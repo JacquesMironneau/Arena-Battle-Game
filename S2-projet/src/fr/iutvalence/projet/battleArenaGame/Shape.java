@@ -29,7 +29,7 @@ public class Shape {
 	/**
 	 * price in action points
 	 */
-	private int spellCoste;
+	private int spellCost;
 	
 	/**
 	 * create a new shape with a name

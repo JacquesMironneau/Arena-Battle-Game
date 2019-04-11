@@ -93,7 +93,7 @@ public class Player {
 	 * Say to the system that this player is ready to play
 	 * @return true the player is ready to play
 	 */
-	public boolean playerReady()
+	public void playerReady()
 	{
 		this.isReady = true;
 	}
