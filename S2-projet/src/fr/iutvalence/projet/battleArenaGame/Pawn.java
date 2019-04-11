@@ -60,6 +60,19 @@ public class Pawn {
 	private HashSet<PawnEffect> activeEffects;
 	
 	/**
+	 * Constructor for pawn:
+	 * Set a team for the pawn
+	 * and set his attributes to their default value : a pawn is ready to be in the game
+	 */
+	public Pawn(PawnTeam pteam)
+	{
+		this.team = pteam;
+		this.healthPoints = Pawn.DEFAULT_HEALTH_POINTS;
+		this.actionPoints = Pawn.DEFAULT_ACTION_POINTS;
+		this.movePoints = Pawn.DEFAULT_MOVE_POINTS;
+		
+	}
+	/**
 	 * Setter for currentCoordinate
 	 * @param pDestination : the destination of the Pawn
 	 */
