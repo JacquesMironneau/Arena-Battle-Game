@@ -7,8 +7,19 @@ package fr.iutvalence.projet.battleArenaGame;
  */
 public class Spell {
 	
+	/**
+	 * current cooldown for a spell
+	 */
 	private int currentCooldown;
+	
+	/**
+	 * shape of spell
+	 */
 	private Shape myShape;
+	
+	/**
+	 * effect of a spell
+	 */
 	private Spell_Effect myEffect;
 	
 	/**
