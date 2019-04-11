@@ -20,7 +20,7 @@ public class Spell {
 	/**
 	 * effect of a spell
 	 */
-	private Spell_Effect myEffect;
+	private SpellEffect myEffect;
 	
 	/**
 	 * create a new empty Spell
@@ -51,7 +51,7 @@ public class Spell {
 	 * set a new value to myEffect
 	 * @param pEffectSpell_Effect is the new value of myEffect
 	 */
-	public void setSpellEffect(Spell_Effect pEffectSpell_Effect) {}
+	public void setSpellEffect(SpellEffect pEffectSpellEffect) {}
 	
 	/**
 	 * set a new value to myShape
