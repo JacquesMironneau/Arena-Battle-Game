@@ -41,6 +41,8 @@ public class Game
 	 * create the game, and call init to initialize the board.
 	 */
 	
+	private Network myNetwork;
+	
 	
 	public Game()
 	{

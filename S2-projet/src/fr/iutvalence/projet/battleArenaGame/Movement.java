@@ -35,7 +35,6 @@ public class Movement {
 	public int getDistance()
 	{
 		return this.distance;
-		
 	}
 	
 	/**
@@ -43,5 +42,6 @@ public class Movement {
 	 */
 	public void calculateDistance() 
 	{
+		
 	}
 }

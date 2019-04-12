@@ -35,24 +35,33 @@ public class Shape {
 	 * create a new shape with a name
 	 * @param pName is the name of the shape
 	 */
-	public Shape(String pName){}
+	public Shape(String pName)
+	{
+
+	}
 	
 	/**
 	 * 
 	 * return damage attribute of shape 
 	 */
-	public int getDamage() {}
+	public int getDamage() {
+		return this.damage;
+	}
 	
 	/**
 	 * return cooldown attribute of shape
 	 */
-	public int getCooldown(){}
+	public int getCooldown(){
+		return this.cooldown;
+	}
 	
 	/**
 	 * return spellCost attribute of shape
 	 * 
 	 */
-	public int getSpellCost(){}
+	public int getSpellCost(){
+		return this.spellCost;
+	}
 	
 	
 	

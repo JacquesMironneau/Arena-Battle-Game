@@ -1,6 +1,6 @@
 package fr.iutvalence.projet.battleArenaGame;
 
-public enum SpellEffect {
+public enum SpellEffect implements Effect{
 		
 	Fire("Fire","Ignite",3),
 	Ice("Ice","Slow",3),
@@ -60,6 +60,6 @@ public enum SpellEffect {
 	 */
 	public int getEffectDuration()
 	{
-	return this.effectDuration;
+		return this.effectDuration;
 	}
 }

@@ -20,8 +20,20 @@ public class Player {
 	 */
 	public Player()
 	{
+		/**
+		 * represents if a player is ready or not
+		 * the true state stands for ready.
+		 */
 		this.isReady = false;
+		
+		/**
+		 * Set the current pawn of the player at null by default
+		 */
 		this.currentPawn = null;
+		
+		/**
+		 * Initialize a new arrayList of SpellPages that the player will have.
+		 */
 		this.playerPages = new ArrayList<SpellPage>();
 	}
 	

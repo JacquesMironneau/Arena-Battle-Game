@@ -33,31 +33,44 @@ public class Spell {
 	 * recover defaultCooldown in his shape
 	 * 
 	 */
-	public int getDefaultCooldown() {}
-	
+	public int getDefaultCooldown()
+	{
+		return this.myShape.getCooldown();
+	}
+		
 	/**
 	 * set a new value to currentCooldown
 	 * @param pcurrentCD new value of currentCooldown
 	 */
-	public void setCurrentCooldown(int pcurrentCD){}
+	public void setCurrentCooldown(int pcurrentCD)
+	{
+		
+	}
 	
 	/**
 	 * return currentCooldown of the Spell
 	 * 
 	 */
-	public int getCurrentCooldown() {}
+	public int getCurrentCooldown()
+	{
+		return this.currentCooldown;
+	}
 	
 	/**
 	 * set a new value to myEffect
 	 * @param pEffectSpell_Effect is the new value of myEffect
 	 */
-	public void setSpellEffect(SpellEffect pEffectSpellEffect) {}
+	public void setSpellEffect(SpellEffect pEffectSpellEffect)
+	{
+		
+	}
 	
 	/**
 	 * set a new value to myShape
 	 * @param pShape is the newvalue of myShape
 	 */
-	public void setShape(Shape pShape) {
+	public void setShape(Shape pShape)
+	{
 		
 	}
 }
