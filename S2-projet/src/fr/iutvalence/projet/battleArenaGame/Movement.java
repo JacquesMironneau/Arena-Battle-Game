@@ -14,6 +14,7 @@ public class Movement {
 	 * Constructor of a movement
 	 * set all the parameters to null by default.
 	 */
+
 	public Movement()
 	{
 		this.distance = 0;
