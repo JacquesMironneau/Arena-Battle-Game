@@ -76,10 +76,11 @@ public class Game
 	/**
 	 * checkMove method: Check if the movement is valid
 	 * A movement is valid if the player have enough movementPoint, and if the selected destination is not taken or outside the board
+	 * @param mov 
 	 * @param Move pMove: A movement chose by the player
 	 * @return true if the chosen move by the player is valid and authorized
 	 */
-	public boolean checkMove()
+	public boolean checkMove(Movement pMovement)
 	{
 		return true; // To remove errors due to type returned
 	}
@@ -90,8 +91,10 @@ public class Game
 	
 	 * @return  true if the chosen spell by the player is valid and authorized
 	 */
-	public boolean checkSpell()
+	public boolean checkSpell(Spell pSpell, Movement pMovement)
 	{
+		//TODO: Get the origin and destination coordinate of the pMovement
+		
 		return true; // To remove errors due to type returned
 	}
 	
