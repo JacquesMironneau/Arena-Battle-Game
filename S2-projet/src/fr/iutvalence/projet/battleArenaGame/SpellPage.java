@@ -3,7 +3,7 @@ package fr.iutvalence.projet.battleArenaGame;
 /**
  * This class represents a Spell page it is composed of 3 spells.
  * A spell page has a name,
- * and is assigned to each pawn.
+ * each pawn have one spell page.
  * @author durantho
  */
 public class SpellPage {

@@ -2,7 +2,8 @@ package fr.iutvalence.projet.battleArenaGame;
 /**
  * 
  * @author Jules
- * represent a shape for a spell
+ * represent a shape for a spell. defined damage, max cooldown, range and his price 
+ *  
  */
 public class Shape {
 
@@ -22,7 +23,7 @@ public class Shape {
 	private int cooldown;
 	
 	/**
-	 * max of range 
+	 * max range 
 	 */
 	private int range;
 	
@@ -41,7 +42,6 @@ public class Shape {
 	}
 	
 	/**
-	 * 
 	 * return damage attribute of shape 
 	 */
 	public int getDamage() {
@@ -57,7 +57,6 @@ public class Shape {
 	
 	/**
 	 * return spellCost attribute of shape
-	 * 
 	 */
 	public int getSpellCost(){
 		return this.spellCost;
