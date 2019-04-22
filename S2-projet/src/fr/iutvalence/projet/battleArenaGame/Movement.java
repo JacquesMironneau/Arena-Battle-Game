@@ -1,4 +1,5 @@
 package fr.iutvalence.projet.battleArenaGame;
+import java.lang.Math;
 
 /**
  * Represents one move of a pawn, with a distance, origin coordinates and destination coordinates.
@@ -14,18 +15,31 @@ public class Movement {
 	 * Constructor of a movement
 	 * set all the parameters to null by default.
 	 */
+
 	public Movement()
 	{
 		this.distance = 0;
 		this.originCoordinate = null;
 		this.destCoordinate = null;
 	}
+	/**
+	 * 
+	 */
+	public Movement(Coordinate pOrigin,Coordinate pDest )
+	{
+		this.distance = Math.abs((pOrigin.getCoordX() - pDest.getCoordY())+ (pOrigin.getCoordX()-pDest.getCoordY()));
+		this.originCoordinate = pOrigin;
+		this.destCoordinate = pDest;
+	}
+	
+	
 	
 	/**
 	 *  Move the pawn to wanted coordinates
 	 * @param pCoordinate the destination coordinates
 	 */
 	public void move(Coordinate pCoordinate) {
+		
 		
 	}
 	

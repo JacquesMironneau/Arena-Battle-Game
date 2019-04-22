@@ -3,6 +3,7 @@ package fr.iutvalence.projet.battleArenaGame;
  * 
  * @author Jules
  * represent a Spell who have one shape, a cooldown and an Effect
+ * Spell is a component of SpellPage use to make damage to pawns
  *
  */
 public class Spell {
@@ -26,7 +27,10 @@ public class Spell {
 	 * create a new empty Spell
 	 * 
 	 */
-	public Spell() {	}
+	public Spell() 
+	{
+		
+	}
 	
 	
 	/**	 
@@ -44,7 +48,7 @@ public class Spell {
 	 */
 	public void setCurrentCooldown(int pcurrentCD)
 	{
-		
+		this.currentCooldown = pcurrentCD;
 	}
 	
 	/**
@@ -62,15 +66,15 @@ public class Spell {
 	 */
 	public void setSpellEffect(SpellEffect pEffectSpellEffect)
 	{
-		
+		this.myEffect = pEffectSpellEffect ;
 	}
 	
-	/**
+	/** 
 	 * set a new value to myShape
 	 * @param pShape is the newvalue of myShape
 	 */
 	public void setShape(Shape pShape)
 	{
-		
+		this.myShape = pShape;
 	}
 }

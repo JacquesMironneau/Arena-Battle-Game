@@ -1,9 +1,11 @@
 package fr.iutvalence.projet.battleArenaGame;
 
-import java.util.HashSet;
+import java.util.ArrayList;
+
 
 /**
  * Represents a Pawn
+ * He has HealthPoints, MovePoints, ActionPoints, a spellPage, coordinates, active effects and belong to a team.
  * @author charvevi
  *
  */
@@ -57,19 +59,23 @@ public class Pawn {
 	/**
 	 * List of all the active effect on the Pawn
 	 */
-	private HashSet<PawnEffect> activeEffects;
+	private ArrayList<PawnEffect> activeEffects;
 	
 	/**
-	 * Constructor for pawn:
-	 * Set a team for the pawn
-	 * and set his attributes to their default value : a pawn is ready to be in the game
+	 * Constructor of Pawn
+	 * @param pteam : The Pawn's Team
+	 * @param pBaseCoordinate : The Pawn's coordinate when he is created
+	 * @param pSpellPage : The Pawn's spell page, selected by the player
 	 */
-	public Pawn(PawnTeam pteam)
+	public Pawn(PawnTeam pteam,Coordinate pBaseCoordinate,SpellPage pSpellPage)
 	{
 		this.team = pteam;
 		this.healthPoints = Pawn.DEFAULT_HEALTH_POINTS;
 		this.actionPoints = Pawn.DEFAULT_ACTION_POINTS;
 		this.movePoints = Pawn.DEFAULT_MOVE_POINTS;
+		this.currentCoordinate = pBaseCoordinate;
+		this.mySpellPage = pSpellPage;
+		
 		
 	}
 	/**
@@ -155,13 +161,31 @@ public class Pawn {
 	}
 	
 	/**
-	 * Update the turn counter of all the effects of this pawn.
+	 * Getter for the list of the pawn's effect
+	 * @return an HashSet of PawnEffect
+	 */
+	public ArrayList<PawnEffect> getEffect()
+	{
+		return this.activeEffects;
+	}
+	
+	/**
+	 * Update the turn counter for all effects of this pawn.
 	 * Removes the effect if the counter reach 0 
 	 */
-	//TODO Complete this method
 	public void updateEffect()
 	{
-		
+		for(int arrayIndex=0;arrayIndex<activeEffects.size();arrayIndex++)
+		{
+		  PawnEffect effectToUpdate = activeEffects.get(arrayIndex);
+		  effectToUpdate.setCurrentDuration(effectToUpdate.getCurrentDuration()-1);
+		  PawnEffect updatedEffect = effectToUpdate;
+		  if(updatedEffect.getCurrentDuration()==0)
+			  activeEffects.remove(arrayIndex);
+		  else
+			  activeEffects.set(arrayIndex, updatedEffect);
+		  
+		}
 	}
 	
 	/**
