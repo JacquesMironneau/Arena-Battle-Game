@@ -18,7 +18,7 @@ public class ShapeSquare extends ShapeSpecial{
 	 * 
 	 * @param pName Name of the shape 
 	 * Constructor of a shapeSquare
-	 * Add the coordinates of a square shape in the effectedCells ArrayList
+	 * Add the coordinates of a square shape in the effectedCells ArrayList.
 	 */
 	public ShapeSquare(String pName) {
 		super(pName);
