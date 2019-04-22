@@ -2,33 +2,33 @@ package fr.iutvalence.projet.battleArenaGame;
 /**
  * 
  * @author Jules
- * represent a shape for a spell. defined damage, max cooldown, range and his price 
+ * represent a shape for a spell. defined damage, max cooldown, range and his price.
  *  
  */
 public class Shape {
 
 	/**
-	 * name a shape
+	 * name of the shape.
 	 */
 	private String nameShape;
 	
 	/**
-	 * damage of shape
+	 * damage of the shape in health points.
 	 */
 	private int damage;
 	
 	/**
-	 * max of cooldown
+	 * shape cooldown in turns.
 	 */
 	private int cooldown;
 	
 	/**
-	 * max range 
+	 * the range of the shape in cells .
 	 */
 	private int range;
 	
 	/**
-	 * price in action points
+	 * price in action points.
 	 */
 	private int spellCost;
 	
