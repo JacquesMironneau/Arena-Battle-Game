@@ -67,7 +67,7 @@ public class SpellPage {
 	 */
 	public void savePage()
 	 {
-		myPlayer.getplayerPages().add(this);
+		myPlayer.getPlayerPage().add(this);
 	 }
 
 	/**
