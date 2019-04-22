@@ -17,6 +17,17 @@ public class Coordinate {
 	
 	
 	/**
+	 * Constructor of a coordinate.
+	 * @param x represents the value that will be set to coordX
+	 * @param y represents the value that will be set to coordY
+	 */
+	public Coordinate(int x, int y)
+	{
+		this.coordX = x;
+		this.coordY = y;
+	}
+	
+	/**
 	 * Getter for coordX
 	 * @return
 	 */
@@ -33,6 +44,7 @@ public class Coordinate {
 	{
 		return this.coordY;
 	}
+	
 	
 
 }
