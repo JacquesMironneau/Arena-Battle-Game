@@ -1,5 +1,11 @@
 package fr.iutvalence.projet.battleArenaGame;
 
+/**
+ * 
+ * @author jules chapelle
+ *defined an effect for a spell.
+ * an effect change a stat of a pawn at the start of the turn
+ */
 public enum SpellEffect implements Effect{
 		
 	Fire("Fire","Ignite",3),
@@ -45,6 +51,7 @@ public enum SpellEffect implements Effect{
 	{
 		return this.elementName;
 	}
+	
 	/**
 	 * Getter for the effect name
 	 * @return the effect name

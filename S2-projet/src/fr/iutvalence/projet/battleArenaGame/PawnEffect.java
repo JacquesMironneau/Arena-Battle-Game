@@ -1,5 +1,11 @@
 package fr.iutvalence.projet.battleArenaGame;
 
+/**
+ * Represent an effect that can affect a Pawn
+ * He has an element Name (fire, ice...), an effect name (ignite, freeze,...), a default duration and a current duration
+ * @author charvevi
+ *
+ */
 public class PawnEffect implements Effect {
 	
 	/**

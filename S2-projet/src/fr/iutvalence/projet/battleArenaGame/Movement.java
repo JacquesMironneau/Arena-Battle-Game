@@ -6,43 +6,47 @@ import java.lang.Math;
  * @author durantho
  */
 public class Movement {
+	
+	/**
+	 * distance between origin and destination
+	 */
 	private int distance;
 	
+	/**
+	 * coordinate of pawns
+	 */
 	private Coordinate originCoordinate;
+	
+	/**
+	 * destination of pawns
+	 */
 	private Coordinate destCoordinate;
 	
 	/**
 	 * Constructor of a movement
 	 * set all the parameters to null by default.
 	 */
-
 	public Movement()
 	{
 		this.distance = 0;
 		this.originCoordinate = null;
 		this.destCoordinate = null;
 	}
+	
 	/**
-	 * 
+	 * Create a movement with a origin position and a destination 
+	 * and set the distance
+	 * @param pOrigin coordinate of the pawn. 
+	 * @param pDest coordinate of the destination
 	 */
-	public Movement(Coordinate pOrigin,Coordinate pDest )
+	public Movement(Coordinate pOrigin,Coordinate pDest)
 	{
-		this.distance = Math.abs((pOrigin.getCoordX() - pDest.getCoordY())+ (pOrigin.getCoordX()-pDest.getCoordY()));
 		this.originCoordinate = pOrigin;
 		this.destCoordinate = pDest;
+		this.distance = calculateDistance();
 	}
 	
-	
-	
-	/**
-	 *  Move the pawn to wanted coordinates
-	 * @param pCoordinate the destination coordinates
-	 */
-	public void move(Coordinate pCoordinate) {
-		
-		
-	}
-	
+
 	/**
 	 * @return the distance of the move in number of cells.
 	 */
@@ -51,11 +55,22 @@ public class Movement {
 		return this.distance;
 	}
 	
+	public Coordinate getOriginCoordinate()
+	{
+		return this.originCoordinate;
+	}
+	
+	public Coordinate getDestCordinate()
+	{
+		return this.destCoordinate;
+	}
+	
 	/**
 	 * Calculates the distance of the move in number of cells
+	 * @return the distance between origin and destination
 	 */
-	public void calculateDistance() 
+	public int calculateDistance() 
 	{
-		
+		return Math.abs((this.originCoordinate.getCoordX() - this.destCoordinate.getCoordX())+ (this.originCoordinate.getCoordY()-this.destCoordinate.getCoordY()));
 	}
 }

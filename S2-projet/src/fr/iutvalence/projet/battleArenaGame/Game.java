@@ -1,5 +1,6 @@
 package fr.iutvalence.projet.battleArenaGame;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 
 /**
@@ -15,6 +16,20 @@ import java.util.HashMap;
 public class Game
 {
 	/**
+	 * Size of the board (length of the square)
+	 */
+	public final static int BOARD_SIZE = 15;
+	/**
+	 * These values are the default position of pawns at the start of the game
+	 * The first number is the player's number and the second is the pawn's number
+	 */
+	public final static Coordinate BASE_POS_1PAWN1 = new Coordinate(2,0);
+	public final static Coordinate BASE_POS_1PAWN2 = new Coordinate(7,1);
+	public final static Coordinate BASE_POS_1PAWN3 = new Coordinate(12,0);
+	public final static Coordinate BASE_POS_2PAWN1 = new Coordinate(2,14);
+	public final static Coordinate BASE_POS_2PAWN2 = new Coordinate(7,13);
+	public final static Coordinate BASE_POS_2PAWN3 = new Coordinate(12,14);
+	/**
 	 * First player of the game, the one who start in the first turn
 	 */
 	private Player player1;
@@ -25,12 +40,9 @@ public class Game
 	private Player player2;
 	
 	/**
-	 * This set represent the list of Pawn currently living in the 2 players teams
-	 * The key is the Coordinates (only one pawn can have a precise coordinate)
-	 * And the value is the pawn
-	 * 
+	 * This list represent Pawns currently living and define the turn order
 	 */
-	private HashMap<Coordinate, Pawn> listPawn;
+	private ArrayList<Pawn> turnOrder;
 	
 	/**
 	 * Represent the GUI of the game
@@ -42,6 +54,11 @@ public class Game
 	 */
 	
 	private Network myNetwork;
+	
+	/*
+	 * Represent the currentPawn of the game = the one that can be moved or can use spell.
+	 */
+	private Pawn currentPawn;
 	
 	
 	public Game()
@@ -70,8 +87,9 @@ public class Game
 	 */
 	private void init()
 	{
-		
+
 	}
+	
 	
 	/**
 	 * checkMove method: Check if the movement is valid
@@ -82,7 +100,27 @@ public class Game
 	 */
 	public boolean checkMove(Movement pMovement)
 	{
-		return true; // To remove errors due to type returned
+		//If the pawn has enough move points to move
+		if(this.currentPawn.getMovePoints() > pMovement.calculateDistance())
+		{
+			//Check if the coordinates of the pawn are free (in order to move, the case must be free and not occuped by another pawn)
+			for(int indexArrayList = 0; indexArrayList < this.turnOrder.size(); indexArrayList++)
+			{
+				if(pMovement.getDestCordinate() == this.turnOrder.get(indexArrayList).getPos())
+					return false;
+			}
+			
+			//Move the current pawn to coordinates
+			this.currentPawn.setPos(pMovement.getDestCordinate());
+
+			//Replace the pawn of the turnOrder (so the current one) by the currentPawn with moved coordinates)
+			this.turnOrder.set(this.turnOrder.indexOf(this.currentPawn), this.currentPawn);
+			
+			//The movement is done
+			return true;
+		}
+		//The movement isn't correct
+		return false; 
 	}
 	
 	/**
