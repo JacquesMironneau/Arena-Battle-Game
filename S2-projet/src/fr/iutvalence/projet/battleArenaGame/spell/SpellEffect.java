@@ -1,4 +1,4 @@
-package fr.iutvalence.projet.battleArenaGame;
+package fr.iutvalence.projet.battleArenaGame.spell;
 
 /**
  * 

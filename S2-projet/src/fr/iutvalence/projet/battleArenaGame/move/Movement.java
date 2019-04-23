@@ -1,4 +1,4 @@
-package fr.iutvalence.projet.battleArenaGame;
+package fr.iutvalence.projet.battleArenaGame.move;
 import java.lang.Math;
 
 /**

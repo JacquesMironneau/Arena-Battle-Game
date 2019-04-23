@@ -1,4 +1,7 @@
-package fr.iutvalence.projet.battleArenaGame;
+package fr.iutvalence.projet.battleArenaGame.spell;
+
+import fr.iutvalence.projet.battleArenaGame.shape.Shape;
+
 /**
  * 
  * @author Jules

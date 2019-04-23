@@ -1,6 +1,8 @@
-package fr.iutvalence.projet.battleArenaGame;
+package fr.iutvalence.projet.battleArenaGame.shape;
 
 import java.util.ArrayList;
+
+import fr.iutvalence.projet.battleArenaGame.move.Coordinate;
 
 /**
  * 

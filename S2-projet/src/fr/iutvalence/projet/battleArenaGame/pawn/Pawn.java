@@ -1,6 +1,9 @@
-package fr.iutvalence.projet.battleArenaGame;
+package fr.iutvalence.projet.battleArenaGame.pawn;
 
 import java.util.ArrayList;
+
+import fr.iutvalence.projet.battleArenaGame.move.Coordinate;
+import fr.iutvalence.projet.battleArenaGame.spell.SpellPage;
 
 
 /**

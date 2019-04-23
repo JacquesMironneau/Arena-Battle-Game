@@ -1,4 +1,6 @@
-package fr.iutvalence.projet.battleArenaGame;
+package fr.iutvalence.projet.battleArenaGame.spell;
+
+import fr.iutvalence.projet.battleArenaGame.Player;
 
 /**
  * This class represents a Spell page it is composed of 3 spells.

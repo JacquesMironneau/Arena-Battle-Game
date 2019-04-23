@@ -3,6 +3,11 @@ package fr.iutvalence.projet.battleArenaGame;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import fr.iutvalence.projet.battleArenaGame.move.Coordinate;
+import fr.iutvalence.projet.battleArenaGame.move.Movement;
+import fr.iutvalence.projet.battleArenaGame.pawn.Pawn;
+import fr.iutvalence.projet.battleArenaGame.spell.Spell;
+
 /**
  * Game class stands for the system of the BattleArena Game:
  * It handles the players, the network, the spellpages of the player, the coordinate
@@ -103,7 +108,7 @@ public class Game
 		//If the pawn has enough move points to move
 		if(this.currentPawn.getMovePoints() > pMovement.calculateDistance())
 		{
-			//Check if the coordinates of the pawn are free (in order to move, the case must be free and not occuped by another pawn)
+			//Check if the coordinates of the pawn are free (in order to move, the case must be free and not occupated by another pawn)
 			for(int indexArrayList = 0; indexArrayList < this.turnOrder.size(); indexArrayList++)
 			{
 				if(pMovement.getDestCordinate() == this.turnOrder.get(indexArrayList).getPos())

@@ -1,4 +1,4 @@
-package fr.iutvalence.projet.battleArenaGame;
+package fr.iutvalence.projet.battleArenaGame.move;
 
 /**
  * Represent coordinate with a X-axis value and Y-axis value

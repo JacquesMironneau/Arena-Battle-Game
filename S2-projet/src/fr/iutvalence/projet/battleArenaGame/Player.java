@@ -2,6 +2,14 @@ package fr.iutvalence.projet.battleArenaGame;
 
 import java.util.ArrayList;
 
+import fr.iutvalence.projet.battleArenaGame.move.Coordinate;
+import fr.iutvalence.projet.battleArenaGame.move.Movement;
+import fr.iutvalence.projet.battleArenaGame.pawn.Pawn;
+import fr.iutvalence.projet.battleArenaGame.shape.Shape;
+import fr.iutvalence.projet.battleArenaGame.spell.Spell;
+import fr.iutvalence.projet.battleArenaGame.spell.SpellEffect;
+import fr.iutvalence.projet.battleArenaGame.spell.SpellPage;
+
 /**
  * 
  * @author durantho

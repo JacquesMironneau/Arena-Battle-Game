@@ -1,4 +1,6 @@
-package fr.iutvalence.projet.battleArenaGame;
+package fr.iutvalence.projet.battleArenaGame.shape;
+
+import fr.iutvalence.projet.battleArenaGame.move.Coordinate;
 
 /**
  * 

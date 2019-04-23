@@ -1,4 +1,6 @@
-package fr.iutvalence.projet.battleArenaGame;
+package fr.iutvalence.projet.battleArenaGame.pawn;
+
+import fr.iutvalence.projet.battleArenaGame.spell.Effect;
 
 /**
  * Represent an effect that can affect a Pawn
