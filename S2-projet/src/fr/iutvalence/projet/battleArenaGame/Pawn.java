@@ -170,7 +170,7 @@ public class Pawn {
 	}
 	
 	/**
-	 * Update the turn counter for all effects of this pawn.
+	 * Reduce the counter of all effect on this pawn by 1
 	 * Removes the effect if the counter reach 0 
 	 */
 	public void updateEffect()
