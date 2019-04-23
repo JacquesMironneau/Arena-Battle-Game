@@ -1,5 +1,6 @@
 package fr.iutvalence.projet.battleArenaGame;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 
 /**
@@ -14,6 +15,20 @@ import java.util.HashMap;
 
 public class Game
 {
+	/**
+	 * Size of the board (length of the square)
+	 */
+	public final static int BOARD_SIZE = 15;
+	/**
+	 * These values are the default position of pawns at the start of the game
+	 * The first number is the player's number and the second is the pawn's number
+	 */
+	public final static Coordinate BASE_POS_1PAWN1 = new Coordinate(2,0);
+	public final static Coordinate BASE_POS_1PAWN2 = new Coordinate(7,1);
+	public final static Coordinate BASE_POS_1PAWN3 = new Coordinate(12,0);
+	public final static Coordinate BASE_POS_2PAWN1 = new Coordinate(2,14);
+	public final static Coordinate BASE_POS_2PAWN2 = new Coordinate(7,13);
+	public final static Coordinate BASE_POS_2PAWN3 = new Coordinate(12,14);
 	/**
 	 * First player of the game, the one who start in the first turn
 	 */
@@ -75,7 +90,11 @@ public class Game
 	 */
 	private void init()
 	{
+		this.player1 = new Player();
+		this.player2 = new Player();
 		
+		ArrayList<Pawn> turnOrder = new ArrayList<Pawn>();
+		turnOrder.add(Pawn 1Pawn1 = new Pawn(PawnJ1,))
 	}
 	
 	/**
