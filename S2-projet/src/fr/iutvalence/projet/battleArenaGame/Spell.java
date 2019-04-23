@@ -25,11 +25,12 @@ public class Spell {
 	
 	/**
 	 * create a new empty Spell
-	 * 
 	 */
 	public Spell() 
 	{
-		
+		this.currentCooldown = 0;
+		this.myShape = null;
+		this.myEffect = null;
 	}
 	
 	
