@@ -41,9 +41,9 @@ public class Movement {
 	 */
 	public Movement(Coordinate pOrigin,Coordinate pDest)
 	{
-		this.distance = calculateDistance(pOrigin,pDest);
 		this.originCoordinate = pOrigin;
 		this.destCoordinate = pDest;
+		this.distance = calculateDistance();
 	}
 	
 
@@ -67,12 +67,10 @@ public class Movement {
 	
 	/**
 	 * Calculates the distance of the move in number of cells
-	 * @param pOrigin coordinate of the pawn.
-	 * @param pDest coordinate of the destination.
 	 * @return the distance between origin and destination
 	 */
-	public int calculateDistance(Coordinate pOrigin,Coordinate pDest) 
+	public int calculateDistance() 
 	{
-		return Math.abs((pOrigin.getCoordX() - pDest.getCoordY())+ (pOrigin.getCoordX()-pDest.getCoordY()));
+		return Math.abs((this.originCoordinate.getCoordX() - this.destCoordinate.getCoordX())+ (this.originCoordinate.getCoordY()-this.destCoordinate.getCoordY()));
 	}
 }
