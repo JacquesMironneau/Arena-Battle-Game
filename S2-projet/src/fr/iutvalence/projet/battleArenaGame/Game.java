@@ -43,6 +43,11 @@ public class Game
 	
 	private Network myNetwork;
 	
+	/*
+	 * Represent the currentPawn of the game = the one that can be moved or can use spell.
+	 */
+	private Pawn currentPawn;
+	
 	
 	public Game()
 	{
@@ -82,6 +87,8 @@ public class Game
 	 */
 	public boolean checkMove(Movement pMovement)
 	{
+	
+			
 		return true; // To remove errors due to type returned
 	}
 	
