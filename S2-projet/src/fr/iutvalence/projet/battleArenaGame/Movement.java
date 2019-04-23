@@ -55,6 +55,16 @@ public class Movement {
 		return this.distance;
 	}
 	
+	public Coordinate getOriginCoordinate()
+	{
+		return this.originCoordinate;
+	}
+	
+	public Coordinate getDestCordinate()
+	{
+		return this.destCoordinate;
+	}
+	
 	/**
 	 * Calculates the distance of the move in number of cells
 	 * @param pOrigin coordinate of the pawn.
