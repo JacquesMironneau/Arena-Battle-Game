@@ -6,6 +6,7 @@ package fr.iutvalence.projet.battleArenaGame;
  *
  */
 public class Coordinate {
+
 	/**
 	 * X value of the coordinate (absciss)
 	 */
@@ -43,6 +44,11 @@ public class Coordinate {
 	public int getCoordY()
 	{
 		return this.coordY;
+	}
+	
+	@Override
+	public String toString() {
+		return "Coordinate [coordX=" + coordX + ", coordY=" + coordY + "]";
 	}
 	
 	
