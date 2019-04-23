@@ -100,9 +100,27 @@ public class Game
 	 */
 	public boolean checkMove(Movement pMovement)
 	{
-	
+		//If the pawn has enough move points to move
+		if(this.currentPawn.getMovePoints() > pMovement.calculateDistance())
+		{
+			//Check if the coordinates of the pawn are free (in order to move, the case must be free and not occuped by another pawn)
+			for(int indexArrayList = 0; indexArrayList < this.turnOrder.size(); indexArrayList++)
+			{
+				if(pMovement.getDestCordinate() == this.turnOrder.get(indexArrayList).getPos())
+					return false;
+			}
 			
-		return true; // To remove errors due to type returned
+			//Move the current pawn to coordinates
+			this.currentPawn.setPos(pMovement.getDestCordinate());
+
+			//Replace the pawn of the turnOrder (so the current one) by the currentPawn with moved coordinates)
+			this.turnOrder.set(this.turnOrder.indexOf(this.currentPawn), this.currentPawn);
+			
+			//The movement is done
+			return true;
+		}
+		//The movement isn't correct
+		return false; 
 	}
 	
 	/**
