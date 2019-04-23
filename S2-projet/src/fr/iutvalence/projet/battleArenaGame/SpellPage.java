@@ -6,6 +6,7 @@ package fr.iutvalence.projet.battleArenaGame;
  * each pawn have one spell page.
  * @author durantho
  */
+
 public class SpellPage {
 	private String pageName;
 	
