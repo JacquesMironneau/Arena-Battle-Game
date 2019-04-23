@@ -40,12 +40,9 @@ public class Game
 	private Player player2;
 	
 	/**
-	 * This set represent the list of Pawn currently living in the 2 players teams
-	 * The key is the Coordinates (only one pawn can have a precise coordinate)
-	 * And the value is the pawn
-	 * 
+	 * This list represent Pawns currently living and define the turn order
 	 */
-	private HashMap<Coordinate, Pawn> listPawn;
+	private ArrayList<Pawn> turnOrder;
 	
 	/**
 	 * Represent the GUI of the game
@@ -85,12 +82,9 @@ public class Game
 	 */
 	private void init()
 	{
-		this.player1 = new Player();
-		this.player2 = new Player();
-		
-		ArrayList<Pawn> turnOrder = new ArrayList<Pawn>();
-		turnOrder.add(Pawn 1Pawn1 = new Pawn(PawnJ1,))
+
 	}
+	
 	
 	/**
 	 * checkMove method: Check if the movement is valid
