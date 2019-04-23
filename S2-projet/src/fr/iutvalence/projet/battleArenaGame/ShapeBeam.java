@@ -21,7 +21,7 @@ public class ShapeBeam extends ShapeSpecial{
 	public ShapeBeam(String pName) {
 		super(pName);
 		
-		//found a solution to add the coordinates that the Beam will effect.
+		//found solutions to add the coordinates that the Beam will effect.
 	}
 	
 	public void setShape()
