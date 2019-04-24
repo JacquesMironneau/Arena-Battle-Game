@@ -15,6 +15,7 @@ import fr.iutvalence.projet.battleArenaGame.spell.SpellPage;
  * @author durantho
  * This class represents a player.
  * A player can ask to the system to move one of his pawn, or cast a spell, or end his turn.
+ * each player interact with the application on different computer.
  */
 public class Player {
 	
@@ -180,6 +181,16 @@ public class Player {
 	public void playerReady()
 	{
 		this.isReady = true;
+	}
+	
+	
+	/**
+	 * save a page in playerPages
+	 * @param page : the page to save.
+	 */
+	public void addSpellpage(SpellPage page)
+	{
+		this.playerPages.add(page);
 	}
 	
 	/**

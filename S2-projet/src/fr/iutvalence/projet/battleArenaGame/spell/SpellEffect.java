@@ -8,6 +8,11 @@ package fr.iutvalence.projet.battleArenaGame.spell;
  */
 public enum SpellEffect implements Effect{
 		
+	/**
+	 * first part is element 
+	 * second is effect
+	 * in third duration of the effect (in number of turn).
+	 */
 	Fire("Fire","Ignite",3),
 	Ice("Ice","Slow",3),
 	Stone("Stone","Stun",3),

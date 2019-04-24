@@ -5,8 +5,9 @@ import fr.iutvalence.projet.battleArenaGame.shape.Shape;
 /**
  * 
  * @author Jules
- * represent a Spell who have one shape, a cooldown and an Effect
- * Spell is a component of SpellPage use to make damage to pawns
+ * represent a Spell who have one shape, a cooldown and an Effect.
+ * a spell can't be used if the currentCooldown is not 0.
+ * Spell is a component of SpellPage use to make damage to pawns.
  *
  */
 public class Spell {
