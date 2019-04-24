@@ -1,8 +1,4 @@
 package fr.iutvalence.projet.battleArenaGame.shape;
-
-import java.util.ArrayList;
-import java.util.Iterator;
-
 import fr.iutvalence.projet.battleArenaGame.move.Coordinate;
 
 /**
@@ -15,7 +11,7 @@ public class Shape {
 
 //Constants
 	
-	//TODO assign correct values to each of these constants.
+//TODO assign correct values to each of these constants.
 	
 //beam constants
 	/**
@@ -36,6 +32,7 @@ public class Shape {
 	 * Represents the cost of a beam shape
 	 */
 	public final static int SB_SPELLCOST = 0;
+	
 
 //cross constants
 	/**
@@ -50,11 +47,11 @@ public class Shape {
 	 * Represents the range of a cross shape
 	 */
 	public final static int SC_RANGE = 0;
-	
 	/**
 	 * Represents the cost of a cross shape
 	 */
 	public final static int SC_SPELLCOST = 0;
+	
 	
 //square constants
 	/**
@@ -73,6 +70,7 @@ public class Shape {
 	 * Represents the cost of a square shape.
 	 */
 	public final static int SSQ_SPELLCOST = 0;
+
 	
 //standard constants
 	/**
@@ -92,38 +90,32 @@ public class Shape {
 	 */
 	public final static int STD_SPELLCOST = 0;
 	
-//Attributes
 	
+//Attributes
 	/**
 	 * the name of the shape.
 	 */
 	protected String name;
-	
 	/**
 	 * Represents the damage of the shape in health points.
 	 */
 	protected int damage;
-	
 	/**
 	 * Represents the cooldown of the shape in turns
 	 */
 	protected int cooldown;
-	
 	/**
 	 * Represents the range of the shape in number of cells
 	 */
 	protected int range;
-	
 	/**
 	 * Represents the price of the spell in action points.
 	 */
 	protected int spellCost;
-	
 	/**
 	 * Represents the coordinate that the shape will affect.
 	 */
 	private Coordinate effectedCoordinate;
-	
 	
 	
 //Constructor	
@@ -192,9 +184,15 @@ public class Shape {
 		this.range = STD_RANGE;
 		this.spellCost = STD_SPELLCOST;
 	}
-	
 
+//toString
+	@Override
+	public String toString() {
+		return "Shape [name=" + name + ", damage=" + damage + ", cooldown=" + cooldown + ", range=" + range
+				+ ", spellCost=" + spellCost + ", effectedCoordinate=" + effectedCoordinate + "]";
+	}
 	
-
+	
+	
 	
 }

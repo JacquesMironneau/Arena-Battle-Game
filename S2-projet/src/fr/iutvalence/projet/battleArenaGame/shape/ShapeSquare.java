@@ -46,5 +46,7 @@ public class ShapeSquare extends ShapeSpecial{
 		this.range = Shape.SSQ_RANGE;
 		this.spellCost = Shape.SSQ_SPELLCOST;
 	}
+	
+	
 
 }
