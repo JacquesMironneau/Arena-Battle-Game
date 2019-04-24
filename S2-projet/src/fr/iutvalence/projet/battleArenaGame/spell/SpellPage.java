@@ -4,7 +4,7 @@ import fr.iutvalence.projet.battleArenaGame.Player;
 
 /**
  * This class represents a Spell page it is composed of 3 spells.
- * A spell page has a name, and a player.
+ * A spell page has a name.
  * each pawn have one spell page.
  * @author durantho
  */
@@ -30,12 +30,7 @@ public class SpellPage {
 	 * third spell of the page.
 	 */
 	private Spell spell3;
-	
-	/**
-	 * owner of the page.
-	 */
-	private Player myPlayer;
-	
+
 	/**
 	 * Constructor of a spell page
 	 * @param pName The name you give to this SpellPage.
@@ -83,14 +78,6 @@ public class SpellPage {
 		return this.spell3;
 	}
 	
-	/**
-	 * Enables the system to save the page 
-	 * save the page in playerPage of player
-	 */
-	public void savePage()
-	 {
-		myPlayer.getPlayerPage().add(this);
-	 }
 
 	/**
 	 * Return the current state of the page,
