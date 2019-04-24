@@ -188,7 +188,7 @@ public class Player {
 	 * save a page in playerPages
 	 * @param page : the page to save.
 	 */
-	public void addSpellpage(SpellPage page)
+	public void addSpellPage(SpellPage page)
 	{
 		this.playerPages.add(page);
 	}
