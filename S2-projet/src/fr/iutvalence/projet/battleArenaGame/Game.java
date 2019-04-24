@@ -1,12 +1,13 @@
 package fr.iutvalence.projet.battleArenaGame;
 
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.Scanner;
 
 import fr.iutvalence.projet.battleArenaGame.move.Coordinate;
 import fr.iutvalence.projet.battleArenaGame.move.Movement;
 import fr.iutvalence.projet.battleArenaGame.pawn.Pawn;
 import fr.iutvalence.projet.battleArenaGame.spell.Spell;
+import fr.iutvalence.projet.battleArenaGame.spell.SpellPage;
 
 /**
  * Game class stands for the system of the BattleArena Game:
@@ -82,7 +83,11 @@ public class Game
 	 * 
 	 */
 	public void play()
-	{
+	{	
+	
+		//Select an action in the menu
+		createSpellPage();
+		
 		
 	}
 	
@@ -208,6 +213,26 @@ public class Game
 	{
 		
 	}
-	
+	/**
+	 * Create a spell page, including the creation of his 3 spells and add
+	 * it to the player spellPage list
+	 */
+	public void createSpellPage()
+	{
+		//Creation of a spellPage
+		//TODO Display spell creation menu
+		Scanner scan = new Scanner(System.in);
+		System.out.println("Entrer le nom de la page de sort");
+		String pageName = scan.nextLine();
+		player1.addSpellPage(new SpellPage(pageName));
+		boolean pageFinished = false;
+		while(pageFinished == false)
+			{
+				
+				Spell createdSpell = new Spell();
+				
+			}
+		
+	}
 	
 }
