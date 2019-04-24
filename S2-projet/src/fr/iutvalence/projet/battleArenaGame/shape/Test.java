@@ -1,5 +1,10 @@
 package fr.iutvalence.projet.battleArenaGame.shape;
 
+/**
+ * Test class for shapes
+ * @author durantho
+ *
+ */
 public class Test {
 	
 	public static void main(String[] args) {
