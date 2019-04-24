@@ -3,7 +3,7 @@ package fr.iutvalence.projet.battleArenaGame.spell;
 /**
  * 
  * @author jules chapelle
- *defined an effect for a spell.
+ * Defines an effect for a spell.
  * an effect change a stat of a pawn at the start of the turn
  */
 public enum SpellEffect implements Effect{

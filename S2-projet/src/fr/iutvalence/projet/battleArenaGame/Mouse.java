@@ -5,6 +5,12 @@ import java.awt.event.MouseListener;
 
 import javax.swing.*;
 
+/**
+ * This class represents the mouse entries attached to the GUI
+ * It listen mouse entries
+ * @author durantho
+ *
+ */
 public class Mouse implements MouseListener {
 
 	@Override

@@ -36,6 +36,7 @@ public class Game
 	public final static Coordinate BASE_POS_2PAWN1 = new Coordinate(2,14);
 	public final static Coordinate BASE_POS_2PAWN2 = new Coordinate(7,13);
 	public final static Coordinate BASE_POS_2PAWN3 = new Coordinate(12,14);
+	
 	/**
 	 * First player of the game, the one who start in the first turn
 	 */
@@ -55,11 +56,10 @@ public class Game
 	 * Represent the GUI of the game
 	 */
 	private GraphicUserInterface myGui;
+
 	/**
-	 * Constructor for Game
-	 * create the game, and call init to initialize the board.
+	 * Represents the network of the game, it enables the players's computers to communicates game Data.
 	 */
-	
 	private Network myNetwork;
 	
 	/*
@@ -67,7 +67,10 @@ public class Game
 	 */
 	private Pawn currentPawn;
 	
-	
+	/**
+	 * Constructor for Game
+	 * create the game, and call init to initialize the board.
+	 */
 	public Game()
 	{
 		
