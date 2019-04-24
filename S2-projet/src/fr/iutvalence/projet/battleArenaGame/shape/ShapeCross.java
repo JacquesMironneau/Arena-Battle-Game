@@ -17,9 +17,15 @@ import fr.iutvalence.projet.battleArenaGame.move.Coordinate;
  */
 public class ShapeCross extends ShapeSpecial{
 
-	public ShapeCross(String pName) {
+	/**
+	 * Constructor of a cross shape
+	 * Add the coordinates of a cross shape in the effectedCells ArrayList.
+	 * And set the correct values for the damage, the cooldown, the range and the spellCost.
+	 * @param pType Type of the shape (in this case cross)
+	 */
+	public ShapeCross(String pType) {
 		
-		super(pName);
+		super(pType);
 		
 		this.effectedCoordinates.add(new Coordinate(0,0));
 		
@@ -37,10 +43,10 @@ public class ShapeCross extends ShapeSpecial{
 	//@override
 	public void setShape()
 	{
-		this.damage = Shape.SC_DAMAGE;
-		this.cooldown = Shape.SC_COOLDOWN;
-		this.range = Shape.SC_RANGE;
-		this.spellCost = Shape.SC_SPELLCOST;
+		this.damage = ShapeSpecial.SC_DAMAGE;
+		this.cooldown = ShapeSpecial.SC_COOLDOWN;
+		this.range = ShapeSpecial.SC_RANGE;
+		this.spellCost = ShapeSpecial.SC_SPELLCOST;
 	}
 
 }

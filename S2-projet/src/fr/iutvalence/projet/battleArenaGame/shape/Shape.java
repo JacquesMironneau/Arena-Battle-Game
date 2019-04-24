@@ -5,97 +5,72 @@ import fr.iutvalence.projet.battleArenaGame.move.Coordinate;
  * 
  * @author Jules
  * represent a shape for a spell. defined damage, max cooldown, range and his price.
- *  
+ * A shape represents how a spell is physically represented, it can be a ball, a fist, a sword
  */
 public class Shape {
 
 //Constants
-	
-//TODO assign correct values to each of these constants.
-	
-//beam constants
-	/**
-	 * Represents the damage of a beam shape
-	 */
-	public final static int SB_DAMAGE = 0;
-	/**
-	 * Represents the cooldown of a beam shape
-	 */
-	public final static int SB_COOLDOWN= 0;
-	
-	/**
-	 * Represents the range of a beam shape
-	 */
-	public final static int SB_RANGE = 0;
-	
-	/**
-	 * Represents the cost of a beam shape
-	 */
-	public final static int SB_SPELLCOST = 0;
-	
 
-//cross constants
+//ball shape constants
 	/**
-	 * Represents the damage of a cross shape
+	 * Represents the damage of a ball shape.
 	 */
-	public final static int SC_DAMAGE = 0;
+	public final static int BALL_DAMAGE = 0;
 	/**
-	 * Represents the cooldown of a cross shape
+	 * Represents the cooldown of a ball shape.
 	 */
-	public final static int SC_COOLDOWN= 0;
+	public final static int BALL_COOLDOWN = 2;
 	/**
-	 * Represents the range of a cross shape
+	 * Represents the range of a ball shape.
 	 */
-	public final static int SC_RANGE = 0;
+	public final static int BALL_RANGE = 5;
 	/**
-	 * Represents the cost of a cross shape
+	 * Represents the cost of a ball shape.
 	 */
-	public final static int SC_SPELLCOST = 0;
-	
-	
-//square constants
-	/**
-	 * Represents the damage of a square shape.
-	 */
-	public final static int SSQ_DAMAGE = 0;
-	/**
-	 * Represents the cooldown of a square shape.
-	 */
-	public final static int SSQ_COOLDOWN = 0;
-	/**
-	 * Represents the range of a square shape.
-	 */
-	public final static int SSQ_RANGE = 0;
-	/**
-	 * Represents the cost of a square shape.
-	 */
-	public final static int SSQ_SPELLCOST = 0;
+	public final static int BALL_SPELLCOST = 3;
 
-	
-//standard constants
+//sword shape constants
 	/**
-	 * Represents the damage of a standard shape.
+	 * Represents the damage of a sword shape.
 	 */
-	public final static int STD_DAMAGE = 0;
+	public final static int SWD_DAMAGE = 0;
 	/**
-	 * Represents the cooldown of a standard shape.
+	 * Represents the cooldown of a sword shape.
 	 */
-	public final static int STD_COOLDOWN = 0;
+	public final static int SWD_COOLDOWN = 2;
 	/**
-	 * Represents the range of a standard shape.
+	 * Represents the range of a sword shape.
 	 */
-	public final static int STD_RANGE = 0;
+	public final static int SWD_RANGE = 1;
 	/**
-	 * Represents the cost of a standard shape.
+	 * Represents the cost of a sword shape.
 	 */
-	public final static int STD_SPELLCOST = 0;
+	public final static int SWD_SPELLCOST = 3;
+
+//fist shape constants
+	/**
+	 * Represents the damage of a fist shape.
+	 */
+	public final static int FIST_DAMAGE = 0;
+	/**
+	 * Represents the cooldown of a fist shape.
+	 */
+	public final static int FIST_COOLDOWN = 1;
+	/**
+	 * Represents the range of a fist shape.
+	 */
+	public final static int FIST_RANGE = 1;
+	/**
+	 * Represents the cost of a fist shape.
+	 */
+	public final static int FIST_SPELLCOST = 2;
 	
 	
 //Attributes
 	/**
 	 * the name of the shape.
 	 */
-	protected String name;
+	protected String type;
 	/**
 	 * Represents the damage of the shape in health points.
 	 */
@@ -125,11 +100,11 @@ public class Shape {
 	 * it also set the values for the different types of shapes. 
 	 * @param pName is the name of the shape
 	 */
-	public Shape(String pName)
+	public Shape(String pType)
 	{
-		this.name = pName;
+		this.type = pType;
 		this.effectedCoordinate = new Coordinate(0,0);
-		this.setShape();
+		this.setShape(this.type);
 	}
 	
 	
@@ -168,9 +143,9 @@ public class Shape {
 	 * 
 	 * @return the name of the shape.
 	 */
-	public String getName()
+	public String getType()
 	{
-		return this.name;
+		return this.type;
 	}
 	
 //setters	
@@ -179,16 +154,44 @@ public class Shape {
 	 */
 	public void setShape()
 	{
-		this.damage = STD_DAMAGE;
-		this.cooldown = STD_COOLDOWN;
-		this.range = STD_RANGE;
-		this.spellCost = STD_SPELLCOST;
+		this.damage = 0;
+		this.cooldown = 0;
+		this.range = 0;
+		this.spellCost = 0;
+	}
+	
+	public void setShape(String type)
+	{
+		switch(type)
+		{
+			case "ball":
+				this.damage = BALL_DAMAGE;
+				this.cooldown = BALL_COOLDOWN;
+				this.range = BALL_RANGE;
+				this.spellCost = BALL_SPELLCOST;
+				break;
+				
+			case "fist":
+				this.damage = FIST_DAMAGE;
+				this.cooldown = FIST_COOLDOWN;
+				this.range = FIST_RANGE;
+				this.spellCost = FIST_SPELLCOST;
+				break;
+				
+			case "sword":
+				this.damage = SWD_DAMAGE;
+				this.cooldown = SWD_COOLDOWN;
+				this.range = SWD_RANGE;
+				this.spellCost = SWD_SPELLCOST;
+				break;
+				
+		}
 	}
 
 //toString
 	@Override
 	public String toString() {
-		return "Shape [name=" + name + ", damage=" + damage + ", cooldown=" + cooldown + ", range=" + range
+		return "Shape [name=" + type + ", damage=" + damage + ", cooldown=" + cooldown + ", range=" + range
 				+ ", spellCost=" + spellCost + ", effectedCoordinate=" + effectedCoordinate + "]";
 	}
 	
