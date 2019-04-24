@@ -5,6 +5,7 @@ import java.util.Scanner;
 
 import fr.iutvalence.projet.battleArenaGame.move.Coordinate;
 import fr.iutvalence.projet.battleArenaGame.move.Movement;
+import fr.iutvalence.projet.battleArenaGame.network.Network;
 import fr.iutvalence.projet.battleArenaGame.pawn.Pawn;
 import fr.iutvalence.projet.battleArenaGame.spell.Spell;
 import fr.iutvalence.projet.battleArenaGame.spell.SpellPage;
