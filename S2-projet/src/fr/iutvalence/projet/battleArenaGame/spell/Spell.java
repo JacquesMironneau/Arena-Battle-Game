@@ -82,4 +82,10 @@ public class Spell {
 	{
 		this.myShape = pShape;
 	}
+	
+	
+	public String toString()
+	{
+		return "[ currentCooldown=" + currentCooldown + ", myShape=" + myShape + ", myEffect=" + myEffect + "]";
+	}
 }
