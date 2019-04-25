@@ -16,8 +16,9 @@ import java.util.HashSet;
 
 /**
  * Client class represent one of the player who can connect to the server, receive data or send others to the server
- * In the future, player will be able to discover the ip of the server just with the 2 last methods.
- * For now it does use the ip address in the constructor.
+ * In the future, player will be able to discover the IP of the server just with the 2 last methods.(With udp features, soon done)
+ * For now it does use the IP address in the constructor.
+ * 
  * @author pashmi
  *
  */
@@ -41,7 +42,10 @@ public class Client
     
     //Socket of the client
     private Socket socket;
-
+    
+    //Network of the system: Used to translate received object into methods calls
+    private Network myNetwork;
+    //
     
     /**
      * Constructor for the client
@@ -49,10 +53,11 @@ public class Client
      * @param port: Port of communication with the server
      * @param address : address of the server
      */
-    public Client(int port, String address)
+    public Client(int port, String address, Network pNetwork)
     {
         this.port = port;
         this.serverAddress = address;
+        this.myNetwork = pNetwork;
     }
     
     /**
@@ -102,17 +107,13 @@ public class Client
             try{
                 Object obj_receive = in.readObject();
                 System.out.println(socket.getInetAddress() + " (server) : " + obj_receive);
+                myNetwork.Transform(obj_receive);
+                
             }
             catch(Exception io){
                 io.printStackTrace();
             }
-      /*      catch (ClassNotFoundException e) {
-                e.printStackTrace();
-            }*/
-
-
         }
-
     }
 
     /**
@@ -138,7 +139,7 @@ public class Client
     /**
      * Send an object to the server
      * by writing in the outputStream the object
-     * @param o object written in the outputstream
+     * @param o object written in the output stream
      */
     public void Send(Object o)
     {
@@ -156,114 +157,5 @@ public class Client
             System.out.println("Can't send : not connected");
         }
     }
-
-    /**
-     * 
-     * @return if the socket of the client is connected
-     */
-    public boolean isConnected()
-    {
-        return socket.isConnected();
-    }
-
-    /**
-     * NOT USED YET, WORK IN PROGRESS
-     * @return
-     */
-    public HashSet<String> discoverNetwork()
-    {
-        InetAddress localHost = null;
-        try {
-            localHost = Inet4Address.getLocalHost();
-        } catch (UnknownHostException e) {
-            e.printStackTrace();
-        }
-        NetworkInterface networkInterface = null;
-        try {
-            networkInterface = NetworkInterface.getByInetAddress(localHost);
-        } catch (SocketException e) {
-            e.printStackTrace();
-        }
-
-        //Local address
-        byte[] local_byte = localHost.getAddress();
-
-        //Get the mask
-        byte[] mask = networkInterface.getInterfaceAddresses().get(0).getBroadcast().getAddress();
-
-        ByteAddress ba = new ByteAddress(mask, local_byte);
-        ba.Afficher();
-
-        //Create all accessible addresses
-        ArrayList<InetAddress> all_addresses = ba.getAllAddresses();
-
-        //Test one address
-//        all_addresses.clear();
-//        try {
-//            all_addresses.add(InetAddress.getByName("10.188.88.106"));
-//        } catch (UnknownHostException e) {
-//            e.printStackTrace();
-//        }
-
-        //Prepare to send
-        DatagramSocket socketClient = null;
-        try 
-        {
-            socketClient = new DatagramSocket(port);
-        } catch (SocketException e) {
-            e.printStackTrace();
-        }
-
-        //Message
-        byte[] msgSend = new byte[1];
-        msgSend[0] = MSG_UDP;
-
-
-        //Create a thread to listen
-        DatagramSocket finalSocketClient = socketClient;
-        Thread t_receive = new Thread(() -> listenUDPReceive(finalSocketClient));
-        t_receive.start();
-
-        //Send the message to everyone
-        for (int i = 0; i < all_addresses.size(); i++) 
-        {
-            DatagramPacket dp = new DatagramPacket(msgSend, msgSend.length, all_addresses.get(i), port);
-            //Send
-            try {
-                socketClient.send(dp);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
-
-        HashSet<String> res = new HashSet<>();
-        return res;
-    }
-
-    
-    //To add feature: not used yet
-    /**
-     * 
-     * @param s_Client
-     */
-    public void listenUDPReceive(DatagramSocket s_Client)
-    {
-        while(true){
-            try {
-                byte[] buff = new byte[1];
-                DatagramPacket dp_listener = new DatagramPacket(buff, buff.length);
-                System.out.println("Ready to receive UDP...");
-                s_Client.receive(dp_listener);
-                System.out.println("Received response from : " + dp_listener.getAddress().toString());
-
-            } catch (SocketException e) {
-                e.printStackTrace();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-
-        }
-    }
-
 
 }
