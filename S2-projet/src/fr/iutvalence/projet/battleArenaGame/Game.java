@@ -7,6 +7,7 @@ import fr.iutvalence.projet.battleArenaGame.move.Coordinate;
 import fr.iutvalence.projet.battleArenaGame.move.Movement;
 import fr.iutvalence.projet.battleArenaGame.network.Network;
 import fr.iutvalence.projet.battleArenaGame.pawn.Pawn;
+import fr.iutvalence.projet.battleArenaGame.pawn.PawnTeam;
 import fr.iutvalence.projet.battleArenaGame.spell.Spell;
 import fr.iutvalence.projet.battleArenaGame.spell.SpellPage;
 
@@ -36,7 +37,10 @@ public class Game
 	public final static Coordinate BASE_POS_2PAWN1 = new Coordinate(2,14);
 	public final static Coordinate BASE_POS_2PAWN2 = new Coordinate(7,13);
 	public final static Coordinate BASE_POS_2PAWN3 = new Coordinate(12,14);
-	
+	/**
+	 * Number of all Pawn in the game
+	 */
+	public final static int PAWN_NUMBER = 6;
 	/**
 	 * First player of the game, the one who start in the first turn
 	 */
@@ -73,7 +77,7 @@ public class Game
 	 */
 	public Game()
 	{
-		
+		this.turnOrder = new ArrayList<Pawn>();
 	}
 	
 	/**
@@ -168,21 +172,38 @@ public class Game
 	}
 	
 	/**
-	 * Remove the deads pawn(hp <= 0) from the hashmap every time a new turn begin
+	 * Remove the deads pawn(hp <= 0) from the arrayList every time a new turn begin
 	 */
 	private void removeDeads()
 	{
-		
+		for(int pawnIndex = 0; pawnIndex >this.turnOrder.size();pawnIndex++)
+		{
+			if(this.turnOrder.get(pawnIndex).getHealthPoints()==0)
+			{
+				this.turnOrder.remove(pawnIndex);
+			}
+		}
 	}
 	
+	
+	
+
 	/**
-	 * After a turn, change the currentPawn to the next one in the hashMap
+	 * Change the currentPawn to the next one in the turnOrder array List
 	 * If the currentPawn is the last one, change to the first one
 	 * 
 	 */
 	private void nextPawn()
 	{
-		
+		int nextPawnIndex = this.turnOrder.indexOf(currentPawn)+1;
+		if(nextPawnIndex>PAWN_NUMBER-1)
+		{
+			this.currentPawn = this.turnOrder.get(0);
+		}
+		else
+		{
+			this.currentPawn = this.turnOrder.get(nextPawnIndex);
+		}
 	}
 	
 	
@@ -220,6 +241,7 @@ public class Game
 	/**
 	 * Create a spell page, including the creation of his 3 spells and add
 	 * it to the player spellPage list
+	 * WORK IN PROGRESS
 	 */
 	public void createSpellPage()
 	{
@@ -238,5 +260,25 @@ public class Game
 			}
 		
 	}
+
+	/**
+	 * Getter for turnOrder
+	 * @return the turnOrder
+	 */
+	public ArrayList<Pawn> getTurnOrder()
+	{
+		return turnOrder;
+	}
+	
+	/**
+	 * Setter for turnOrder
+	 * @param pTurnOrder : the turnOrder to set
+	 */
+	public void setTurnOrder(ArrayList<Pawn> pTurnOrder)
+	{
+		this.turnOrder = pTurnOrder;
+	}
+	
+	
 	
 }
