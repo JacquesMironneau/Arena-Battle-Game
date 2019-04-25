@@ -11,7 +11,7 @@ import fr.iutvalence.projet.battleArenaGame.spell.SpellPage;
 /**
  * Represents the network of the game,
  * it enables the system to send and receive data to a distant computer.
- * @author durantho
+ * @author mironnej,durantho
  *
  * This class will deal with every object received and call the rights methods in order to do the needed job.
  * For instance after a player do damages or effects, it send the affected pawn.
@@ -39,8 +39,8 @@ public class Network {
 		if(transferedObject.getClass() == ArrayList.class)
 		{
 			//Unsafe but works actually
+			@SuppressWarnings("unchecked")
 			ArrayList<Pawn> ModifiedArrayListOfPawns = (ArrayList<Pawn>) transferedObject;
-			
 
 			//For each pawn of the arrayList, it does print it (DEBUG ONLY: TODO: REMOVE THESES 3LINES)
 			for(Pawn PawnIndexInTheArrayList : ModifiedArrayListOfPawns)
@@ -55,6 +55,7 @@ public class Network {
 	
 	/*
 	 * Test main 
+	 * TODO: remove
 	 */
 	public static void main(String[] args)
 	{

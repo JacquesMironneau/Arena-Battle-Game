@@ -3,10 +3,13 @@ package fr.iutvalence.projet.battleArenaGame;
 import java.util.ArrayList;
 import java.util.Scanner;
 
+import fr.iutvalence.projet.battleArenaGame.exceptions.SpellIndexException;
 import fr.iutvalence.projet.battleArenaGame.exceptions.SpellNotFoundException;
 import fr.iutvalence.projet.battleArenaGame.move.Coordinate;
 import fr.iutvalence.projet.battleArenaGame.move.Movement;
+import fr.iutvalence.projet.battleArenaGame.network.Client;
 import fr.iutvalence.projet.battleArenaGame.network.Network;
+import fr.iutvalence.projet.battleArenaGame.network.Server;
 import fr.iutvalence.projet.battleArenaGame.pawn.Pawn;
 import fr.iutvalence.projet.battleArenaGame.spell.Spell;
 import fr.iutvalence.projet.battleArenaGame.spell.SpellPage;
@@ -27,10 +30,33 @@ public class Game
 	 * Size of the board (length of the square)
 	 */
 	public final static int BOARD_SIZE = 15;
+	
+	/**
+	 * Used in the network : Numbers of player (excluding the host)
+	 */
+    public final static int MAXPLAYERS = 1;
+    
+    /**
+     * Used in the network : Message send by a Client to left the application
+     */
+    public final static String QUIT = "quit";
+	
+    
+    /**
+     * Used in the network: Port 
+     */
+    
+    public final static int PORT = 12899;
+    
+    /**
+     * Used in the network: IP address of the server (might be deleted when UDP auto IP will be implemented
+     */
+    
+    public final static String HOST_ADDRESS = "";
 	/**
 	 * These values are the default position of pawns at the start of the game
 	 * The first number is the player's number and the second is the pawn's number
-	 * TODO: move this in init method
+	 * TODO: move this in init() method
 	 */
 	public final static Coordinate BASE_POS_1PAWN1 = new Coordinate(2,0);
 	public final static Coordinate BASE_POS_1PAWN2 = new Coordinate(7,1);
@@ -59,6 +85,7 @@ public class Game
 	
 	/**
 	 * Represent the GUI of the game
+	 *TODO might be removed
 	 */
 	private GraphicUserInterface myGui;
 
@@ -73,12 +100,32 @@ public class Game
 	private Pawn currentPawn;
 	
 	/**
+	 * If the user chose to join a game, he will be a Client in the network system.
+	 */
+	private Client myClient;
+	
+	/**
+	 * If the user chose to join a game, he will be represented as the Server in the network system.
+	 */
+	private Server myServer;
+	
+	/*
+	 * Represents if the user of the system embodies the server or is just a client
+	 * Used 
+	 */
+	private boolean isServer;
+	
+	
+	/**
 	 * Constructor for Game
 	 * create the game, and call init to initialize the board.
 	 */
 	public Game()
 	{
+		this.player1 = new Player();
 		this.turnOrder = new ArrayList<Pawn>();
+		this.myNetwork = new Network(this);
+		//Server and client are created in play method if the player chose to create a game (create Server) or to join (create Client)
 	}
 	
 	/**
@@ -93,11 +140,34 @@ public class Game
 	 */
 	public void play()
 	{	
-	//TODO: Un switch sur un scanner qui permet de choisir le menu (créerPartie/rejoindre/créerSort)
-	//Pour faire des test réseau et l'implémenter dans la classe Game
 		
-		//Select an action in the menu
-		createSpellPage();
+		Scanner sc = new Scanner(System.in); //TODO replace by java.io stream
+		System.out.println("----------------Menu-----------------");
+		System.out.println("1) Créer une page de sort");
+		System.out.println("2) Créer une partie");
+		System.out.println("3) Rejoindre une partie");
+		int result = sc.nextInt();
+		
+		switch(result)
+		{
+		case 1:
+			createSpellPage();
+			break;
+			
+		case 2: // server
+			myServer = new Server(Game.PORT, myNetwork);
+			myServer.init(); // Launch the server
+			
+			break;
+		
+		case 3: // client 
+			myClient = new Client(Game.PORT,Game.HOST_ADDRESS, myNetwork);
+			myClient.connect(); // Connect the client to the server
+			break;
+		default:
+			System.out.println("Please enter a valid choice...");
+		}
+		
 		
 		
 	}
@@ -139,6 +209,13 @@ public class Game
 			//Replace the pawn of the turnOrder (so the current one) by the currentPawn with moved coordinates)
 			this.turnOrder.set(this.turnOrder.indexOf(this.currentPawn), this.currentPawn);
 			
+			
+			//Send the turn order (need to create myServer and myClient (in Game consctructor and then in play method
+			if(this.isServer)
+				myServer.SendAll(this.turnOrder);
+			else
+				myClient.Send(this.turnOrder);
+			
 			//The movement is done
 			return true;
 		}
@@ -154,7 +231,7 @@ public class Game
 	
 	 * @return  true if the chosen spell by the player is valid and authorized
 	 */
-	public boolean checkSpell(Spell pSpell, Movement pMovement) throws SpellNotFoundException
+	public boolean checkSpell(Spell pSpell, Movement pMovement) throws SpellNotFoundException, SpellIndexException
 	{
 		//Find which spell is used on the pawn spellPage
 		int spellNumber;
@@ -200,29 +277,29 @@ public class Game
 			//Set the cooldown on the spell used
 			switch(spellNumber)
 			{
-			case 1 :
+			case 1:
 				this.currentPawn.getSpellPage().getSpell1().resetCooldown();
-			case 2 :
+				break;
+			case 2:
 				this.currentPawn.getSpellPage().getSpell2().resetCooldown();
-			case 3 :
+				break;
+			case 3:
 				this.currentPawn.getSpellPage().getSpell3().resetCooldown();
+				break;
+			default:
+				throw new SpellIndexException();
 			}
-			//TODO LAUNCH THE SPELL
+			//TODO LAUNCH THE SPELL: setHealthsPoint( New hp here ) <- the check of negatives health points is done in Pawn class
 			
 			//And send data to the other player, use:  Send(this.turnOrder); (might need a try catch statement)
-			
 		}
-			
-			
-			
-			
-			
 		return true; // To remove errors due to type returned
 	}
 	
 	
 	/**
 	 * TODO: check sequences diagram
+	 * Disconnect the user (myClient.disconnect() and the Server ( myServer.disconnectAll())
 	 */
 	private void endGame()
 	{
@@ -235,7 +312,7 @@ public class Game
 	 */
 	private void closeGame()
 	{
-		System.exit(1);
+		System.exit(1); // This stop in a clean way the application
 	}
 	
 	/**
@@ -251,8 +328,6 @@ public class Game
 			}
 		}
 	}
-	
-	
 	
 
 	/**
@@ -275,7 +350,6 @@ public class Game
 	
 	
 	/** MIGHT BE DELETED OR REPLACED BY THE DISTANCE IN MOVEMENT
-	 * The "calcul savant"
 	 * Check if the chosen destination (for spell or movement) is in range
 	 * 
 	 
@@ -299,12 +373,13 @@ public class Game
 	
 	/**
 	 * Set new coordinates for a pawn with a selected movement
-	 * TODO
+	 * TODO: might be remove due to the non access of the pawn
 	 */
 	public void updateBoard(Movement pMove)
 	{
 		
 	}
+	
 	/** TODO
 	 * Create a spell page, including the creation of his 3 spells and add
 	 * it to the player spellPage list
@@ -323,6 +398,7 @@ public class Game
 		
 		boolean pageFinished = false;
 		
+		//TODO Set true maybe XD
 		while(pageFinished == false)
 		{
 			Spell createdSpell = new Spell();

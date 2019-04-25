@@ -26,18 +26,6 @@ public class Movement {
 	
 	/**
 	 * Constructor of a movement
-	 * set all the parameters to null by default.
-	 * 
-	 * TODO: remove this or add setters
-	 */
-	public Movement()
-	{
-		this.distance = 0;
-		this.originCoordinate = null;
-		this.destCoordinate = null;
-	}
-	
-	/**
 	 * Create a movement with a origin position and a destination 
 	 * and set the distance
 	 * @param pOrigin coordinate of the pawn. 

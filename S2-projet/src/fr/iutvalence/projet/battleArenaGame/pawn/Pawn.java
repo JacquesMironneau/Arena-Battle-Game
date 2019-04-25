@@ -10,8 +10,8 @@ import fr.iutvalence.projet.battleArenaGame.spell.SpellPage;
  * Represents a Pawn
  * He has HealthPoints, MovePoints, ActionPoints, a spellPage, coordinates, active effects and belong to a team.
  * each player have 3 pawns.
- * @author charvevi
  *
+ * @author charvevi
  */
 public class Pawn {
 	//TODO Complete the default values for HP, PM and PA
@@ -60,6 +60,7 @@ public class Pawn {
 	 */
 	private SpellPage mySpellPage;
 	
+
 	/**
 	 * List of all the active effect on the Pawn
 	 */
@@ -80,12 +81,13 @@ public class Pawn {
 		this.currentCoordinate = pBaseCoordinate;
 		this.mySpellPage = pSpellPage;
 		
-		
 	}
+	
 	/**
 	 * Setter for currentCoordinate
 	 * @param pDestination : the destination of the Pawn
 	 */
+	
 	public void setPos(Coordinate pDestination)
 	{
 		this.currentCoordinate = pDestination;
@@ -142,8 +144,11 @@ public class Pawn {
 	 * @param pHP : amount of healthPoints to set
 	 */
 	public void setHealthPoints(int pHP)
-	{
-		this.healthPoints= pHP;
+	{	
+		if(this.healthPoints < 0) // TODO: a way to check if health points are negatives
+			this.healthPoints = 0;
+		else 
+			this.healthPoints= pHP;
 	}
 	
 	/**
@@ -153,6 +158,15 @@ public class Pawn {
 	public int getHealthPoints()
 	{
 		return this.healthPoints;
+	}
+	
+	/**
+	 * Getter for the team of the pawn
+	 * @return in which team the pawn is
+	 */
+	public PawnTeam getTeam()
+	{
+		return this.team;
 	}
 	
 	/**
@@ -182,13 +196,14 @@ public class Pawn {
 		for(int arrayIndex=0;arrayIndex<activeEffects.size();arrayIndex++)
 		{
 		  PawnEffect effectToUpdate = activeEffects.get(arrayIndex);
-		  effectToUpdate.setCurrentDuration(effectToUpdate.getCurrentDuration()-1);
+		  effectToUpdate.setCurrentDuration(effectToUpdate.getCurrentDuration() -1);
 		  PawnEffect updatedEffect = effectToUpdate;
-		  if(updatedEffect.getCurrentDuration()==0)
+		  
+		  if(updatedEffect.getCurrentDuration() == 0)
 			  activeEffects.remove(arrayIndex);
+		  
 		  else
 			  activeEffects.set(arrayIndex, updatedEffect);
-		  
 		}
 	}
 	

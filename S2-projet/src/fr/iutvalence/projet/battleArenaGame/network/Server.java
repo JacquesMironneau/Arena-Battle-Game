@@ -3,10 +3,10 @@ package fr.iutvalence.projet.battleArenaGame.network;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-import java.net.DatagramPacket;
-import java.net.DatagramSocket;
 import java.net.ServerSocket;
 import java.net.Socket;
+
+import fr.iutvalence.projet.battleArenaGame.Game;
 
 /**
  * Server class represent one of the player which receive and send data to other player and manage the game
@@ -39,12 +39,7 @@ public class Server
     
     //Network of the system: Used to translate received object into methods calls
     private Network myNetwork;
-    
-    /**
-     * temporary constants (move them to Game class)
-     */
-    public final static int MAXPLAYERS = 2;
-    public final static String QUIT = "quit";
+ 
     
     /**
      * Constructor for the server
@@ -55,7 +50,7 @@ public class Server
     {
         this.port = port;
         this.playersConnected = 0;
-        this.clients = new Object[MAXPLAYERS][3];
+        this.clients = new Object[Game.MAXPLAYERS][3];
         this.myNetwork = pNetwork;
 
     }
@@ -80,13 +75,14 @@ public class Server
             socketServ = new ServerSocket(port);
         }
         catch (IOException e) {
+        	//TODO replace this
             e.printStackTrace();
         }
 
 
 
         //The server starts to emit or send when every player are connected
-        while(this.playersConnected < MAXPLAYERS)
+        while(this.playersConnected < Game.MAXPLAYERS)
         {
             try{
 
@@ -123,6 +119,7 @@ public class Server
 
             } catch(Exception e)
             {
+            	//TODO replace this
                 e.printStackTrace();
             }
         }
@@ -147,13 +144,10 @@ public class Server
                 msg = pInput.readObject();
             } catch (Exception e) {
                 e.printStackTrace();
-
+            }
             System.out.println(socketClient.getInetAddress() + " :" + msg);
-           //Transform the object 
-            myNetwork.Transform(msg);
 
-
-            if (msg.equals(QUIT))
+            if (msg.equals(Game.QUIT))
             {
                 System.out.println("Deconnexion de " + pSocket.getInetAddress());
 
@@ -174,19 +168,14 @@ public class Server
                 this.playersConnected--;
 
             }
-
+            
+            //Transform the object 
+            //TODO : might need a thread in order to optimize the 
+            myNetwork.Transform(msg);
         }
-/*
-To test the kind of message received: to move in network class
-            if(msg.getClass() == Block.class)
-            {
-                Block b = new Block((Block)msg);
-                System.out.println("b est " + b);
-            }
 
-*/
-        }
     }
+    
 
 
     /**
@@ -204,6 +193,7 @@ To test the kind of message received: to move in network class
                 ((ObjectOutputStream)clients[i][2]).writeObject(o);
             }
             catch (Exception e) {
+            	//TODO Replace this
                 e.printStackTrace();
             }
         }
@@ -232,7 +222,7 @@ To test the kind of message received: to move in network class
         }
         else
             System.out.println("Id non reconnu... Soon tm une exception...");
-
+        //Exception : IdClientException()
     }
 
 

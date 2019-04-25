@@ -1,18 +1,11 @@
-package fr.iutvalence.projet.battleArenaGame.network;
+ package fr.iutvalence.projet.battleArenaGame.network;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-import java.net.DatagramPacket;
-import java.net.DatagramSocket;
-import java.net.Inet4Address;
-import java.net.InetAddress;
-import java.net.NetworkInterface;
 import java.net.Socket;
-import java.net.SocketException;
-import java.net.UnknownHostException;
-import java.util.ArrayList;
-import java.util.HashSet;
+
+import fr.iutvalence.projet.battleArenaGame.Game;
 
 /**
  * Client class represent one of the player who can connect to the server, receive data or send others to the server
@@ -23,10 +16,8 @@ import java.util.HashSet;
  *
  */
 
-//TODO: move constants to game class (msg_udp)
 public class Client
 {
-    public static final byte MSG_UDP = 1;
 
     //The port of the server
 	private int port;
@@ -122,7 +113,7 @@ public class Client
     public void Disconnect()
     {
         if(socket.isConnected()){
-            this.Send(Server.QUIT);
+            this.Send(Game.QUIT);
 
             try{
                 socket.close();

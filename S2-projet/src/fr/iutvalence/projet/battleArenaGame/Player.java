@@ -19,6 +19,7 @@ import fr.iutvalence.projet.battleArenaGame.spell.SpellPage;
  * A player can ask to the system to move one of his pawn, or cast a spell, or end his turn.
  * each player interact with the application on different computer.
  */
+
 public class Player {
 	
 	/**
@@ -84,7 +85,6 @@ public class Player {
 		 */
 		this.game.checkMove(mov);
 		
-		
 	}
 	
 	/**
@@ -93,7 +93,7 @@ public class Player {
 	 * @param pSpell The spell that the player want to cast.
 	 * @throws SpellNotFoundException in case of the pawn doesn't own the asked spell
 	 */
-	public void askSpell(Coordinate pDest, Spell pSpell) throws SpellNotFoundException
+	public void askSpell(Coordinate pDest, Spell pSpell)
 	{
 		/*
 		 * Create a movement with the coordinates of the currentPawn and the Destination (coordinate) chosen by the player
@@ -103,7 +103,13 @@ public class Player {
 		/*
 		 * Try to launch the spell to 
 		 */
-		this.game.checkSpell(pSpell, mov);
+		try {
+			this.game.checkSpell(pSpell, mov);
+		}
+		catch(SpellNotFoundException|SpellIndexException e) 
+		{
+			e.printStackTrace();
+		}
 	}
 	
 	
