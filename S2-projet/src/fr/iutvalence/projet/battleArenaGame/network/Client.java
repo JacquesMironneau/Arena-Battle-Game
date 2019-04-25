@@ -45,7 +45,7 @@ public class Client
     
     //Network of the system: Used to translate received object into methods calls
     private Network myNetwork;
-    //
+    
     
     /**
      * Constructor for the client
