@@ -72,12 +72,12 @@ public class Game
 	/**
 	 * First player of the game, the one who start in the first turn
 	 */
-	private Player player1;
+	private Player localPlayer;
 	
 	/**
 	 * Second player of the game
 	 */
-	private Player player2;
+	private Player remotePlayer;
 	
 	/**
 	 * This list represent Pawns currently living and define the turn order
@@ -123,7 +123,7 @@ public class Game
 	 */
 	public Game()
 	{
-		this.player1 = new Player();
+		this.localPlayer = new Player();
 		this.turnOrder = new ArrayList<Pawn>();
 		this.myNetwork = new Network(this);
 		//Server and client are created in play method if the player chose to create a game (create Server) or to join (create Client)
@@ -139,6 +139,10 @@ public class Game
 	 * When the player ask to end his turn, the system switch to next player with a new currentPawn.
 	 * 
 	 */
+	
+	//TODO Manage the two players, the two different ArrayList (Does the pawn of the LocalPlayer are the odd ones ?
+	// Manage turn, one player should not play while it's the other turn
+	//Might need to send if the player can play or not
 	public void play()
 	{	
 		
@@ -406,7 +410,7 @@ public class Game
 		System.out.println("Entrer le nom de la page de sort");
 		String pageName = scan.nextLine();
 		
-		player1.addSpellPage(new SpellPage(pageName));
+		localPlayer.addSpellPage(new SpellPage(pageName));
 		
 		boolean pageFinished = false;
 		
