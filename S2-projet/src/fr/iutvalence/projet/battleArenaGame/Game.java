@@ -85,7 +85,9 @@ public class Game
 	 */
 	public void play()
 	{	
-	
+	//TODO: Un switch sur un scanner qui permet de choisir le menu (créerPartie/rejoindre/créerSort)
+	//Pour faire des test réseau et l'implémenter dans la classe Game
+		
 		//Select an action in the menu
 		createSpellPage();
 		
