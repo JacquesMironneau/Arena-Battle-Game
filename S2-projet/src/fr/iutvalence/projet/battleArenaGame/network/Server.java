@@ -37,6 +37,9 @@ public class Server
     //table which contains Socket, ObjectInputStream & ObjectOutputStream of a customer
     private Object[][] clients;
     
+    //Network of the system: Used to translate received object into methods calls
+    private Network myNetwork;
+    
     /**
      * temporary constants (move them to Game class)
      */
@@ -48,11 +51,12 @@ public class Server
      * When the server is started there is no player connected
      * @param port chosen in the Game class
      */
-    public Server(int port)
+    public Server(int port, Network pNetwork)
     {
         this.port = port;
         this.playersConnected = 0;
         this.clients = new Object[MAXPLAYERS][3];
+        this.myNetwork = pNetwork;
 
     }
 
@@ -67,6 +71,7 @@ public class Server
     public void init()
     {
 
+        //TODO remove debug
         System.out.println("Serveur en lancement...(c'est pas vrai il est pas lancé)");
 
         socketServ = null;
@@ -78,8 +83,7 @@ public class Server
             e.printStackTrace();
         }
 
-        //Create thread to listen for udp search
-        new Thread(() -> ReceiveSearchUdp());
+
 
         //The server starts to emit or send when every player are connected
         while(this.playersConnected < MAXPLAYERS)
@@ -90,6 +94,7 @@ public class Server
 
                 socketClient = socketServ.accept();
 
+                //TODO remove debug
                 System.out.println("Connected w/ :" + socketClient.getInetAddress());
 
 
@@ -98,7 +103,7 @@ public class Server
 
                 in = new ObjectInputStream(socketClient.getInputStream());
 
-                //It saves the socket, the inputstream and outputstream in the clients array
+                //It saves the socket, the input stream and output stream in the clients array
                 clients[this.playersConnected][0] = socketClient;
                 clients[this.playersConnected][1] = in;
                 clients[this.playersConnected][2] = out;
@@ -107,6 +112,7 @@ public class Server
                 /*
                 Create a new thread to handle the connection of the right and new player connected
                  */
+                //TODO remove debug
                 System.out.println("Nb joueurs courants:" + this.playersConnected + "Socket" + this.clients[this.playersConnected][0] + " OutputStream " + this.clients[this.playersConnected][1]);
 
                 new Thread(() -> Receive(((Socket)clients[playersConnected][0]), ((ObjectInputStream)clients[playersConnected][1])));
@@ -123,25 +129,7 @@ public class Server
 
     }
 
-    private void ReceiveSearchUdp(){
-        try {
-        	
-            DatagramSocket socketServerUDP = new DatagramSocket(port);
-            int sizeBuff = "SEARCH".getBytes().length;
-
-            while(true){
-                byte[] buff = new byte[sizeBuff];
-                DatagramPacket dpReceiver = new DatagramPacket(buff, buff.length);
-                socketServerUDP.receive(dpReceiver);
-
-                //if receive and msg = SEARCH then send back
-                System.out.println(buff.length);
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
+   
     /**
      * Receive method, this method is called by a thread which always listen to a client Socket 
      * It read the object in the stream sent by the client.
@@ -161,6 +149,8 @@ public class Server
                 e.printStackTrace();
 
             System.out.println(socketClient.getInetAddress() + " :" + msg);
+           //Transform the object 
+            myNetwork.Transform(msg);
 
 
             if (msg.equals(QUIT))
