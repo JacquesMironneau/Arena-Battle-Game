@@ -3,8 +3,10 @@ import java.lang.Math;
 
 /**
  * Represents one move of a pawn, with a distance, origin coordinates and destination coordinates.
+ * Might also be a movement of a spell (the ground traveled )
  * @author durantho
  */
+
 public class Movement {
 	
 	/**
@@ -25,6 +27,8 @@ public class Movement {
 	/**
 	 * Constructor of a movement
 	 * set all the parameters to null by default.
+	 * 
+	 * TODO: remove this or add setters
 	 */
 	public Movement()
 	{
@@ -71,6 +75,17 @@ public class Movement {
 	 */
 	public int calculateDistance() 
 	{
-		return Math.abs((this.originCoordinate.getCoordX() - this.destCoordinate.getCoordX())+ (this.originCoordinate.getCoordY()-this.destCoordinate.getCoordY()));
+		return Math.abs(this.originCoordinate.getCoordX() - this.destCoordinate.getCoordX())+ Math.abs(this.originCoordinate.getCoordY()-this.destCoordinate.getCoordY());
 	}
+	
+	/**
+	 * Sum up the movement
+	 */
+	public String toString()
+	{
+		return "Movement [distance=" + distance + ", originCoordinate=" + originCoordinate + ", destCoordinate="
+				+ destCoordinate + "]";
+	}
+	
+	
 }

@@ -2,6 +2,8 @@ package fr.iutvalence.projet.battleArenaGame;
 
 import java.util.ArrayList;
 
+import fr.iutvalence.projet.battleArenaGame.exceptions.SpellIndexException;
+import fr.iutvalence.projet.battleArenaGame.exceptions.SpellNotFoundException;
 import fr.iutvalence.projet.battleArenaGame.move.Coordinate;
 import fr.iutvalence.projet.battleArenaGame.move.Movement;
 import fr.iutvalence.projet.battleArenaGame.pawn.Pawn;
@@ -89,8 +91,9 @@ public class Player {
 	 * Ask to the system to cast a spell to a wanted position.
 	 * @param pDest Destination where the player like to cast a spell.
 	 * @param pSpell The spell that the player want to cast.
+	 * @throws SpellNotFoundException in case of the pawn doesn't own the asked spell
 	 */
-	public void askSpell(Coordinate pDest, Spell pSpell)
+	public void askSpell(Coordinate pDest, Spell pSpell) throws SpellNotFoundException
 	{
 		/*
 		 * Create a movement with the coordinates of the currentPawn and the Destination (coordinate) chosen by the player
@@ -145,7 +148,7 @@ public class Player {
 	 * @param pShape The shape that the player want to apply to a spell.
 	 * @param index: describe which spell of the page will be modified
 	 */
-	public void askShape(Shape pShape, int index)
+	public void askShape(Shape pShape, int index) throws SpellIndexException
 	{
 		//Pick the correct page in the list (the last one here)
 		SpellPage currentPage = this.playerPages.get(playerPages.size());
@@ -159,14 +162,15 @@ public class Player {
 		
 		else
 		{
-			//TODO: Exception
 			System.out.println("Mauvais indice");
+			throw new SpellIndexException();
 		}
 	}
 	
 	/**
 	 * Tell the system that the player have finished to create his spell page
 	 * This method loops while conditions of a valid spell page is missing
+	 * Might be useless, depending on how the loop works
 	 */
 	//TODO
 	public void validateSpellPage()
@@ -195,6 +199,7 @@ public class Player {
 	
 	/**
 	 * Ask to the system if its possible to create a lobby
+	 * TODO: Will probably be remove or move in Game class
 	 */
 	public void askLobbyCreation()
 	{
@@ -203,7 +208,7 @@ public class Player {
 	
 
 	/**
-	 * Send the arrayList to edit it while saving
+	 * Send the arrayList to edit it during the save
 	 */
 	public ArrayList<SpellPage> getPlayerPage()
 	{

@@ -3,11 +3,11 @@ package fr.iutvalence.projet.battleArenaGame;
 import java.util.ArrayList;
 import java.util.Scanner;
 
+import fr.iutvalence.projet.battleArenaGame.exceptions.SpellNotFoundException;
 import fr.iutvalence.projet.battleArenaGame.move.Coordinate;
 import fr.iutvalence.projet.battleArenaGame.move.Movement;
 import fr.iutvalence.projet.battleArenaGame.network.Network;
 import fr.iutvalence.projet.battleArenaGame.pawn.Pawn;
-import fr.iutvalence.projet.battleArenaGame.pawn.PawnTeam;
 import fr.iutvalence.projet.battleArenaGame.spell.Spell;
 import fr.iutvalence.projet.battleArenaGame.spell.SpellPage;
 
@@ -30,6 +30,7 @@ public class Game
 	/**
 	 * These values are the default position of pawns at the start of the game
 	 * The first number is the player's number and the second is the pawn's number
+	 * TODO: move this in init method
 	 */
 	public final static Coordinate BASE_POS_1PAWN1 = new Coordinate(2,0);
 	public final static Coordinate BASE_POS_1PAWN2 = new Coordinate(7,1);
@@ -103,6 +104,7 @@ public class Game
 	
 	/**
 	 * Init method initialize the board witch the beginning places for every pawn,
+	 * Set up the board with pawn initals coordinates (and life and so on)
 	 * 
 	 */
 	private void init()
@@ -144,39 +146,48 @@ public class Game
 		return false; 
 	}
 	
+	
+	
 	/**
 	 *  checkSpell method: Check if the chosen spell is valid
 	 * A spell is valid if the player have enough action Point, if his spell have a cooldown equals to 0 and if the selected destination outside the board
 	
 	 * @return  true if the chosen spell by the player is valid and authorized
 	 */
-	public boolean checkSpell(Spell pSpell, Movement pMovement)
+	public boolean checkSpell(Spell pSpell, Movement pMovement) throws SpellNotFoundException
 	{
 		//Find which spell is used on the pawn spellPage
 		int spellNumber;
+		
 		if(pSpell.equals(this.currentPawn.getSpellPage().getSpell1()))
 			spellNumber = 1;
+		
 		if(pSpell.equals(this.currentPawn.getSpellPage().getSpell2()))
 			spellNumber = 2;
+		
 		if(pSpell.equals(this.currentPawn.getSpellPage().getSpell3()))
 			spellNumber = 3;
-		else
+		
+		else 
 		{
-			System.out.println("Error in checkSpell : the spell used is not found in the pawn's spellPage");
-			return false;
+			//System.out.println("Error in checkSpell : the spell used is not found in the pawn's spellPage");
+			throw new SpellNotFoundException();
+			/*return false;
+			 * Test if this exception does really work
+			 */
 		}
 		
-		if(pSpell.getCurrentCooldown()==0)
+		if(pSpell.getCurrentCooldown() == 0)
 		{	
 			//The spell is on cooldown
 			return false;
 		}
-		else if(pSpell.getShape().getSpellCost()>this.currentPawn.getActionPoints())
+		else if(pSpell.getShape().getSpellCost() > this.currentPawn.getActionPoints())
 		{
 			//The spell cost is bigger than the pawn's action points
 			return false;
 		}
-		else if(pMovement.getDistance()>pSpell.getShape().getRange())
+		else if(pMovement.getDistance() > pSpell.getShape().getRange())
 		{
 			//The target is too far away
 			return false;
@@ -185,7 +196,7 @@ public class Game
 		{
 			//The spell is sent
 			//Remove action points used
-			this.currentPawn.setActionPoints(this.currentPawn.getActionPoints()-pSpell.getShape().getSpellCost());
+			this.currentPawn.setActionPoints(this.currentPawn.getActionPoints() - pSpell.getShape().getSpellCost());
 			//Set the cooldown on the spell used
 			switch(spellNumber)
 			{
@@ -197,6 +208,8 @@ public class Game
 				this.currentPawn.getSpellPage().getSpell3().resetCooldown();
 			}
 			//TODO LAUNCH THE SPELL
+			
+			//And send data to the other player, use:  Send(this.turnOrder); (might need a try catch statement)
 			
 		}
 			
@@ -217,11 +230,12 @@ public class Game
 	}
 	
 	/**
-	 * This method close the game when everything is finished
+	 * This method close the game
+	 * Called when a the game is finished, after results
 	 */
 	private void closeGame()
 	{
-		
+		System.exit(1);
 	}
 	
 	/**
@@ -291,7 +305,7 @@ public class Game
 	{
 		
 	}
-	/**
+	/** TODO
 	 * Create a spell page, including the creation of his 3 spells and add
 	 * it to the player spellPage list
 	 * WORK IN PROGRESS
@@ -301,19 +315,25 @@ public class Game
 		//Creation of a spellPage
 		//TODO Display spell creation menu
 		Scanner scan = new Scanner(System.in);
+		
 		System.out.println("Entrer le nom de la page de sort");
 		String pageName = scan.nextLine();
+		
 		player1.addSpellPage(new SpellPage(pageName));
+		
 		boolean pageFinished = false;
+		
 		while(pageFinished == false)
-			{
-				
-				Spell createdSpell = new Spell();
-				
-			}
+		{
+			Spell createdSpell = new Spell();
+		}
 		
 	}
 
+	/*
+	 * Edit in turnOrder is mainly done in the network package
+	 * (To apply the modifications done by a player to the other
+	 */
 	/**
 	 * Getter for turnOrder
 	 * @return the turnOrder
@@ -325,7 +345,7 @@ public class Game
 	
 	/**
 	 * Setter for turnOrder
-	 * @param pTurnOrder : the turnOrder to set
+	 * @param pTurnOrder : the new turnOrder to set
 	 */
 	public void setTurnOrder(ArrayList<Pawn> pTurnOrder)
 	{

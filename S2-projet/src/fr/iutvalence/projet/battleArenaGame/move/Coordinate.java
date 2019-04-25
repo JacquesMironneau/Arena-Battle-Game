@@ -8,7 +8,7 @@ package fr.iutvalence.projet.battleArenaGame.move;
 public class Coordinate {
 
 	/**
-	 * X value of the coordinate (absciss)
+	 * X value of the coordinate (abscissa)
 	 */
 	private int coordX;
 	/**
