@@ -148,6 +148,15 @@ public class Shape {
 		return this.type;
 	}
 	
+	/**
+	 * 
+	 * @return the range of the shape 
+	 */
+	public int getRange()
+	{
+		return this.range;
+	}
+	
 //setters	
 	/**
 	 * this method enables to set the values that match with different types of shapes

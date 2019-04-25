@@ -83,6 +83,22 @@ public class Spell {
 		this.myShape = pShape;
 	}
 	
+	/**
+	 * Getter for my  the spell shape
+	 * @return the shape of the spell
+	 */
+	public Shape getShape()
+	{
+		return this.myShape;
+	}
+	
+	/**
+	 * Set the current cooldown to the default cooldown defined by the shape
+	 */
+	public void resetCooldown()
+	{
+		this.currentCooldown=this.getDefaultCooldown();
+	}
 	
 	public String toString()
 	{

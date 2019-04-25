@@ -116,6 +116,7 @@ public class Game
 	 * @param Move pMove: A movement chose by the player
 	 * @return true if the chosen move by the player is valid and authorized
 	 */
+	//TODO ajouter reseau
 	public boolean checkMove(Movement pMovement)
 	{
 		//If the pawn has enough move points to move
@@ -149,8 +150,58 @@ public class Game
 	 */
 	public boolean checkSpell(Spell pSpell, Movement pMovement)
 	{
-		//TODO: Get the origin and destination coordinate of the pMovement
+		//Find which spell is used on the pawn spellPage
+		int spellNumber;
+		if(pSpell.equals(this.currentPawn.getSpellPage().getSpell1()))
+			spellNumber = 1;
+		if(pSpell.equals(this.currentPawn.getSpellPage().getSpell2()))
+			spellNumber = 2;
+		if(pSpell.equals(this.currentPawn.getSpellPage().getSpell3()))
+			spellNumber = 3;
+		else
+		{
+			System.out.println("Error in checkSpell : the spell used is not found in the pawn's spellPage");
+			return false;
+		}
 		
+		if(pSpell.getCurrentCooldown()==0)
+		{	
+			//The spell is on cooldown
+			return false;
+		}
+		else if(pSpell.getShape().getSpellCost()>this.currentPawn.getActionPoints())
+		{
+			//The spell cost is bigger than the pawn's action points
+			return false;
+		}
+		else if(pMovement.getDistance()>pSpell.getShape().getRange())
+		{
+			//The target is too far away
+			return false;
+		}
+		else
+		{
+			//The spell is sent
+			//Remove action points used
+			this.currentPawn.setActionPoints(this.currentPawn.getActionPoints()-pSpell.getShape().getSpellCost());
+			//Set the cooldown on the spell used
+			switch(spellNumber)
+			{
+			case 1 :
+				this.currentPawn.getSpellPage().getSpell1().resetCooldown();
+			case 2 :
+				this.currentPawn.getSpellPage().getSpell2().resetCooldown();
+			case 3 :
+				this.currentPawn.getSpellPage().getSpell3().resetCooldown();
+			}
+			//TODO LAUNCH THE SPELL
+			
+		}
+			
+			
+			
+			
+			
 		return true; // To remove errors due to type returned
 	}
 	
@@ -178,7 +229,7 @@ public class Game
 	{
 		for(int pawnIndex = 0; pawnIndex >this.turnOrder.size();pawnIndex++)
 		{
-			if(this.turnOrder.get(pawnIndex).getHealthPoints()==0)
+			if(this.turnOrder.get(pawnIndex).getHealthPoints()<=0)
 			{
 				this.turnOrder.remove(pawnIndex);
 			}

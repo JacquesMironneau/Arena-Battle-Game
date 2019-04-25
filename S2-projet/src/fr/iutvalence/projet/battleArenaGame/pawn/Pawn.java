@@ -200,5 +200,14 @@ public class Pawn {
 	{
 		this.mySpellPage=pPage;
 	}
+	
+	/**
+	 * Getter for the pawn spellPage
+	 * @return the pawn SpellPage
+	 */
+	public SpellPage getSpellPage()
+	{
+		return this.mySpellPage;
+	}
 }
 
