@@ -15,20 +15,22 @@ public class ShapeBeam extends ShapeSpecial{
 	
 	
 	/**
-	 * 
-	 * @param pName Name of the shape
+	 * Constructor of a beam
+	 * Add the coordinates of a beam shape in the effectedCells ArrayList.
+	 * And set the correct values for the damage, the cooldown, the range and the spellCost.
+	 * @param pType Type of the shape (in this case beam)
 	 */
-	public ShapeBeam(String pName) {
-		super(pName);
+	public ShapeBeam(String pType) {
+		super(pType);
 		
 		//found solutions to add the coordinates that the Beam will effect.
 	}
 	
 	public void setShape()
 	{
-		this.damage = Shape.SB_DAMAGE;
-		this.cooldown = Shape.SB_COOLDOWN;
-		this.range = Shape.SB_RANGE;
-		this.spellCost = Shape.SB_SPELLCOST;
+		this.damage = ShapeSpecial.SB_DAMAGE;
+		this.cooldown = ShapeSpecial.SB_COOLDOWN;
+		this.range = ShapeSpecial.SB_RANGE;
+		this.spellCost = ShapeSpecial.SB_SPELLCOST;
 	}
 }

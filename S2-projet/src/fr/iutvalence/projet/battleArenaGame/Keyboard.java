@@ -3,6 +3,12 @@ package fr.iutvalence.projet.battleArenaGame;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 
+/**
+ * This class represents keyboard entries attached to the GUI
+ * It Listen keyboard entries
+ * @author durantho
+ *
+ */
 public class Keyboard implements KeyListener{
 
 	@Override

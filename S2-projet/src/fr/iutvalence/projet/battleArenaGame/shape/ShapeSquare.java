@@ -15,14 +15,13 @@ import fr.iutvalence.projet.battleArenaGame.move.Coordinate;
 public class ShapeSquare extends ShapeSpecial{
 
 	/**
-	 * 
-	 * @param pName Name of the shape 
 	 * Constructor of a shapeSquare
 	 * Add the coordinates of a square shape in the effectedCells ArrayList.
 	 * And set the correct values for the damage, the cooldown, the range and the spellCost.
+	 * @param pType Type of the shape 
 	 */
-	public ShapeSquare(String pName) {
-		super(pName);
+	public ShapeSquare(String pType) {
+		super(pType);
 
 		this.effectedCoordinates.add(new Coordinate(0,0));
 		this.effectedCoordinates.add(new Coordinate(0,-1));
@@ -41,10 +40,10 @@ public class ShapeSquare extends ShapeSpecial{
 	//@override
 	public void setShape()
 	{
-		this.cooldown = Shape.SSQ_COOLDOWN;
-		this.damage = Shape.SSQ_DAMAGE;
-		this.range = Shape.SSQ_RANGE;
-		this.spellCost = Shape.SSQ_SPELLCOST;
+		this.cooldown = ShapeSpecial.SSQ_COOLDOWN;
+		this.damage = ShapeSpecial.SSQ_DAMAGE;
+		this.range = ShapeSpecial.SSQ_RANGE;
+		this.spellCost = ShapeSpecial.SSQ_SPELLCOST;
 	}
 	
 	
