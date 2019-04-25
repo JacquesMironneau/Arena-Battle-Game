@@ -1,6 +1,5 @@
 package fr.iutvalence.projet.battleArenaGame.spell;
 
-import fr.iutvalence.projet.battleArenaGame.Player;
 
 /**
  * This class represents a Spell page it is composed of 3 spells.
@@ -87,7 +86,7 @@ public class SpellPage {
 	 * spell3
 	 */
 	public String toString() {
-		return "SpellPage [pageName=" + pageName + "]";
+		return "SpellPage [pageName=" + pageName + ", spell1=" + spell1 + ", spell2=" + spell2 + ", spell3=" + spell3 + "]";
 	}
 	
 }
