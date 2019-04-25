@@ -1,5 +1,7 @@
 package fr.iutvalence.projet.battleArenaGame.pawn;
 
+import java.io.Serializable;
+
 import fr.iutvalence.projet.battleArenaGame.spell.Effect;
 
 /**
@@ -8,7 +10,7 @@ import fr.iutvalence.projet.battleArenaGame.spell.Effect;
  * @author charvevi
  *
  */
-public class PawnEffect implements Effect {
+public class PawnEffect implements Effect, Serializable {
 	
 	/**
 	 * Current duration of the effect (number of Turn)

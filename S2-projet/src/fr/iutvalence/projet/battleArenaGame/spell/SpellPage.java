@@ -1,5 +1,6 @@
 package fr.iutvalence.projet.battleArenaGame.spell;
 
+import java.io.Serializable;
 
 /**
  * This class represents a Spell page it is composed of 3 spells.
@@ -8,7 +9,7 @@ package fr.iutvalence.projet.battleArenaGame.spell;
  * @author durantho
  */
 
-public class SpellPage {
+public class SpellPage implements Serializable{
 	
 	/**
 	 * name of the page.

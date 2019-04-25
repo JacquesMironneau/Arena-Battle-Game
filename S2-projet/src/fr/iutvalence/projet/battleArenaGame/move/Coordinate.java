@@ -1,11 +1,13 @@
 package fr.iutvalence.projet.battleArenaGame.move;
 
+import java.io.Serializable;
+
 /**
  * Represent coordinate with a X-axis value and Y-axis value
  * @author charvevi
  *
  */
-public class Coordinate {
+public class Coordinate implements Serializable {
 
 	/**
 	 * X value of the coordinate (abscissa)

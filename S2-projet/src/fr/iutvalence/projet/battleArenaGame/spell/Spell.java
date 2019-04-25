@@ -1,5 +1,7 @@
 package fr.iutvalence.projet.battleArenaGame.spell;
 
+import java.io.Serializable;
+
 import fr.iutvalence.projet.battleArenaGame.shape.Shape;
 
 /**
@@ -10,7 +12,7 @@ import fr.iutvalence.projet.battleArenaGame.shape.Shape;
  * Spell is a component of SpellPage use to make damage to pawns.
  *
  */
-public class Spell {
+public class Spell implements Serializable{
 	
 	/**
 	 * current cooldown for a spell

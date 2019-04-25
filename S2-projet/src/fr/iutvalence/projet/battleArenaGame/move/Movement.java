@@ -1,4 +1,5 @@
 package fr.iutvalence.projet.battleArenaGame.move;
+import java.io.Serializable;
 import java.lang.Math;
 
 /**
@@ -7,7 +8,7 @@ import java.lang.Math;
  * @author durantho
  */
 
-public class Movement {
+public class Movement implements Serializable{
 	
 	/**
 	 * distance between origin and destination

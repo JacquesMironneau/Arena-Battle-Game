@@ -11,6 +11,7 @@ import fr.iutvalence.projet.battleArenaGame.network.Client;
 import fr.iutvalence.projet.battleArenaGame.network.Network;
 import fr.iutvalence.projet.battleArenaGame.network.Server;
 import fr.iutvalence.projet.battleArenaGame.pawn.Pawn;
+import fr.iutvalence.projet.battleArenaGame.pawn.PawnTeam;
 import fr.iutvalence.projet.battleArenaGame.spell.Spell;
 import fr.iutvalence.projet.battleArenaGame.spell.SpellPage;
 
@@ -155,8 +156,14 @@ public class Game
 			break;
 			
 		case 2: // server
+			
+			Coordinate coo = new Coordinate(4,4);
+			Pawn kevin = new Pawn(null, null, null);
+			this.turnOrder.add(new Pawn(PawnTeam.PawnJ1, new Coordinate(0,0), new SpellPage("Page de test pour le réseau")));
 			myServer = new Server(Game.PORT, myNetwork);
 			myServer.init(); // Launch the server
+			myServer.Send(0, coo);
+			myServer.SendAll(this.turnOrder);
 			
 			break;
 		

@@ -1,4 +1,7 @@
 package fr.iutvalence.projet.battleArenaGame.pawn;
+
+import java.io.Serializable;
+
 /**
  * 
  * @author pashmi
@@ -7,7 +10,7 @@ package fr.iutvalence.projet.battleArenaGame.pawn;
  * It is used to see if every pawns of a same player are dead or not
  *
  */
-public enum PawnTeam
+public enum PawnTeam implements Serializable
 {
 	PawnJ1,
 	PawnJ2

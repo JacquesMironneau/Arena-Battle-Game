@@ -1,12 +1,14 @@
 package fr.iutvalence.projet.battleArenaGame.spell;
 
+import java.io.Serializable;
+
 /**
  * 
  * @author jules chapelle
  * Defines an effect for a spell.
  * an effect change a stat of a pawn at the start of the turn
  */
-public enum SpellEffect implements Effect{
+public enum SpellEffect implements Effect, Serializable{
 		
 	/**
 	 * first part is element 

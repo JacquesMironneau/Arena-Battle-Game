@@ -1,5 +1,6 @@
 package fr.iutvalence.projet.battleArenaGame.pawn;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
 import fr.iutvalence.projet.battleArenaGame.move.Coordinate;
@@ -13,7 +14,13 @@ import fr.iutvalence.projet.battleArenaGame.spell.SpellPage;
  *
  * @author charvevi
  */
-public class Pawn {
+public class Pawn implements Serializable
+{
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -3994360615192173337L;
+
 	//TODO Complete the default values for HP, PM and PA
 	/**
 	 * Default amount of health for a Pawn
