@@ -172,6 +172,7 @@ public class Game
 			myClient = new Client(Game.PORT,Game.HOST_ADDRESS, myNetwork);
 			myClient.connect(); // Connect the client to the server
 		
+			//May need a few time to update the Game
 			System.out.println("APRES"+ this.turnOrder.size());
 
 			break;
@@ -433,6 +434,7 @@ public class Game
 	/**
 	 * Setter for turnOrder
 	 * @param pTurnOrder : the new turnOrder to set
+	 * TODO: might need to be synchronized
 	 */
 	public void setTurnOrder(ArrayList<Pawn> pTurnOrder)
 	{
