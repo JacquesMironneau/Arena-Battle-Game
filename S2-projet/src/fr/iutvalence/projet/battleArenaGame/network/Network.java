@@ -38,6 +38,7 @@ public class Network {
 		
 		if(transferedObject.getClass() == ArrayList.class)
 		{
+			System.out.println(this.myGame.getTurnOrder().size());
 			//Unsafe but works actually
 			@SuppressWarnings("unchecked")
 			ArrayList<Pawn> ModifiedArrayListOfPawns = (ArrayList<Pawn>) transferedObject;
@@ -49,7 +50,8 @@ public class Network {
 			
 			//Edit the array list of the current game
 			this.myGame.setTurnOrder(ModifiedArrayListOfPawns);
-			
+			System.out.println("After" + this.myGame.getTurnOrder().size());
+
 		}
 	}
 	
@@ -57,7 +59,7 @@ public class Network {
 	 * Test main 
 	 * TODO: remove
 	 */
-	public static void main(String[] args)
+	/*public static void main(String[] args)
 	{
 		
 		System.out.println("hllo");
@@ -80,5 +82,5 @@ public class Network {
 		System.out.println(elle.getTurnOrder());
 		
 
-	}
+	}*/
 }

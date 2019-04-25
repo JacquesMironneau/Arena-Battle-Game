@@ -53,7 +53,7 @@ public class Game
      * Used in the network: IP address of the server (might be deleted when UDP auto IP will be implemented
      */
     
-    public final static String HOST_ADDRESS = "";
+    public final static String HOST_ADDRESS = "192.168.1.49";
 	/**
 	 * These values are the default position of pawns at the start of the game
 	 * The first number is the player's number and the second is the pawn's number
@@ -168,8 +168,12 @@ public class Game
 			break;
 		
 		case 3: // client 
+			System.out.println("AVANT"+ this.turnOrder.size());
 			myClient = new Client(Game.PORT,Game.HOST_ADDRESS, myNetwork);
 			myClient.connect(); // Connect the client to the server
+		
+			System.out.println("APRES"+ this.turnOrder.size());
+
 			break;
 		default:
 			System.out.println("Please enter a valid choice...");

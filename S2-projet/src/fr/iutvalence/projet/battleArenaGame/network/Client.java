@@ -83,7 +83,7 @@ public class Client
         }
 
         catch (IOException io){
-            io.printStackTrace();
+        	io.printStackTrace();
         }
     }
 
@@ -95,15 +95,21 @@ public class Client
     {
 
         while(socket.isConnected()){
+        	Object obj_receive = null;
             try{
-                Object obj_receive = in.readObject();
+                
+            	
+                obj_receive = this.in.readObject();
                 System.out.println(socket.getInetAddress() + " (server) : " + obj_receive);
-                myNetwork.Transform(obj_receive);
                 
             }
             catch(Exception io){
-                io.printStackTrace();
+               //TODO Fix the few exceptions that are coming 
+            	io.printStackTrace();
             }
+            if(obj_receive != null)
+            	myNetwork.Transform(obj_receive);
+
         }
     }
 
