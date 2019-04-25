@@ -10,6 +10,10 @@ import java.io.Serializable;
 public class Coordinate implements Serializable {
 
 	/**
+	 * serialVersionUID is an hash code, which allow the JVM to check if attributes, names and type are the same for the object
+	 */
+	private static final long serialVersionUID = -6617054550036231222L;
+	/**
 	 * X value of the coordinate (abscissa)
 	 */
 	private int coordX;

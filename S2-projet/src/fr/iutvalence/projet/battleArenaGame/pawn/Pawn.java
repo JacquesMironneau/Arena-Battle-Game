@@ -16,6 +16,11 @@ import fr.iutvalence.projet.battleArenaGame.spell.SpellPage;
  */
 public class Pawn implements Serializable
 {
+	/**
+	 * serialVersionUID is an hash code, which allow the JVM to check if attributes, names and type are the same for the object
+	 */
+	private static final long serialVersionUID = -3994360615192173337L;
+
 	//TODO Complete the default values for HP, PM and PA
 	/**
 	 * Default amount of health for a Pawn

@@ -15,6 +15,11 @@ import fr.iutvalence.projet.battleArenaGame.shape.Shape;
 public class Spell implements Serializable{
 	
 	/**
+	 * serialVersionUID is an hash code, which allow the JVM to check if attributes, names and type are the same for the object
+	 */
+	private static final long serialVersionUID = -4985990245872091058L;
+
+	/**
 	 * current cooldown for a spell
 	 */
 	private int currentCooldown;

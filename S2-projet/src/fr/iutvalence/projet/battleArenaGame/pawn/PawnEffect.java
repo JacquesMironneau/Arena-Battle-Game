@@ -13,6 +13,11 @@ import fr.iutvalence.projet.battleArenaGame.spell.Effect;
 public class PawnEffect implements Effect, Serializable {
 	
 	/**
+	 * serialVersionUID is an hash code, which allow the JVM to check if attributes, names and type are the same for the object
+	 */
+	private static final long serialVersionUID = 8320330691124777890L;
+
+	/**
 	 * Current duration of the effect (number of Turn)
 	 */
 	private int currentDuration;

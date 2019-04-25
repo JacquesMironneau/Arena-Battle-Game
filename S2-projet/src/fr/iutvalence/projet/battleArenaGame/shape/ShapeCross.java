@@ -1,5 +1,7 @@
 package fr.iutvalence.projet.battleArenaGame.shape;
 
+import java.io.Serializable;
+
 import fr.iutvalence.projet.battleArenaGame.move.Coordinate;
 
 //import java.util.ArrayList;
@@ -15,8 +17,13 @@ import fr.iutvalence.projet.battleArenaGame.move.Coordinate;
  *               |1 ,0|
  *               |2, 0|
  */
-public class ShapeCross extends ShapeSpecial{
+public class ShapeCross extends ShapeSpecial implements Serializable
+{
 
+	/**
+	 * serialVersionUID is an hash code, which allow the JVM to check if attributes, names and type are the same for the object
+	 */
+	private static final long serialVersionUID = -1605060884000608785L;
 	/**
 	 * Constructor of a cross shape
 	 * Add the coordinates of a cross shape in the effectedCells ArrayList.

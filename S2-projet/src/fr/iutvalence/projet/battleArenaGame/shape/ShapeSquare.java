@@ -1,5 +1,7 @@
 package fr.iutvalence.projet.battleArenaGame.shape;
 
+import java.io.Serializable;
+
 import fr.iutvalence.projet.battleArenaGame.move.Coordinate;
 
 /**
@@ -12,7 +14,13 @@ import fr.iutvalence.projet.battleArenaGame.move.Coordinate;
  * | 1,-1| | 1, 0| | 1, 1|
  *
  */
-public class ShapeSquare extends ShapeSpecial{
+public class ShapeSquare extends ShapeSpecial implements Serializable
+{
+
+	/**
+	 * serialVersionUID is an hash code, which allow the JVM to check if attributes, names and type are the same for the object
+	 */
+	private static final long serialVersionUID = 6252285842714764589L;
 
 	/**
 	 * Constructor of a shapeSquare

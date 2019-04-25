@@ -11,6 +11,10 @@ import fr.iutvalence.projet.battleArenaGame.move.Coordinate;
  */
 public class Shape implements Serializable{
 
+	/**
+	 * serialVersionUID is an hash code, which allow the JVM to check if attributes, names and type are the same for the object
+	 */
+	private static final long serialVersionUID = -9146357777294575373L;
 //Constants
 
 //ball shape constants

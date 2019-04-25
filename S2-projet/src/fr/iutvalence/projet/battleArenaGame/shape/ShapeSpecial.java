@@ -1,5 +1,6 @@
 package fr.iutvalence.projet.battleArenaGame.shape;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
 import fr.iutvalence.projet.battleArenaGame.move.Coordinate;
@@ -11,11 +12,15 @@ import fr.iutvalence.projet.battleArenaGame.move.Coordinate;
  * for example in a spell that is made of fire it special shape necessarily be a Cross.
  * Those Shapes affect more cells on the board.
  */
-public class ShapeSpecial extends Shape{
+public class ShapeSpecial extends Shape implements Serializable{
 	
 //TODO assign correct values to each of these constants.
 	
-//beam constants
+	/**
+	 *serialVersionUID is an hash code, which allow the JVM to check if attributes, names and type are the same for the object 
+	 */
+	private static final long serialVersionUID = -24959536532205165L;
+	//beam constants
 	/**
 	 * Represents the damage of a beam shape
 	 */

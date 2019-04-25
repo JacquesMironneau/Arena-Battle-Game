@@ -1,5 +1,7 @@
 package fr.iutvalence.projet.battleArenaGame.shape;
 
+import java.io.Serializable;
+
 /**
  * 
  * @author durantho
@@ -11,9 +13,15 @@ package fr.iutvalence.projet.battleArenaGame.shape;
  *           |n+1,0|
  *           |n+i,0|
  */
-public class ShapeBeam extends ShapeSpecial{
+public class ShapeBeam extends ShapeSpecial implements Serializable
+{
 	
 	
+	/**
+	 * serialVersionUID is an hash code, which allow the JVM to check if attributes, names and type are the same for the object
+	 */
+	private static final long serialVersionUID = -8013775426779999474L;
+
 	/**
 	 * Constructor of a beam
 	 * Add the coordinates of a beam shape in the effectedCells ArrayList.

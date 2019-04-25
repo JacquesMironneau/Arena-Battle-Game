@@ -11,6 +11,11 @@ import java.lang.Math;
 public class Movement implements Serializable{
 	
 	/**
+	 * serialVersionUID is an hash code, which allow the JVM to check if attributes, names and type are the same for the object
+	 */
+	private static final long serialVersionUID = 1458443588635931997L;
+
+	/**
 	 * distance between origin and destination
 	 */
 	private int distance;
