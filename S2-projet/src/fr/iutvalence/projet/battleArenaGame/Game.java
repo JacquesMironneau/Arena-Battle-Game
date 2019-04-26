@@ -171,15 +171,15 @@ public class Game
 			
 			break;
 		
-		case 3: // client 
+		case 3: // client TODO test send from client to server
 			System.out.println("AVANT"+ this.turnOrder.size());
 			myClient = new Client(Game.PORT,Game.HOST_ADDRESS, myNetwork);
 			myClient.connect(); // Connect the client to the server
 		
 			//May need a few time to update the Game
 			System.out.println("APRES"+ this.turnOrder.size());
-
 			break;
+			
 		default:
 			System.out.println("Please enter a valid choice...");
 		}

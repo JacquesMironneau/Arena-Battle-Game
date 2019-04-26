@@ -171,6 +171,7 @@ public class Server
             
             //Transform the object 
             //TODO : might need a thread in order to optimize the 
+            
             myNetwork.Transform(msg);
         }
 
