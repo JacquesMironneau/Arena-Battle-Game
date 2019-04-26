@@ -63,7 +63,7 @@ public class Client
         //Ask for connection to the server
         try {
             socket = new Socket(serverAddress, port);
-            System.out.println("Connected to : " + serverAddress);
+            System.out.println("Connected to : " + serverAddress +" (" + socket.getInetAddress().getHostName() + ")");
 
             //It get the outputStream and inputStream from the client socket
 
@@ -101,15 +101,14 @@ public class Client
             	
                 obj_receive = this.in.readObject();
                 System.out.println(socket.getInetAddress() + " (server) : " + obj_receive);
+                if(obj_receive != null)
+                	myNetwork.Transform(obj_receive);
                 
             }
             catch(Exception io){
                //TODO Fix the few exceptions that are coming 
             	io.printStackTrace();
             }
-            if(obj_receive != null)
-            	myNetwork.Transform(obj_receive);
-
         }
     }
 

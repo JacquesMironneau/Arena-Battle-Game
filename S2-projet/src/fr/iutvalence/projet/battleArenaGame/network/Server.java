@@ -67,7 +67,7 @@ public class Server
     {
 
         //TODO remove debug
-        System.out.println("Serveur en lancement...(c'est pas vrai il est pas lancé)");
+        System.out.println("Launching the server...");
 
         socketServ = null;
 
@@ -78,6 +78,7 @@ public class Server
         	//TODO replace this
             e.printStackTrace();
         }
+        System.out.println("Server launched !");
 
 
 
@@ -90,8 +91,7 @@ public class Server
 
                 socketClient = socketServ.accept();
 
-                //TODO remove debug
-                System.out.println("Connected w/ :" + socketClient.getInetAddress());
+                System.out.println("Connected with : " + socketClient.getInetAddress().getHostName());
 
 
                 //It get the outputStream and inputStream from the client socket
@@ -109,9 +109,9 @@ public class Server
                 Create a new thread to handle the connection of the right and new player connected
                  */
                 //TODO remove debug
-                System.out.println("Nb joueurs courants:" + this.playersConnected + "Socket" + this.clients[this.playersConnected][0] + " OutputStream " + this.clients[this.playersConnected][1]);
+                //System.out.println("Nb joueurs courants:" + this.playersConnected + "Socket" + this.clients[this.playersConnected][0] + " OutputStream " + this.clients[this.playersConnected][1]);
 
-                new Thread(() -> Receive(((Socket)clients[playersConnected][0]), ((ObjectInputStream)clients[playersConnected][1])));
+                new Thread(() -> Receive(((Socket)clients[playersConnected-1][0]), ((ObjectInputStream)clients[playersConnected-1][1]))).start();
 
 
                 //Increase the number of connected player
@@ -142,10 +142,12 @@ public class Server
             Object msg = null;
             try {
                 msg = pInput.readObject();
+                myNetwork.Transform(msg);
+
             } catch (Exception e) {
                 e.printStackTrace();
             }
-            System.out.println(socketClient.getInetAddress() + " :" + msg);
+            System.out.println(socketClient.getInetAddress().getHostName() + " :" + msg);
 
             if (msg.equals(Game.QUIT))
             {
@@ -158,23 +160,19 @@ public class Server
                 }
 
                 //Searching the ID for the leaving player
-                for (int i = 0; i < this.playersConnected; i++) {}
+                for (int playerId = 0; playerId < this.playersConnected; playerId++) {}
 
-            //If clients[i][0] == pSocket: the deconnected user is found
+            //If clients[i][0] == pSocket: the disconnected user is found
 
+                //Copy the Socket existing after the removed one just after the previous of the removed one.
                 if (this.playersConnected - 1 >= 0)
                     System.arraycopy(clients, 1, clients, 0, this.playersConnected - 1);
 
+                //Then reduce the array size
                 this.playersConnected--;
 
             }
-            
-            //Transform the object 
-            //TODO : might need a thread in order to optimize the 
-            
-            myNetwork.Transform(msg);
         }
-
     }
     
 
@@ -188,10 +186,10 @@ public class Server
     public void SendAll(Object o)
     {
         System.out.println("Sending to all");
-        for (int i = 0; i < this.playersConnected; ++i)
+        for (int playerID = 0; playerID < this.playersConnected; ++playerID)
         {
             try {
-                ((ObjectOutputStream)clients[i][2]).writeObject(o);
+                ((ObjectOutputStream)clients[playerID][2]).writeObject(o);
             }
             catch (Exception e) {
             	//TODO Replace this
@@ -206,16 +204,17 @@ public class Server
      * First id = first person connected
      * Check if the id of the player is correct
      * Write in the selected outputStream the object passed in parameters
-     * @param id id of the player (to whom we are talking)
+     * @param playerId id of the player (to whom we are talking)
      * @param o Object that we are sending
      */
-    public void Send(int id, Object o)
+    public void Send(int playerId, Object o)
     {
-        System.out.println("Sending to " + id);
-        if(id >= 0 && id < this.playersConnected)
+        System.out.println("Sending to " + ((Socket)this.clients[playerId][0]).getInetAddress().getHostName());
+        
+        if(playerId >= 0 && playerId < this.playersConnected)
         {
             try {
-                ((ObjectOutputStream)clients[id][2]).writeObject(o);
+                ((ObjectOutputStream)clients[playerId][2]).writeObject(o);
             }
             catch (Exception e) {
                 e.printStackTrace();
@@ -223,7 +222,7 @@ public class Server
         }
         else
             System.out.println("Id non reconnu... Soon tm une exception...");
-        //Exception : IdClientException()
+        //Exception : IdClientException() TODO
     }
 
 
@@ -235,12 +234,14 @@ public class Server
      */
     public void Broadcast(int id, Object o)
     {
-        for (int i = 0; i < this.playersConnected; i++)
+        System.out.println("Sending to everyone except " + ((Socket)this.clients[id][0]).getInetAddress().getHostName());
+
+        for (int playerIndex = 0; playerIndex < this.playersConnected; playerIndex++)
         {
-            if(i != id)
+            if(playerIndex != id)
             {
                 try {
-                    ((ObjectOutputStream)clients[i][2]).writeObject(o);
+                    ((ObjectOutputStream)clients[playerIndex][2]).writeObject(o);
                 }
                 catch (Exception e) {
                     e.printStackTrace();
@@ -254,10 +255,11 @@ public class Server
      */
     public void DisconnectAll()
     {
-        for(int i = 0; i < this.playersConnected; i++)
+        for(int playerIndex = 0; playerIndex < this.playersConnected; playerIndex++)
         {
             try {
-                ((Socket)this.clients[i][0]).close();
+                ((Socket)this.clients[playerIndex][0]).close();
+                System.out.println( ((Socket)this.clients[playerIndex][0]).getInetAddress().getHostName() + " has left");
             }
             catch (IOException e) {
                 e.printStackTrace();
