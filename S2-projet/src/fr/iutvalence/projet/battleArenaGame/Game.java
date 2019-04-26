@@ -160,6 +160,7 @@ public class Game
 			break;
 			
 		case 2: // server
+			this.isServer = true;
 			
 			Coordinate coo = new Coordinate(4,4);
 			Pawn kevin = new Pawn(null, null, null);
@@ -172,10 +173,11 @@ public class Game
 			break;
 		
 		case 3: // client TODO test send from client to server
+			this.isServer = false;
 			System.out.println("AVANT"+ this.turnOrder.size());
 			myClient = new Client(Game.PORT,Game.HOST_ADDRESS, myNetwork);
 			myClient.connect(); // Connect the client to the server
-		
+			myClient.Send(new Coordinate(4,4));
 			//May need a few time to update the Game
 			System.out.println("APRES"+ this.turnOrder.size());
 			break;
@@ -183,8 +185,6 @@ public class Game
 		default:
 			System.out.println("Please enter a valid choice...");
 		}
-		
-		
 		
 	}
 	
@@ -206,7 +206,6 @@ public class Game
 	 * @param Move pMove: A movement chose by the player
 	 * @return true if the chosen move by the player is valid and authorized
 	 */
-	//TODO ajouter reseau
 	public boolean checkMove(Movement pMovement)
 	{
 		//If the pawn has enough move points to move
@@ -309,6 +308,12 @@ public class Game
 			
 			//And send data to the other player, use:  Send(this.turnOrder); (might need a try catch statement)
 		}
+		
+		if(this.isServer)
+			myServer.SendAll(this.turnOrder);
+		else
+			myClient.Send(this.turnOrder);
+		
 		return true; // To remove errors due to type returned
 	}
 	
