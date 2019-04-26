@@ -4,6 +4,7 @@ import java.io.Serializable;
 
 /**
  * Represent coordinate with a X-axis value and Y-axis value
+ * A pawn moves from originCoordinate to destCoordinate
  * @author charvevi
  *
  */

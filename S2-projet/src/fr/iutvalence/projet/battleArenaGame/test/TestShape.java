@@ -1,11 +1,16 @@
-package fr.iutvalence.projet.battleArenaGame.shape;
+package fr.iutvalence.projet.battleArenaGame.test;
+
+import fr.iutvalence.projet.battleArenaGame.shape.Shape;
+import fr.iutvalence.projet.battleArenaGame.shape.ShapeBeam;
+import fr.iutvalence.projet.battleArenaGame.shape.ShapeCross;
+import fr.iutvalence.projet.battleArenaGame.shape.ShapeSquare;
 
 /**
  * Test class for shapes
  * @author durantho
  *
  */
-public class Test {
+public class TestShape {
 	
 	public static void main(String[] args) {
 		

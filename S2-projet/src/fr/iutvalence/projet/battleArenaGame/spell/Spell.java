@@ -7,7 +7,7 @@ import fr.iutvalence.projet.battleArenaGame.shape.Shape;
 /**
  * 
  * @author Jules
- * represent a Spell who have one shape, a cooldown and an Effect.
+ * Represent a Spell who have one shape, a cooldown and an Effect.
  * A spell can't be used if the currentCooldown is not 0.
  * Spell is a component of SpellPage use to make damage to pawns.
  *
@@ -73,7 +73,7 @@ public class Spell implements Serializable{
 	}
 	
 	/**
-	 * set a new value to myEffect
+	 * Set a new value to myEffect
 	 * @param pEffectSpell_Effect is the new value of myEffect
 	 */
 	public void setSpellEffect(SpellEffect pEffectSpellEffect)
@@ -82,7 +82,7 @@ public class Spell implements Serializable{
 	}
 	
 	/** 
-	 * set a new value to myShape
+	 * Set a new value to myShape
 	 * @param pShape is the newvalue of myShape
 	 */
 	public void setShape(Shape pShape)
@@ -91,7 +91,7 @@ public class Spell implements Serializable{
 	}
 	
 	/**
-	 * Getter for my  the spell shape
+	 * Getter for myShape the spell shape
 	 * @return the shape of the spell
 	 */
 	public Shape getShape()

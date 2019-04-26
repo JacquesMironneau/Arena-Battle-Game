@@ -1,6 +1,8 @@
-package fr.iutvalence.projet.battleArenaGame.spell;
+package fr.iutvalence.projet.battleArenaGame.test;
 
 import fr.iutvalence.projet.battleArenaGame.shape.Shape;
+import fr.iutvalence.projet.battleArenaGame.spell.SpellEffect;
+import fr.iutvalence.projet.battleArenaGame.spell.SpellPage;
 /**
  * test spell package
  * @author jules chapelle

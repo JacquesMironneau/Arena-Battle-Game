@@ -14,13 +14,13 @@ import fr.iutvalence.projet.battleArenaGame.move.Coordinate;
  */
 public class ShapeSpecial extends Shape implements Serializable{
 	
-//TODO assign correct values to each of these constants.
+//TODO assign correct damages values for each shape.
 	
 	/**
 	 *serialVersionUID is an hash code, which allow the JVM to check if attributes, names and type are the same for the object 
 	 */
 	private static final long serialVersionUID = -24959536532205165L;
-	//beam constants
+//beam constants
 	/**
 	 * Represents the damage of a beam shape
 	 */
@@ -39,7 +39,7 @@ public class ShapeSpecial extends Shape implements Serializable{
 	 */
 	public final static int SB_SPELLCOST = 4;
 		
-//cross constants
+//Cross constants
 	/**
 	 * Represents the damage of a cross shape
 	 */
@@ -57,7 +57,7 @@ public class ShapeSpecial extends Shape implements Serializable{
 	 */
 	public final static int SC_SPELLCOST = 4;
 		
-//square constants
+//Square constants
 	/**
 	 * Represents the damage of a square shape.
 	 */
@@ -81,7 +81,7 @@ public class ShapeSpecial extends Shape implements Serializable{
 	 */
 	protected ArrayList<Coordinate> effectedCoordinates;
 
-	
+//Constructor	
 	/**
 	 * Constructor of a shape special,
 	 * it initialize the arrayList that contains all the coordinates that the shape will effect.
@@ -92,7 +92,8 @@ public class ShapeSpecial extends Shape implements Serializable{
 		super(pType);
 		this.effectedCoordinates = new ArrayList<Coordinate>();	
 	}
-	
+
+//Getters
 	/**
 	 * 
 	 * @return the coordinates that the shape will effect.

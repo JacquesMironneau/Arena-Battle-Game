@@ -3,10 +3,10 @@ package fr.iutvalence.projet.battleArenaGame.shape;
 import java.io.Serializable;
 
 /**
- * 
  * @author durantho
- * this class extends shape, this shape represents a beam like shape in the game.
- * 
+ * This class extends shape, this shape represents a beam like shape in the game.
+ * The coordinate (0,0) represents where the player has clicked to cast his spell.
+ * Example of a beam :
  * 
  *           |0  ,0|  //represents the player 
  *           |n  ,0|
@@ -31,7 +31,7 @@ public class ShapeBeam extends ShapeSpecial implements Serializable
 	public ShapeBeam(String pType) {
 		super(pType);
 		
-		//found solutions to add the coordinates that the Beam will effect.
+	//found solutions to add the coordinates that the Beam will effect.
 	}
 	
 	public void setShape()

@@ -9,7 +9,13 @@ import fr.iutvalence.projet.battleArenaGame.spell.SpellPage;
 
 /**
  * Represents a Pawn
- * He has HealthPoints, MovePoints, ActionPoints, a spellPage, coordinates, active effects and belong to a team.
+ * It has HealthPoints,
+ * MovePoints,
+ * ActionPoints,
+ * A spellPage,
+ * Coordinates,
+ * Active effects 
+ * A pawn and belong to a team (each player).
  * each player have 3 pawns.
  *
  * @author charvevi

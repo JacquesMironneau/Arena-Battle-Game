@@ -10,6 +10,8 @@ import fr.iutvalence.projet.battleArenaGame.move.Coordinate;
  * 
  * @author durantho
  * This class extends shape, shapeCross represents a cross like shape in the game.
+ * The coordinate (0,0) represents where the player has clicked to cast his spell.
+ * Example of a cross:
  * 
  *               |-2,0|    
  *               |-1,0|

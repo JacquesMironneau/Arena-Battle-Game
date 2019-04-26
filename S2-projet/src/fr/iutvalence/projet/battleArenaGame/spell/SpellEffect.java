@@ -6,7 +6,9 @@ import java.io.Serializable;
  * 
  * @author jules chapelle
  * Defines an effect for a spell.
- * an effect change a stat of a pawn at the start of the turn
+ * An effect change the stats of a pawn at the start of the turn
+ * An effect is initalized with :
+ * 		Name("Element/Name","effect",duration [in turns]);
  */
 public enum SpellEffect implements Effect, Serializable{
 		
