@@ -115,6 +115,13 @@ public class Game
 	 * Used 
 	 */
 	private boolean isServer;
+
+	/**
+	 * Represents if a user the local player is playing now.
+	 * It is used to manage when a player can play.
+	 * If it's true the local player can play, else it can't. 
+	 */
+	private boolean localPlayerTurn;
 	
 	
 	/**
@@ -161,6 +168,7 @@ public class Game
 			
 		case 2: // server
 			this.isServer = true;
+			this.localPlayerTurn = true;
 			
 			Coordinate coo = new Coordinate(4,4);
 			Pawn kevin = new Pawn(null, null, null);
@@ -174,6 +182,8 @@ public class Game
 		
 		case 3: // client TODO test send from client to server
 			this.isServer = false;
+			this.localPlayerTurn = false;
+			
 			System.out.println("AVANT"+ this.turnOrder.size());
 			myClient = new Client(Game.PORT,Game.HOST_ADDRESS, myNetwork);
 			myClient.connect(); // Connect the client to the server
@@ -227,10 +237,15 @@ public class Game
 			
 			//Send the turn order (need to create myServer and myClient (in Game consctructor and then in play method
 			if(this.isServer)
+			{
 				myServer.SendAll(this.turnOrder);
+			}
+				
 			else
+			{
 				myClient.Send(this.turnOrder);
-			
+			}
+				
 			//The movement is done
 			return true;
 		}
@@ -307,12 +322,18 @@ public class Game
 			//TODO LAUNCH THE SPELL: setHealthsPoint( New hp here ) <- the check of negatives health points is done in Pawn class
 			
 			//And send data to the other player, use:  Send(this.turnOrder); (might need a try catch statement)
+			
 		}
 		
 		if(this.isServer)
+		{
 			myServer.SendAll(this.turnOrder);
+		}
+			
 		else
+		{
 			myClient.Send(this.turnOrder);
+		}
 		
 		return true; // To remove errors due to type returned
 	}
@@ -337,7 +358,7 @@ public class Game
 	}
 	
 	/**
-	 * Remove the deads pawn(hp <= 0) from the arrayList every time a new turn begin
+	 * Remove the dead pawns (hp <= 0) from the arrayList every time a new turn begin
 	 */
 	private void removeDeads()
 	{
