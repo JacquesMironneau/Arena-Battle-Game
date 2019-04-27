@@ -169,7 +169,7 @@ public class Player {
 		else
 		{
 			System.out.println("Mauvais indice");
-			throw new SpellIndexException();
+			throw new SpellIndexException(index);
 		}
 	}
 	

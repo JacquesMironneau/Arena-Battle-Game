@@ -3,6 +3,7 @@ package fr.iutvalence.projet.battleArenaGame.test;
 import java.util.ArrayList;
 
 import fr.iutvalence.projet.battleArenaGame.Game;
+import fr.iutvalence.projet.battleArenaGame.exceptions.NetworkUnknownTypeException;
 import fr.iutvalence.projet.battleArenaGame.move.Coordinate;
 import fr.iutvalence.projet.battleArenaGame.network.Network;
 import fr.iutvalence.projet.battleArenaGame.pawn.Pawn;
@@ -14,7 +15,7 @@ public class testNetwork
 	public static void main(String[] args)
 	{
 		
-		System.out.println("hllo");
+		System.out.println("------------------test network #1----------");
 		ArrayList<Pawn> testArrayListOfPawns = new ArrayList<Pawn>();
 		testArrayListOfPawns.add(new Pawn(PawnTeam.PawnJ1, new Coordinate(0,0), new SpellPage("Page de feu")));
 		testArrayListOfPawns.add(new Pawn(PawnTeam.PawnJ2, new Coordinate(1,1), new SpellPage("Page de glace")));
@@ -28,7 +29,14 @@ public class testNetwork
 		//Puis on le modifie
 		System.out.println("La liste est " + elle.getTurnOrder());
 		
-		new Network(elle).Transform(testArrayListOfPawns);
+		try
+		{
+			new Network(elle).Transform(testArrayListOfPawns);
+		} catch (NetworkUnknownTypeException e)
+		{
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		elle.setTurnOrder(testArrayListOfPawns);
 		System.out.println();
 		System.out.println(elle.getTurnOrder());

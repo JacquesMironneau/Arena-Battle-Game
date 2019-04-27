@@ -3,10 +3,8 @@ package fr.iutvalence.projet.battleArenaGame.network;
 import java.util.ArrayList;
 
 import fr.iutvalence.projet.battleArenaGame.Game;
-import fr.iutvalence.projet.battleArenaGame.move.Coordinate;
+import fr.iutvalence.projet.battleArenaGame.exceptions.NetworkUnknownTypeException;
 import fr.iutvalence.projet.battleArenaGame.pawn.Pawn;
-import fr.iutvalence.projet.battleArenaGame.pawn.PawnTeam;
-import fr.iutvalence.projet.battleArenaGame.spell.SpellPage;
 
 /**
  * Represents the network of the game,
@@ -31,14 +29,16 @@ public class Network {
 	 * 
 	 * @param o: the received object 
 	 */
-	public void Transform(Object transferedObject)
+	public void Transform(Object transferedObject) throws NetworkUnknownTypeException
 	{
 		//TODO: remove that(debug only)
 		System.out.println("La classe de l'objet traité est " + transferedObject.getClass());
 		
 		if(transferedObject.getClass() == ArrayList.class)
 		{
+			//TODO remove debug
 			System.out.println(this.myGame.getTurnOrder().size());
+			
 			//Unsafe but works actually
 			@SuppressWarnings("unchecked")
 			ArrayList<Pawn> ModifiedArrayListOfPawns = (ArrayList<Pawn>) transferedObject;
@@ -53,5 +53,9 @@ public class Network {
 			System.out.println("After" + this.myGame.getTurnOrder().size());
 
 		}
+		else if(transferedObject.getClass() == Boolean.class)
+			this.myGame.setLocalPlayerTurn(!(Boolean)transferedObject);
+		
+		else throw new NetworkUnknownTypeException(transferedObject); //If the type of the sended object is not a boolean or an arrayList
 	}
 }
