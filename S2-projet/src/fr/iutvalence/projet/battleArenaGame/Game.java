@@ -325,6 +325,7 @@ public class Game
 					pawnToAffect.setHealthPoints(pawnToAffect.getHealthPoints()-pSpell.getShape().getDamage());
 					//Add the effect on the affectPawn
 					pawnToAffect.addEffect(new PawnEffect(pSpell.getSpellEffect()));
+					this.turnOrder.set(indexOfPawnToAffect, pawnToAffect);
 				}
 				
 			}
