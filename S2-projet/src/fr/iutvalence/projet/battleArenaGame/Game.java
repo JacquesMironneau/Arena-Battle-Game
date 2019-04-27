@@ -126,7 +126,7 @@ public class Game
 	 */
 	public Game()
 	{
-		this.localPlayer = new Player();
+		this.localPlayer = new Player(this);
 		this.turnOrder = new ArrayList<Pawn>();
 		this.myNetwork = new Network(this);
 		//Server and client are created in play method if the player chose to create a game (create Server) or to join (create Client)
@@ -270,7 +270,7 @@ public class Game
 		else 
 		{
 			//System.out.println("Error in checkSpell : the spell used is not found in the pawn's spellPage");
-			throw new SpellNotFoundException();
+			throw new SpellNotFoundException(pSpell);
 			/*return false;
 			 * Test if this exception does really work
 			 */
@@ -309,7 +309,7 @@ public class Game
 				this.currentPawn.getSpellPage().getSpell3().resetCooldown();
 				break;
 			default:
-				throw new SpellIndexException();
+				throw new SpellIndexException(spellNumber);
 			}
 			//Check on all case affected by the spell shape
 			ArrayList<Coordinate> effectedCoordinateList = pSpell.getShape().getEffectedCoordinates();
