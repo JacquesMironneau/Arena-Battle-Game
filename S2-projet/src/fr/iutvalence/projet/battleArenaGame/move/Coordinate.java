@@ -58,6 +58,17 @@ public class Coordinate implements Serializable {
 		return "Coordinate [coordX=" + coordX + ", coordY=" + coordY + "]";
 	}
 	
+	/**
+	 * Add Coordinate value (x and y) to this coordinate
+	 * @param pCoordinate Coordinate to add
+	 * @return a new Coordinate which is the sum of the 2 Coordinate
+	 */
+	public Coordinate addCoordinate(Coordinate pCoordinate)
+	{
+		int nextX = this.coordX + pCoordinate.getCoordX();
+		int nextY = this.coordY + pCoordinate.getCoordY();
+		return new Coordinate(nextX,nextY);
+	}
 	
 
 }

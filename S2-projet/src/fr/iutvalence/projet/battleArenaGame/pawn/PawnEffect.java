@@ -3,6 +3,7 @@ package fr.iutvalence.projet.battleArenaGame.pawn;
 import java.io.Serializable;
 
 import fr.iutvalence.projet.battleArenaGame.spell.Effect;
+import fr.iutvalence.projet.battleArenaGame.spell.SpellEffect;
 
 /**
  * Represent an effect that can affect a Pawn
@@ -36,6 +37,20 @@ public class PawnEffect implements Effect, Serializable {
 	 * Default duration of the effect (number of Turn)
 	 */
 	private int effectDuration;
+	
+	/**
+	 * Constructor for PawnEffect from a SpellEffect
+	 * Copy all atributes from the spellEffect and set the current duration to the default effect duration
+	 * @param pSpellEffect the effect to copy
+	 */
+	public PawnEffect(SpellEffect pSpellEffect)
+	{
+		this.elementName = pSpellEffect.getElementName();
+		this.effectName = pSpellEffect.getEffectName();
+		this.effectDuration = pSpellEffect.getEffectDuration();
+		this.currentDuration = this.effectDuration;
+	}
+
 	
 	/**
 	 * Getter for the element name
@@ -81,5 +96,6 @@ public class PawnEffect implements Effect, Serializable {
 	{
 		return this.currentDuration;
 	}
-
+	
+	
 }

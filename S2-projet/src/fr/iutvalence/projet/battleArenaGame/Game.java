@@ -11,6 +11,7 @@ import fr.iutvalence.projet.battleArenaGame.network.Client;
 import fr.iutvalence.projet.battleArenaGame.network.Network;
 import fr.iutvalence.projet.battleArenaGame.network.Server;
 import fr.iutvalence.projet.battleArenaGame.pawn.Pawn;
+import fr.iutvalence.projet.battleArenaGame.pawn.PawnEffect;
 import fr.iutvalence.projet.battleArenaGame.pawn.PawnTeam;
 import fr.iutvalence.projet.battleArenaGame.spell.Spell;
 import fr.iutvalence.projet.battleArenaGame.spell.SpellPage;
@@ -310,11 +311,21 @@ public class Game
 			default:
 				throw new SpellIndexException();
 			}
-			//TODO LAUNCH THE SPELL: setHealthsPoint( New hp here ) <- the check of negatives health points is done in Pawn class
-			ArrayList<Coordinate> effectedCoordinateList = pSpell.getShape().getEffectedCoordinate();
+			//Check on all case affected by the spell shape
+			ArrayList<Coordinate> effectedCoordinateList = pSpell.getShape().getEffectedCoordinates();
 			for(int effectedIndex=0;effectedIndex <effectedCoordinateList.size();effectedIndex++)
 			{
-				effectedCase = effectedCoordinateList.get(effectedIndex);
+				//If there is a pawn on the affected case
+				Coordinate effectedCase = pMovement.getDestCordinate().addCoordinate(effectedCoordinateList.get(effectedIndex));
+				if(this.getPawnOnCell(effectedCase)!= null)
+				{
+					Pawn pawnToAffect = this.getPawnOnCell(effectedCase);
+					int indexOfPawnToAffect = this.turnOrder.indexOf(pawnToAffect);
+					//Set the new HP on the affected Pawn
+					pawnToAffect.setHealthPoints(pawnToAffect.getHealthPoints()-pSpell.getShape().getDamage());
+					//Add the effect on the affectPawn
+					pawnToAffect.addEffect(new PawnEffect(pSpell.getSpellEffect()));
+				}
 				
 			}
 			//And send data to the other player, use:  Send(this.turnOrder); (might need a try catch statement)
@@ -411,12 +422,17 @@ public class Game
 	
 	
 	/**
-	 *  Check if a pawn exist in the list on the coordinates passed in parameters
+	 *  Check if a pawn is on coordinates passed in parameters
 	 *  If it exists return the pawn
 	 *  else returns null
 	 */
 	private Pawn getPawnOnCell(Coordinate pCoordinate)
 	{
+		for(int pawnIndex = 0; pawnIndex < this.turnOrder.size();pawnIndex++)
+		{
+			if(this.turnOrder.get(pawnIndex).getPos()==pCoordinate)
+				return this.turnOrder.get(pawnIndex);
+		}
 		return null;
 	}
 	

@@ -81,6 +81,15 @@ public class Spell implements Serializable{
 		this.myEffect = pEffectSpellEffect ;
 	}
 	
+	/**
+	 * Getter for myEffect
+	 * @return the effect of the spell
+	 */
+	public SpellEffect getSpellEffect()
+	{
+		return this.myEffect;
+	}
+	
 	/** 
 	 * Set a new value to myShape
 	 * @param pShape is the newvalue of myShape
