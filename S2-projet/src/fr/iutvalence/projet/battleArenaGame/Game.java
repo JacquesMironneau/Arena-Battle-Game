@@ -73,12 +73,7 @@ public class Game
 	 * First player of the game, the one who start in the first turn
 	 */
 	private Player localPlayer;
-	
-	/**
-	 * Second player of the game
-	 */
-	private Player remotePlayer;
-	
+
 	/**
 	 * This list represent Pawns currently living and define the turn order
 	 */
@@ -237,14 +232,10 @@ public class Game
 			
 			//Send the turn order (need to create myServer and myClient (in Game consctructor and then in play method
 			if(this.isServer)
-			{
 				myServer.SendAll(this.turnOrder);
-			}
 				
 			else
-			{
 				myClient.Send(this.turnOrder);
-			}
 				
 			//The movement is done
 			return true;
@@ -326,14 +317,10 @@ public class Game
 		}
 		
 		if(this.isServer)
-		{
 			myServer.SendAll(this.turnOrder);
-		}
 			
 		else
-		{
 			myClient.Send(this.turnOrder);
-		}
 		
 		return true; // To remove errors due to type returned
 	}
