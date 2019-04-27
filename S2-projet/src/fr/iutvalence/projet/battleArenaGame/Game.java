@@ -135,6 +135,11 @@ public class Game
 	 * If it's true the local player can play, else it can't. 
 	 */
 	private boolean localPlayerTurn;
+
+	/**
+	 * True if player decide to stop his turn, false either
+	 */
+	private boolean endTurn;
 	
 	
 	/**
@@ -178,17 +183,24 @@ public class Game
 		case 2: // server
 			this.isServer = true;
 			this.localPlayerTurn = true;
+			this.endTurn = false;
 			
 			myServer = new Server(Game.PORT, myNetwork);
 			myServer.init(); // Launch the server
+			
+			init(); // setup the game, TODO hink about champselect, might move init there
 			break;
 		
 		case 3: // client TODO test send from client to server
 			this.isServer = false;
 			this.localPlayerTurn = false;
+			this.endTurn = false;
+
 			
 			myClient = new Client(Game.PORT,Game.HOST_ADDRESS, myNetwork);
 			myClient.connect(); // Connect the client to the server
+			
+			init(); // set up the game TODO: think about champselect, might move init there
 			break;
 			
 		default:
@@ -213,9 +225,44 @@ public class Game
 	//TODO Manage the two players, the two different ArrayList (Does the pawn of the LocalPlayer are the odd ones ?
 	// Manage turn, one player should not play while it's the other turn
 	//Might need to send if the player can play or not
+	
 	public void play()
 	{
-		
+		while(this.localPlayerTurn)
+		{
+			while(!this.endTurn)
+			{
+				Scanner sc = new Scanner(System.in); //TODO: java.io instead
+				System.out.println("Choississez une action :"); //edit that in a more precise way
+				int choice = sc.nextInt();
+
+				switch(choice)
+				{
+				case 1:
+					//get distance and spell TODO
+					this.localPlayer.askSpell(null, null);
+					
+					break;
+				case 2:
+					//TODO get arguments
+					this.localPlayer.askMove(null);
+
+					break;
+				case 3:
+					this.localPlayerTurn = false; // this one is set to true in the network class
+					this.endTurn = true; // TODO set it to true somewhere
+					
+					if(this.isServer)
+						myServer.SendAll(this.localPlayerTurn);
+					else
+						myClient.Send(this.localPlayerTurn);
+					
+					break;
+					
+				}
+			}
+		}
+		this.endTurn = false; //CARE TODO
 	}
 	
 	/**
@@ -225,7 +272,18 @@ public class Game
 	 */
 	private void init()
 	{
-
+		// Create the turn order
+		
+		this.turnOrder.add(new Pawn(PawnTeam.PAWN_LOCAL, Game.BASE_POS_1PAWN1 , null));
+		this.turnOrder.add(new Pawn(PawnTeam.PAWN_REMOTE, Game.BASE_POS_2PAWN1 , null));
+		
+		this.turnOrder.add(new Pawn(PawnTeam.PAWN_LOCAL, Game.BASE_POS_1PAWN2 , null));
+		this.turnOrder.add(new Pawn(PawnTeam.PAWN_REMOTE, Game.BASE_POS_2PAWN2 , null));
+		
+		this.turnOrder.add(new Pawn(PawnTeam.PAWN_LOCAL, Game.BASE_POS_1PAWN3 , null));
+		this.turnOrder.add(new Pawn(PawnTeam.PAWN_REMOTE, Game.BASE_POS_2PAWN3 , null));
+		
+	
 	}
 	
 	
@@ -384,6 +442,7 @@ public class Game
 	}
 
 	/**
+	 * TODO Add theses changes in the Network class
 	 * Might Disconnect the user (myClient.disconnect() and the Server ( myServer.disconnectAll())
 	 */
 	private void endGame()
@@ -394,10 +453,10 @@ public class Game
 		{
 			for(Pawn pawnIndex : turnOrder)
 			{
-				if(pawnIndex.getTeam() == PawnTeam.PawnJ1)
+				if(pawnIndex.getTeam() == PawnTeam.PAWN_LOCAL)
 					alivePawnsPlayerServer++;
 				
-				if(pawnIndex.getTeam() == PawnTeam.PawnJ2)
+				if(pawnIndex.getTeam() == PawnTeam.PAWN_REMOTE)
 					alivePawnsPlayerClient++;
 			}
 			

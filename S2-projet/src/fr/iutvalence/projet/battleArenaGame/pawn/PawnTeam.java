@@ -12,6 +12,6 @@ import java.io.Serializable;
  */
 public enum PawnTeam implements Serializable
 {
-	PawnJ1,
-	PawnJ2
+	PAWN_LOCAL,
+	PAWN_REMOTE
 }
