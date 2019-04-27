@@ -58,11 +58,12 @@ public class Player {
 	 * the current pawn to null,
 	 * and create a new ArrayList of SpellPage.
 	 */
-	public Player()
+	public Player(Game pGame)
 	{
 		/**
 		 * By default, a player is not ready, has no current pawn and his list of pages is empty.
 		 */
+		this.game = pGame;
 		this.isReady = false;
 		this.currentPawn = null;
 		this.playerPages = new ArrayList<SpellPage>();
