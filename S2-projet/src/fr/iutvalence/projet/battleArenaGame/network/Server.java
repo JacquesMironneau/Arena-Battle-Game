@@ -147,7 +147,7 @@ public class Server
             } catch (Exception e) {
                 e.printStackTrace();
             }
-            System.out.println(socketClient.getInetAddress().getHostName() + " :" + msg);
+            System.out.println(socketClient.getInetAddress().getHostName() + "(client) :" + msg);
 
             if (msg.equals(Game.QUIT))
             {
