@@ -75,11 +75,24 @@ public class ShapeSpecial extends Shape implements Serializable{
 	 */
 	public final static int SSQ_SPELLCOST = 4;
 	
-//Attributes	
+//sword shape constants
 	/**
-	 * Represents the cells that the spell will effect, it contains all the coordinates that this shape will effect
+	 * Represents the damage of a sword shape.
 	 */
-	protected ArrayList<Coordinate> effectedCoordinates;
+	public final static int SWD_DAMAGE = 0;
+	/**
+	 * Represents the cooldown of a sword shape.
+	 */
+	public final static int SWD_COOLDOWN = 2;
+	/**
+	 * Represents the range of a sword shape.
+	 */
+	public final static int SWD_RANGE = 1;
+	/**
+	 * Represents the cost of a sword shape.
+	 */
+	public final static int SWD_SPELLCOST = 3;
+	
 
 //Constructor	
 	/**
@@ -91,16 +104,6 @@ public class ShapeSpecial extends Shape implements Serializable{
 	{
 		super(pType);
 		this.effectedCoordinates = new ArrayList<Coordinate>();	
-	}
-
-//Getters
-	/**
-	 * 
-	 * @return the coordinates that the shape will effect.
-	 */
-	public ArrayList<Coordinate> getAffectedCoordinates()
-	{
-		return this.effectedCoordinates;
 	}
 
 //toString	

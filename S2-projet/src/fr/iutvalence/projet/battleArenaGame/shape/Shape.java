@@ -1,5 +1,6 @@
 package fr.iutvalence.projet.battleArenaGame.shape;
 import java.io.Serializable;
+import java.util.ArrayList;
 
 import fr.iutvalence.projet.battleArenaGame.move.Coordinate;
 
@@ -35,23 +36,6 @@ public class Shape implements Serializable{
 	 */
 	public final static int BALL_SPELLCOST = 3;
 
-//sword shape constants
-	/**
-	 * Represents the damage of a sword shape.
-	 */
-	public final static int SWD_DAMAGE = 0;
-	/**
-	 * Represents the cooldown of a sword shape.
-	 */
-	public final static int SWD_COOLDOWN = 2;
-	/**
-	 * Represents the range of a sword shape.
-	 */
-	public final static int SWD_RANGE = 1;
-	/**
-	 * Represents the cost of a sword shape.
-	 */
-	public final static int SWD_SPELLCOST = 3;
 
 //fist shape constants
 	/**
@@ -96,7 +80,7 @@ public class Shape implements Serializable{
 	/**
 	 * Represents the coordinate that the shape will affect.
 	 */
-	private Coordinate effectedCoordinate;
+	protected ArrayList<Coordinate> effectedCoordinates;
 	
 	
 //Constructor	
@@ -109,7 +93,7 @@ public class Shape implements Serializable{
 	public Shape(String pType)
 	{
 		this.type = pType;
-		this.effectedCoordinate = new Coordinate(0,0);
+		this.effectedCoordinates = new ArrayList<Coordinate>();
 		this.setShape(this.type);
 	}
 	
@@ -140,9 +124,9 @@ public class Shape implements Serializable{
 	 * 
 	 * @return the coordinate that the shape will effect;
 	 */
-	public Coordinate getEffectedCoordinate()
+	public ArrayList<Coordinate> getEffectedCoordinates()
 	{
-		return this.effectedCoordinate;
+		return this.effectedCoordinates;
 	}
 	
 	/**
@@ -184,6 +168,7 @@ public class Shape implements Serializable{
 				this.cooldown = BALL_COOLDOWN;
 				this.range = BALL_RANGE;
 				this.spellCost = BALL_SPELLCOST;
+				this.effectedCoordinates.add(new Coordinate(0,0));
 				break;
 				
 			case "fist":
@@ -191,13 +176,7 @@ public class Shape implements Serializable{
 				this.cooldown = FIST_COOLDOWN;
 				this.range = FIST_RANGE;
 				this.spellCost = FIST_SPELLCOST;
-				break;
-				
-			case "sword":
-				this.damage = SWD_DAMAGE;
-				this.cooldown = SWD_COOLDOWN;
-				this.range = SWD_RANGE;
-				this.spellCost = SWD_SPELLCOST;
+				this.effectedCoordinates.add(new Coordinate(0,0));
 				break;
 				
 		}
@@ -207,7 +186,7 @@ public class Shape implements Serializable{
 	@Override
 	public String toString() {
 		return "Shape [name=" + type + ", damage=" + damage + ", cooldown=" + cooldown + ", range=" + range
-				+ ", spellCost=" + spellCost + ", effectedCoordinate=" + effectedCoordinate + "]";
+				+ ", spellCost=" + spellCost + ", effectedCoordinates=" + effectedCoordinates + "]";
 	}
 	
 	

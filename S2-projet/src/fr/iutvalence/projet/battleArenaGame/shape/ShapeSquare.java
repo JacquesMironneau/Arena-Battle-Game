@@ -47,7 +47,6 @@ public class ShapeSquare extends ShapeSpecial implements Serializable
 		
 	}
 	
-	//@override
 	public void setShape()
 	{
 		this.cooldown = ShapeSpecial.SSQ_COOLDOWN;
