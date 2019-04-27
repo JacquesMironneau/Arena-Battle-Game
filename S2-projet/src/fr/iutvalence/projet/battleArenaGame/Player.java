@@ -61,13 +61,12 @@ public class Player {
 	public Player(Game pGame)
 	{
 		/**
-		 * By default, a player is not ready, has no current pawn and his list of pages is empty.
+		 * By default, a player is linked to his Game object, and is not ready, has no current pawn and his list of pages is empty.
 		 */
 		this.game = pGame;
 		this.isReady = false;
 		this.currentPawn = null;
 		this.playerPages = new ArrayList<SpellPage>();
-		
 	}
 	
 	/**
