@@ -55,6 +55,23 @@ public class Game
      */
     
     public final static String HOST_ADDRESS = "192.168.1.49";
+    
+    /** 
+     * Winning message that will be send to the winner
+     */
+    public final static String VICTORY = "Victory";
+    
+    /**
+     * Defeat message that will be send to the looser
+     */
+    
+    public final static String DEFEAT = "Defeat";
+    
+    /**
+     * Draw message that will be send to the other player
+     */
+    public final static String DRAW = "Draw";
+    
 	/**
 	 * These values are the default position of pawns at the start of the game
 	 * The first number is the player's number and the second is the pawn's number
@@ -132,6 +149,56 @@ public class Game
 		//Server and client are created in play method if the player chose to create a game (create Server) or to join (create Client)
 	}
 	
+	
+	/**
+	 * The first method call, set up the network
+	 * and allow the player to navigate in the menu
+	 */
+	public void launch()
+	{	
+		
+		Scanner sc = new Scanner(System.in); //TODO replace by java.io stream
+		
+		System.out.println("----------------Menu-----------------");
+		System.out.println("1) Créer une page de sort");
+		System.out.println("2) Créer une partie");
+		System.out.println("3) Rejoindre une partie");
+	
+		int result = sc.nextInt();
+		/*
+		 * For now, this represent the menu of the game
+		 */
+		switch(result)
+		{
+		
+		case 1:
+			createSpellPage();
+			break;
+			
+		case 2: // server
+			this.isServer = true;
+			this.localPlayerTurn = true;
+			
+			myServer = new Server(Game.PORT, myNetwork);
+			myServer.init(); // Launch the server
+			break;
+		
+		case 3: // client TODO test send from client to server
+			this.isServer = false;
+			this.localPlayerTurn = false;
+			
+			myClient = new Client(Game.PORT,Game.HOST_ADDRESS, myNetwork);
+			myClient.connect(); // Connect the client to the server
+			break;
+			
+		default:
+			System.out.println("Please enter a valid choice...");
+		}
+		
+	}
+	
+	
+
 	/**
 	 * Manage method for turns
 	 * First the play method check if game is ended: No more pawns in one team player.
@@ -147,50 +214,7 @@ public class Game
 	// Manage turn, one player should not play while it's the other turn
 	//Might need to send if the player can play or not
 	public void play()
-	{	
-		
-		Scanner sc = new Scanner(System.in); //TODO replace by java.io stream
-		System.out.println("----------------Menu-----------------");
-		System.out.println("1) Créer une page de sort");
-		System.out.println("2) Créer une partie");
-		System.out.println("3) Rejoindre une partie");
-		int result = sc.nextInt();
-		
-		switch(result)
-		{
-		case 1:
-			createSpellPage();
-			break;
-			
-		case 2: // server
-			this.isServer = true;
-			this.localPlayerTurn = true;
-			
-			Coordinate coo = new Coordinate(4,4);
-			Pawn kevin = new Pawn(null, null, null);
-			this.turnOrder.add(new Pawn(PawnTeam.PawnJ1, new Coordinate(0,0), new SpellPage("Page de test pour le réseau")));
-			myServer = new Server(Game.PORT, myNetwork);
-			myServer.init(); // Launch the server
-			myServer.Send(0, coo);
-			myServer.SendAll(this.turnOrder);
-			
-			break;
-		
-		case 3: // client TODO test send from client to server
-			this.isServer = false;
-			this.localPlayerTurn = false;
-			
-			System.out.println("AVANT"+ this.turnOrder.size());
-			myClient = new Client(Game.PORT,Game.HOST_ADDRESS, myNetwork);
-			myClient.connect(); // Connect the client to the server
-			myClient.Send(new Coordinate(4,4));
-			//May need a few time to update the Game
-			System.out.println("APRES"+ this.turnOrder.size());
-			break;
-			
-		default:
-			System.out.println("Please enter a valid choice...");
-		}
+	{
 		
 	}
 	
@@ -360,13 +384,88 @@ public class Game
 	}
 
 	/**
-	 * TODO: check sequences diagram
-	 * Disconnect the user (myClient.disconnect() and the Server ( myServer.disconnectAll())
+	 * Might Disconnect the user (myClient.disconnect() and the Server ( myServer.disconnectAll())
 	 */
 	private void endGame()
 	{
+		int alivePawnsPlayerServer = 0, alivePawnsPlayerClient = 0;
 		
+		if(this.turnOrder.size() <= 3)
+		{
+			for(Pawn pawnIndex : turnOrder)
+			{
+				if(pawnIndex.getTeam() == PawnTeam.PawnJ1)
+					alivePawnsPlayerServer++;
+				
+				if(pawnIndex.getTeam() == PawnTeam.PawnJ2)
+					alivePawnsPlayerClient++;
+			}
+			
+			if(alivePawnsPlayerServer == 0 && alivePawnsPlayerClient == 0)
+			{
+				System.out.println(Game.DRAW);
+				
+				if(this.isServer)
+					myServer.SendAll(Game.DRAW);
+				else
+					myClient.Send(Game.DRAW);
+			}
+
+			else if(alivePawnsPlayerServer == 0)
+			{
+				
+				/*
+				 * Here the server loose
+				 */
+				
+				//If this Game is the one of the server, it send Victory to the client, and display a loosing screen
+				//to the current user
+				if(this.isServer)
+				{
+					myServer.SendAll(Game.VICTORY);
+					System.out.println("You loose :c ");
+				}
+				
+				//If this Game is the one of the client, it send Defeat to the client, and display a winning screen
+				//to the current user
+				else
+				{
+						myClient.Send(Game.DEFEAT);
+						System.out.println("You win !");
+				}
+			}
+			
+			/*
+			 * Here the client loose
+			 */
+			else if(alivePawnsPlayerClient == 0)
+			{
+				/*
+				 * If this Game is the one of the server, it sends defeat to the client
+				 * and display win to the server
+				 */
+				if(this.isServer)
+				{
+					myServer.SendAll(Game.DEFEAT);
+					System.out.println("You win ");
+				}
+				/*
+				 * If this Game is the one of the client, it sends win to the client
+				 * and display loose to the server
+				*/
+				else
+				{
+					myClient.Send(Game.VICTORY);
+					System.out.println("You loose :c");
+				}
+			}
+		}
+		//DEBUG TODO remove
+		else
+			System.out.println("Game non finie...");
 	}
+	
+	
 	
 	/**
 	 * This method close the game
@@ -411,17 +510,6 @@ public class Game
 	}
 	
 	
-	/** MIGHT BE DELETED OR REPLACED BY THE DISTANCE IN MOVEMENT
-	 * Check if the chosen destination (for spell or movement) is in range
-	 * 
-	 
-	private  boolean cellInRange(Coordinate pCoordinate, Coordinate dCoordinate)
-	{
-		
-	}
-	*/
-	
-	
 	/**
 	 *  Check if a pawn is on coordinates passed in parameters
 	 *  If it exists return the pawn
@@ -437,15 +525,6 @@ public class Game
 		return null;
 	}
 	
-	
-	/**
-	 * Set new coordinates for a pawn with a selected movement
-	 * TODO: might be remove due to the non access of the pawn
-	 */
-	public void updateBoard(Movement pMove)
-	{
-		
-	}
 	
 	/** TODO
 	 * Create a spell page, including the creation of his 3 spells and add
