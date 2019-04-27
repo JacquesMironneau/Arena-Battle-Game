@@ -311,7 +311,12 @@ public class Game
 				throw new SpellIndexException();
 			}
 			//TODO LAUNCH THE SPELL: setHealthsPoint( New hp here ) <- the check of negatives health points is done in Pawn class
-			
+			ArrayList<Coordinate> effectedCoordinateList = pSpell.getShape().getEffectedCoordinate();
+			for(int effectedIndex=0;effectedIndex <effectedCoordinateList.size();effectedIndex++)
+			{
+				effectedCase = effectedCoordinateList.get(effectedIndex);
+				
+			}
 			//And send data to the other player, use:  Send(this.turnOrder); (might need a try catch statement)
 			
 		}
@@ -326,6 +331,22 @@ public class Game
 	}
 	
 	
+	/**
+	 * Getter for LocalPlayerTurn
+	 * @return
+	 */
+	public boolean getLocalPlayerTurn() {
+		return localPlayerTurn;
+	}
+
+	/**
+	 * Setter for localPlayerTurn
+	 * @param localPlayerTurn
+	 */
+	public void setLocalPlayerTurn(boolean localPlayerTurn) {
+		this.localPlayerTurn = localPlayerTurn;
+	}
+
 	/**
 	 * TODO: check sequences diagram
 	 * Disconnect the user (myClient.disconnect() and the Server ( myServer.disconnectAll())
