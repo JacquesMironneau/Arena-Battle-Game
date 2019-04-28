@@ -177,6 +177,9 @@ public class Game
 		{
 		
 		case 1:
+			this.localPlayerTurn = true;
+			init();
+			play();
 			createSpellPage();
 			break;
 			
@@ -228,41 +231,46 @@ public class Game
 	
 	public void play()
 	{
-		while(this.localPlayerTurn)
+		while(!endGame()) // replace by boolean / or method to know if game is finished
 		{
-			while(!this.endTurn)
+			if(this.localPlayerTurn)
 			{
-				Scanner sc = new Scanner(System.in); //TODO: java.io instead
-				System.out.println("Choississez une action :"); //edit that in a more precise way
-				int choice = sc.nextInt();
-
-				switch(choice)
+				//Update effects and PA &PM of pawn
+				while(!this.endTurn)
 				{
-				case 1:
-					//get distance and spell TODO
-					this.localPlayer.askSpell(null, null);
-					
-					break;
-				case 2:
-					//TODO get arguments
-					this.localPlayer.askMove(null);
-
-					break;
-				case 3:
-					this.localPlayerTurn = false; // this one is set to true in the network class
-					this.endTurn = true; // TODO set it to true somewhere
-					
-					if(this.isServer)
-						myServer.SendAll(this.localPlayerTurn);
-					else
-						myClient.Send(this.localPlayerTurn);
-					
-					break;
-					
+					Scanner sc = new Scanner(System.in); //TODO: java.io instead
+					System.out.println("Choississez une action :"); //edit that in a more precise way
+					int choice = sc.nextInt();
+	
+					switch(choice)
+					{
+					case 1:
+						//get distance and spell TODO
+						this.localPlayer.askSpell(new Coordinate(3,3), new Spell()); // bug here; a pawn need to be selected
+						
+						break;
+					case 2:
+						//TODO get arguments
+						this.localPlayer.askMove(null);
+	
+						break;
+					case 3:
+						this.localPlayerTurn = false; // this one is set to true in the network class
+						this.endTurn = true; // TODO set it to true somewhere
+						
+						if(this.isServer)
+							myServer.SendAll(this.localPlayerTurn);
+						else
+							myClient.Send(this.localPlayerTurn);
+						
+						break;
+						
+					}
 				}
+				nextPawn();
 			}
+			this.endTurn = false; //CARE TODO
 		}
-		this.endTurn = false; //CARE TODO
 	}
 	
 	/**
@@ -445,7 +453,7 @@ public class Game
 	 * TODO Add theses changes in the Network class
 	 * Might Disconnect the user (myClient.disconnect() and the Server ( myServer.disconnectAll())
 	 */
-	private void endGame()
+	private boolean endGame()
 	{
 		int alivePawnsPlayerServer = 0, alivePawnsPlayerClient = 0;
 		
@@ -518,10 +526,11 @@ public class Game
 					System.out.println("You loose :c");
 				}
 			}
+			return true;
 		}
 		//DEBUG TODO remove
 		else
-			System.out.println("Game non finie...");
+			return false;
 	}
 	
 	
@@ -553,9 +562,9 @@ public class Game
 	/**
 	 * Change the currentPawn to the next one in the turnOrder array List
 	 * If the currentPawn is the last one, change to the first one
-	 * 
+	 * TODO currentpawn can be deleted and replaced by player currentPawn.
 	 */
-	private void nextPawn()
+	private void nextPawn() 
 	{
 		int nextPawnIndex = this.turnOrder.indexOf(currentPawn)+1;
 		if(nextPawnIndex>PAWN_NUMBER-1)
