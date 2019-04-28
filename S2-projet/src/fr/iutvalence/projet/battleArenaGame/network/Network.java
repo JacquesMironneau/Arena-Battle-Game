@@ -53,7 +53,7 @@ public class Network {
 			System.out.println("After" + this.myGame.getTurnOrder().size());
 
 		}
-		else if(transferedObject.getClass() == Boolean.class)
+		else if(transferedObject.getClass() == Boolean.class) // This is used in order to manage turn in network
 			this.myGame.setLocalPlayerTurn(!(Boolean)transferedObject);
 		
 		else throw new NetworkUnknownTypeException(transferedObject); //If the type of the sended object is not a boolean or an arrayList
