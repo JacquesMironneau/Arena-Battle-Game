@@ -291,6 +291,8 @@ public class Game
 		this.turnOrder.add(new Pawn(PawnTeam.PAWN_LOCAL, Game.BASE_POS_1PAWN3 , null));
 		this.turnOrder.add(new Pawn(PawnTeam.PAWN_REMOTE, Game.BASE_POS_2PAWN3 , null));
 		
+		this.localPlayer.setPawn(this.turnOrder.get(0));
+		
 	
 	}
 	
@@ -560,21 +562,17 @@ public class Game
 	
 
 	/**
-	 * Change the currentPawn to the next one in the turnOrder array List
+	 * Change the currentPawn of the player to the next one in the turnOrder array List
 	 * If the currentPawn is the last one, change to the first one
-	 * TODO currentpawn can be deleted and replaced by player currentPawn.
 	 */
 	private void nextPawn() 
 	{
 		int nextPawnIndex = this.turnOrder.indexOf(currentPawn)+1;
+		
 		if(nextPawnIndex>PAWN_NUMBER-1)
-		{
-			this.currentPawn = this.turnOrder.get(0);
-		}
+			this.localPlayer.setPawn(this.turnOrder.get(0));
 		else
-		{
-			this.currentPawn = this.turnOrder.get(nextPawnIndex);
-		}
+			this.localPlayer.setPawn(this.turnOrder.get(nextPawnIndex));
 	}
 	
 	
