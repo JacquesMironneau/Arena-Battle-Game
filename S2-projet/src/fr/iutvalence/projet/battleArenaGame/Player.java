@@ -79,10 +79,7 @@ public class Player {
 		 * Create a movement with the coordinates of the currentPawn and the Destination (coordinate) chosen by the player
 		 */
 		Movement mov = new Movement(this.currentPawn.getPos(), pDest);
-		
-		/*
-		 * Try the move chosen by the player
-		 */
+		 // Try the move chosen by the player
 		this.game.checkMove(mov);
 		
 	}
@@ -99,10 +96,7 @@ public class Player {
 		 * Create a movement with the coordinates of the currentPawn and the Destination (coordinate) chosen by the player
 		 */
 		Movement mov = new Movement(this.currentPawn.getPos(), pDest);
-		
-		/*
-		 * Try to launch the spell to 
-		 */
+		 // Try to launch the spell to 
 		try {
 			this.game.checkSpell(pSpell, mov);
 		}
@@ -139,50 +133,18 @@ public class Player {
 		return this.turnInProgress;
 	}
 	
-	/**
-	 * TODO
-	 * Ask to the system to set an effect to a spell.
-	 * @param pSpellEffect The effect the player want to set on a spell.
-	 */
-	public void askSpellEffect(SpellEffect pSpellEffect)
-	{
-		
-	}
-	
-	/**
-	 * Ask to the system to apply a shape to a spell.
-	 * @param pShape The shape that the player want to apply to a spell.
-	 * @param index: describe which spell of the page will be modified
-	 */
-	public void askShape(Shape pShape, int index) throws SpellIndexException
-	{
-		//Pick the correct page in the list (the last one here)
-		SpellPage currentPage = this.playerPages.get(playerPages.size());
-		
-		
-		//Pick the correct spell
-		
-		if(index == 1) currentPage.getSpell1().setShape(pShape);
-		else if(index == 2) currentPage.getSpell2().setShape(pShape);
-		else if(index == 3) currentPage.getSpell3().setShape(pShape);
-		
-		else
-		{
-			System.out.println("Mauvais indice");
-			throw new SpellIndexException(index);
-		}
-	}
-	
-	/**
+/*	
+	Work in progress
 	 * Tell the system that the player have finished to create his spell page
 	 * This method loops while conditions of a valid spell page is missing
 	 * Might be useless, depending on how the loop works
-	 */
+	 
 	//TODO
 	public void validateSpellPage()
 	{
 		
 	}
+*/
 	
 	/**
 	 * Say to the system that this player is ready to play
@@ -202,16 +164,6 @@ public class Player {
 	{
 		this.playerPages.add(page);
 	}
-	
-	/**
-	 * Ask to the system if its possible to create a lobby
-	 * TODO: Will probably be remove or move in Game class
-	 */
-	public void askLobbyCreation()
-	{
-		
-	}
-	
 
 	/**
 	 * Send the arrayList to edit it during the save

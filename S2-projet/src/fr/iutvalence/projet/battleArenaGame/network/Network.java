@@ -44,13 +44,15 @@ public class Network {
 			ArrayList<Pawn> ModifiedArrayListOfPawns = (ArrayList<Pawn>) transferedObject;
 
 			//For each pawn of the arrayList, it does print it (DEBUG ONLY: TODO: REMOVE THESES 3LINES)
-			for(Pawn PawnIndexInTheArrayList : ModifiedArrayListOfPawns)
-				System.out.println(PawnIndexInTheArrayList);
 			
+			/*for(Pawn PawnIndexInTheArrayList : ModifiedArrayListOfPawns)
+				System.out.println(PawnIndexInTheArrayList);
+			*/
 			
 			//Edit the array list of the current game
 			this.myGame.setTurnOrder(ModifiedArrayListOfPawns);
-			System.out.println("After" + this.myGame.getTurnOrder().size());
+			
+			/*System.out.println("After" + this.myGame.getTurnOrder().size());*/
 
 		}
 		else if(transferedObject.getClass() == Boolean.class) // This is used in order to manage turn in network
