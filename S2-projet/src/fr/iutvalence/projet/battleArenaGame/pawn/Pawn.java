@@ -158,10 +158,10 @@ public class Pawn implements Serializable
 	 */
 	public void setHealthPoints(int pHP)
 	{	
-		if(this.healthPoints < 0) // TODO: a way to check if health points are negatives
+		this.healthPoints = pHP;
+		if(this.healthPoints < 0) 
 			this.healthPoints = 0;
-		else 
-			this.healthPoints= pHP;
+		
 	}
 	
 	/**

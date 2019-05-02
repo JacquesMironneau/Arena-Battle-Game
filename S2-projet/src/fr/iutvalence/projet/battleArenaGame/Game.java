@@ -14,6 +14,7 @@ import fr.iutvalence.projet.battleArenaGame.pawn.Pawn;
 import fr.iutvalence.projet.battleArenaGame.pawn.PawnEffect;
 import fr.iutvalence.projet.battleArenaGame.pawn.PawnTeam;
 import fr.iutvalence.projet.battleArenaGame.spell.Spell;
+import fr.iutvalence.projet.battleArenaGame.spell.SpellEffect;
 import fr.iutvalence.projet.battleArenaGame.spell.SpellPage;
 
 /**
@@ -600,7 +601,6 @@ public class Game
 	public void createSpellPage()
 	{
 		//Creation of a spellPage
-		//TODO Display spell creation menu
 		Scanner scan = new Scanner(System.in);
 		
 		System.out.println("Entrer le nom de la page de sort");
@@ -614,6 +614,53 @@ public class Game
 		while(pageFinished == false)
 		{
 			Spell createdSpell = new Spell();
+			String elementName;
+			String shapeName;
+			do
+			{
+				System.out.println("Choisiser l'élement du sort à créer");
+				elementName = scan.nextLine();
+				
+				switch(elementName)
+				{
+				case "Fire":
+					createdSpell.setSpellEffect(SpellEffect.Fire);
+					break;
+				case "Ice":
+					createdSpell.setSpellEffect(SpellEffect.Ice);
+					break;
+				case "Stone":
+					createdSpell.setSpellEffect(SpellEffect.Stone);
+					break;
+				case "Electricity" :
+					createdSpell.setSpellEffect(SpellEffect.Electricity);
+					break;
+				case "Wind":
+					createdSpell.setSpellEffect(SpellEffect.Wind);
+					break;
+				case "Darkness":
+					createdSpell.setSpellEffect(SpellEffect.Darkness);
+					break;
+				default:
+					elementName = null;				
+				}
+			}while(elementName==null);
+			
+			do
+			{
+				System.out.println("Choisiser la forme du sort à créer");
+				shapeName = scan.nextLine();
+				switch(shapeName)
+				{
+				//TODO WIP, change Shape to Enum ?
+				case fist:
+					createdSpell.setShape(pShape);
+				
+				}
+			}while(shapeName==null);
+			
+		
+			
 		}
 		
 	}
