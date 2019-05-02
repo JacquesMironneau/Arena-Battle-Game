@@ -65,9 +65,9 @@ public class Coordinate implements Serializable {
 	 */
 	public Coordinate addCoordinate(Coordinate pCoordinate)
 	{
-		int nextX = this.coordX + pCoordinate.getCoordX();
-		int nextY = this.coordY + pCoordinate.getCoordY();
-		return new Coordinate(nextX,nextY);
+		this.coordX  += pCoordinate.getCoordX();
+		this.coordY += pCoordinate.getCoordY();
+		return this;
 	}
 	
 
