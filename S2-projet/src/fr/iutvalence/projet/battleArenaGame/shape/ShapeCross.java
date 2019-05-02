@@ -5,6 +5,9 @@ import java.io.Serializable;
 import fr.iutvalence.projet.battleArenaGame.move.Coordinate;
 
 //import java.util.ArrayList;
+/**
+ * TODO PUT IN THE SHAPE ENUM
+ */
 
 /**
  * 
@@ -13,11 +16,13 @@ import fr.iutvalence.projet.battleArenaGame.move.Coordinate;
  * The coordinate (0,0) represents where the player has clicked to cast his spell.
  * Example of a cross:
  * 
- *               |-2,0|    
- *               |-1,0|
- * |0,-2| |0,-1| |0 ,0| |0 ,1| |0 ,2|
- *               |1 ,0|
- *               |2, 0|
+ * 				 |0,-2|    
+ *               |0,-1|
+ * |-2,0| |-1,0| |0 ,0| |1 ,0| |2, 0|
+ * 				 |0 ,1|  
+ * 				 |0 ,2|
+ *               
+ *               
  */
 public class ShapeCross extends ShapeSpecial implements Serializable
 {

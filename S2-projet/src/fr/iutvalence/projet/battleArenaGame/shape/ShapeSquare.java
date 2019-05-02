@@ -5,15 +5,18 @@ import java.io.Serializable;
 import fr.iutvalence.projet.battleArenaGame.move.Coordinate;
 
 /**
+ * TODO PUT IN THE SHAPE ENUM
+ */
+/**
  * 
  * @author durantho
  * This class represents a square shape in the game.
  * The coordinate (0,0) represents where the player click to cast his spell.
  * Example of a Square:
  * 
- * |-1,-1| |-1, 0| |-1, 1|
- * | 0,-1| | 0, 0| | 0, 1|
- * | 1,-1| | 1, 0| | 1, 1|
+ * |-1,-1| | 0,-1| | 1,-1|
+ * |-1, 0| | 0, 0| | 1, 0|
+ * |-1, 1| | 0, 1| | 1, 1|
  *
  */
 public class ShapeSquare extends ShapeSpecial implements Serializable

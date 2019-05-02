@@ -6,6 +6,9 @@ import java.util.ArrayList;
 import fr.iutvalence.projet.battleArenaGame.move.Coordinate;
 
 /**
+ * TODO ERASE THIS CLASS AND IMPLEMENT IT IN THE SHAPE ENUM
+ */
+/**
  * 
  * @author durantho
  * This class represents the shape that is linked with an effect there are not available for all the effect,

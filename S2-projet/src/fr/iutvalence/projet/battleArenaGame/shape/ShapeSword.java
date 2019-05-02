@@ -5,16 +5,21 @@ import java.io.Serializable;
 import fr.iutvalence.projet.battleArenaGame.move.Coordinate;
 
 /**
+ * TODO PUT IN THE SHAPE ENUM
+ */
+/**
  * 
  * @author durantho
  * This class represents a sword Shape.
  * 
  * Example of a sword Shape:
- * 	|-1,-1| |-1, 0| |-1, 1|
- *  | 0,-1|         | 0, 1|
- *  | 1,-1| | 1, 1| | 1, 1|
+ * 	|-1,-1| | 0,-1| | 1,-1|
+ *  |-1, 0|         | 1, 0|
+ *  |-1, 1| | 0, 1| | 1, 1|
  *
  */
+
+
 
 public class ShapeSword extends ShapeSpecial implements Serializable{
 

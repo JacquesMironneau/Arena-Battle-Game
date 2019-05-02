@@ -10,6 +10,12 @@ import fr.iutvalence.projet.battleArenaGame.move.Coordinate;
  * represent a shape for a spell. defined damage, max cooldown, range and his price.
  * A shape represents how a spell is physically represented, it can be a ball, a fist, a sword
  */
+
+
+/**
+ * TODO ENUM OF SHAPE
+ *
+ */
 public class Shape implements Serializable{
 
 	/**
