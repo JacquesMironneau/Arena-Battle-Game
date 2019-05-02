@@ -11,5 +11,8 @@ Each Player has 3 pawns
 Each pawn has 3 spells
 
 Group Members :
-Jacques Mironneau  Vincent Charvet  Jules Chapelle  Thomas Durand 
+Jacques Mironneau = Pashmi = mironnej
+Vincent Charvet = charvevi Kioxfr
+Jules Chapelle = Cecile chapelju 
+Thomas Durand = durantho Is0ke taki 
 
