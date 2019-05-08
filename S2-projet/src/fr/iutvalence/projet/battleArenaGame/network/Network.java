@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import fr.iutvalence.projet.battleArenaGame.Game;
 import fr.iutvalence.projet.battleArenaGame.exceptions.NetworkUnknownTypeException;
 import fr.iutvalence.projet.battleArenaGame.pawn.Pawn;
+import fr.iutvalence.projet.battleArenaGame.pawn.PawnTeam;
 
 /**
  * Represents the network of the game,
@@ -42,7 +43,22 @@ public class Network {
 			//Unsafe but works actually
 			@SuppressWarnings("unchecked")
 			ArrayList<Pawn> ModifiedArrayListOfPawns = (ArrayList<Pawn>) transferedObject;
-
+			System.out.println("Modification de turnOrder en cours");
+			for(Pawn p: ModifiedArrayListOfPawns)
+			{
+				if(p.getTeam() == PawnTeam.PAWN_LOCAL)
+					{
+						System.out.println(p.getTeam());
+						p.setTeam(PawnTeam.PAWN_REMOTE);
+						System.out.println("Nouveau: " + p.getTeam());
+					}
+				else
+					{	
+						System.out.println(p.getTeam());
+						p.setTeam(PawnTeam.PAWN_LOCAL);
+						System.out.println("Nouveau: " + p.getTeam());
+					}
+			}
 			//For each pawn of the arrayList, it does print it (DEBUG ONLY: TODO: REMOVE THESES 3LINES)
 			
 			/*for(Pawn PawnIndexInTheArrayList : ModifiedArrayListOfPawns)
@@ -59,7 +75,7 @@ public class Network {
 			this.myGame.setLocalPlayerTurn(!(Boolean)transferedObject);
 		
 		else if(transferedObject.getClass() == String.class)
-			System.out.println(transferedObject);
+			System.out.println("Message de fin de jeu : " + transferedObject);
 			
 		else throw new NetworkUnknownTypeException(transferedObject); //If the type of the sended object is not a boolean or an arrayList
 	}

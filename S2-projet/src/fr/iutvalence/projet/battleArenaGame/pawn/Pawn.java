@@ -237,5 +237,10 @@ public class Pawn implements Serializable
 	{
 		return this.mySpellPage;
 	}
+	
+	public void setTeam(PawnTeam theTeam)
+	{
+		this.team = theTeam;
+	}
 }
 
