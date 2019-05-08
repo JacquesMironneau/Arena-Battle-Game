@@ -86,10 +86,7 @@ public class Game
 	public final static Coordinate BASE_POS_2PAWN1 = new Coordinate(2,14);
 	public final static Coordinate BASE_POS_2PAWN2 = new Coordinate(7,13);
 	public final static Coordinate BASE_POS_2PAWN3 = new Coordinate(12,14);
-	/**
-	 * Number of all Pawn in the game
-	 */
-	public final static int PAWN_NUMBER = 6;
+
 	/**
 	 * First player of the game, the one who start in the first turn
 	 */
@@ -164,7 +161,8 @@ public class Game
 	 */
 	public void launch()
 	{	
-		
+		while(true) 
+		{
 		Scanner sc = new Scanner(System.in); //TODO replace by java.io stream
 		
 		System.out.println("----------------Menu-----------------");
@@ -180,9 +178,6 @@ public class Game
 		{
 		
 		case 1:
-			this.localPlayerTurn = true;
-			init();
-			play();
 			try {
 				createSpellPage();
 			} catch (SpellIndexException e) {
@@ -199,7 +194,7 @@ public class Game
 			myServer = new Server(Game.PORT, myNetwork);
 			myServer.init(); // Launch the server
 			
-			init(); // setup the game, TODO hink about champselect, might move init there
+			init(); // setup the game, TODO think about champselect, might move init there
 			break;
 		
 		case 3: // client TODO test send from client to server
@@ -211,13 +206,14 @@ public class Game
 			myClient = new Client(Game.PORT,Game.HOST_ADDRESS, myNetwork);
 			myClient.connect(); // Connect the client to the server
 			
-			init(); // set up the game TODO: think about champselect, might move init there
+			// set up the game TODO: think about champselect, might move init there
 			break;
 			
 		default:
 			System.out.println("Please enter a valid choice...");
 		}
 		
+	}
 	}
 	
 	
@@ -554,7 +550,7 @@ public class Game
 	{
 		int nextPawnIndex = this.turnOrder.indexOf(currentPawn)+1;
 		
-		if(nextPawnIndex>PAWN_NUMBER-1)
+		if(nextPawnIndex==turnOrder.size())
 			this.localPlayer.setPawn(this.turnOrder.get(0));
 		else
 			this.localPlayer.setPawn(this.turnOrder.get(nextPawnIndex));
@@ -598,8 +594,7 @@ public class Game
 		
 		boolean pageFinished = false;
 		
-		//TODO Set true maybe XD
-		while(pageFinished == false)
+		while(!pageFinished)
 		{
 			Spell createdSpell = new Spell();
 			String elementName;
@@ -607,7 +602,7 @@ public class Game
 			int spellIndexToCreate;
 			do
 			{
-				System.out.println("Choisiser l'�lement du sort � cr�er");
+				System.out.println("Choisir l'index du sort a creer");
 				spellIndexToCreate = scan.nextInt();
 				if(spellIndexToCreate<1 || spellIndexToCreate > 3)
 					spellIndexToCreate = 0;			
@@ -615,7 +610,7 @@ public class Game
 			
 			do
 			{
-				System.out.println("Choisiser l'�lement du sort � cr�er");
+				System.out.println("Choisiser l'element du sort a creer");
 				elementName = scan.nextLine();
 				
 				switch(elementName)
@@ -645,11 +640,10 @@ public class Game
 			
 			do
 			{
-				System.out.println("Choisiser la forme du sort à créer");
+				System.out.println("Choisiser la forme du sort a creer");
 				shapeName = scan.nextLine();
 				switch(shapeName)
 				{
-				//TODO WIP, change Shape to Enum ?
 				case "fist":
 					createdSpell.setShape(Shape.Fist);
 					break;
@@ -687,17 +681,16 @@ public class Game
 				}
 			}while(shapeName==null);
 			
-		pageToAdd.setSpell(spellIndexToCreate,createdSpell);
+		pageToAdd.setSpell(spellIndexToCreate-1,createdSpell);
 		if(pageToAdd.getSpell(0)!= null && pageToAdd.getSpell(1)!= null && pageToAdd.getSpell(2)!= null )
 		{
-			System.out.println("Entrer 'oui' pour terminer la cr�ation / Entrer 'non' pour recr�er un sort");
+			System.out.println("Entrer 'oui' pour terminer la creation / Entrer 'non' pour recreer un sort");
 			String isFinished = scan.nextLine();
-			if(isFinished == "oui")
+			if(isFinished.equals("oui"))
 				pageFinished = true;		
 		}
 		}
-		localPlayer.addSpellPage(pageToAdd);
-		
+		localPlayer.addSpellPage(pageToAdd);	
 	}
 
 	/*
