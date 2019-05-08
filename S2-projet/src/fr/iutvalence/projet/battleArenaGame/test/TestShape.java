@@ -1,6 +1,6 @@
 package fr.iutvalence.projet.battleArenaGame.test;
 
-import fr.iutvalence.projet.battleArenaGame.shape.Shape;
+import fr.iutvalence.projet.battleArenaGame.shape.OldShape;
 import fr.iutvalence.projet.battleArenaGame.shape.ShapeBeam;
 import fr.iutvalence.projet.battleArenaGame.shape.ShapeCross;
 import fr.iutvalence.projet.battleArenaGame.shape.ShapeSquare;
@@ -14,9 +14,9 @@ public class TestShape {
 	
 	public static void main(String[] args) {
 		
-		Shape fist = new Shape("fist");
-		Shape ball = new Shape("ball");
-		Shape sword = new Shape("sword");
+		OldShape fist = new OldShape("fist");
+		OldShape ball = new OldShape("ball");
+		OldShape sword = new OldShape("sword");
 		
 		ShapeSquare sqr = new ShapeSquare("square");
 		ShapeCross cross = new ShapeCross("cross");

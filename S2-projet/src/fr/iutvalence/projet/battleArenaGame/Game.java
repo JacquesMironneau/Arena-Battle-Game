@@ -13,6 +13,7 @@ import fr.iutvalence.projet.battleArenaGame.network.Server;
 import fr.iutvalence.projet.battleArenaGame.pawn.Pawn;
 import fr.iutvalence.projet.battleArenaGame.pawn.PawnEffect;
 import fr.iutvalence.projet.battleArenaGame.pawn.PawnTeam;
+import fr.iutvalence.projet.battleArenaGame.shape.OldShape;
 import fr.iutvalence.projet.battleArenaGame.spell.Spell;
 import fr.iutvalence.projet.battleArenaGame.spell.SpellEffect;
 import fr.iutvalence.projet.battleArenaGame.spell.SpellPage;
@@ -605,8 +606,11 @@ public class Game
 		
 		System.out.println("Entrer le nom de la page de sort");
 		String pageName = scan.nextLine();
-		
-		localPlayer.addSpellPage(new SpellPage(pageName));
+		SpellPage pageToAdd = new SpellPage(pageName);
+		for(int i;i<pageToAdd.getSpell().length;i++)
+		{
+			pageToAdd.setSpell(i, null);	
+		}
 		
 		boolean pageFinished = false;
 		
@@ -616,9 +620,18 @@ public class Game
 			Spell createdSpell = new Spell();
 			String elementName;
 			String shapeName;
+			int spellIndexToCreate;
 			do
 			{
-				System.out.println("Choisiser l'élement du sort à créer");
+				System.out.println("Choisiser l'�lement du sort � cr�er");
+				spellIndexToCreate = scan.nextInt();
+				if(spellIndexToCreate<1 || spellIndexToCreate > 3)
+					spellIndexToCreate = 0;			
+			}while(spellIndexToCreate == 0);
+			
+			do
+			{
+				System.out.println("Choisiser l'�lement du sort � cr�er");
 				elementName = scan.nextLine();
 				
 				switch(elementName)
@@ -653,15 +666,53 @@ public class Game
 				switch(shapeName)
 				{
 				//TODO WIP, change Shape to Enum ?
-				case fist:
-					createdSpell.setShape(pShape);
-				
+				case "fist":
+					createdSpell.setShape(OldShape.Fist);
+					break;
+				case "ball":
+					createdSpell.setShape(OldShape.Ball);
+					break;
+				case "sword":
+					createdSpell.setShape(OldShape.Sword);
+					break;
+				case "special":
+					switch(elementName)
+					{
+					case "Fire": 
+						createdSpell.setShape(OldShape.Cross);
+						break;
+					case "Wind":
+						createdSpell.setShape(OldShape.Cross);
+						break;
+					case "Ice":
+						createdSpell.setShape(OldShape.Beam);
+						break;
+					case "Electricity":
+						createdSpell.setShape(OldShape.Beam);
+						break;
+					case "Stone":
+						createdSpell.setShape(OldShape.Square);
+						break;
+					case "Darkness":
+						createdSpell.setShape(OldShape.Square);
+						break;
+					}
+					break;
+				default:
+					shapeName = null;
 				}
 			}while(shapeName==null);
 			
-		
-			
+		pageToAdd.setSpell(spellIndexToCreate,createdSpell);
+		if(pageToAdd.getSpell(0)!= null && pageToAdd.getSpell(1)!= null && pageToAdd.getSpell(2)!= null )
+		{
+			System.out.println("Entrer 'oui' pour terminer la cr�ation / Entrer 'non' pour recr�er un sort");
+			String isFinished = scan.nextLine();
+			if(isFinished == "oui")
+				pageFinished = true;		
 		}
+		}
+		localPlayer.addSpellPage(pageToAdd);
 		
 	}
 
