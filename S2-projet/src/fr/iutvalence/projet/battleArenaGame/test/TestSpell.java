@@ -1,6 +1,6 @@
 package fr.iutvalence.projet.battleArenaGame.test;
 
-import fr.iutvalence.projet.battleArenaGame.shape.Shape;
+import fr.iutvalence.projet.battleArenaGame.shape.OldShape;
 import fr.iutvalence.projet.battleArenaGame.spell.SpellEffect;
 import fr.iutvalence.projet.battleArenaGame.spell.SpellPage;
 /**
@@ -14,9 +14,9 @@ public class TestSpell {
 		
 		SpellPage page1 = new SpellPage("Namepage1");
 		
-		Shape fist = new Shape("fist");
-		Shape ball = new Shape("ball");
-		Shape sword = new Shape("sword");
+		OldShape fist = new OldShape("fist");
+		OldShape ball = new OldShape("ball");
+		OldShape sword = new OldShape("sword");
 		
 		page1.getSpell1().setShape(sword);
 		page1.getSpell2().setShape(ball);

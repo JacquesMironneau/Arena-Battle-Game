@@ -13,7 +13,7 @@ import fr.iutvalence.projet.battleArenaGame.network.Server;
 import fr.iutvalence.projet.battleArenaGame.pawn.Pawn;
 import fr.iutvalence.projet.battleArenaGame.pawn.PawnEffect;
 import fr.iutvalence.projet.battleArenaGame.pawn.PawnTeam;
-import fr.iutvalence.projet.battleArenaGame.shape.Shape;
+import fr.iutvalence.projet.battleArenaGame.shape.OldShape;
 import fr.iutvalence.projet.battleArenaGame.spell.Spell;
 import fr.iutvalence.projet.battleArenaGame.spell.SpellEffect;
 import fr.iutvalence.projet.battleArenaGame.spell.SpellPage;
@@ -623,7 +623,7 @@ public class Game
 			int spellIndexToCreate;
 			do
 			{
-				System.out.println("Choisiser l'élement du sort à  créer");
+				System.out.println("Choisiser l'ï¿½lement du sort ï¿½ crï¿½er");
 				spellIndexToCreate = scan.nextInt();
 				if(spellIndexToCreate<1 || spellIndexToCreate > 3)
 					spellIndexToCreate = 0;			
@@ -631,7 +631,7 @@ public class Game
 			
 			do
 			{
-				System.out.println("Choisiser l'élement du sort à  créer");
+				System.out.println("Choisiser l'ï¿½lement du sort ï¿½ crï¿½er");
 				elementName = scan.nextLine();
 				
 				switch(elementName)
@@ -667,34 +667,34 @@ public class Game
 				{
 				//TODO WIP, change Shape to Enum ?
 				case "fist":
-					createdSpell.setShape(Shape.Fist);
+					createdSpell.setShape(OldShape.Fist);
 					break;
 				case "ball":
-					createdSpell.setShape(Shape.Ball);
+					createdSpell.setShape(OldShape.Ball);
 					break;
 				case "sword":
-					createdSpell.setShape(Shape.Sword);
+					createdSpell.setShape(OldShape.Sword);
 					break;
 				case "special":
 					switch(elementName)
 					{
 					case "Fire": 
-						createdSpell.setShape(Shape.Cross);
+						createdSpell.setShape(OldShape.Cross);
 						break;
 					case "Wind":
-						createdSpell.setShape(Shape.Cross);
+						createdSpell.setShape(OldShape.Cross);
 						break;
 					case "Ice":
-						createdSpell.setShape(Shape.Beam);
+						createdSpell.setShape(OldShape.Beam);
 						break;
 					case "Electricity":
-						createdSpell.setShape(Shape.Beam);
+						createdSpell.setShape(OldShape.Beam);
 						break;
 					case "Stone":
-						createdSpell.setShape(Shape.Square);
+						createdSpell.setShape(OldShape.Square);
 						break;
 					case "Darkness":
-						createdSpell.setShape(Shape.Square);
+						createdSpell.setShape(OldShape.Square);
 						break;
 					}
 					break;
@@ -706,7 +706,7 @@ public class Game
 		pageToAdd.setSpell(spellIndexToCreate,createdSpell);
 		if(pageToAdd.getSpell(0)!= null && pageToAdd.getSpell(1)!= null && pageToAdd.getSpell(2)!= null )
 		{
-			System.out.println("Entrer 'oui' pour terminer la création / Entrer 'non' pour recréer un sort");
+			System.out.println("Entrer 'oui' pour terminer la crï¿½ation / Entrer 'non' pour recrï¿½er un sort");
 			String isFinished = scan.nextLine();
 			if(isFinished == "oui")
 				pageFinished = true;		

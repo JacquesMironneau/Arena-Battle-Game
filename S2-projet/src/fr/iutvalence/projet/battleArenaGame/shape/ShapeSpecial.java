@@ -15,7 +15,7 @@ import fr.iutvalence.projet.battleArenaGame.move.Coordinate;
  * for example in a spell that is made of fire it special shape necessarily be a Cross.
  * Those Shapes affect more cells on the board.
  */
-public class ShapeSpecial extends Shape implements Serializable{
+public class ShapeSpecial extends OldShape implements Serializable{
 	
 //TODO assign correct damages values for each shape.
 	
