@@ -2,6 +2,8 @@ package fr.iutvalence.projet.battleArenaGame.spell;
 
 import java.io.Serializable;
 
+import fr.iutvalence.projet.battleArenaGame.exceptions.SpellIndexException;
+
 /**
  * This class represents a Spell page it is composed of 3 spells.
  * A spell page has a name.
@@ -22,19 +24,9 @@ public class SpellPage implements Serializable{
 	private String pageName;
 	
 	/**
-	 * first spell of the page.
+	 * Table of spells in this page
 	 */
-	private Spell spell1;
-	
-	/**
-	 * second spell of the page.
-	 */
-	private Spell spell2;
-	
-	/**
-	 * third spell of the page.
-	 */
-	private Spell spell3;
+	private Spell[] spells;
 
 	/**
 	 * Constructor of a spell page
@@ -43,10 +35,10 @@ public class SpellPage implements Serializable{
 	public SpellPage(String pName)
 	{
 		this.pageName = pName;
-		
-		this.spell1 = new Spell();
-		this.spell2 = new Spell();
-		this.spell3 = new Spell();
+		this.spells = new Spell[3];
+		this.spells[0] = new Spell();
+		this.spells[1] = new Spell();
+		this.spells[2] = new Spell();
 	}
 	
 	/**
@@ -57,42 +49,37 @@ public class SpellPage implements Serializable{
 		return this.pageName;
 	}
 	/**
-	 * return the fist spell.
-	 * @return spell1 : the spell
+	 * return the table of spells.
+	 * @return spell : the spell
 	 */
-	public Spell getSpell1()
+	public Spell[] getSpell()
 	{
-		return this.spell1;
+		return this.spells;
 	}
 	
 	/**
-	 * return the second spell.
-	 * @return spell2 : the spell
+	 * return the spell in the table of all spells
+	 * @param spellIndex : index of the spell to return
+	 * @return the spell
 	 */
-	public Spell getSpell2()
+	public Spell getSpell(int spellIndex)
 	{
-		return this.spell2;
+		return this.spells[spellIndex];
 	}
 	
-	/**
-	 * return the third spell.
-	 * @return spell2 : the spell
-	 */
-	public Spell getSpell3()
+	public void setSpell(int pageIndex,Spell pSpell) throws SpellIndexException
 	{
-		return this.spell3;
+		if(pageIndex>2 || pageIndex<0) throw new SpellIndexException(pageIndex);
+		this.spells[pageIndex] = pSpell;
 	}
 	
-
 	/**
 	 * Return the current state of the page,
 	 * name
-	 * spell1
-	 * spell2
-	 * spell3
+	 * spells
 	 */
 	public String toString() {
-		return "SpellPage [pageName=" + pageName + ", spell1=" + spell1 + ", spell2=" + spell2 + ", spell3=" + spell3 + "]";
+		return "SpellPage [pageName=" + pageName + ", spell1=" + this.spells[0] + ", spell2=" + this.spells[1] + ", spell3=" + this.spells[2] + "]";
 	}
 	
 }
