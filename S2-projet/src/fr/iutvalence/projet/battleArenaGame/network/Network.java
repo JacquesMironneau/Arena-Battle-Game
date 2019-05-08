@@ -58,6 +58,9 @@ public class Network {
 		else if(transferedObject.getClass() == Boolean.class) // This is used in order to manage turn in network
 			this.myGame.setLocalPlayerTurn(!(Boolean)transferedObject);
 		
+		else if(transferedObject.getClass() == String.class)
+			System.out.println(transferedObject);
+			
 		else throw new NetworkUnknownTypeException(transferedObject); //If the type of the sended object is not a boolean or an arrayList
 	}
 }
