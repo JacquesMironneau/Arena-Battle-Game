@@ -1,9 +1,6 @@
 package fr.iutvalence.projet.battleArenaGame.test;
 
-import fr.iutvalence.projet.battleArenaGame.shape.OldShape;
-import fr.iutvalence.projet.battleArenaGame.shape.ShapeBeam;
-import fr.iutvalence.projet.battleArenaGame.shape.ShapeCross;
-import fr.iutvalence.projet.battleArenaGame.shape.ShapeSquare;
+import fr.iutvalence.projet.battleArenaGame.shape.*;
 
 /**
  * Test class for shapes
@@ -14,20 +11,20 @@ public class TestShape {
 	
 	public static void main(String[] args) {
 		
-		OldShape fist = new OldShape("fist");
-		OldShape ball = new OldShape("ball");
-		OldShape sword = new OldShape("sword");
+		Shape myFist = Shape.Fist;
+		Shape myBall = Shape.Ball;
+		Shape mySword = Shape.Sword;
+		Shape mySquare = Shape.Square;
+		Shape myCross = Shape.Cross;
+		Shape myBeam = Shape.Beam;
 		
-		ShapeSquare sqr = new ShapeSquare("square");
-		ShapeCross cross = new ShapeCross("cross");
-		ShapeBeam beam = new ShapeBeam("beam");
 		
-		System.out.println(fist.toString());
-		System.out.println(ball.toString());
-		System.out.println(sword.toString());
+		System.out.println(myFist.toString());
+		System.out.println(myBall.toString());
+		System.out.println(mySword.toString());
 		
-		System.out.println(sqr.toString());
-		System.out.println(cross.toString());
-		System.out.println(beam.toString());
+		System.out.println(mySquare.toString());
+		System.out.println(myCross.toString());
+		System.out.println(myBeam.toString());
 	}
 }

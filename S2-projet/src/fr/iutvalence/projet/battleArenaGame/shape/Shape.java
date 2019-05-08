@@ -52,7 +52,19 @@ public enum Shape implements Serializable {
 		return effectedCoordinates;
 	}
 	
+	public String displayEffectedCoords() {
+		int k;
+		String effectedCoords = "[ ";
+		for(k=0;k<this.effectedCoordinates.length;k++) {
+			effectedCoords+= effectedCoordinates[k].toString()+" ";
+		}
+		effectedCoords+=" ]";
+		return effectedCoords;
+	}
 	
+	public String toString() {
+		return "Shape [type="+this.type+",damage="+this.damage+",cooldown="+this.cooldown+",range="+this.range+",spellCost="+this.cooldown+"effectedCoordinates="+this.displayEffectedCoords()+"]";
+	}
 
 	
 	
