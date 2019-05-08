@@ -2,7 +2,7 @@ package fr.iutvalence.projet.battleArenaGame.spell;
 
 import java.io.Serializable;
 
-import fr.iutvalence.projet.battleArenaGame.shape.OldShape;
+import fr.iutvalence.projet.battleArenaGame.shape.Shape;
 
 /**
  * 
@@ -27,7 +27,7 @@ public class Spell implements Serializable{
 	/**
 	 * shape of spell
 	 */
-	private OldShape myShape;
+	private Shape myShape;
 	
 	/**
 	 * effect of a spell
@@ -94,7 +94,7 @@ public class Spell implements Serializable{
 	 * Set a new value to myShape
 	 * @param pShape is the newvalue of myShape
 	 */
-	public void setShape(OldShape pShape)
+	public void setShape(Shape pShape)
 	{
 		this.myShape = pShape;
 	}
@@ -103,7 +103,7 @@ public class Spell implements Serializable{
 	 * Getter for myShape the spell shape
 	 * @return the shape of the spell
 	 */
-	public OldShape getShape()
+	public Shape getShape()
 	{
 		return this.myShape;
 	}

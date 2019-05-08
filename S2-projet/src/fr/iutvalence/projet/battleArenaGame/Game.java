@@ -1,6 +1,7 @@
 package fr.iutvalence.projet.battleArenaGame;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Scanner;
 
 import fr.iutvalence.projet.battleArenaGame.exceptions.SpellIndexException;
@@ -13,7 +14,7 @@ import fr.iutvalence.projet.battleArenaGame.network.Server;
 import fr.iutvalence.projet.battleArenaGame.pawn.Pawn;
 import fr.iutvalence.projet.battleArenaGame.pawn.PawnEffect;
 import fr.iutvalence.projet.battleArenaGame.pawn.PawnTeam;
-import fr.iutvalence.projet.battleArenaGame.shape.OldShape;
+import fr.iutvalence.projet.battleArenaGame.shape.Shape;
 import fr.iutvalence.projet.battleArenaGame.spell.Spell;
 import fr.iutvalence.projet.battleArenaGame.spell.SpellEffect;
 import fr.iutvalence.projet.battleArenaGame.spell.SpellPage;
@@ -182,7 +183,12 @@ public class Game
 			this.localPlayerTurn = true;
 			init();
 			play();
-			createSpellPage();
+			try {
+				createSpellPage();
+			} catch (SpellIndexException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 			break;
 			
 		case 2: // server
@@ -349,26 +355,7 @@ public class Game
 	 */
 	public boolean checkSpell(Spell pSpell, Movement pMovement) throws SpellNotFoundException, SpellIndexException
 	{
-		//Find which spell is used on the pawn spellPage
-		int spellNumber;
 		
-		if(pSpell.equals(this.currentPawn.getSpellPage().getSpell1()))
-			spellNumber = 1;
-		
-		if(pSpell.equals(this.currentPawn.getSpellPage().getSpell2()))
-			spellNumber = 2;
-		
-		if(pSpell.equals(this.currentPawn.getSpellPage().getSpell3()))
-			spellNumber = 3;
-		
-		else 
-		{
-			//System.out.println("Error in checkSpell : the spell used is not found in the pawn's spellPage");
-			throw new SpellNotFoundException(pSpell);
-			/*return false;
-			 * Test if this exception does really work
-			 */
-		}
 		
 		if(pSpell.getCurrentCooldown() == 0)
 		{	
@@ -391,22 +378,18 @@ public class Game
 			//Remove action points used
 			this.currentPawn.setActionPoints(this.currentPawn.getActionPoints() - pSpell.getShape().getSpellCost());
 			//Set the cooldown on the spell used
-			switch(spellNumber)
+			//TODO Exception if spell not found
+			pSpell.resetCooldown();
+			int spellIndexInPage = -1;
+			for(int index=0;index < 3;index++)
 			{
-			case 1:
-				this.currentPawn.getSpellPage().getSpell1().resetCooldown();
-				break;
-			case 2:
-				this.currentPawn.getSpellPage().getSpell2().resetCooldown();
-				break;
-			case 3:
-				this.currentPawn.getSpellPage().getSpell3().resetCooldown();
-				break;
-			default:
-				throw new SpellIndexException(spellNumber);
+				if(pSpell.equals(this.currentPawn.getSpellPage().getSpell(index)))
+					spellIndexInPage = index;		
 			}
+			
+			this.turnOrder.get(this.turnOrder.indexOf(currentPawn)).getSpellPage().getSpell(spellIndexInPage).resetCooldown();
 			//Check on all case affected by the spell shape
-			ArrayList<Coordinate> effectedCoordinateList = pSpell.getShape().getEffectedCoordinates();
+			ArrayList<Coordinate> effectedCoordinateList = new ArrayList<Coordinate>(Arrays.asList(pSpell.getShape().getEffectedCoordinates()));
 			for(int effectedIndex=0;effectedIndex <effectedCoordinateList.size();effectedIndex++)
 			{
 				//If there is a pawn on the affected case
@@ -598,8 +581,9 @@ public class Game
 	 * Create a spell page, including the creation of his 3 spells and add
 	 * it to the player spellPage list
 	 * WORK IN PROGRESS
+	 * @throws SpellIndexException 
 	 */
-	public void createSpellPage()
+	public void createSpellPage() throws SpellIndexException
 	{
 		//Creation of a spellPage
 		Scanner scan = new Scanner(System.in);
@@ -607,9 +591,9 @@ public class Game
 		System.out.println("Entrer le nom de la page de sort");
 		String pageName = scan.nextLine();
 		SpellPage pageToAdd = new SpellPage(pageName);
-		for(int i;i<pageToAdd.getSpell().length;i++)
+		for(int index=0;index<pageToAdd.getSpell().length;index++)
 		{
-			pageToAdd.setSpell(i, null);	
+			pageToAdd.setSpell(index, null);	
 		}
 		
 		boolean pageFinished = false;
@@ -667,34 +651,34 @@ public class Game
 				{
 				//TODO WIP, change Shape to Enum ?
 				case "fist":
-					createdSpell.setShape(OldShape.Fist);
+					createdSpell.setShape(Shape.Fist);
 					break;
 				case "ball":
-					createdSpell.setShape(OldShape.Ball);
+					createdSpell.setShape(Shape.Ball);
 					break;
 				case "sword":
-					createdSpell.setShape(OldShape.Sword);
+					createdSpell.setShape(Shape.Sword);
 					break;
 				case "special":
 					switch(elementName)
 					{
 					case "Fire": 
-						createdSpell.setShape(OldShape.Cross);
+						createdSpell.setShape(Shape.Cross);
 						break;
 					case "Wind":
-						createdSpell.setShape(OldShape.Cross);
+						createdSpell.setShape(Shape.Cross);
 						break;
 					case "Ice":
-						createdSpell.setShape(OldShape.Beam);
+						createdSpell.setShape(Shape.Beam);
 						break;
 					case "Electricity":
-						createdSpell.setShape(OldShape.Beam);
+						createdSpell.setShape(Shape.Beam);
 						break;
 					case "Stone":
-						createdSpell.setShape(OldShape.Square);
+						createdSpell.setShape(Shape.Square);
 						break;
 					case "Darkness":
-						createdSpell.setShape(OldShape.Square);
+						createdSpell.setShape(Shape.Square);
 						break;
 					}
 					break;
