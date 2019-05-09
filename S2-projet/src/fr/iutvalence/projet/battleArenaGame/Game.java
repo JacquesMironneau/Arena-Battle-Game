@@ -689,7 +689,6 @@ public class Game
 				}
 			}while(shapeName==null);
 			
-
 		pageToAdd.setSpell(spellIndexToCreate-1,createdSpell);
 		if(pageToAdd.getSpell(0)!= null && pageToAdd.getSpell(1)!= null && pageToAdd.getSpell(2)!= null )
 		{
@@ -710,7 +709,7 @@ public class Game
 
 		}
 		localPlayer.addSpellPage(pageToAdd);	
-		scan.close();
+		
 	}
 	
 	
@@ -758,7 +757,6 @@ public class Game
 				
 				
 				}
-			scan.close();
 			if(isServer)
 				myServer.SendAll(this.turnOrder);
 			else
