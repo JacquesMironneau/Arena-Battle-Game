@@ -247,6 +247,11 @@ public class Game
 		{
 			if(this.localPlayerTurn)
 			{
+				this.currentPawn.setActionPoints(6);
+				this.currentPawn.setMovePoints(6);
+				this.turnOrder.set(this.turnOrder.indexOf(currentPawn), currentPawn);
+				applyEffect();
+				
 				//Update effects and PA &PM of pawn
 				while(!this.endTurn)
 				{
@@ -267,19 +272,46 @@ public class Game
 	
 						break;
 					case 3:
-						this.localPlayerTurn = false; // this one is set to true in the network class
-						this.endTurn = true; // TODO set it to true somewhere
 						
-						if(this.isServer)
-							myServer.SendAll(this.localPlayerTurn);
+						nextPawn();
+						
+						if(this.currentPawn.getTeam() == PawnTeam.PAWN_REMOTE)
+						{
+							this.endTurn = true; //  set it to true somewhere
+							this.localPlayerTurn = false; // this one is set to true in the network class
+
+
+							if(this.isServer)
+								{
+									myServer.SendAll(this.currentPawn);
+									myServer.SendAll(this.turnOrder);
+									myServer.SendAll(this.localPlayerTurn);
+								}
+							else
+								{
+									myClient.Send(this.currentPawn);
+									myClient.Send(this.turnOrder);
+									myClient.Send(this.localPlayerTurn);
+								}
+						}
 						else
-							myClient.Send(this.localPlayerTurn);
+						{
+							this.currentPawn.setActionPoints(6);
+							this.currentPawn.setMovePoints(6);
+							this.turnOrder.set(this.turnOrder.indexOf(currentPawn), currentPawn);
+							applyEffect();
+
+
+						}
+						//Si le next pawn est remote
+						
+						
+						//Sinon: appeler les méthodes de remise à max des PA/PM/ Applyeffect
 						
 						break;
-						
 					}
 				}
-				nextPawn();
+				//nextPawn();
 			}
 			this.endTurn = false; //CARE TODO
 		}
@@ -603,9 +635,16 @@ public class Game
 		int nextPawnIndex = this.turnOrder.indexOf(currentPawn)+1;
 		
 		if(nextPawnIndex==turnOrder.size())
-			this.localPlayer.setPawn(this.turnOrder.get(0));
+			{
+				this.localPlayer.setPawn(this.turnOrder.get(0));
+				this.currentPawn = this.turnOrder.get(0);
+
+			}
 		else
-			this.localPlayer.setPawn(this.turnOrder.get(nextPawnIndex));
+			{
+				this.localPlayer.setPawn(this.turnOrder.get(nextPawnIndex));
+				this.currentPawn = this.turnOrder.get(nextPawnIndex);
+			}
 	}
 	
 	
@@ -840,6 +879,9 @@ public class Game
 		this.turnOrder = pTurnOrder;
 	}
 	
-	
+	public void setCurrentPawn(Pawn thePawn)
+	{
+		this.currentPawn = thePawn;
+	}
 	
 }

@@ -76,7 +76,11 @@ public class Network {
 		
 		else if(transferedObject.getClass() == String.class)
 			System.out.println("Message de fin de jeu : " + transferedObject);
-			
+		
+		else if(transferedObject.getClass() == Pawn.class)
+		{
+			myGame.setCurrentPawn((Pawn) transferedObject);
+		}
 		else throw new NetworkUnknownTypeException(transferedObject); //If the type of the sended object is not a boolean or an arrayList
 	}
 }
