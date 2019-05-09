@@ -611,7 +611,7 @@ public class Game
 			do
 			{
 				System.out.println("Choisiser l'element du sort a creer");
-				elementName = scan.nextLine();
+				elementName = scan.next();
 				
 				switch(elementName)
 				{
@@ -641,7 +641,7 @@ public class Game
 			do
 			{
 				System.out.println("Choisiser la forme du sort a creer");
-				shapeName = scan.nextLine();
+				shapeName = scan.next();
 				switch(shapeName)
 				{
 				case "fist":
@@ -685,12 +685,76 @@ public class Game
 		if(pageToAdd.getSpell(0)!= null && pageToAdd.getSpell(1)!= null && pageToAdd.getSpell(2)!= null )
 		{
 			System.out.println("Entrer 'oui' pour terminer la creation / Entrer 'non' pour recreer un sort");
-			String isFinished = scan.nextLine();
+			String isFinished = scan.next();
 			if(isFinished.equals("oui"))
 				pageFinished = true;		
 		}
 		}
 		localPlayer.addSpellPage(pageToAdd);	
+		scan.close();
+	}
+	
+	
+	/**
+	 * Start the selection of the spell pages for the pawns of local player
+	 */
+	private void selectPageForPawns()
+	{
+		Scanner scan = new Scanner(System.in);
+		int selectedPageIndex;
+		Pawn[] temporaryPawns = new Pawn[3];
+		boolean selectionFinished = false;
+		//add every local pawns 
+		int loopCount = 0;
+		for(Pawn p: turnOrder)
+			if(p.getTeam()==PawnTeam.PAWN_LOCAL)
+				{
+					temporaryPawns[loopCount]=p;
+					loopCount++;
+				}
+		
+		int pawnNumber = 1;
+			for(Pawn pPawn: temporaryPawns)
+			{
+				displaySpellPages();
+				System.out.println("Choisisez l'index de la page que vous voulez donner au pion numéro" + pawnNumber );
+				selectedPageIndex = scan.nextInt();
+				this.turnOrder.get(this.turnOrder.indexOf(pPawn)).setSpellPage(this.localPlayer.getPlayerPage().get(selectedPageIndex));		
+				pawnNumber++;
+			}
+			while(!selectionFinished)
+			{
+			System.out.println("Taper 'oui' pour terminer la selection / Taper 'non' pour modifier la page d'un pion");
+				if(scan.next().equals("oui"))
+					selectionFinished = true;
+				else
+				{
+					System.out.println("Choisier le numero du pion a modifier");
+					pawnNumber = scan.nextInt();
+					displaySpellPages();
+					System.out.println("Choisisez l'index de la page que vous voulez donner au pion numéro" + pawnNumber );
+					selectedPageIndex = scan.nextInt();
+					this.turnOrder.get(this.turnOrder.indexOf(temporaryPawns[pawnNumber])).setSpellPage(this.localPlayer.getPlayerPage().get(selectedPageIndex));
+				}
+				
+				
+				}
+			scan.close();
+			if(isServer)
+				myServer.SendAll(this.turnOrder);
+			else
+				myClient.Send(this.turnOrder);
+	}
+	
+	/**
+	 * Display all pages of the player with an index
+	 */
+	private void displaySpellPages()
+	{
+		for(int pageIndex=0;pageIndex < this.localPlayer.getPlayerPage().size();pageIndex++)
+		{
+			System.out.println(pageIndex + ":" + this.localPlayer.getPlayerPage().get(pageIndex));
+		}
 	}
 
 	/*
