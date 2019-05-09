@@ -8,7 +8,7 @@ package fr.iutvalence.projet.battleArenaGame.exceptions;
 public class SpellOnCooldownException extends Exception{
 
 	/**
-	 * 
+	 * serialVersionUID is an hash code, which allow the JVM to check if attributes, names and type are the same for the object
 	 */
 	private static final long serialVersionUID = -9112019511377977915L;
 
