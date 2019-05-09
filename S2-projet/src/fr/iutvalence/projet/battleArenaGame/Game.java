@@ -256,14 +256,34 @@ public class Game
 				while(!this.endTurn)
 				{
 					Scanner sc = new Scanner(System.in); //TODO: java.io instead
-					System.out.println("Choississez une action :"); //edit that in a more precise way
+					System.out.println("Choisissez une action :"); //edit that in a more precise way
 					int choice = sc.nextInt();
 	
 					switch(choice)
 					{
 					case 1:
-						//get distance and spell TODO
-						this.localPlayer.askSpell(new Coordinate(3,3), new Spell()); // bug here; a pawn need to be selected
+						int choose,X,Y;
+						do 
+						{
+							System.out.println("choisissez un sort");
+							choose = sc.nextInt();
+
+						}while(choose >3 || choose<1 );
+						
+						do
+						{
+							System.out.println("choisissez un X");
+							X = sc.nextInt();	
+						}while(X<0 || X>Game.BOARD_SIZE);
+						
+						do
+						{
+							System.out.println("choisissez un Y");
+							Y = sc.nextInt();	
+						}while(Y<0 || Y>Game.BOARD_SIZE);
+						
+						
+						this.localPlayer.askSpell(new Coordinate(X,Y),this.currentPawn.getSpellPage().getSpell(choose)); // bug here; a pawn need to be selected
 						
 						break;
 					case 2:
