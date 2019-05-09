@@ -2,6 +2,7 @@ package fr.iutvalence.projet.battleArenaGame;
 
 import java.util.ArrayList;
 
+import fr.iutvalence.projet.battleArenaGame.exceptions.InvalidMoveException;
 import fr.iutvalence.projet.battleArenaGame.exceptions.SpellIndexException;
 import fr.iutvalence.projet.battleArenaGame.exceptions.SpellNotFoundException;
 import fr.iutvalence.projet.battleArenaGame.move.Coordinate;
@@ -78,7 +79,12 @@ public class Player {
 		 */
 		Movement mov = new Movement(this.currentPawn.getPos(), pDest);
 		 // Try the move chosen by the player
-		this.game.checkMove(mov);
+		try {
+			this.game.checkMove(mov);
+		} catch (InvalidMoveException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		
 	}
 	
@@ -98,7 +104,7 @@ public class Player {
 		try {
 			this.game.checkSpell(pSpell, mov);
 		}
-		catch(SpellNotFoundException|SpellIndexException e) 
+		catch(Exception e) 
 		{
 			e.printStackTrace();
 		}
