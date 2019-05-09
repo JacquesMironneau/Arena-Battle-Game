@@ -163,18 +163,22 @@ public class Game
 	 * The first method call, set up the network
 	 * and allow the player to navigate in the menu
 	 */
+	@SuppressWarnings("resource")
 	public void launch()
 	{	
+		int result;
+		Scanner sc;
+		
 		while(true) 
 		{
-		Scanner sc = new Scanner(System.in); //TODO replace by java.io stream
+		sc = new Scanner(System.in); //TODO replace by java.io stream
 		
 		System.out.println("----------------Menu-----------------");
 		System.out.println("1) Créer une page de sort");
 		System.out.println("2) Créer une partie");
 		System.out.println("3) Rejoindre une partie");
 	
-		int result = sc.nextInt();
+		result = sc.nextInt();
 		/*
 		 * For now, this represent the menu of the game
 		 */
@@ -710,7 +714,6 @@ public class Game
 
 		}
 		localPlayer.addSpellPage(pageToAdd);	
-		scan.close();
 	}
 	
 	
