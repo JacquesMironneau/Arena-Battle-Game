@@ -4,8 +4,12 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Scanner;
 
+import fr.iutvalence.projet.battleArenaGame.exceptions.InvalidMoveException;
+import fr.iutvalence.projet.battleArenaGame.exceptions.NotEnoughPointsException;
 import fr.iutvalence.projet.battleArenaGame.exceptions.SpellIndexException;
 import fr.iutvalence.projet.battleArenaGame.exceptions.SpellNotFoundException;
+import fr.iutvalence.projet.battleArenaGame.exceptions.SpellOnCooldownException;
+import fr.iutvalence.projet.battleArenaGame.exceptions.SpellOutOfRangeException;
 import fr.iutvalence.projet.battleArenaGame.move.Coordinate;
 import fr.iutvalence.projet.battleArenaGame.move.Movement;
 import fr.iutvalence.projet.battleArenaGame.network.Client;
@@ -308,7 +312,7 @@ public class Game
 	 * @param Move pMove: A movement chose by the player
 	 * @return true if the chosen move by the player is valid and authorized
 	 */
-	public boolean checkMove(Movement pMovement)
+	public void checkMove(Movement pMovement) throws InvalidMoveException
 	{
 		//If the pawn has enough move points to move
 		if(this.currentPawn.getMovePoints() > pMovement.calculateDistance())
@@ -317,7 +321,7 @@ public class Game
 			for(int indexArrayList = 0; indexArrayList < this.turnOrder.size(); indexArrayList++)
 			{
 				if(pMovement.getDestCordinate() == this.turnOrder.get(indexArrayList).getPos())
-					return false;
+					throw new InvalidMoveException("Selected position is occupated");
 			}
 			
 			//Move the current pawn to coordinates
@@ -335,10 +339,13 @@ public class Game
 				myClient.Send(this.turnOrder);
 				
 			//The movement is done
-			return true;
+//	TODO remove =>	return true;
+		}
+		else {
+			throw new InvalidMoveException("Not enough move points");
 		}
 		//The movement isn't correct
-		return false; 
+//	TODO remove =>	return false; 
 	}
 	
 	
@@ -349,24 +356,24 @@ public class Game
 	
 	 * @return  true if the chosen spell by the player is valid and authorized
 	 */
-	public boolean checkSpell(Spell pSpell, Movement pMovement) throws SpellNotFoundException, SpellIndexException
+	public void checkSpell(Spell pSpell, Movement pMovement) throws SpellNotFoundException, SpellIndexException, NotEnoughPointsException, SpellOutOfRangeException, SpellOnCooldownException
 	{
 		
 		
 		if(pSpell.getCurrentCooldown() == 0)
 		{	
 			//The spell is on cooldown
-			return false;
+			throw new SpellOnCooldownException();
 		}
 		else if(pSpell.getShape().getSpellCost() > this.currentPawn.getActionPoints())
 		{
 			//The spell cost is bigger than the pawn's action points
-			return false;
+			throw new NotEnoughPointsException();
 		}
 		else if(pMovement.getDistance() > pSpell.getShape().getRange())
 		{
 			//The target is too far away
-			return false;
+			throw new SpellOutOfRangeException();
 		}
 		else
 		{
@@ -374,13 +381,16 @@ public class Game
 			//Remove action points used
 			this.currentPawn.setActionPoints(this.currentPawn.getActionPoints() - pSpell.getShape().getSpellCost());
 			//Set the cooldown on the spell used
-			//TODO Exception if spell not found
+			//TODO Exception if spell not found next TODO (review or check)
 			pSpell.resetCooldown();
 			int spellIndexInPage = -1;
 			for(int index=0;index < 3;index++)
 			{
 				if(pSpell.equals(this.currentPawn.getSpellPage().getSpell(index)))
-					spellIndexInPage = index;		
+					spellIndexInPage = index;	
+				//TODO review or check
+				else
+					throw new SpellNotFoundException(pSpell);
 			}
 			
 			this.turnOrder.get(this.turnOrder.indexOf(currentPawn)).getSpellPage().getSpell(spellIndexInPage).resetCooldown();
@@ -411,8 +421,6 @@ public class Game
 			
 		else
 			myClient.Send(this.turnOrder);
-		
-		return true; // To remove errors due to type returned
 	}
 	
 	
@@ -681,14 +689,14 @@ public class Game
 				}
 			}while(shapeName==null);
 			
-		pageToAdd.setSpell(spellIndexToCreate-1,createdSpell);
-		if(pageToAdd.getSpell(0)!= null && pageToAdd.getSpell(1)!= null && pageToAdd.getSpell(2)!= null )
-		{
-			System.out.println("Entrer 'oui' pour terminer la creation / Entrer 'non' pour recreer un sort");
-			String isFinished = scan.nextLine();
-			if(isFinished.equals("oui"))
-				pageFinished = true;		
-		}
+			pageToAdd.setSpell(spellIndexToCreate-1,createdSpell);
+			if(pageToAdd.getSpell(0)!= null && pageToAdd.getSpell(1)!= null && pageToAdd.getSpell(2)!= null )
+			{
+				System.out.println("Entrer 'oui' pour terminer la creation / Entrer 'non' pour recreer un sort");
+				String isFinished = scan.nextLine();
+				if(isFinished.equals("oui"))
+					pageFinished = true;		
+			}
 		}
 		localPlayer.addSpellPage(pageToAdd);	
 	}
