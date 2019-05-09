@@ -341,6 +341,46 @@ public class Game
 		return false; 
 	}
 	
+	/**
+	 * apply effect to current pawn at the start of the turn
+	 */
+	private void applyEffect() 
+	{
+		int index = this.turnOrder.indexOf(currentPawn);
+		
+		for(PawnEffect eff : this.currentPawn.getEffect() )
+		{
+			
+			switch(eff.getEffectName())
+			{
+			case "Ignite":
+				this.currentPawn.setHealthPoints(this.currentPawn.getHealthPoints()-5);
+				break;
+			case "Slow":
+				this.currentPawn.setMovePoints(this.currentPawn.getMovePoints()-2);
+				break;
+			case "Silence":
+				this.currentPawn.setActionPoints(this.currentPawn.getActionPoints()-2);
+				break;
+			case "stun":
+				this.currentPawn.setMovePoints(this.currentPawn.getMovePoints()-1);
+				this.currentPawn.setActionPoints(this.currentPawn.getActionPoints()-1);
+				break;
+			case "Crit":
+				//TODO set effect
+				break;
+			case "weakness":
+				//TODO set effect
+				break;
+			
+			}
+		
+		}
+		
+		this.currentPawn.updateEffect();
+		this.turnOrder.set(index, currentPawn);
+		//replace current pawn by the right one in turnorder
+	}
 	
 	
 	/**
