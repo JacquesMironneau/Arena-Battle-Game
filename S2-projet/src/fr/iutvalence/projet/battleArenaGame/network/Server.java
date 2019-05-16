@@ -185,7 +185,7 @@ public class Server
      */
     public void SendAll(Object o)
     {
-        System.out.println("Sending to all");
+        System.out.println("Sending to all : " +o);
         for (int playerID = 0; playerID < this.playersConnected; ++playerID)
         {
             try {

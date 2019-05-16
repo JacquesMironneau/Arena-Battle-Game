@@ -266,14 +266,34 @@ public class Game
 	
 	public void play()
 	{
+		System.out.println(this.currentPawn);
+		for(Pawn p :this.turnOrder)
+			System.out.println(p);
+		
 		this.synchronizePlayers();
+		
+		this.currentPawn = this.turnOrder.get(0);
+
 		while(!endGame()) // replace by boolean / or method to know if game is finished
 		{
+			System.out.println("Waiting for client-kun.." + this.localPlayerTurn);
+			try {
+				Thread.sleep(1000);
+
+			}catch(Exception e)
+			{
+				
+			}
 			if(this.localPlayerTurn)
 			{
+
 				this.localPlayer.setPawn(this.currentPawn);
 				this.currentPawn.setActionPoints(6);
 				this.currentPawn.setMovePoints(6);
+				System.out.println(this.turnOrder.get(0) == this.currentPawn);
+				System.out.println(this.turnOrder.get(0));
+				System.out.println(this.currentPawn);
+				System.out.println("Au dessus");
 				this.turnOrder.set(this.turnOrder.indexOf(this.currentPawn), this.currentPawn);
 				this.turnOrder.set(this.turnOrder.indexOf(this.localPlayer.getPlayerCurrentPawn()), this.currentPawn);
 				this.localPlayer.setPawn(this.currentPawn);
@@ -319,8 +339,9 @@ public class Game
 	
 						break;
 					case 3:
-						
+						System.out.println(this.currentPawn.getTeam());
 						nextPawn();
+						System.out.println(this.currentPawn.getTeam());
 						
 						if(this.currentPawn.getTeam() == PawnTeam.PAWN_REMOTE)
 						{
@@ -478,8 +499,14 @@ public class Game
 	{
 		int index = this.turnOrder.indexOf(currentPawn);
 		
+		if(this.currentPawn.getEffect().isEmpty())
+		{
+			System.out.println("Effet vide");
+			return;
+		}
 		for(PawnEffect eff : this.currentPawn.getEffect() )
 		{
+			
 			
 			switch(eff.getEffectName())
 			{
@@ -523,10 +550,11 @@ public class Game
 	{
 		
 		
-		if(pSpell.getCurrentCooldown() == 0)
+		if(pSpell.getCurrentCooldown() > 0)
 		{	
 			//The spell is on cooldown
-			throw new SpellOnCooldownException();
+			//throw new SpellOnCooldownException();
+			System.out.println("Sort en CD");
 		}
 		else if(pSpell.getShape().getSpellCost() > this.currentPawn.getActionPoints())
 		{
@@ -536,7 +564,8 @@ public class Game
 		else if(pMovement.getDistance() > pSpell.getShape().getRange())
 		{
 			//The target is too far away
-			throw new SpellOutOfRangeException();
+			System.out.println("Out of range ");
+			//throw new SpellOutOfRangeException();
 		}
 		else
 		{

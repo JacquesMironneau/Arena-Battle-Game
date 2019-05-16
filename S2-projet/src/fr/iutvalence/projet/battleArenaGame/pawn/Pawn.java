@@ -93,6 +93,7 @@ public class Pawn implements Serializable
 		this.movePoints = Pawn.DEFAULT_MOVE_POINTS;
 		this.currentCoordinate = pBaseCoordinate;
 		this.mySpellPage = pSpellPage;
+		this.activeEffects = new ArrayList<PawnEffect>();
 		
 	}
 	

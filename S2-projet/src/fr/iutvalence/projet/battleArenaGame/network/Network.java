@@ -61,9 +61,9 @@ public class Network {
 			}
 			//For each pawn of the arrayList, it does print it (DEBUG ONLY: TODO: REMOVE THESES 3LINES)
 			
-			/*for(Pawn PawnIndexInTheArrayList : ModifiedArrayListOfPawns)
+			for(Pawn PawnIndexInTheArrayList : ModifiedArrayListOfPawns)
 				System.out.println(PawnIndexInTheArrayList);
-			*/
+			
 			
 			//Edit the array list of the current game
 			this.myGame.setTurnOrder(ModifiedArrayListOfPawns);
