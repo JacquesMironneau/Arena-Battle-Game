@@ -61,7 +61,7 @@ public class Game
      * Used in the network: IP address of the server (might be deleted when UDP auto IP will be implemented
      */
     
-    public final static String HOST_ADDRESS = "192.168.1.49";
+    public final static String HOST_ADDRESS = "172.26.105.6";
     
     /** 
      * Winning message that will be send to the winner
@@ -367,9 +367,10 @@ public class Game
 	 */
 	private void synchronizePlayers()
 	{
+		System.out.println("Syncrhonize");
 		if(!this.isServer)
 		{
-			while(!this.serverMessage.equals(SERVER_READY))
+			while(!SERVER_READY.equals(serverMessage))
 			{
 				try {
 					Thread.sleep(1000);
@@ -378,10 +379,11 @@ public class Game
 				}
 			}
 			this.selectPageForPawns();
+			myClient.Send(CLIENT_READY);
 		}
 		else
 		{
-			while(!this.clientMessage.equals(CLIENT_READY))
+			while(!CLIENT_READY.equals(clientMessage))
 			{
 				try {
 					Thread.sleep(1000);
@@ -412,6 +414,10 @@ public class Game
 		
 		this.localPlayer.setPawn(this.turnOrder.get(0));
 		
+		this.selectPageForPawns();
+		//is a server here
+		
+		myServer.SendAll(Game.SERVER_READY);
 	
 	}
 	
@@ -875,6 +881,7 @@ public class Game
 	 */
 	private void selectPageForPawns()
 	{
+		System.out.println("Select page for pawns");
 		Scanner scan = new Scanner(System.in);
 		int selectedPageIndex;
 		Pawn[] temporaryPawns = new Pawn[3];
