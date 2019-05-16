@@ -223,6 +223,7 @@ public class Game
 			myServer.init(); // Launch the server
 			
 			init(); // setup the game, TODO think about champselect, might move init there
+			this.play();
 			break;
 		
 		case 3: // client TODO test send from client to server
@@ -235,6 +236,7 @@ public class Game
 			myClient.connect(); // Connect the client to the server
 			
 			// set up the game TODO: think about champselect, might move init there
+			this.play();
 			break;
 			
 		default:
@@ -263,6 +265,7 @@ public class Game
 	
 	public void play()
 	{
+		this.synchronizePlayers();
 		while(!endGame()) // replace by boolean / or method to know if game is finished
 		{
 			if(this.localPlayerTurn)
