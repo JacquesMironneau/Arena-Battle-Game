@@ -270,6 +270,7 @@ public class Game
 		{
 			if(this.localPlayerTurn)
 			{
+				this.localPlayer.setPawn(this.currentPawn);
 				this.currentPawn.setActionPoints(6);
 				this.currentPawn.setMovePoints(6);
 				this.turnOrder.set(this.turnOrder.indexOf(currentPawn), currentPawn);
