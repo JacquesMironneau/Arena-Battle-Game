@@ -81,7 +81,7 @@ public class Network {
 			 */
 				if(transferedObject.equals(Game.CLIENT_READY))
 				{
-					myGame.setClientMessage(Game.CLIENT_READY);
+					this.myGame.setClientMessage(Game.CLIENT_READY);
 					System.out.println("[NETWORK] Client is ready... ");
 				}
 			/**
@@ -90,7 +90,7 @@ public class Network {
 				else if(transferedObject.equals(Game.SERVER_READY))
 				{
 					System.out.println("[NETWORK] Server is ready... ");
-					myGame.setServerMessage(Game.SERVER_READY);
+					this.myGame.setServerMessage(Game.SERVER_READY);
 				}
 				/**
 				 * Victory/deafeat/draw case
