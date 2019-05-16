@@ -93,6 +93,7 @@ public class Pawn implements Serializable
 		this.movePoints = Pawn.DEFAULT_MOVE_POINTS;
 		this.currentCoordinate = pBaseCoordinate;
 		this.mySpellPage = pSpellPage;
+		this.activeEffects= new ArrayList<PawnEffect>();
 		
 	}
 	
@@ -206,17 +207,18 @@ public class Pawn implements Serializable
 	 */
 	public void updateEffect()
 	{
-		for(int arrayIndex=0;arrayIndex<activeEffects.size();arrayIndex++)
+		
+		for(int arrayIndex=0;arrayIndex<this.getEffect().size();arrayIndex++)
 		{
-		  PawnEffect effectToUpdate = activeEffects.get(arrayIndex);
+		  PawnEffect effectToUpdate = this.getEffect().get(arrayIndex);
 		  effectToUpdate.setCurrentDuration(effectToUpdate.getCurrentDuration() -1);
 		  PawnEffect updatedEffect = effectToUpdate;
 		  
 		  if(updatedEffect.getCurrentDuration() == 0)
-			  activeEffects.remove(arrayIndex);
+			  this.getEffect().remove(arrayIndex);
 		  
 		  else
-			  activeEffects.set(arrayIndex, updatedEffect);
+			  this.getEffect().set(arrayIndex, updatedEffect);
 		}
 	}
 	
