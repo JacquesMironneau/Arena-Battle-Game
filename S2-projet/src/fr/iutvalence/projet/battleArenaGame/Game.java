@@ -79,6 +79,16 @@ public class Game
      */
     public final static String DRAW = "Draw";
     
+    /**
+     * Message saying that client is ready to start
+     */
+    public final static String CLIENT_READY = "ClientIsReady";
+    
+    /**
+     * Message saying that server is ready to start
+     */
+    public final static String SERVER_READY = "ServerIsReady";
+    
 	/**
 	 * These values are the default position of pawns at the start of the game
 	 * The first number is the player's number and the second is the pawn's number
@@ -144,6 +154,16 @@ public class Game
 	 * True if player decide to stop his turn, false either
 	 */
 	private boolean endTurn;
+	
+	/**
+	 * Message send by the client, used to synchronize
+	 */
+	private String clientMessage;
+	
+	/**
+	 * Message send by the server, used to synchronize 
+	 */
+	private String serverMessage;
 	
 	
 	/**
@@ -337,6 +357,38 @@ public class Game
 		}
 	}
 	
+	/**
+	 * Called in play() before the game loop
+	 * It wait until both side have selected their pages for their pawn in order to start the game loop
+	 * Make the page selection for the client
+	 */
+	private void synchronizePlayers()
+	{
+		if(!this.isServer)
+		{
+			while(!this.serverMessage.equals(SERVER_READY))
+			{
+				try {
+					Thread.sleep(1000);
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
+			}
+			this.selectPageForPawns();
+		}
+		else
+		{
+			while(!this.clientMessage.equals(CLIENT_READY))
+			{
+				try {
+					Thread.sleep(1000);
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
+			}
+		}
+		
+	}
 	/**
 	 * Init method initialize the board witch the beginning places for every pawn,
 	 * Set up the board with pawn initals coordinates (and life and so on)
@@ -904,4 +956,39 @@ public class Game
 		this.currentPawn = thePawn;
 	}
 	
+	/**
+	 * Setter for ServerMessage
+	 * @param pMessage : message received
+	 */
+	public void setServerMessage(String pMessage)
+	{
+		this.serverMessage = pMessage;
+	}
+	
+	/**
+	 * Getter for serverMessage
+	 * @return message corresponding to the server status
+	 */
+	public String getServerMessage()
+	{
+		return this.serverMessage;
+	}
+	
+	/**
+	 * Getter for clientMessage
+	 * @param pMessage : message received
+	 */
+	public void setClientMessage(String pMessage)
+	{
+		this.clientMessage = pMessage;
+	}
+	
+	/**
+	 * Getter for clientMessage
+	 * @return message corresponding to client status
+	 */
+	public String getClientMessage()
+	{
+		return this.clientMessage;
+	}
 }
