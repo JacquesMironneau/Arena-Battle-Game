@@ -273,7 +273,8 @@ public class Game
 				this.localPlayer.setPawn(this.currentPawn);
 				this.currentPawn.setActionPoints(6);
 				this.currentPawn.setMovePoints(6);
-				this.turnOrder.set(this.turnOrder.indexOf(currentPawn), currentPawn);
+				this.turnOrder.set(this.turnOrder.indexOf(this.localPlayer.getPlayerCurrentPawn()), currentPawn);
+				this.localPlayer.setPawn(this.currentPawn);
 				applyEffect();
 				
 				//Update effects and PA &PM of pawn

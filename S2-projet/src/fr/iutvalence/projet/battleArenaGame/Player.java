@@ -159,7 +159,10 @@ public class Player {
 		this.isReady = true;
 	}
 	
-	
+	public Pawn getPlayerCurrentPawn()
+	{
+		return this.currentPawn;
+	}
 	/**
 	 * save a page in playerPages
 	 * @param page : the page to save.
