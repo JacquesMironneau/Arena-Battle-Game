@@ -416,10 +416,11 @@ public class Game
 		this.turnOrder.add(new Pawn(PawnTeam.PAWN_LOCAL, Game.BASE_POS_1PAWN3 , null));
 		this.turnOrder.add(new Pawn(PawnTeam.PAWN_REMOTE, Game.BASE_POS_2PAWN3 , null));
 		
-		this.currentPawn = this.turnOrder.get(0);
+		
 		
 		
 		this.selectPageForPawns();
+		this.currentPawn = this.turnOrder.get(0);
 		//is a server here
 		
 		myServer.SendAll(Game.SERVER_READY);
