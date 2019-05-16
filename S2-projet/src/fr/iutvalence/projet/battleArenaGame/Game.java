@@ -1028,9 +1028,9 @@ public void createSpellPageForTest() throws SpellIndexException
 	s2.setSpellEffect(SpellEffect.Ice);
 	s3.setSpellEffect(SpellEffect.Electricity);
 	
-	p1.setSpell(1,s1);
-	p1.setSpell(2,s2);
-	p1.setSpell(3,s3);
+	p1.setSpell(0,s1);
+	p1.setSpell(1,s2);
+	p1.setSpell(2,s3);
 	
 	
 	this.localPlayer.addSpellPage(p1);
