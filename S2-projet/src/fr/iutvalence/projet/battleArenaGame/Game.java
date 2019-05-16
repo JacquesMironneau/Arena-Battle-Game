@@ -207,7 +207,8 @@ public class Game
 		
 		case 1:
 			try {
-				createSpellPage();
+				//createSpellPage();
+				createSpellPageForTest(); //TODO Remove this, used for test and uncomment previous line
 			} catch (SpellIndexException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -1005,4 +1006,33 @@ public class Game
 	{
 		return this.clientMessage;
 	}
+
+/**
+ * Used for test
+ * Create a spell page with 3 spells
+ * @throws SpellIndexException 
+ *
+ */
+	//TODO Remove this method, used for test
+public void createSpellPageForTest() throws SpellIndexException
+{
+	SpellPage p1 = new SpellPage("page1");
+	Spell s1 = new Spell();
+	Spell s2 = new Spell();
+	Spell s3 = new Spell();
+	s1.setShape(Shape.Ball);
+	s2.setShape(Shape.Fist);
+	s3.setShape(Shape.Sword);
+	s1.setSpellEffect(SpellEffect.Fire);
+	s2.setSpellEffect(SpellEffect.Ice);
+	s3.setSpellEffect(SpellEffect.Electricity);
+	
+	p1.setSpell(1,s1);
+	p1.setSpell(2,s2);
+	p1.setSpell(3,s3);
+	
+	
+	this.localPlayer.addSpellPage(p1);
+}
+
 }
