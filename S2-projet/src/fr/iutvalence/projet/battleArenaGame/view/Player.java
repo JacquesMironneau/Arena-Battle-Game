@@ -1,7 +1,8 @@
-package fr.iutvalence.projet.battleArenaGame;
+package fr.iutvalence.projet.battleArenaGame.view;
 
 import java.util.ArrayList;
 
+import fr.iutvalence.projet.battleArenaGame.Game;
 import fr.iutvalence.projet.battleArenaGame.exceptions.InvalidMoveException;
 import fr.iutvalence.projet.battleArenaGame.exceptions.SpellIndexException;
 import fr.iutvalence.projet.battleArenaGame.exceptions.SpellNotFoundException;
@@ -10,7 +11,17 @@ import fr.iutvalence.projet.battleArenaGame.move.Movement;
 import fr.iutvalence.projet.battleArenaGame.pawn.Pawn;
 import fr.iutvalence.projet.battleArenaGame.spell.Spell;
 import fr.iutvalence.projet.battleArenaGame.spell.SpellPage;
-
+//TODO THIS IS IHM
+/*REMINDER:
+ * 
+ * Player : -> enlever les attributs (currentPawn est useless)
+ * les pages vont dans un tableau de joueur dans game
+ * La game dégage (y penser)
+ * TurnInProgress(comprendre)
+ * 
+ * Pour game:
+ * couper en 2 la game et faire un board qui gère tout
+ */
 /**
  * 
  * @author durantho
@@ -25,7 +36,7 @@ public class Player {
 	 * represents if a player is ready or not
 	 * the true state stands for ready.
 	 */
-	private boolean isReady;
+	//private boolean isReady;
 	
 	/**
 	 * pawn currently moving or casting spell
@@ -63,7 +74,7 @@ public class Player {
 		 * By default, a player is linked to his Game object, and is not ready, has no current pawn and his list of pages is empty.
 		 */
 		this.game = pGame;
-		this.isReady = false;
+		//this.isReady = false;
 		this.currentPawn = null;
 		this.playerPages = new ArrayList<SpellPage>();
 	}
@@ -154,10 +165,10 @@ public class Player {
 	 * Say to the system that this player is ready to play
 	 * @return true the player is ready to play
 	 */
-	public void playerReady()
-	{
-		this.isReady = true;
-	}
+//	public void playerReady()
+//	{
+//		this.isReady = true;
+//	}
 	
 	public Pawn getPlayerCurrentPawn()
 	{

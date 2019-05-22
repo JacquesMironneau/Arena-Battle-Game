@@ -22,6 +22,7 @@ import fr.iutvalence.projet.battleArenaGame.shape.Shape;
 import fr.iutvalence.projet.battleArenaGame.spell.Spell;
 import fr.iutvalence.projet.battleArenaGame.spell.SpellEffect;
 import fr.iutvalence.projet.battleArenaGame.spell.SpellPage;
+import fr.iutvalence.projet.battleArenaGame.view.Player;
 
 /**
  * Game class stands for the system of the BattleArena Game:
