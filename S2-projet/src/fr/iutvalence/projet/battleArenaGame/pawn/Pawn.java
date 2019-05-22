@@ -94,6 +94,7 @@ public class Pawn implements Serializable
 		this.currentCoordinate = pBaseCoordinate;
 		this.mySpellPage = pSpellPage;
 		this.activeEffects= new ArrayList<PawnEffect>();
+
 		
 	}
 	

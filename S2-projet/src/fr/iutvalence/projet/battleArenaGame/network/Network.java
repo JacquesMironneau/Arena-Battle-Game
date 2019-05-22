@@ -33,7 +33,7 @@ public class Network {
 	public void Transform(Object transferedObject) throws NetworkUnknownTypeException
 	{
 		//TODO: remove that(debug only)
-		System.out.println("La classe de l'objet traité est " + transferedObject.getClass());
+		System.out.println("[NETWORK]La classe de l'objet traité est " + transferedObject.getClass());
 		
 		if(transferedObject.getClass() == ArrayList.class)
 		{
@@ -43,27 +43,27 @@ public class Network {
 			//Unsafe but works actually
 			@SuppressWarnings("unchecked")
 			ArrayList<Pawn> ModifiedArrayListOfPawns = (ArrayList<Pawn>) transferedObject;
-			System.out.println("Modification de turnOrder en cours");
+			System.out.println("[NETWORK]Modification de turnOrder en cours");
 			for(Pawn p: ModifiedArrayListOfPawns)
 			{
 				if(p.getTeam() == PawnTeam.PAWN_LOCAL)
 					{
 						System.out.println(p.getTeam());
 						p.setTeam(PawnTeam.PAWN_REMOTE);
-						System.out.println("Nouveau: " + p.getTeam());
+						System.out.println("[NETWORK]Nouveau: " + p.getTeam());
 					}
 				else
 					{	
 						System.out.println(p.getTeam());
 						p.setTeam(PawnTeam.PAWN_LOCAL);
-						System.out.println("Nouveau: " + p.getTeam());
+						System.out.println("[NETWORK]Nouveau: " + p.getTeam());
 					}
 			}
 			//For each pawn of the arrayList, it does print it (DEBUG ONLY: TODO: REMOVE THESES 3LINES)
 			
-			/*for(Pawn PawnIndexInTheArrayList : ModifiedArrayListOfPawns)
+			for(Pawn PawnIndexInTheArrayList : ModifiedArrayListOfPawns)
 				System.out.println(PawnIndexInTheArrayList);
-			*/
+			
 			
 			//Edit the array list of the current game
 			this.myGame.setTurnOrder(ModifiedArrayListOfPawns);
@@ -74,12 +74,38 @@ public class Network {
 		else if(transferedObject.getClass() == Boolean.class) // This is used in order to manage turn in network
 			this.myGame.setLocalPlayerTurn(!(Boolean)transferedObject);
 		
-		else if(transferedObject.getClass() == String.class)
-			System.out.println("Message de fin de jeu : " + transferedObject);
+		else if(transferedObject.getClass() == String.class) 
+			{
+			/**
+			 * If the client says he is ready, we tell the the server he is
+			 */
+				if(transferedObject.equals(Game.CLIENT_READY))
+				{
+					this.myGame.setClientMessage(Game.CLIENT_READY);
+					System.out.println("[NETWORK] Client is ready... ");
+				}
+			/**
+			 * If the server says he is ready, we tell the client he is
+			 */
+				else if(transferedObject.equals(Game.SERVER_READY))
+				{
+					System.out.println("[NETWORK] Server is ready... ");
+					this.myGame.setServerMessage(Game.SERVER_READY);
+				}
+				/**
+				 * Victory/deafeat/draw case
+				 * For now we only display who win
+				 */
+				else {
+					System.out.println("[NETWORK] end game message: " + transferedObject);
+				}
+				
+			}
 		
 		else if(transferedObject.getClass() == Pawn.class)
 		{
 			myGame.setCurrentPawn((Pawn) transferedObject);
+			System.out.println("[NETWORK] a pawn is sended");
 		}
 		else throw new NetworkUnknownTypeException(transferedObject); //If the type of the sended object is not a boolean or an arrayList
 	}

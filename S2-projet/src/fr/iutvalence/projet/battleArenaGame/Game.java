@@ -61,7 +61,7 @@ public class Game
      * Used in the network: IP address of the server (might be deleted when UDP auto IP will be implemented
      */
     
-    public final static String HOST_ADDRESS = "192.168.1.49";
+    public final static String HOST_ADDRESS = "172.26.105.6";
     
     /** 
      * Winning message that will be send to the winner
@@ -78,6 +78,16 @@ public class Game
      * Draw message that will be send to the other player
      */
     public final static String DRAW = "Draw";
+    
+    /**
+     * Message saying that client is ready to start
+     */
+    public final static String CLIENT_READY = "ClientIsReady";
+    
+    /**
+     * Message saying that server is ready to start
+     */
+    public final static String SERVER_READY = "ServerIsReady";
     
 	/**
 	 * These values are the default position of pawns at the start of the game
@@ -145,6 +155,16 @@ public class Game
 	 */
 	private boolean endTurn;
 	
+	/**
+	 * Message send by the client, used to synchronize
+	 */
+	private String clientMessage;
+	
+	/**
+	 * Message send by the server, used to synchronize 
+	 */
+	private String serverMessage;
+	
 	
 	/**
 	 * Constructor for Game
@@ -187,7 +207,8 @@ public class Game
 		
 		case 1:
 			try {
-				createSpellPage();
+				//createSpellPage();
+				createSpellPageForTest(); //TODO Remove this, used for test and uncomment previous line
 			} catch (SpellIndexException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -203,6 +224,7 @@ public class Game
 			myServer.init(); // Launch the server
 			
 			init(); // setup the game, TODO think about champselect, might move init there
+			this.play();
 			break;
 		
 		case 3: // client TODO test send from client to server
@@ -215,6 +237,7 @@ public class Game
 			myClient.connect(); // Connect the client to the server
 			
 			// set up the game TODO: think about champselect, might move init there
+			this.play();
 			break;
 			
 		default:
@@ -243,13 +266,37 @@ public class Game
 	
 	public void play()
 	{
+		System.out.println(this.currentPawn);
+		for(Pawn p :this.turnOrder)
+			System.out.println(p);
+		
+		this.synchronizePlayers();
+		
+		this.currentPawn = this.turnOrder.get(0);
+
 		while(!endGame()) // replace by boolean / or method to know if game is finished
 		{
+			System.out.println("Waiting for client-kun.." + this.localPlayerTurn);
+			try {
+				Thread.sleep(1000);
+
+			}catch(Exception e)
+			{
+				
+			}
 			if(this.localPlayerTurn)
 			{
+
+				this.localPlayer.setPawn(this.currentPawn);
 				this.currentPawn.setActionPoints(6);
 				this.currentPawn.setMovePoints(6);
-				this.turnOrder.set(this.turnOrder.indexOf(currentPawn), currentPawn);
+				System.out.println(this.turnOrder.get(0) == this.currentPawn);
+				System.out.println(this.turnOrder.get(0));
+				System.out.println(this.currentPawn);
+				System.out.println("Au dessus");
+				this.turnOrder.set(this.turnOrder.indexOf(this.currentPawn), this.currentPawn);
+				this.turnOrder.set(this.turnOrder.indexOf(this.localPlayer.getPlayerCurrentPawn()), this.currentPawn);
+				this.localPlayer.setPawn(this.currentPawn);
 				applyEffect();
 				
 				//Update effects and PA &PM of pawn
@@ -292,8 +339,9 @@ public class Game
 	
 						break;
 					case 3:
-						
+						System.out.println(this.currentPawn.getTeam());
 						nextPawn();
+						System.out.println(this.currentPawn.getTeam());
 						
 						if(this.currentPawn.getTeam() == PawnTeam.PAWN_REMOTE)
 						{
@@ -338,6 +386,40 @@ public class Game
 	}
 	
 	/**
+	 * Called in play() before the game loop
+	 * It wait until both side have selected their pages for their pawn in order to start the game loop
+	 * Make the page selection for the client
+	 */
+	private void synchronizePlayers()
+	{
+		System.out.println("Syncrhonize");
+		if(!this.isServer)
+		{
+			while(!SERVER_READY.equals(serverMessage))
+			{
+				try {
+					Thread.sleep(1000);
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
+			}
+			this.selectPageForPawns();
+			myClient.Send(CLIENT_READY);
+		}
+		else
+		{
+			while(!CLIENT_READY.equals(clientMessage))
+			{
+				try {
+					Thread.sleep(1000);
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
+			}
+		}
+		
+	}
+	/**
 	 * Init method initialize the board witch the beginning places for every pawn,
 	 * Set up the board with pawn initals coordinates (and life and so on)
 	 * 
@@ -355,8 +437,14 @@ public class Game
 		this.turnOrder.add(new Pawn(PawnTeam.PAWN_LOCAL, Game.BASE_POS_1PAWN3 , null));
 		this.turnOrder.add(new Pawn(PawnTeam.PAWN_REMOTE, Game.BASE_POS_2PAWN3 , null));
 		
-		this.localPlayer.setPawn(this.turnOrder.get(0));
 		
+		
+		
+		this.selectPageForPawns();
+		this.currentPawn = this.turnOrder.get(0);
+		//is a server here
+		
+		myServer.SendAll(Game.SERVER_READY);
 	
 	}
 	
@@ -411,8 +499,14 @@ public class Game
 	{
 		int index = this.turnOrder.indexOf(currentPawn);
 		
+		if(this.currentPawn.getEffect().isEmpty())
+		{
+			System.out.println("Effet vide");
+			return;
+		}
 		for(PawnEffect eff : this.currentPawn.getEffect() )
 		{
+			
 			
 			switch(eff.getEffectName())
 			{
@@ -456,10 +550,11 @@ public class Game
 	{
 		
 		
-		if(pSpell.getCurrentCooldown() == 0)
+		if(pSpell.getCurrentCooldown() > 0)
 		{	
 			//The spell is on cooldown
-			throw new SpellOnCooldownException();
+			//throw new SpellOnCooldownException();
+			System.out.println("Sort en CD");
 		}
 		else if(pSpell.getShape().getSpellCost() > this.currentPawn.getActionPoints())
 		{
@@ -469,7 +564,8 @@ public class Game
 		else if(pMovement.getDistance() > pSpell.getShape().getRange())
 		{
 			//The target is too far away
-			throw new SpellOutOfRangeException();
+			System.out.println("Out of range ");
+			//throw new SpellOutOfRangeException();
 		}
 		else
 		{
@@ -820,6 +916,7 @@ public class Game
 	 */
 	private void selectPageForPawns()
 	{
+		System.out.println("Select page for pawns");
 		Scanner scan = new Scanner(System.in);
 		int selectedPageIndex;
 		Pawn[] temporaryPawns = new Pawn[3];
@@ -904,4 +1001,68 @@ public class Game
 		this.currentPawn = thePawn;
 	}
 	
+	/**
+	 * Setter for ServerMessage
+	 * @param pMessage : message received
+	 */
+	public void setServerMessage(String pMessage)
+	{
+		this.serverMessage = pMessage;
+	}
+	
+	/**
+	 * Getter for serverMessage
+	 * @return message corresponding to the server status
+	 */
+	public String getServerMessage()
+	{
+		return this.serverMessage;
+	}
+	
+	/**
+	 * Getter for clientMessage
+	 * @param pMessage : message received
+	 */
+	public void setClientMessage(String pMessage)
+	{
+		this.clientMessage = pMessage;
+	}
+	
+	/**
+	 * Getter for clientMessage
+	 * @return message corresponding to client status
+	 */
+	public String getClientMessage()
+	{
+		return this.clientMessage;
+	}
+
+/**
+ * Used for test
+ * Create a spell page with 3 spells
+ * @throws SpellIndexException 
+ *
+ */
+	//TODO Remove this method, used for test
+public void createSpellPageForTest() throws SpellIndexException
+{
+	SpellPage p1 = new SpellPage("page1");
+	Spell s1 = new Spell();
+	Spell s2 = new Spell();
+	Spell s3 = new Spell();
+	s1.setShape(Shape.Ball);
+	s2.setShape(Shape.Fist);
+	s3.setShape(Shape.Sword);
+	s1.setSpellEffect(SpellEffect.Fire);
+	s2.setSpellEffect(SpellEffect.Ice);
+	s3.setSpellEffect(SpellEffect.Electricity);
+	
+	p1.setSpell(0,s1);
+	p1.setSpell(1,s2);
+	p1.setSpell(2,s3);
+	
+	
+	this.localPlayer.addSpellPage(p1);
+}
+
 }
