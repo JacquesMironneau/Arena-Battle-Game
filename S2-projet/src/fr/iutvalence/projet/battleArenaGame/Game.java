@@ -400,33 +400,6 @@ public class Game
 		}
 		
 	}
-	/**
-	 * Init method initialize the board witch the beginning places for every pawn,
-	 * Set up the board with pawn initals coordinates (and life and so on)
-	 * 
-	 */
-	private void init()
-	{
-		// Create the turn order
-		
-		
-		
-		
-		
-		
-		this.selectPageForPawns();
-		
-		//is a server here
-		
-		myServer.SendAll(Game.SERVER_READY);
-	
-	}
-	
-	
-	
-	
-	
-	
 	
 	/**
 	 * Getter for LocalPlayerTurn
@@ -538,25 +511,7 @@ public class Game
 		System.exit(1); // This stop in a clean way the application
 	}
 	
-	
 
-	
-	
-	/**
-	 *  Check if a pawn is on coordinates passed in parameters
-	 *  If it exists return the pawn
-	 *  else returns null
-	 */
-	private Pawn getPawnOnCell(Coordinate pCoordinate)
-	{
-		for(int pawnIndex = 0; pawnIndex < this.turnOrder.size();pawnIndex++)
-		{
-			if(this.turnOrder.get(pawnIndex).getPos()==pCoordinate)
-				return this.turnOrder.get(pawnIndex);
-		}
-		return null;
-	}
-	
 	
 	/** TODO
 	 * Create a spell page, including the creation of his 3 spells and add

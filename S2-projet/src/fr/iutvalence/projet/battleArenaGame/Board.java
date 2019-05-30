@@ -246,7 +246,20 @@ public class Board {
 	}
 	
 	
-	
+	/**
+	 *  Check if a pawn is on coordinates passed in parameters
+	 *  If it exists return the pawn
+	 *  else returns null
+	 */
+	private Pawn getPawnOnCell(Coordinate pCoordinate)
+	{
+		for(int pawnIndex = 0; pawnIndex < this.turnOrder.size();pawnIndex++)
+		{
+			if(this.turnOrder.get(pawnIndex).getPos()==pCoordinate)
+				return this.turnOrder.get(pawnIndex);
+		}
+		return null;
+	}
 	
 	
 	/**
