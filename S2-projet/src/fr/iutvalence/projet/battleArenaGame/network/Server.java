@@ -15,7 +15,7 @@ import fr.iutvalence.projet.battleArenaGame.Game;
  * @author pashmi
  *
  */
-public class Server
+public class Server implements Communication
 {
     //The port of the server
     private int port;
@@ -111,7 +111,7 @@ public class Server
                 //TODO remove debug
                 //System.out.println("Nb joueurs courants:" + this.playersConnected + "Socket" + this.clients[this.playersConnected][0] + " OutputStream " + this.clients[this.playersConnected][1]);
 
-                new Thread(() -> Receive(((Socket)clients[playersConnected-1][0]), ((ObjectInputStream)clients[playersConnected-1][1]))).start();
+                new Thread(() -> receive(((Socket)clients[playersConnected-1][0]), ((ObjectInputStream)clients[playersConnected-1][1]))).start();
 
 
                 //Increase the number of connected player
@@ -134,7 +134,7 @@ public class Server
      * @param pSocket socket of the client
      * @param pInput ObjectInputStream of the client
      */
-    private void Receive(Socket pSocket, ObjectInputStream pInput)
+    public void receive(Socket pSocket, ObjectInputStream pInput)
     {
 
         while(socketClient.isConnected())
@@ -183,7 +183,7 @@ public class Server
      * 
      * @param o: the object sent
      */
-    public void SendAll(Object o)
+    public void sendToOther(Object o)
     {
         System.out.println("Sending to all : " +o);
         for (int playerID = 0; playerID < this.playersConnected; ++playerID)
@@ -266,6 +266,10 @@ public class Server
             }
         }
     }
+
+
+
+
 
 
 }

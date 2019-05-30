@@ -17,12 +17,9 @@ import fr.iutvalence.projet.battleArenaGame.pawn.PawnTeam;
  */
 public class Network {
 
-	//myGame represent the Game of the network
-	private Game myGame;
 	
-	public Network(Game pGame)
+	public Network()
 	{
-		this.myGame = pGame;
 	}
 	/**
 	 * The Transform method, catch an arrayList sent by one of the emitter, caught in the receive method (server or client)
@@ -38,7 +35,7 @@ public class Network {
 		if(transferedObject.getClass() == ArrayList.class)
 		{
 			//TODO remove debug
-			System.out.println(this.myGame.getTurnOrder().size());
+			System.out.println(Board.getTurnOrder().size());
 			
 			//Unsafe but works actually
 			@SuppressWarnings("unchecked")
@@ -66,13 +63,13 @@ public class Network {
 			
 			
 			//Edit the array list of the current game
-			this.myGame.setTurnOrder(ModifiedArrayListOfPawns);
+			Board.setTurnOrder(ModifiedArrayListOfPawns);
 			
 			/*System.out.println("After" + this.myGame.getTurnOrder().size());*/
 
 		}
 		else if(transferedObject.getClass() == Boolean.class) // This is used in order to manage turn in network
-			this.myGame.setLocalPlayerTurn(!(Boolean)transferedObject);
+			Game.setLocalPlayerTurn(!(Boolean)transferedObject);
 		
 		else if(transferedObject.getClass() == String.class) 
 			{
@@ -81,7 +78,7 @@ public class Network {
 			 */
 				if(transferedObject.equals(Game.CLIENT_READY))
 				{
-					this.myGame.setClientMessage(Game.CLIENT_READY);
+					Game.setClientMessage(Game.CLIENT_READY);
 					System.out.println("[NETWORK] Client is ready... ");
 				}
 			/**
@@ -90,7 +87,7 @@ public class Network {
 				else if(transferedObject.equals(Game.SERVER_READY))
 				{
 					System.out.println("[NETWORK] Server is ready... ");
-					this.myGame.setServerMessage(Game.SERVER_READY);
+					Game.setServerMessage(Game.SERVER_READY);
 				}
 				/**
 				 * Victory/deafeat/draw case
@@ -104,7 +101,7 @@ public class Network {
 		
 		else if(transferedObject.getClass() == Pawn.class)
 		{
-			myGame.setCurrentPawn((Pawn) transferedObject);
+			Game.setCurrentPawn((Pawn) transferedObject);
 			System.out.println("[NETWORK] a pawn is sended");
 		}
 		else throw new NetworkUnknownTypeException(transferedObject); //If the type of the sended object is not a boolean or an arrayList

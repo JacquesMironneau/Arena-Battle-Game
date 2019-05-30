@@ -16,7 +16,7 @@ import fr.iutvalence.projet.battleArenaGame.Game;
  *
  */
 
-public class Client
+public class Client implements Communication
 {
 
     //The port of the server
@@ -56,7 +56,7 @@ public class Client
      * And create the input and output stream in order to send and receive data
      * 
      */
-    public void connect() 
+    public void init() 
     {
         System.out.println("Client!");
 
@@ -77,7 +77,8 @@ public class Client
             /*
              * Create a thread in order to listen the  data sent by the server
              */
-            Thread t_listener = new Thread(this::Receive);
+            
+           Thread t_listener = new Thread(this::receive);
 
             t_listener.start();
         }
@@ -91,7 +92,7 @@ public class Client
     /**
      * Listen to the server and readObject in the inputStream 
      */
-    private void Receive()
+	public void receive()
     {
 
         while(socket.isConnected()){
@@ -118,7 +119,7 @@ public class Client
     public void Disconnect()
     {
         if(socket.isConnected()){
-            this.Send(Game.QUIT);
+            this.sendToOther(Game.QUIT);
 
             try{
                 socket.close();
@@ -137,7 +138,7 @@ public class Client
      * by writing in the outputStream the object
      * @param o object written in the output stream
      */
-    public void Send(Object o)
+    public void sendToOther(Object o)
     {
         if(socket.isConnected()){
             try
@@ -153,5 +154,6 @@ public class Client
             System.out.println("Can't send : not connected");
         }
     }
+
 
 }
