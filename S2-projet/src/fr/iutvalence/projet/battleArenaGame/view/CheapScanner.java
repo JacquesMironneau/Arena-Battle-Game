@@ -43,18 +43,15 @@ public class CheapScanner {
 	 * @throws NumberFormatException
 	 * @throws IOException
 	 */
-	public int getInt(){
+	public Object getInt(){
+		Object result = null;
 		try {
-			return Integer.valueOf(this.in.readLine());
-		} catch (NumberFormatException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-			return (Integer) null;
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-			return (Integer) null;
+			result = Integer.valueOf(this.in.readLine());
 		}
+		catch(Exception e){
+			System.out.println("Un nombre est attendu");
+		}
+		return result;
 	}
 	
 	/**
