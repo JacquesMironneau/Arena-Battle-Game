@@ -4,6 +4,7 @@ package fr.iutvalence.projet.battleArenaGame.view;
 import java.util.ArrayList;
 import java.util.Scanner;
 
+import fr.iutvalence.projet.battleArenaGame.Board;
 import fr.iutvalence.projet.battleArenaGame.Game;
 import fr.iutvalence.projet.battleArenaGame.exceptions.InvalidMoveException;
 import fr.iutvalence.projet.battleArenaGame.exceptions.SpellIndexException;
@@ -20,20 +21,31 @@ import fr.iutvalence.projet.battleArenaGame.spell.SpellPage;
 public class PlayerConsole implements Player{
 
 	
-	public PlayerConsole(Game pGame)
+	public PlayerConsole()
 	{
 	}
 	
 	
 	@Override
-	public void askMove(Coordinate pDest) {
+	public void askMove() {
+		
+		CheapScanner scan = new CheapScanner();
+		
+		int xCoord = (Integer)scan.getInt();
+		System.out.println("entrez la coordoné X de la destination de votre sort");
+		
+		int yCoord = (Integer)scan.getInt();
+		System.out.println("entre la coordonné Y de la destination de votre sort");
+		
+		Coordinate vDest = new Coordinate(xCoord,yCoord);
+		
 		/*
 		 * Create a movement with the coordinates of the currentPawn and the Destination (coordinate) chosen by the player
 		 */
-		Movement mov = new Movement(Board.getCurrentPawn().getPos(), pDest);
+		Movement mov = new Movement(Board.getCurrentPawn().getPos(), vDest);
 		 // Try the move chosen by the player
 		try {
-			this.Board.checkMove(mov);
+			Board.checkMove(mov);
 		} catch (InvalidMoveException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -46,15 +58,26 @@ public class PlayerConsole implements Player{
 		/*
 		 * Create a movement with the coordinates of the currentPawn and the Destination (coordinate) chosen by the player
 		 */
-		Scanner scan = new Scanner(System.in);
-		this.displaySpellPage();
-		System.out.println("entrez l'index du sort a lancer (1 ou 2 ou 3");
-		int index = scan.nextInt();
 		
-		Movement mov = new Movement(Board.getCurrentPawn().getPos(), pDest);
+		this.displaySpellPage();
+		CheapScanner scan = new CheapScanner();
+		int index = (Integer)scan.getInt();
+		System.out.println("entrez l'index du sort a lancer (1 ou 2 ou 3");
+
+		int xCoord = (Integer)scan.getInt();
+		System.out.println("entrez la coordoné X de la destination de votre sort");
+		
+		int yCoord = (Integer)scan.getInt();
+		System.out.println("entre la coordonné Y de la destination de votre sort");
+		
+		Coordinate vDest = new Coordinate(xCoord,yCoord);
+		Spell vSpell = Board.getCurrentPawn().getSpellPage().getSpell(index);
+		
+		
+		Movement mov = new Movement(Board.getCurrentPawn().getPos(), vDest);
 		 // Try to launch the spell to 
 		try {
-			Board.checkSpell(pSpell, mov);
+			Board.checkSpell(vSpell, mov);
 		}
 		catch(Exception e) 
 		{
@@ -244,10 +267,92 @@ public class PlayerConsole implements Player{
 			else
 				myClient.Send(this.turnOrder);
 	}
+
+
+	@Override
+	public void askSpell(Coordinate pDest, Spell pSpell) {
+		// TODO Auto-generated method stub
+		
+	}
+
+
+	@Override
+	public void askAction() {
+		// TODO Auto-generated method stub
+		
+	}
+
+
+	@Override
+	public void display() {
+		// TODO Auto-generated method stub
+		
+	}
+
+
+	@Override
+	public void displayMenu() {
+		System.out.println("----------------Menu-----------------");
+		System.out.println("1) CrÃ©er une page de sort");
+		System.out.println("2) CrÃ©er une partie");
+		System.out.println("3) Rejoindre une partie");
+		
+	}
+
+
+	@Override
+	public void displayEnd() {
+		// TODO Auto-generated method stub
+		
+	}
+
+
+	@Override
+	public Choices askActionChoice() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+
+	@Override
+	public Choices askChoiceMenu() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+
+	@Override
+	public void displayError() {
+		// TODO Auto-generated method stub
+		
+	}
+
+
+	@Override
+	public void displaySpellPage() {
+		// TODO Auto-generated method stub
+		
+	}
+
+
+	@Override
+	public void displayChoiceMenu() {
+		// TODO Auto-generated method stub
+		
+	}
+
+
+	@Override
+	public void displayChoiceAction() {
+		// TODO Auto-generated method stub
+		
+	}
+
+
+	@Override
+	public void askSpellPageCreation() {
+		// TODO Auto-generated method stub
+		
+	}
 	
-	
-	System.out.println("----------------Menu-----------------");
-	System.out.println("1) CrÃ©er une page de sort");
-	System.out.println("2) CrÃ©er une partie");
-	System.out.println("3) Rejoindre une partie");
 }

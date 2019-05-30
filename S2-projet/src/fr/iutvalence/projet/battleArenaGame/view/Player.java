@@ -9,22 +9,23 @@ public interface Player {
 	
 	/**
 	 * Ask to the system to move a pawn to a wanted destination.
-	 * @param pDest The destination where the player want to move his current pawn.
+	 * 
 	 */
-	public void askMove(Coordinate pDest);
+	public void askMove();
 	
 	/**
 	 * Ask to the system to cast a spell to a wanted position.
-	 * @param pDest Destination where the player like to cast a spell.
-	 * @param pSpell The spell that the player want to cast.
 	 * @throws SpellNotFoundException in case of the pawn doesn't own the asked spell
 	 */
-	public void askSpell(Coordinate pDest, Spell pSpell);
+	public void askSpell();
 
 	/**
 	 * ask to the system make an action
 	 */
-	public void askAction();
+	
+	public Choices askActionChoice();
+	
+	public Choices askChoiceMenu();
 	
 	/**
 	 * display the board
@@ -36,26 +37,20 @@ public interface Player {
 	 */
 	public void displayMenu();
 	
-	/**
-	 * ask to the system to make an new spell page
-	 */
-	public void createSpellPage();
-	
 	public void displayError();
 	
 	public void displaySpellPage();
-	
-	public Choices askChoiceMenu();
 	
 	public void displayChoiceMenu();
 	
 	public void displayChoiceAction();
 	
 	public void selectPageForPawns();
-
-	public Choices askActionChoice();
 	
 	public void displayEnd();
 	
+	/**
+	 * ask to the system to make an new spell page
+	 */
 	public void askSpellPageCreation();
 }
