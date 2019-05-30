@@ -7,6 +7,7 @@ import fr.iutvalence.projet.battleArenaGame.network.Client;
 import fr.iutvalence.projet.battleArenaGame.network.Communication;
 import fr.iutvalence.projet.battleArenaGame.network.Network;
 import fr.iutvalence.projet.battleArenaGame.network.Server;
+import fr.iutvalence.projet.battleArenaGame.pawn.Pawn;
 import fr.iutvalence.projet.battleArenaGame.pawn.PawnTeam;
 import fr.iutvalence.projet.battleArenaGame.shape.Shape;
 import fr.iutvalence.projet.battleArenaGame.spell.Spell;
@@ -234,7 +235,7 @@ public class Game
 
 		while(!endGame()) // replace by boolean / or method to know if game is finished
 		{
-			System.out.println("Waiting for client-kun.." + this.localPlayerTurn);
+			System.out.println("Waiting for client-kun.." + Game.localPlayerTurn);
 			try {
 				Thread.sleep(1000);
 
@@ -242,7 +243,7 @@ public class Game
 			{
 				
 			}
-			if(this.localPlayerTurn)
+			if(Game.localPlayerTurn)
 			{
 				//Update effects and PA &PM of pawn
 				//this.localPlayer.setPawn(Board.getCurrentPawn()); TODO FIX
@@ -271,11 +272,11 @@ public class Game
 						if(Board.getCurrentPawn().getTeam() == PawnTeam.PAWN_REMOTE)
 						{
 							this.endTurn = true; //  set it to true somewhere
-							this.localPlayerTurn = false; // this one is set to true in the network class
+							Game.localPlayerTurn = false; // this one is set to true in the network class
 
 							this.communication.sendToOther(Board.getCurrentPawn());
 							this.communication.sendToOther(Board.getTurnOrder());
-							this.communication.sendToOther(this.localPlayerTurn);
+							this.communication.sendToOther(Game.localPlayerTurn);
 								
 		
 						}
@@ -315,6 +316,7 @@ public class Game
 				Game.localPlayerTurn = false;
 				this.communication.sendToOther(Board.getTurnOrder());
 				this.communication.sendToOther(Game.localPlayerTurn);
+				break;
 			}
 		}
 		
@@ -436,6 +438,19 @@ public class Game
 			pageFinished = this.localPlayer.askValidation();
 		}
 	}
+	
+	public void pageSelection()
+	{
+		for(Pawn p : Board.getTurnOrder())
+		{
+			if(p.getTeam() ==PawnTeam.PAWN_LOCAL)
+				{	
+				this.localPlayer.displaySpellPage();
+				p.setSpellPage(this.localPlayer.askSpellPageSelection());
+				}
+			}
+	}
+	
 
 /**
  * Used for test
