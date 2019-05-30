@@ -1,4 +1,4 @@
-package fr.iutvalence.projet.battleArenaGame.shape;
+package deprecated;
 
 import java.io.Serializable;
 import java.util.ArrayList;

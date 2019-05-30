@@ -7,8 +7,9 @@ import fr.iutvalence.projet.battleArenaGame.shape.Shape;
 /**
  * 
  * @author Jules
- * Represent a Spell who have one shape, a cooldown and an Effect.
+ * Represent a Spell who have a shape, a cooldown and an Effect.
  * A spell can't be used if the currentCooldown is not 0.
+ * A spell can't be used if it costs more than the actual amount of Action Points of the player
  * Spell is a component of SpellPage use to make damage to pawns.
  *
  */
@@ -20,22 +21,22 @@ public class Spell implements Serializable{
 	private static final long serialVersionUID = -4985990245872091058L;
 
 	/**
-	 * current cooldown for a spell
+	 * The current cooldown for a spell
 	 */
 	private int currentCooldown;
 	
 	/**
-	 * shape of spell
+	 * The shape of spell
 	 */
 	private Shape myShape;
 	
 	/**
-	 * effect of a spell
+	 * An effect of a spell
 	 */
 	private SpellEffect myEffect;
 	
 	/**
-	 * create a new empty Spell
+	 * Create a new empty Spell
 	 */
 	public Spell() 
 	{
@@ -45,9 +46,9 @@ public class Spell implements Serializable{
 	}
 	
 	
-	/**	 
-	 * recover defaultCooldown in his shape
-	 * 
+	/**
+	 * Getter for the default cooldown of the spell
+	 * @return  myShape.getCooldown The default cooldown of the spell
 	 */
 	public int getDefaultCooldown()
 	{
@@ -55,7 +56,7 @@ public class Spell implements Serializable{
 	}
 		
 	/**
-	 * set a new value to currentCooldown
+	 * Set a new value to currentCooldown
 	 * @param pcurrentCD new value of currentCooldown
 	 */
 	public void setCurrentCooldown(int pcurrentCD)
@@ -64,8 +65,8 @@ public class Spell implements Serializable{
 	}
 	
 	/**
-	 * return currentCooldown of the Spell
-	 * 
+	 * Getter for the currentCooldown of the Spell
+	 * @return currentCooldown
 	 */
 	public int getCurrentCooldown()
 	{
@@ -74,7 +75,7 @@ public class Spell implements Serializable{
 	
 	/**
 	 * Set a new value to myEffect
-	 * @param pEffectSpell_Effect is the new value of myEffect
+	 * @param pEffectSpellEffect is the new value of myEffect
 	 */
 	public void setSpellEffect(SpellEffect pEffectSpellEffect)
 	{
@@ -83,7 +84,7 @@ public class Spell implements Serializable{
 	
 	/**
 	 * Getter for myEffect
-	 * @return the effect of the spell
+	 * @return myEffect the effect of the spell
 	 */
 	public SpellEffect getSpellEffect()
 	{
@@ -92,7 +93,7 @@ public class Spell implements Serializable{
 	
 	/** 
 	 * Set a new value to myShape
-	 * @param pShape is the newvalue of myShape
+	 * @param pShape is the new value of myShape
 	 */
 	public void setShape(Shape pShape)
 	{
@@ -101,7 +102,7 @@ public class Spell implements Serializable{
 	
 	/**
 	 * Getter for myShape the spell shape
-	 * @return the shape of the spell
+	 * @return myShape the shape of the spell
 	 */
 	public Shape getShape()
 	{

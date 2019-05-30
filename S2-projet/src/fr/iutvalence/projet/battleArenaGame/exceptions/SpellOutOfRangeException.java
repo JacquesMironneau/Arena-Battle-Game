@@ -1,7 +1,7 @@
 package fr.iutvalence.projet.battleArenaGame.exceptions;
 
 /**
- * This exception is raised when the player cast a spell out of its range
+ * This exception is raised when the player cast a spell out of it's range
  * @author durantho
  *
  */

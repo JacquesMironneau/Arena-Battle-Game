@@ -81,7 +81,7 @@ public class PawnEffect implements Effect, Serializable {
 	
 	/**
 	 * Setter for the currentDuration
-	 * @param pNewDuration : new Duration for the effect
+	 * @param pNewDuration the new Duration for the effect
 	 */
 	public void setCurrentDuration(int pNewDuration)
 	{
@@ -90,7 +90,7 @@ public class PawnEffect implements Effect, Serializable {
 	
 	/**
 	 * Getter for the current duration
-	 * @return : the current duration (number of Turn)
+	 * @return the current duration (number of Turn)
 	 */
 	public int getCurrentDuration()
 	{

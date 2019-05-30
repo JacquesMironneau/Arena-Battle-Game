@@ -1,7 +1,7 @@
 package fr.iutvalence.projet.battleArenaGame.exceptions;
 
 /**
- * this exception is raised when a player launch a spell that have a cost greater than the amount of action points of the player
+ * This exception is raised when a player cast a spell that have a cost greater than the amount of action points of the player
  * @author durantho
  *
  */

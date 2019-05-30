@@ -136,7 +136,7 @@ public class Pawn implements Serializable
 	
 	/**
 	 * Setter for movePoints
-	 * @param pMP : amount of movePoints to set
+	 * @param pMP the amount of movePoints to set
 	 */
 	public void setMovePoints(int pMP)
 	{
@@ -155,7 +155,7 @@ public class Pawn implements Serializable
 	
 	/**
 	 * Setter for HealthPoints
-	 * @param pHP : amount of healthPoints to set
+	 * @param pHP the amount of healthPoints to set
 	 */
 	public void setHealthPoints(int pHP)
 	{	
@@ -185,7 +185,7 @@ public class Pawn implements Serializable
 	
 	/**
 	 * Add an effect to the current list of Effect of this pawn
-	 * @param pEffect : the effect to add
+	 * @param pEffect the effect to add
 	 */
 	public void addEffect(PawnEffect pEffect)
 	{
@@ -224,7 +224,7 @@ public class Pawn implements Serializable
 	
 	/**
 	 * Setter for mySpellPage
-	 * @param pPage : page to set
+	 * @param pPage the page to set
 	 */
 	public void setSpellPage(SpellPage pPage)
 	{

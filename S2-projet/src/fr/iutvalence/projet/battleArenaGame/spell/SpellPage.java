@@ -42,7 +42,8 @@ public class SpellPage implements Serializable{
 	}
 	
 	/**
-	 * @return the name off the page.
+	 * Getter for the page name
+	 * @return pageName the name off the page.
 	 */
 	public String getPageName()
 	{
@@ -50,7 +51,7 @@ public class SpellPage implements Serializable{
 	}
 	/**
 	 * return the table of spells.
-	 * @return spell : the spell
+	 * @return spells the array of spells
 	 */
 	public Spell[] getSpell()
 	{
@@ -59,8 +60,8 @@ public class SpellPage implements Serializable{
 	
 	/**
 	 * return the spell in the table of all spells
-	 * @param spellIndex : index of the spell to return
-	 * @return the spell
+	 * @param spellIndex index of the spell to return
+	 * @return spells[spellIndex] the spell at the specified index
 	 */
 	public Spell getSpell(int spellIndex)
 	{

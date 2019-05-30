@@ -1,4 +1,4 @@
-package fr.iutvalence.projet.battleArenaGame.shape;
+package deprecated;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -9,7 +9,7 @@ import fr.iutvalence.projet.battleArenaGame.move.Coordinate;
  * TODO ERASE THIS CLASS AND IMPLEMENT IT IN THE SHAPE ENUM
  */
 /**
- * 
+ * DEPRECATED
  * @author durantho
  * This class represents the shape that is linked with an effect there are not available for all the effect,
  * for example in a spell that is made of fire it special shape necessarily be a Cross.

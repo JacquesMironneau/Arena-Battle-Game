@@ -41,9 +41,9 @@ public enum SpellEffect implements Effect, Serializable{
 	
 	/**
 	 * Constructor of SpellEffect
-	 * @param pElementName : name of the element to set
-	 * @param pEffectName : name of the effect to set
-	 * @param pEffectDuration : default duration of the effect to set
+	 * @param pElementName name of the element to set
+	 * @param pEffectName name of the effect to set
+	 * @param pEffectDuration default duration of the effect to set
 	 */
 	SpellEffect(String pElementName,String pEffectName, int pEffectDuration)
 	{
@@ -54,7 +54,7 @@ public enum SpellEffect implements Effect, Serializable{
 	
 	/**
 	 * Getter for the element name
-	 * @return the element name
+	 * @return elementName the element name
 	 */
 	public String getElementName()
 	{
@@ -63,7 +63,7 @@ public enum SpellEffect implements Effect, Serializable{
 	
 	/**
 	 * Getter for the effect name
-	 * @return the effect name
+	 * @return effectName the effect name
 	 */
 	public String getEffectName()
 	{
@@ -72,7 +72,7 @@ public enum SpellEffect implements Effect, Serializable{
 	
 	/**
 	 * Getter for the effect duration
-	 * @return the effect duration
+	 * @return effectDuration the effect duration
 	 */
 	public int getEffectDuration()
 	{

@@ -1,11 +1,11 @@
-package fr.iutvalence.projet.battleArenaGame.shape;
+package deprecated;
 import java.io.Serializable;
 import java.util.ArrayList;
 
 import fr.iutvalence.projet.battleArenaGame.move.Coordinate;
 
 /**
- * 
+ * DEPRECATED
  * @author Jules
  * represent a shape for a spell. defined damage, max cooldown, range and his price.
  * A shape represents how a spell is physically represented, it can be a ball, a fist, a sword
