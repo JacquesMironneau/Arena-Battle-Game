@@ -365,82 +365,13 @@ public class Game
 	 */
 	private boolean endGame()
 	{
-		int alivePawnsPlayerServer = 0, alivePawnsPlayerClient = 0;
-		
-		if(Board.getTurnOrder().size() <= 3)
-		{
-			for(Pawn pawnIndex : Board.getTurnOrder())
-			{
-				if(pawnIndex.getTeam() == PawnTeam.PAWN_LOCAL)
-					alivePawnsPlayerServer++;
-				
-				if(pawnIndex.getTeam() == PawnTeam.PAWN_REMOTE)
-					alivePawnsPlayerClient++;
-			}
-			
-			if(alivePawnsPlayerServer == 0 && alivePawnsPlayerClient == 0)
-			{
-				System.out.println(Game.DRAW);
-				
-				if(this.isServer)
-					this.communication.sendToOther(Game.DRAW);
-				else
-					this.communication.sendToOther(Game.DRAW);
-			}
-
-			else if(alivePawnsPlayerServer == 0)
-			{
-				
-				/*
-				 * Here the server loose
-				 */
-				
-				//If this Game is the one of the server, it send Victory to the client, and display a loosing screen
-				//to the current user
-				if(this.isServer)
-				{
-					this.communication.sendToOther(Game.VICTORY);
-					System.out.println("You loose :c ");
-				}
-				
-				//If this Game is the one of the client, it send Defeat to the client, and display a winning screen
-				//to the current user
-				else
-				{
-					this.communication.sendToOther(Game.DEFEAT);
-						System.out.println("You win !");
-				}
-			}
-			
-			/*
-			 * Here the client loose
-			 */
-			else if(alivePawnsPlayerClient == 0)
-			{
-				/*
-				 * If this Game is the one of the server, it sends defeat to the client
-				 * and display win to the server
-				 */
-				if(this.isServer)
-				{
-					this.communication.sendToOther(Game.DEFEAT);
-					System.out.println("You win ");
-				}
-				/*
-				 * If this Game is the one of the client, it sends win to the client
-				 * and display loose to the server
-				*/
-				else
-				{
-					this.communication.sendToOther(Game.VICTORY);
-					System.out.println("You loose :c");
-				}
-			}
+		if(this.board.getWinTeam()==RUNNING)
+			return false;
+		else
+		{	
+			this.localPlayer.displayEnd(this.board.getWinTeam());
 			return true;
 		}
-		//DEBUG TODO remove
-		else
-			return false;
 	}
 	
 	
