@@ -33,12 +33,12 @@ public class Board {
 	/**
 	 * This list represent Pawns currently living and define the turn order
 	 */
-	private ArrayList<Pawn> turnOrder;
+	private static ArrayList<Pawn> turnOrder;
 	
 	/**
 	 * Represent the currentPawn of the game = the one that can be moved or can use spell.
 	 */
-	private Pawn currentPawn;
+	private static Pawn currentPawn;
 
 	/**
 	 * Create the board including creation of pawns 
@@ -105,7 +105,7 @@ public class Board {
 	/**
 	 * apply effect to current pawn at the start of the turn
 	 */
-	private void applyEffect() 
+	public void applyEffect() 
 	{
 		int index = this.turnOrder.indexOf(currentPawn);
 		
@@ -230,7 +230,7 @@ public class Board {
 	 * Change the currentPawn of the player to the next one in the turnOrder array List
 	 * If the currentPawn is the last one, change to the first one
 	 */
-	private void nextPawn() 
+	public void nextPawn() 
 	{
 		int nextPawnIndex = this.turnOrder.indexOf(currentPawn)+1;
 		
@@ -285,7 +285,7 @@ public class Board {
 	 * Getter for turnOrder
 	 * @return the turnOrder
 	 */
-	public ArrayList<Pawn> getTurnOrder()
+	public static ArrayList<Pawn> getTurnOrder()
 	{
 		return turnOrder;
 	}
@@ -295,14 +295,18 @@ public class Board {
 	 * @param pTurnOrder : the new turnOrder to set
 	 * TODO: might need to be synchronized
 	 */
-	public void setTurnOrder(ArrayList<Pawn> pTurnOrder)
+	public static void setTurnOrder(ArrayList<Pawn> pTurnOrder)
 	{
-		this.turnOrder = pTurnOrder;
+		turnOrder = pTurnOrder;
 	}
 	
-	public void setCurrentPawn(Pawn thePawn)
+	public static void setCurrentPawn(Pawn thePawn)
 	{
-		this.currentPawn = thePawn;
+		currentPawn = thePawn;
 	}
 	
+	public static Pawn getCurrentPawn()
+	{
+		return currentPawn;
+	}
 }

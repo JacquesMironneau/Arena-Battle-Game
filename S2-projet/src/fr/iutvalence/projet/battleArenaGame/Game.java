@@ -22,6 +22,7 @@ import fr.iutvalence.projet.battleArenaGame.shape.Shape;
 import fr.iutvalence.projet.battleArenaGame.spell.Spell;
 import fr.iutvalence.projet.battleArenaGame.spell.SpellEffect;
 import fr.iutvalence.projet.battleArenaGame.spell.SpellPage;
+import fr.iutvalence.projet.battleArenaGame.view.Choices;
 import fr.iutvalence.projet.battleArenaGame.view.Player;
 
 /**
@@ -147,6 +148,11 @@ public class Game
 	 */
 	private String serverMessage;
 	
+	/**
+	 * Board of the game
+	 */
+	private Board board;
+	
 	
 	/**
 	 * Constructor for Game
@@ -167,46 +173,40 @@ public class Game
 	 */
 	@SuppressWarnings("resource")
 	public void launch()
-	{	
-		int result;
-		Scanner sc;
-		
+	{			
 		while(true) 
-		{
-		sc = new Scanner(System.in); //TODO replace by java.io stream
-		
-		
-	
-		result = sc.nextInt();
+		{		
 		/*
 		 * For now, this represent the menu of the game
 		 */
-		switch(result)
+			localPlayer.displayMenu();
+		switch(localPlayer.askChoiceMenu())
 		{
 		
-		case 1:
+		case Choices.CREATE_SPELL_PAGE:
 			try {
 				//createSpellPage();
-				createSpellPageForTest(); //TODO Remove this, used for test and uncomment previous line
+				localPlayer.askSPellPageCreation();
 			} catch (SpellIndexException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 			break;
 			
-		case 2: // server
+		case Choices.HOST_GAME: // server
+			//TODO review network
 			this.isServer = true;
 			this.localPlayerTurn = true;
 			this.endTurn = false;
 			
 			myServer = new Server(Game.PORT, myNetwork);
 			myServer.init(); // Launch the server
-			
-			init(); // setup the game, TODO think about champselect, might move init there
+			this.board = new Board();
+			//TODO insert champSelect
 			this.play();
 			break;
 		
-		case 3: // client TODO test send from client to server
+		case Choices.JOIN_GAME: // client TODO test send from client to server
 			this.isServer = false;
 			this.localPlayerTurn = false;
 			this.endTurn = false;
@@ -215,12 +215,13 @@ public class Game
 			myClient = new Client(Game.PORT,Game.HOST_ADDRESS, myNetwork);
 			myClient.connect(); // Connect the client to the server
 			
-			// set up the game TODO: think about champselect, might move init there
+			//TODO get board from server
+			//TODO Insert champ select
 			this.play();
 			break;
 			
 		default:
-			System.out.println("Please enter a valid choice...");
+			localPlayer.displayError();
 		}
 		
 	}
@@ -243,14 +244,11 @@ public class Game
 	//Might need to send if the player can play or not
 	
 	public void play()
-	{
-		System.out.println(this.currentPawn);
-		for(Pawn p :this.turnOrder)
-			System.out.println(p);
-		
+	{	
+		//TODO ??
 		this.synchronizePlayers();
 		
-		this.currentPawn = this.turnOrder.get(0);
+		Board.setCurrentPawn(Board.getTurnOrder().get(0));
 
 		while(!endGame()) // replace by boolean / or method to know if game is finished
 		{
@@ -264,64 +262,31 @@ public class Game
 			}
 			if(this.localPlayerTurn)
 			{
-
-				this.localPlayer.setPawn(this.currentPawn);
-				this.currentPawn.setActionPoints(6);
-				this.currentPawn.setMovePoints(6);
-				System.out.println(this.turnOrder.get(0) == this.currentPawn);
-				System.out.println(this.turnOrder.get(0));
-				System.out.println(this.currentPawn);
-				System.out.println("Au dessus");
-				this.turnOrder.set(this.turnOrder.indexOf(this.currentPawn), this.currentPawn);
-				this.turnOrder.set(this.turnOrder.indexOf(this.localPlayer.getPlayerCurrentPawn()), this.currentPawn);
-				this.localPlayer.setPawn(this.currentPawn);
-				applyEffect();
-				
 				//Update effects and PA &PM of pawn
+				this.localPlayer.setPawn(Board.getCurrentPawn());
+				Board.getCurrentPawn().setActionPoints(6);
+				Board.getCurrentPawn().setMovePoints(6);
+				//this.board.getTurnOrder().set(this.board.getTurnOrder().indexOf(this.board.getCurrentPawn()), this.board.getCurrentPawn());
+				this.board.applyEffect();
+				
+				
 				while(!this.endTurn)
 				{
-					Scanner sc = new Scanner(System.in); //TODO: java.io instead
-					System.out.println("Choisissez une action :"); //edit that in a more precise way
-					int choice = sc.nextInt();
-	
-					switch(choice)
+					this.localPlayer.displayChoiceAction();
+					
+					switch(this.localPlayer.askActionChoice())
 					{
-					case 1:
-						int choose,X,Y;
-						do 
-						{
-							System.out.println("choisissez un sort");
-							choose = sc.nextInt();
-
-						}while(choose >3 || choose<1 );
-						
-						do
-						{
-							System.out.println("choisissez un X");
-							X = sc.nextInt();	
-						}while(X<0 || X>Game.BOARD_SIZE);
-						
-						do
-						{
-							System.out.println("choisissez un Y");
-							Y = sc.nextInt();	
-						}while(Y<0 || Y>Game.BOARD_SIZE);
-						
-						
-						this.localPlayer.askSpell(new Coordinate(X,Y),this.currentPawn.getSpellPage().getSpell(choose)); // bug here; a pawn need to be selected
-						
+					case Choices.LAUNCH_SPELL:
+						localPlayer.askSpell();
 						break;
-					case 2:
-						//TODO get arguments
-						this.localPlayer.askMove(null);
-	
-						break;
-					case 3:
-						System.out.println(this.currentPawn.getTeam());
-						nextPawn();
-						System.out.println(this.currentPawn.getTeam());
 						
-						if(this.currentPawn.getTeam() == PawnTeam.PAWN_REMOTE)
+					case Choices.MOVE:
+						this.localPlayer.askMove();
+						break;
+						
+					case Choices.END_TURN:
+						this.board.nextPawn();			
+						if(Board.getCurrentPawn().getTeam() == PawnTeam.PAWN_REMOTE)
 						{
 							this.endTurn = true; //  set it to true somewhere
 							this.localPlayerTurn = false; // this one is set to true in the network class
@@ -329,35 +294,31 @@ public class Game
 
 							if(this.isServer)
 								{
-									myServer.SendAll(this.currentPawn);
-									myServer.SendAll(this.turnOrder);
+									myServer.SendAll(Board.getCurrentPawn());
+									myServer.SendAll(Board.getTurnOrder());
 									myServer.SendAll(this.localPlayerTurn);
 								}
 							else
 								{
-									myClient.Send(this.currentPawn);
-									myClient.Send(this.turnOrder);
+									myClient.Send(Board.getCurrentPawn());
+									myClient.Send(Board.getTurnOrder());
 									myClient.Send(this.localPlayerTurn);
 								}
 						}
-						else
+						/**else
 						{
-							this.currentPawn.setActionPoints(6);
+							Board.getCurrentPawn().setActionPoints(6);
 							this.currentPawn.setMovePoints(6);
 							this.turnOrder.set(this.turnOrder.indexOf(currentPawn), currentPawn);
 							applyEffect();
 
 
-						}
-						//Si le next pawn est remote
-						
-						
-						//Sinon: appeler les méthodes de remise à max des PA/PM/ Applyeffect
-						
+						}*/
 						break;
+					default:
+						localPlayer.displayError();
 					}
 				}
-				//nextPawn();
 			}
 			this.endTurn = false; //CARE TODO
 		}
@@ -422,9 +383,9 @@ public class Game
 	{
 		int alivePawnsPlayerServer = 0, alivePawnsPlayerClient = 0;
 		
-		if(this.turnOrder.size() <= 3)
+		if(Board.getTurnOrder().size() <= 3)
 		{
-			for(Pawn pawnIndex : turnOrder)
+			for(Pawn pawnIndex : Board.getTurnOrder())
 			{
 				if(pawnIndex.getTeam() == PawnTeam.PAWN_LOCAL)
 					alivePawnsPlayerServer++;
