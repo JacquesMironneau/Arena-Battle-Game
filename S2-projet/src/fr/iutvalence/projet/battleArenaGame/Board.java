@@ -76,7 +76,7 @@ public class Board {
 	 * @param Move pMove: A movement chose by the player
 	 * @return true if the chosen move by the player is valid and authorized
 	 */
-	public void checkMove(Movement pMovement) throws InvalidMoveException
+	public void checkMove(Movement pMovement)
 	{
 		//If the pawn has enough move points to move
 		if(Board.currentPawn.getMovePoints() > pMovement.calculateDistance())
@@ -110,7 +110,7 @@ public class Board {
 		else {
 			this.player.displayNotEnoughMovePoints();
 			this.player.askMove();
-			throw new InvalidMoveException("Not enough move points");
+			//throw new InvalidMoveException("Not enough move points");
 		}
 		//The movement isn't correct
 //	TODO remove =>	return false; 
@@ -170,7 +170,7 @@ public class Board {
 	
 	 * @return  true if the chosen spell by the player is valid and authorized
 	 */
-	public void checkSpell(Spell pSpell, Movement pMovement) throws SpellNotFoundException, SpellIndexException, NotEnoughPointsException, SpellOutOfRangeException, SpellOnCooldownException
+	public void checkSpell(Spell pSpell, Movement pMovement)
 	{
 		
 		
