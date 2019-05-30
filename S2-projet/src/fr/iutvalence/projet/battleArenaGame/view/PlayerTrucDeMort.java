@@ -68,7 +68,7 @@ public class PlayerTrucDeMort{
 	 * the current pawn to null,
 	 * and create a new ArrayList of SpellPage.
 	 */
-	public PlayerTrucDeMort(Game pGame)
+	public Player(Game pGame)
 	{
 		/**
 		 * By default, a player is linked to his Game object, and is not ready, has no current pawn and his list of pages is empty.

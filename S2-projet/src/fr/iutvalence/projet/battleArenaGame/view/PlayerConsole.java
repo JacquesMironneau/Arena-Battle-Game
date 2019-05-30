@@ -1,10 +1,14 @@
 package fr.iutvalence.projet.battleArenaGame.view;
 
+
 import java.util.ArrayList;
 import java.util.Scanner;
 
+import fr.iutvalence.projet.battleArenaGame.Game;
+import fr.iutvalence.projet.battleArenaGame.exceptions.InvalidMoveException;
 import fr.iutvalence.projet.battleArenaGame.exceptions.SpellIndexException;
 import fr.iutvalence.projet.battleArenaGame.move.Coordinate;
+import fr.iutvalence.projet.battleArenaGame.move.Movement;
 import fr.iutvalence.projet.battleArenaGame.pawn.Pawn;
 import fr.iutvalence.projet.battleArenaGame.pawn.PawnTeam;
 import fr.iutvalence.projet.battleArenaGame.shape.Shape;
@@ -12,70 +16,52 @@ import fr.iutvalence.projet.battleArenaGame.spell.Spell;
 import fr.iutvalence.projet.battleArenaGame.spell.SpellEffect;
 import fr.iutvalence.projet.battleArenaGame.spell.SpellPage;
 
+
 public class PlayerConsole implements Player{
 
+	
+	public PlayerConsole(Game pGame)
+	{
+	}
+	
+	
 	@Override
 	public void askMove(Coordinate pDest) {
-		// TODO Auto-generated method stub
+		/*
+		 * Create a movement with the coordinates of the currentPawn and the Destination (coordinate) chosen by the player
+		 */
+		Movement mov = new Movement(Board.getCurrentPawn().getPos(), pDest);
+		 // Try the move chosen by the player
+		try {
+			this.Board.checkMove(mov);
+		} catch (InvalidMoveException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		
 	}
 
 	@Override
-	public void askSpell(Coordinate pDest, Spell pSpell) {
-		// TODO Auto-generated method stub
+	public void askSpell() {
+		/*
+		 * Create a movement with the coordinates of the currentPawn and the Destination (coordinate) chosen by the player
+		 */
+		Scanner scan = new Scanner(System.in);
+		this.displaySpellPage();
+		System.out.println("entrez l'index du sort a lancer (1 ou 2 ou 3");
+		int index = scan.nextInt();
+		
+		Movement mov = new Movement(Board.getCurrentPawn().getPos(), pDest);
+		 // Try to launch the spell to 
+		try {
+			Board.checkSpell(pSpell, mov);
+		}
+		catch(Exception e) 
+		{
+			e.printStackTrace();
+		}
 		
 	}
-
-	@Override
-	public void setPawn(Pawn pPawn) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void endTurn() {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public boolean getTurn() {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
-	public void validateSpellPage() {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void playerReady() {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public Pawn getPlayerCurrentPawn() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public void addSpellPage(SpellPage page) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public ArrayList<SpellPage> getPlayerPage() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	
-	
 	
 	/** TODO
 	 * Create a spell page, including the creation of his 3 spells and add
@@ -204,13 +190,14 @@ public class PlayerConsole implements Player{
 			}
 
 		}
-		localPlayer.addSpellPage(pageToAdd);
+		Game.addSpellPage(pageToAdd);
 	}
 	
 	/**
 	 * Start the selection of the spell pages for the pawns of local player
 	 */
-	private void selectPageForPawns()
+	@Override
+	public void selectPageForPawns()
 	{
 		System.out.println("Select page for pawns");
 		Scanner scan = new Scanner(System.in);
@@ -219,7 +206,7 @@ public class PlayerConsole implements Player{
 		boolean selectionFinished = false;
 		//add every local pawns 
 		int loopCount = 0;
-		for(Pawn p: turnOrder)
+		for(Pawn p: Board.getTurnOrder())
 			if(p.getTeam()==PawnTeam.PAWN_LOCAL)
 				{
 					temporaryPawns[loopCount]=p;
@@ -229,10 +216,10 @@ public class PlayerConsole implements Player{
 		int pawnNumber = 1;
 			for(Pawn pPawn: temporaryPawns)
 			{
-				displaySpellPages();
+				this.displaySpellPages();
 				System.out.println("Choisisez l'index de la page que vous voulez donner au pion numéro" + pawnNumber );
 				selectedPageIndex = scan.nextInt();
-				this.turnOrder.get(this.turnOrder.indexOf(pPawn)).setSpellPage(this.localPlayer.getPlayerPage().get(selectedPageIndex));		
+				Board.getTurnOrder.get(Board.getTurnOrder().indexOf(pPawn)).setSpellPage(this.localPlayer.getPlayerPage().get(selectedPageIndex));		
 				pawnNumber++;
 			}
 			while(!selectionFinished)
@@ -244,10 +231,10 @@ public class PlayerConsole implements Player{
 				{
 					System.out.println("Choisier le numero du pion a modifier");
 					pawnNumber = scan.nextInt();
-					displaySpellPages();
+					this.displaySpellPages();
 					System.out.println("Choisisez l'index de la page que vous voulez donner au pion numéro" + pawnNumber );
 					selectedPageIndex = scan.nextInt();
-					this.turnOrder.get(this.turnOrder.indexOf(temporaryPawns[pawnNumber])).setSpellPage(this.localPlayer.getPlayerPage().get(selectedPageIndex));
+					Board.getTurnOrder().get(Board.getTurnOrder.indexOf(temporaryPawns[pawnNumber])).setSpellPage(this.localPlayer.getPlayerPage().get(selectedPageIndex));
 				}
 				
 				
