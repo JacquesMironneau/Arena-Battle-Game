@@ -5,11 +5,12 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.io.Reader;
+
 
 
 /**
- * This class reads inputs from an input Stream 
+ * This class reads inputs from an input Stream
+ * Be carefull of not enter an String when you want to read an int :)
  * @author durantho
  *
  */
@@ -42,23 +43,44 @@ public class CheapScanner {
 	 * @throws NumberFormatException
 	 * @throws IOException
 	 */
-	public int getInt() throws NumberFormatException, IOException {
-		return Integer.valueOf(this.in.readLine());
+	public int getInt(){
+		try {
+			return Integer.valueOf(this.in.readLine());
+		} catch (NumberFormatException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return (Integer) null;
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return (Integer) null;
+		}
 	}
 	
 	/**
 	 * @return The String from the bufferedReader
 	 * @throws IOException
 	 */
-	public String getStr() throws IOException {
-		return this.in.readLine();
+	public String getStr(){
+		try {
+			return this.in.readLine();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return null;
+		}
 	}
 	
 	/**
 	 * Close the InputStream
 	 * @throws IOException
 	 */
-	public void close() throws IOException {
-		this.in.close();
+	public void close(){
+		try {
+			this.in.close();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 }
