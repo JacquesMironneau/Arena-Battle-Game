@@ -35,6 +35,18 @@ public interface Player {
 	
 	public Choices askChoiceMenu();
 
+	
+	/**
+	 * ask to the system to make a new spell page
+	 * @throws SpellIndexException 
+	 */
+	public void askSpellPageCreation() throws SpellIndexException;
+	
+	/**
+	 * display the board
+	 */
+	public void display();
+	
 	/**
 	 * display the menu 
 	 */
