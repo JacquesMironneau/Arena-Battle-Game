@@ -1,22 +1,11 @@
 package fr.iutvalence.projet.battleArenaGame;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Scanner;
-
-import fr.iutvalence.projet.battleArenaGame.exceptions.InvalidMoveException;
-import fr.iutvalence.projet.battleArenaGame.exceptions.NotEnoughPointsException;
 import fr.iutvalence.projet.battleArenaGame.exceptions.SpellIndexException;
-import fr.iutvalence.projet.battleArenaGame.exceptions.SpellNotFoundException;
-import fr.iutvalence.projet.battleArenaGame.exceptions.SpellOnCooldownException;
-import fr.iutvalence.projet.battleArenaGame.exceptions.SpellOutOfRangeException;
-import fr.iutvalence.projet.battleArenaGame.move.Coordinate;
-import fr.iutvalence.projet.battleArenaGame.move.Movement;
 import fr.iutvalence.projet.battleArenaGame.network.Client;
+import fr.iutvalence.projet.battleArenaGame.network.Communication;
 import fr.iutvalence.projet.battleArenaGame.network.Network;
 import fr.iutvalence.projet.battleArenaGame.network.Server;
 import fr.iutvalence.projet.battleArenaGame.pawn.Pawn;
-import fr.iutvalence.projet.battleArenaGame.pawn.PawnEffect;
 import fr.iutvalence.projet.battleArenaGame.pawn.PawnTeam;
 import fr.iutvalence.projet.battleArenaGame.shape.Shape;
 import fr.iutvalence.projet.battleArenaGame.spell.Spell;
@@ -126,6 +115,7 @@ public class Game
 	 */
 	private boolean isServer;
 
+	private Communication communication;
 	/**
 	 * Represents if a user the local player is playing now.
 	 * It is used to manage when a player can play.
@@ -195,13 +185,15 @@ public class Game
 			
 		case Choices.HOST_GAME: // server
 			//TODO review network
+			
+			this.communication = new Server(Game.PORT, myNetwork);
+			this.communication.init();
 			this.isServer = true;
 			this.localPlayerTurn = true;
 			this.endTurn = false;
 			
-			myServer = new Server(Game.PORT, myNetwork);
-			myServer.init(); // Launch the server
-			this.board = new Board();
+			
+			this.board = new Board(this.communication);
 			//TODO insert champSelect
 			this.play();
 			break;
@@ -211,10 +203,10 @@ public class Game
 			this.localPlayerTurn = false;
 			this.endTurn = false;
 
-			
-			myClient = new Client(Game.PORT,Game.HOST_ADDRESS, myNetwork);
-			myClient.init(); // Connect the client to the server
-			
+			this.communication = new Client(Game.PORT,Game.HOST_ADDRESS, myNetwork);
+			//myClient = new Client(Game.PORT,Game.HOST_ADDRESS, myNetwork);
+			//myClient.init(); // Connect the client to the server
+			this.communication.init();
 			//TODO get board from server
 			//TODO Insert champ select
 			this.play();
@@ -291,19 +283,11 @@ public class Game
 							this.endTurn = true; //  set it to true somewhere
 							this.localPlayerTurn = false; // this one is set to true in the network class
 
-
-							if(this.isServer)
-								{
-									myServer.sendToOther(Board.getCurrentPawn());
-									myServer.sendToOther(Board.getTurnOrder());
-									myServer.sendToOther(this.localPlayerTurn);
-								}
-							else
-								{
-									myClient.sendToOther(Board.getCurrentPawn());
-									myClient.sendToOther(Board.getTurnOrder());
-									myClient.sendToOther(this.localPlayerTurn);
-								}
+							this.communication.sendToOther(Board.getCurrentPawn());
+							this.communication.sendToOther(Board.getTurnOrder());
+							this.communication.sendToOther(this.localPlayerTurn);
+								
+		
 						}
 						/**else
 						{
@@ -343,7 +327,7 @@ public class Game
 				}
 			}
 			this.selectPageForPawns(); //TODO Do this method in game (call method of player to display or ask)
-			myClient.sendToOther(CLIENT_READY);
+			this.communication.sendToOther(CLIENT_READY);
 		}
 		else
 		{
@@ -399,9 +383,9 @@ public class Game
 				System.out.println(Game.DRAW);
 				
 				if(this.isServer)
-					myServer.sendToOther(Game.DRAW);
+					this.communication.sendToOther(Game.DRAW);
 				else
-					myClient.sendToOther(Game.DRAW);
+					this.communication.sendToOther(Game.DRAW);
 			}
 
 			else if(alivePawnsPlayerServer == 0)
@@ -415,7 +399,7 @@ public class Game
 				//to the current user
 				if(this.isServer)
 				{
-					myServer.sendToOther(Game.VICTORY);
+					this.communication.sendToOther(Game.VICTORY);
 					System.out.println("You loose :c ");
 				}
 				
@@ -423,7 +407,7 @@ public class Game
 				//to the current user
 				else
 				{
-						myClient.sendToOther(Game.DEFEAT);
+					this.communication.sendToOther(Game.DEFEAT);
 						System.out.println("You win !");
 				}
 			}
@@ -439,7 +423,7 @@ public class Game
 				 */
 				if(this.isServer)
 				{
-					myServer.sendToOther(Game.DEFEAT);
+					this.communication.sendToOther(Game.DEFEAT);
 					System.out.println("You win ");
 				}
 				/*
@@ -448,7 +432,7 @@ public class Game
 				*/
 				else
 				{
-					myClient.sendToOther(Game.VICTORY);
+					this.communication.sendToOther(Game.VICTORY);
 					System.out.println("You loose :c");
 				}
 			}
