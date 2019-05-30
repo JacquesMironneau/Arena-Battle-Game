@@ -278,6 +278,33 @@ public class Board {
 		}
 	}
 	
+	/**
+	 * Give the status of the game
+	 * @return EndStatus enum (Draw, Victory, Defeat or Running)
+	 */
+	public EndStatus getWinTeam()
+	{
+		if(Board.turnOrder.size()==0)
+			return EndStatus.DRAW;
+		int vLocal = 0;
+		int vRemote = 0;
+		for(Pawn p : Board.turnOrder)
+		{
+			if(p.getTeam()==PawnTeam.PAWN_LOCAL)
+				vLocal++;
+			else
+				vRemote++;
+		}
+		if(vLocal>0 && vRemote>0)
+			return EndStatus.RUNNING;
+		if(vLocal==0)
+			return EndStatus.DEFEAT;
+		if(vRemote==0)
+			return EndStatus.VICTORY;
+		
+		return null;
+	
+	}
 	
 	/*
 	 * Edit in turnOrder is mainly done in the network package
