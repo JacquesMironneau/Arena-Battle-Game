@@ -10,6 +10,7 @@ import java.io.Serializable;
  */
 public class Coordinate implements Serializable {
 
+	
 	/**
 	 * serialVersionUID is an hash code, which allow the JVM to check if attributes, names and type are the same for the object
 	 */
@@ -69,6 +70,34 @@ public class Coordinate implements Serializable {
 		this.coordY += pCoordinate.getCoordY();
 		return this;
 	}
+	
+	@Override
+	public int hashCode()
+	{
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + coordX;
+		result = prime * result + coordY;
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj)
+	{
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Coordinate other = (Coordinate) obj;
+		if (coordX != other.coordX)
+			return false;
+		if (coordY != other.coordY)
+			return false;
+		return true;
+	}
+
 	
 
 }

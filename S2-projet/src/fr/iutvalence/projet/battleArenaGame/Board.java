@@ -251,13 +251,17 @@ public class Board {
 	 */
 	public Pawn getPawnOnCell(Coordinate pCoordinate)
 	{
-		for(int pawnIndex = 0; pawnIndex < Board.turnOrder.size();pawnIndex++)
+		for(Pawn p : Board.turnOrder)
 		{
-			if(Board.turnOrder.get(pawnIndex).getPos()==pCoordinate)
-				return Board.turnOrder.get(pawnIndex);
+			if(p.getPos().equals(new Coordinate(2,0)))
+			{
+				return p;
+			}
 		}
 		return null;
 	}
+	
+	
 	
 	
 	/**
@@ -265,14 +269,11 @@ public class Board {
 	 */
 	public static void removeDeads()
 	{
-		int size = Board.turnOrder.size();
-		for(int pawnIndex = 0; pawnIndex <size;pawnIndex++)
-		{
-			if(Board.turnOrder.get(pawnIndex).getHealthPoints()<=0)
-			{
-				Board.turnOrder.remove(pawnIndex);
-			}
-		}
+		ArrayList<Pawn> temp = new ArrayList<Pawn>();
+		for(Pawn p: Board.turnOrder)
+			if(p.getHealthPoints() <= 0)
+				temp.add(p);
+		Board.getTurnOrder().removeAll(temp);
 	}
 	
 	/**
@@ -323,12 +324,12 @@ public class Board {
 	 */
 	public static void setTurnOrder(ArrayList<Pawn> pTurnOrder)
 	{
-		turnOrder = pTurnOrder;
+		Board.turnOrder = pTurnOrder;
 	}
 	
 	public static void setCurrentPawn(Pawn thePawn)
 	{
-		currentPawn = thePawn;
+		Board.currentPawn = thePawn;
 	}
 	
 	public static Pawn getCurrentPawn()
