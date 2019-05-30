@@ -135,7 +135,7 @@ public class Board {
 			case "Silence":
 				Board.currentPawn.setActionPoints(Board.currentPawn.getActionPoints()-2);
 				break;
-			case "stun":
+			case "Stun":
 				Board.currentPawn.setMovePoints(Board.currentPawn.getMovePoints()-1);
 				Board.currentPawn.setActionPoints(Board.currentPawn.getActionPoints()-1);
 				break;
@@ -253,7 +253,7 @@ public class Board {
 	 *  If it exists return the pawn
 	 *  else returns null
 	 */
-	private Pawn getPawnOnCell(Coordinate pCoordinate)
+	public Pawn getPawnOnCell(Coordinate pCoordinate)
 	{
 		for(int pawnIndex = 0; pawnIndex < Board.turnOrder.size();pawnIndex++)
 		{
@@ -267,9 +267,10 @@ public class Board {
 	/**
 	 * Remove the dead pawns (hp <= 0) from the arrayList every time a new turn begin
 	 */
-	private void removeDeads()
+	public static void removeDeads()
 	{
-		for(int pawnIndex = 0; pawnIndex >Board.turnOrder.size();pawnIndex++)
+		int size = Board.turnOrder.size();
+		for(int pawnIndex = 0; pawnIndex <size;pawnIndex++)
 		{
 			if(Board.turnOrder.get(pawnIndex).getHealthPoints()<=0)
 			{
