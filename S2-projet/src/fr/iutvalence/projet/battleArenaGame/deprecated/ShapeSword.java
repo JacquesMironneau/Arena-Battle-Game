@@ -1,4 +1,4 @@
-package deprecated;
+package fr.iutvalence.projet.battleArenaGame.deprecated;
 
 import java.io.Serializable;
 
