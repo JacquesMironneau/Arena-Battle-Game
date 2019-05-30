@@ -1,7 +1,9 @@
 package fr.iutvalence.projet.battleArenaGame.view;
 
+import fr.iutvalence.projet.battleArenaGame.exceptions.SpellIndexException;
 import fr.iutvalence.projet.battleArenaGame.exceptions.SpellNotFoundException;
 import fr.iutvalence.projet.battleArenaGame.move.Coordinate;
+import fr.iutvalence.projet.battleArenaGame.shape.Shape;
 import fr.iutvalence.projet.battleArenaGame.spell.Spell;
 
 public interface Player {
@@ -28,6 +30,12 @@ public interface Player {
 	public Choices askChoiceMenu();
 	
 	/**
+	 * ask to the system to make an new spell page
+	 * @throws SpellIndexException 
+	 */
+	public void askSpellPageCreation() throws SpellIndexException;
+	
+	/**
 	 * display the board
 	 */
 	public void display();
@@ -41,16 +49,35 @@ public interface Player {
 	
 	public void displaySpellPage();
 	
-	public void displayChoiceMenu();
-	
 	public void displayChoiceAction();
 	
 	public void selectPageForPawns();
 	
-	public void displayEnd();
+	public void displayEnd(EndStatus Pstat);
 	
-	/**
-	 * ask to the system to make an new spell page
-	 */
-	public void askSpellPageCreation();
+	public String askPageName();
+	
+	public int askSpellIndex();
+	
+	public String askSpellElement();
+	
+	public Shape askSpellShape();
+	
+	public boolean askValidation();
+	
+	public void displayElementChoice();
+	
+	public void displayShapeChoice();
+	
+	public void displaySpellInCooldown(Spell pSpell);
+	
+	public void displaySpellOutOfRange();
+	
+	public void displayNotEnoughActionPoints();
+	
+	public void displaySpellLaunched();
+	
+	public void displayNextTurn();
+	
+
 }

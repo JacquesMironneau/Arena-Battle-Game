@@ -92,7 +92,8 @@ public class PlayerConsole implements Player{
 	 * WORK IN PROGRESS
 	 * @throws SpellIndexException 
 	 */
-	public void createSpellPage() throws SpellIndexException
+	@Override
+	public void askSpellPageCreation() throws SpellIndexException
 	{
 		//Creation of a spellPage
 		Scanner scan = new Scanner(System.in);
@@ -254,10 +255,10 @@ public class PlayerConsole implements Player{
 				{
 					System.out.println("Choisier le numero du pion a modifier");
 					pawnNumber = scan.nextInt();
-					this.displaySpellPages();
+					this.displaySpellPage();
 					System.out.println("Choisisez l'index de la page que vous voulez donner au pion num√©ro" + pawnNumber );
 					selectedPageIndex = scan.nextInt();
-					Board.getTurnOrder().get(Board.getTurnOrder.indexOf(temporaryPawns[pawnNumber])).setSpellPage(this.localPlayer.getPlayerPage().get(selectedPageIndex));
+					Board.getTurnOrder().get(Board.getTurnOrder().indexOf(temporaryPawns[pawnNumber])).setSpellPage(Game.getLocalPlayer().getPlayerPage().get(selectedPageIndex));
 				}
 				
 				
@@ -270,16 +271,11 @@ public class PlayerConsole implements Player{
 
 
 	@Override
-	public void askSpell(Coordinate pDest, Spell pSpell) {
-		// TODO Auto-generated method stub
-		
-	}
-
-
-	@Override
-	public void askAction() {
-		// TODO Auto-generated method stub
-		
+	public void displaySpellPage() {
+		for(SpellPage myPage: Game.getSpellPage())
+		{
+			System.out.println(myPage.getPageName());
+		}
 	}
 
 
@@ -296,28 +292,36 @@ public class PlayerConsole implements Player{
 		System.out.println("1) Cr√©er une page de sort");
 		System.out.println("2) Cr√©er une partie");
 		System.out.println("3) Rejoindre une partie");
+		System.out.println("4) crÈÈ partie local");
 		
 	}
 
 
 	@Override
-	public void displayEnd() {
+	public void displayEnd(EndStatus pStat) {
 		// TODO Auto-generated method stub
 		
 	}
 
 
 	@Override
-	public Choices askActionChoice() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-
-	@Override
-	public Choices askChoiceMenu() {
-		// TODO Auto-generated method stub
-		return null;
+	public Choices askChoiceMenu() 
+	{	
+		CheapScanner scan = new CheapScanner();
+		int mychoice = (Integer)scan.getInt();
+		System.out.println("faite votre choix");
+		switch (mychoice) {
+		
+		case 1:
+			return Choices.CREATE_SPELL_PAGE;
+		case 2:
+			return Choices.HOST_GAME;
+		case 3:
+			return Choices.JOIN_GAME;
+		case 4:
+			return Choices.LOCAL_GAME;
+		
+		}
 	}
 
 
@@ -328,31 +332,175 @@ public class PlayerConsole implements Player{
 	}
 
 
+
 	@Override
-	public void displaySpellPage() {
-		// TODO Auto-generated method stub
+	public Choices askActionChoice() 
+	{
+		CheapScanner scan = new CheapScanner();
+		int mychoice= (Integer)scan.getInt();
+		System.out.println("faite votre choix");
 		
-	}
-
-
-	@Override
-	public void displayChoiceMenu() {
-		// TODO Auto-generated method stub
+		switch(mychoice)
+		{
+		case 1:
+			return Choices.MOVE;
+		case 2:
+			return Choices.LAUNCH_SPELL;
+		}
 		
 	}
 
 
 	@Override
 	public void displayChoiceAction() {
+		System.out.println("1) bouger mon pion");
+		System.out.println("2) lancer un sort");
+		
+	}
+
+
+	@Override
+	public String askPageName() {
+		CheapScanner scan = new CheapScanner();
+		String myName = scan.getStr();
+		System.out.println("entrez le nom de votre page");
+		return myName;
+	}
+
+
+	@Override
+	public int askSpellIndex() {
+		CheapScanner scan = new CheapScanner();
+		System.out.println("entrez ‡ quel index de votre sort dans la page de sort entre 1 et 3");
+		int index = (Integer)scan.getInt();
+		while (3<index || index<0)
+		{
+			index = (Integer)scan.getInt();
+			System.out.println("j'ai dis entre 1 et 3");
+		}
+		return index;
+	}
+
+
+	@Override
+	public String askSpellElement() 
+	{	
+		Spell createdSpell = new Spell();
+		CheapScanner scan = new CheapScanner();
+		
+		String elementName;
+
+		do {		
+		System.out.println("Choisiser l'element du sort a creer");
+		elementName = scan.getStr();
+		switch(elementName)
+		{
+		case "Fire":
+			createdSpell.setSpellEffect(SpellEffect.Fire);
+			break;
+		case "Ice":
+			createdSpell.setSpellEffect(SpellEffect.Ice);
+			break;
+		case "Stone":
+			createdSpell.setSpellEffect(SpellEffect.Stone);
+			break;
+		case "Electricity" :
+			createdSpell.setSpellEffect(SpellEffect.Electricity);
+			break;
+		case "Wind":
+			createdSpell.setSpellEffect(SpellEffect.Wind);
+			break;
+		case "Darkness":
+			createdSpell.setSpellEffect(SpellEffect.Darkness);
+			break;
+		default:
+			elementName = null;
+		} 				
+	}while(elementName ==null);
+	return elementName;
+	}
+
+
+	@Override
+	public Shape askSpellShape() {
+		CheapScanner scan = new CheapScanner();
+		String myShape = scan.getStr();
+		
+	}
+
+
+	@Override
+	public boolean askValidation() {
+		CheapScanner scan = new CheapScanner();
+		System.out.println("validez votre saisie?");
+		System.out.println("1) oui       2)non");
+		int myChoice;
+		do
+		{
+			myChoice = (Integer)scan.getInt();
+			switch (myChoice)
+			{
+			case 1:return true;
+			case 2: return false;
+			default: myChoice = 0;
+			}
+		}while(myChoice==0);
+	return false;
+	}
+
+
+	@Override
+	public void displayElementChoice() {
+		for (SpellEffect i : SpellEffect.values())
+		{
+			System.out.println(i.getElementName());
+		}
+		
+	}
+
+
+	@Override
+	public void displayShapeChoice() {
+		for(Shape i :Shape.values())
+		{
+			System.out.println(i.getType());
+		}
+		
+	}
+
+
+	@Override
+	public void displaySpellInCooldown(Spell pSpell) {
+		System.out.println("il reste "+ pSpell.getCurrentCooldown() +"‡ attendre");
+	}
+
+
+	@Override
+	public void displaySpellOutOfRange(Spell pSpell) {
+		System.out.println("la portÈe max est "+ pSpell.getShape().getRange());
+		
+	}
+
+
+	@Override
+	public void displayNotEnoughActionPoints() {
+		
+		
+	}
+
+
+	@Override
+	public void displaySpellLaunched() {
 		// TODO Auto-generated method stub
 		
 	}
 
 
 	@Override
-	public void askSpellPageCreation() {
+	public void displayNextTurn() {
 		// TODO Auto-generated method stub
 		
 	}
+
 	
 }
