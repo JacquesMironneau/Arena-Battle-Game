@@ -7,12 +7,8 @@ import java.util.Scanner;
 import fr.iutvalence.projet.battleArenaGame.Board;
 import fr.iutvalence.projet.battleArenaGame.EndStatus;
 import fr.iutvalence.projet.battleArenaGame.Game;
-import fr.iutvalence.projet.battleArenaGame.exceptions.InvalidMoveException;
-import fr.iutvalence.projet.battleArenaGame.exceptions.SpellIndexException;
 import fr.iutvalence.projet.battleArenaGame.move.Coordinate;
 import fr.iutvalence.projet.battleArenaGame.move.Movement;
-import fr.iutvalence.projet.battleArenaGame.pawn.Pawn;
-import fr.iutvalence.projet.battleArenaGame.pawn.PawnTeam;
 import fr.iutvalence.projet.battleArenaGame.shape.Shape;
 import fr.iutvalence.projet.battleArenaGame.spell.Spell;
 import fr.iutvalence.projet.battleArenaGame.spell.SpellEffect;
@@ -29,7 +25,7 @@ public class PlayerConsole implements Player{
 	
 	@Override
 	public Movement askMove() {
-		this.displayboard();
+		this.displayBoard();
 		CheapScanner scan = new CheapScanner();
 		
 		int xCoord = (Integer)scan.getInt();
@@ -380,6 +376,13 @@ public class PlayerConsole implements Player{
 		System.out.println("Cooldown max "+ pPage.getSpell(0).getDefaultCooldown()+" shape "+pPage.getSpell(0).getShape()+" element "+pPage.getSpell(0).getSpellEffect());
 		System.out.println("Cooldown max "+ pPage.getSpell(1).getDefaultCooldown()+" shape "+pPage.getSpell(1).getShape()+" element "+pPage.getSpell(1).getSpellEffect());
 		System.out.println("Cooldown max "+ pPage.getSpell(2).getDefaultCooldown()+" shape "+pPage.getSpell(2).getShape()+" element "+pPage.getSpell(2).getSpellEffect());
+	}
+
+
+	@Override
+	public void displayBoard() {
+		// TODO Auto-generated method stub
+		
 	}
 
 	
