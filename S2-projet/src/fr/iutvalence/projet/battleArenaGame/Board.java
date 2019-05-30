@@ -16,6 +16,7 @@ import fr.iutvalence.projet.battleArenaGame.pawn.Pawn;
 import fr.iutvalence.projet.battleArenaGame.pawn.PawnEffect;
 import fr.iutvalence.projet.battleArenaGame.pawn.PawnTeam;
 import fr.iutvalence.projet.battleArenaGame.spell.Spell;
+import fr.iutvalence.projet.battleArenaGame.view.Player;
 
 public class Board {
 	
@@ -31,6 +32,7 @@ public class Board {
 	public final static Coordinate BASE_POS_2PAWN3 = new Coordinate(12,14);
 
 	
+	private Player player;
 	/**
 	 * This list represent Pawns currently living and define the turn order
 	 */
@@ -49,7 +51,7 @@ public class Board {
 	/**
 	 * Create the board including creation of pawns 
 	 */
-	public Board(Communication pCommunication)
+	public Board(Communication pCommunication, Player pPlayer)
 	{
 		Board.turnOrder = new ArrayList<Pawn>();
 		Board.turnOrder.add(new Pawn(PawnTeam.PAWN_LOCAL, BASE_POS_1PAWN1 , null));
@@ -61,6 +63,7 @@ public class Board {
 		Board.turnOrder.add(new Pawn(PawnTeam.PAWN_LOCAL, BASE_POS_1PAWN3 , null));
 		Board.turnOrder.add(new Pawn(PawnTeam.PAWN_REMOTE, BASE_POS_2PAWN3 , null));
 		
+		this.player = pPlayer;
 		Board.currentPawn = Board.turnOrder.get(0);
 		
 		this.communication = pCommunication;
@@ -82,7 +85,12 @@ public class Board {
 			for(int indexArrayList = 0; indexArrayList < Board.turnOrder.size(); indexArrayList++)
 			{
 				if(pMovement.getDestCordinate() == Board.turnOrder.get(indexArrayList).getPos())
-					throw new InvalidMoveException("Selected position is occupated");
+				{
+					//this.player.displayNo
+					//TODO something to display
+					this.player.askMove();
+					//throw new InvalidMoveException("Selected position is occupated");
+				}
 			}
 			
 			//Move the current pawn to coordinates
@@ -92,7 +100,7 @@ public class Board {
 			//Replace the pawn of the turnOrder (so the current one) by the currentPawn with moved coordinates)
 			Board.turnOrder.set(Board.turnOrder.indexOf(Board.currentPawn), Board.currentPawn);
 			
-			
+				this.player.displayMoveDone();
 			//Send the turn order (need to create myServer and myClient (in Game consctructor and then in play method
 				this.communication.sendToOther(Board.turnOrder);
 				
@@ -100,6 +108,8 @@ public class Board {
 //	TODO remove =>	return true;
 		}
 		else {
+			this.player.displayNotEnoughMovePoints();
+			this.player.askMove();
 			throw new InvalidMoveException("Not enough move points");
 		}
 		//The movement isn't correct
@@ -167,18 +177,26 @@ public class Board {
 		if(pSpell.getCurrentCooldown() > 0)
 		{	
 			//The spell is on cooldown
-			throw new SpellOnCooldownException();
+			this.player.displaySpellInCooldown(pSpell);
+			this.player.askSpell();
+			//throw new SpellOnCooldownException();
 			
 		}
 		else if(pSpell.getShape().getSpellCost() > Board.currentPawn.getActionPoints())
 		{
 			//The spell cost is bigger than the pawn's action points
-			throw new NotEnoughPointsException();
+			this.player.displayNotEnoughActionPoints();
+			this.player.askSpell();
+
+		//	throw new NotEnoughPointsException();
 		}
 		else if(pMovement.getDistance() > pSpell.getShape().getRange())
 		{
 			//The target is too far away
-			throw new SpellOutOfRangeException();
+			this.player.displaySpellOutOfRange(pSpell);
+			this.player.askSpell();
+
+//			throw new SpellOutOfRangeException();
 		}
 		else
 		{
@@ -193,7 +211,10 @@ public class Board {
 				if(pSpell.equals(Board.currentPawn.getSpellPage().getSpell(index)))
 					spellIndexInPage = index;	
 				else
-					throw new SpellNotFoundException(pSpell);
+				{
+					this.player.askSpell();
+					//throw new SpellNotFoundException(pSpell);
+				}
 			}
 			
 			Board.turnOrder.get(Board.turnOrder.indexOf(currentPawn)).getSpellPage().getSpell(spellIndexInPage).resetCooldown();
@@ -218,7 +239,7 @@ public class Board {
 			//And send data to the other player, use:  Send(this.turnOrder); (might need a try catch statement)
 			
 		}
-		
+		this.player.displaySpellLaunched();
 		this.communication.sendToOther(Board.turnOrder);
 	}
 	
@@ -228,7 +249,7 @@ public class Board {
 	 * Change the currentPawn of the player to the next one in the turnOrder array List
 	 * If the currentPawn is the last one, change to the first one
 	 */
-	public void nextPawn() 
+	public static void nextPawn() 
 	{
 		int nextPawnIndex = Board.turnOrder.indexOf(currentPawn)+1;
 		
@@ -280,7 +301,7 @@ public class Board {
 	 * Give the status of the game
 	 * @return EndStatus enum (Draw, Victory, Defeat or Running)
 	 */
-	public EndStatus getWinTeam()
+	public static EndStatus getWinTeam()
 	{
 		if(Board.turnOrder.size()==0)
 			return EndStatus.DRAW;
