@@ -13,8 +13,8 @@ public class TestCheapScanner {
 		System.out.println("Veuillez saisir une chaine de caracteres : \n");
 		System.out.println(cs.getStr());
 		
-		Scanner sc = new Scanner(System.in);
-		System.out.println("Veuillez saisir un entier");
-		System.out.println(sc.nextInt());
+//		Scanner sc = new Scanner(System.in);
+//		System.out.println("Veuillez saisir un entier");
+//		System.out.println(sc.nextInt());
 	}
 }

@@ -1,5 +1,6 @@
 package fr.iutvalence.projet.battleArenaGame.view;
 
+import fr.iutvalence.projet.battleArenaGame.EndStatus;
 import fr.iutvalence.projet.battleArenaGame.exceptions.SpellIndexException;
 import fr.iutvalence.projet.battleArenaGame.exceptions.SpellNotFoundException;
 import fr.iutvalence.projet.battleArenaGame.move.Coordinate;
@@ -30,7 +31,7 @@ public interface Player {
 	public Choices askChoiceMenu();
 	
 	/**
-	 * ask to the system to make an new spell page
+	 * ask to the system to make a new spell page
 	 * @throws SpellIndexException 
 	 */
 	public void askSpellPageCreation() throws SpellIndexException;
