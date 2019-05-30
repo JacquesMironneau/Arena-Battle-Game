@@ -99,13 +99,6 @@ public class Game
 	 */
 	private Network myNetwork;
 	
-	
-
-	/*
-	 * Represents if the user of the system embodies the server or is just a client
-	 * Used 
-	 */
-	private boolean isServer;
 
 	private Communication communication;
 	/**
@@ -146,7 +139,7 @@ public class Game
 	 */
 	public Game(Player p)
 	{
-		this.mySpellPages = new ArrayList<SpellPage>();
+		Game.mySpellPages = new ArrayList<SpellPage>();
 		this.localPlayer = p;
 		//this.turnOrder = new ArrayList<Pawn>();
 		this.myNetwork = new Network();
@@ -179,7 +172,7 @@ public class Game
 			this.communication = new Server(Game.PORT, myNetwork);
 			this.communication.init();
 			this.isServer = true;
-			this.localPlayerTurn = true;
+			Game.localPlayerTurn = true;
 			this.endTurn = false;
 			
 			
@@ -190,7 +183,7 @@ public class Game
 		
 		case JOIN_GAME: // client TODO test send from client to server
 			this.isServer = false;
-			this.localPlayerTurn = false;
+			Game.localPlayerTurn = false;
 			this.endTurn = false;
 
 			this.communication = new Client(Game.PORT,Game.HOST_ADDRESS, myNetwork);
@@ -476,7 +469,6 @@ public void createSpellPageForTest() throws SpellIndexException
 	p1.setSpell(1,s2);
 	p1.setSpell(2,s3);
 	
-	//TODO DO A ADD SPELL PAGE IN GAME CLASS
 	//this.localPlayer.addSpellPage(p1);
 }
 

@@ -22,7 +22,6 @@ public class Board {
 	/**
 	 * These values are the default position of pawns at the start of the game
 	 * The first number is the player's number and the second is the pawn's number
-	 * TODO: move this in init() method
 	 */
 	public final static Coordinate BASE_POS_1PAWN1 = new Coordinate(2,0);
 	public final static Coordinate BASE_POS_1PAWN2 = new Coordinate(7,1);
@@ -168,8 +167,8 @@ public class Board {
 		if(pSpell.getCurrentCooldown() > 0)
 		{	
 			//The spell is on cooldown
-			//throw new SpellOnCooldownException();
-			System.out.println("Sort en CD");
+			throw new SpellOnCooldownException();
+			
 		}
 		else if(pSpell.getShape().getSpellCost() > Board.currentPawn.getActionPoints())
 		{
@@ -179,8 +178,7 @@ public class Board {
 		else if(pMovement.getDistance() > pSpell.getShape().getRange())
 		{
 			//The target is too far away
-			System.out.println("Out of range ");
-			//throw new SpellOutOfRangeException();
+			throw new SpellOutOfRangeException();
 		}
 		else
 		{
@@ -188,14 +186,12 @@ public class Board {
 			//Remove action points used
 			Board.currentPawn.setActionPoints(Board.currentPawn.getActionPoints() - pSpell.getShape().getSpellCost());
 			//Set the cooldown on the spell used
-			//TODO Exception if spell not found next TODO (review or check)
 			pSpell.resetCooldown();
 			int spellIndexInPage = -1;
 			for(int index=0;index < 3;index++)
 			{
 				if(pSpell.equals(Board.currentPawn.getSpellPage().getSpell(index)))
 					spellIndexInPage = index;	
-				//TODO review or check
 				else
 					throw new SpellNotFoundException(pSpell);
 			}

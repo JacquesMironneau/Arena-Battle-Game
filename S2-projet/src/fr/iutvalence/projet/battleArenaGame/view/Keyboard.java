@@ -1,4 +1,4 @@
-package fr.iutvalence.projet.battleArenaGame;
+package fr.iutvalence.projet.battleArenaGame.view;
 
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
