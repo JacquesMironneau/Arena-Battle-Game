@@ -162,7 +162,13 @@ public class Game
 		switch(localPlayer.askChoiceMenu())
 		{		
 		case CREATE_SPELL_PAGE:
-				createSpellPage();
+				//createSpellPage();
+			try {
+				this.createSpellPageForTest();
+			} catch (SpellIndexException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 			break;
 			
 		case HOST_GAME: // server
@@ -174,7 +180,7 @@ public class Game
 			this.endTurn = false;
 			
 			
-			this.board = new Board(this.communication);
+			this.board = new Board(this.communication,this.localPlayer);
 			//TODO insert champSelect
 			this.play();
 			break;
@@ -192,7 +198,9 @@ public class Game
 			this.play();
 			break;
 		case LOCAL_GAME:
-			//TODO this
+			this.pawnSelection();
+			this.play();
+			
 		default:
 			localPlayer.displayError();
 		}
