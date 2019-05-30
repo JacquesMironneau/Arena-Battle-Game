@@ -173,7 +173,7 @@ public class Game
 		switch(localPlayer.askChoiceMenu())
 		{
 		
-		case Choices.CREATE_SPELL_PAGE:
+		case CREATE_SPELL_PAGE:
 			try {
 				//createSpellPage();
 				localPlayer.askSpellPageCreation();
@@ -183,7 +183,7 @@ public class Game
 			}
 			break;
 			
-		case Choices.HOST_GAME: // server
+		case HOST_GAME: // server
 			//TODO review network
 			
 			this.communication = new Server(Game.PORT, myNetwork);
@@ -198,7 +198,7 @@ public class Game
 			this.play();
 			break;
 		
-		case Choices.JOIN_GAME: // client TODO test send from client to server
+		case JOIN_GAME: // client TODO test send from client to server
 			this.isServer = false;
 			this.localPlayerTurn = false;
 			this.endTurn = false;
@@ -365,7 +365,7 @@ public class Game
 	 */
 	private boolean endGame()
 	{
-		if(this.board.getWinTeam()==RUNNING)
+		if(this.board.getWinTeam()==EndStatus.RUNNING)
 			return false;
 		else
 		{	
