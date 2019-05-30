@@ -1,17 +1,17 @@
 package fr.iutvalence.projet.battleArenaGame;
 
+import java.util.ArrayList;
+
 import fr.iutvalence.projet.battleArenaGame.exceptions.SpellIndexException;
 import fr.iutvalence.projet.battleArenaGame.network.Client;
 import fr.iutvalence.projet.battleArenaGame.network.Communication;
 import fr.iutvalence.projet.battleArenaGame.network.Network;
 import fr.iutvalence.projet.battleArenaGame.network.Server;
-import fr.iutvalence.projet.battleArenaGame.pawn.Pawn;
 import fr.iutvalence.projet.battleArenaGame.pawn.PawnTeam;
 import fr.iutvalence.projet.battleArenaGame.shape.Shape;
 import fr.iutvalence.projet.battleArenaGame.spell.Spell;
 import fr.iutvalence.projet.battleArenaGame.spell.SpellEffect;
 import fr.iutvalence.projet.battleArenaGame.spell.SpellPage;
-import fr.iutvalence.projet.battleArenaGame.view.Choices;
 import fr.iutvalence.projet.battleArenaGame.view.Player;
 
 /**
@@ -112,7 +112,7 @@ public class Game
 	 * It is used to manage when a player can play.
 	 * If it's true the local player can play, else it can't. 
 	 */
-	private boolean localPlayerTurn;
+	private static boolean localPlayerTurn;
 
 	/**
 	 * True if player decide to stop his turn, false either
@@ -134,6 +134,10 @@ public class Game
 	 */
 	private Board board;
 	
+	/**
+	 * List of all spellPages of the player
+	 */
+	private static ArrayList<SpellPage> mySpellPages;
 	
 	/**
 	 * Constructor for Game
@@ -141,6 +145,7 @@ public class Game
 	 */
 	public Game(Player p)
 	{
+		this.mySpellPages = new ArrayList<SpellPage>();
 		this.localPlayer = p;
 		//this.turnOrder = new ArrayList<Pawn>();
 		this.myNetwork = new Network();
@@ -162,16 +167,9 @@ public class Game
 		 */
 			localPlayer.displayMenu();
 		switch(localPlayer.askChoiceMenu())
-		{
-		
+		{		
 		case CREATE_SPELL_PAGE:
-			try {
-				//createSpellPage();
-				localPlayer.askSpellPageCreation();
-			} catch (SpellIndexException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+				createSpellPage();
 			break;
 			
 		case HOST_GAME: // server
@@ -202,7 +200,8 @@ public class Game
 			//TODO Insert champ select
 			this.play();
 			break;
-			
+		case LOCAL_GAME:
+			//TODO this
 		default:
 			localPlayer.displayError();
 		}
@@ -338,7 +337,7 @@ public class Game
 	 * Getter for LocalPlayerTurn
 	 * @return
 	 */
-	public boolean getLocalPlayerTurn() {
+	public static boolean getLocalPlayerTurn() {
 		return localPlayerTurn;
 	}
 
@@ -346,8 +345,8 @@ public class Game
 	 * Setter for localPlayerTurn
 	 * @param localPlayerTurn
 	 */
-	public void setLocalPlayerTurn(boolean localPlayerTurn) {
-		this.localPlayerTurn = localPlayerTurn;
+	public void setLocalPlayerTurn(boolean pLocalPlayerTurn) {
+		Game.localPlayerTurn = pLocalPlayerTurn;
 	}
 
 	/**
@@ -422,6 +421,33 @@ public class Game
 	public String getClientMessage()
 	{
 		return this.clientMessage;
+	}
+	
+	public ArrayList<SpellPage> getSpellPages()
+	{
+		return Game.mySpellPages;
+	}
+	
+	/**
+	 * Creation of a spellPage using player HMI selection
+	 */
+	public void createSpellPage()
+	{
+		SpellPage pageToAdd = new SpellPage(this.localPlayer.askPageName());
+		boolean pageFinished = false;
+		while(!pageFinished)
+		{
+		Spell spellToAdd = new Spell();
+		this.localPlayer.displaySpellPageDetail(pageToAdd);
+		int indexToAdd = this.localPlayer.askSPellIndex() -1;
+		this.localPlayer.displayElementChoice();
+		spellToAdd.setSpellEffect(this.localPlayer.askSpellElement());
+		this.localPlayer.displayShapeChoice();
+		spellToAdd.setShape(this.localPlayer.askSPellShape(spellToAdd.getSpellEffect().getElementName()));
+		pageToAdd.setSpell(indexToAdd,spellToAdd);
+		if(pageToAdd.getSpell(0)!= null && pageToAdd.getSpell(1)!= null && pageToAdd.getSpell(2)!= null)
+			pageFinished = this.localPlayer.askValidation();
+		}
 	}
 
 /**
