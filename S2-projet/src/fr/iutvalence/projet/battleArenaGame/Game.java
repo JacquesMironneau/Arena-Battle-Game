@@ -228,7 +228,7 @@ public class Game
 	public void play()
 	{	
 		//TODO ??
-		this.synchronizePlayers();
+		this.pawnSelection();
 		
 		Board.setCurrentPawn(Board.getTurnOrder().get(0));
 
@@ -303,31 +303,18 @@ public class Game
 	 * It wait until both side have selected their pages for their pawn in order to start the game loop
 	 * Make the page selection for the client
 	 */
-	private void synchronizePlayers()
+	private void pawnSelection()
 	{
 		System.out.println("Syncrhonize");
-		if(!this.isServer)
+
+		while(true)
 		{
-			while(!SERVER_READY.equals(serverMessage))
+			if(Game.localPlayerTurn)
 			{
-				try {
-					Thread.sleep(1000);
-				} catch (InterruptedException e) {
-					e.printStackTrace();
-				}
-			}
-			this.selectPageForPawns(); //TODO Do this method in game (call method of player to display or ask)
-			this.communication.sendToOther(CLIENT_READY);
-		}
-		else
-		{
-			while(!CLIENT_READY.equals(clientMessage))
-			{
-				try {
-					Thread.sleep(1000);
-				} catch (InterruptedException e) {
-					e.printStackTrace();
-				}
+				this.localPlayer.askSpellPageCreation();
+				Game.localPlayerTurn = false;
+				this.communication.sendToOther(Board.getTurnOrder());
+				this.communication.sendToOther(Game.localPlayerTurn);
 			}
 		}
 		
