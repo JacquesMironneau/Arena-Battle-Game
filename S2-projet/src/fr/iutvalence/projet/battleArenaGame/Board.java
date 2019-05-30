@@ -2,6 +2,7 @@ package fr.iutvalence.projet.battleArenaGame;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+
 import fr.iutvalence.projet.battleArenaGame.exceptions.InvalidMoveException;
 import fr.iutvalence.projet.battleArenaGame.exceptions.NotEnoughPointsException;
 import fr.iutvalence.projet.battleArenaGame.exceptions.SpellIndexException;
@@ -10,6 +11,7 @@ import fr.iutvalence.projet.battleArenaGame.exceptions.SpellOnCooldownException;
 import fr.iutvalence.projet.battleArenaGame.exceptions.SpellOutOfRangeException;
 import fr.iutvalence.projet.battleArenaGame.move.Coordinate;
 import fr.iutvalence.projet.battleArenaGame.move.Movement;
+import fr.iutvalence.projet.battleArenaGame.network.Communication;
 import fr.iutvalence.projet.battleArenaGame.pawn.Pawn;
 import fr.iutvalence.projet.battleArenaGame.pawn.PawnEffect;
 import fr.iutvalence.projet.battleArenaGame.pawn.PawnTeam;
@@ -41,21 +43,28 @@ public class Board {
 	private static Pawn currentPawn;
 
 	/**
+	 * Type of communication
+	 */
+	private Communication communication;
+	
+	/**
 	 * Create the board including creation of pawns 
 	 */
-	public Board()
+	public Board(Communication pCommunication)
 	{
-		this.turnOrder = new ArrayList<Pawn>();
-		this.turnOrder.add(new Pawn(PawnTeam.PAWN_LOCAL, BASE_POS_1PAWN1 , null));
-		this.turnOrder.add(new Pawn(PawnTeam.PAWN_REMOTE, BASE_POS_2PAWN1 , null));
+		Board.turnOrder = new ArrayList<Pawn>();
+		Board.turnOrder.add(new Pawn(PawnTeam.PAWN_LOCAL, BASE_POS_1PAWN1 , null));
+		Board.turnOrder.add(new Pawn(PawnTeam.PAWN_REMOTE, BASE_POS_2PAWN1 , null));
 		
-		this.turnOrder.add(new Pawn(PawnTeam.PAWN_LOCAL, BASE_POS_1PAWN2 , null));
-		this.turnOrder.add(new Pawn(PawnTeam.PAWN_REMOTE, BASE_POS_2PAWN2 , null));
+		Board.turnOrder.add(new Pawn(PawnTeam.PAWN_LOCAL, BASE_POS_1PAWN2 , null));
+		Board.turnOrder.add(new Pawn(PawnTeam.PAWN_REMOTE, BASE_POS_2PAWN2 , null));
 		
-		this.turnOrder.add(new Pawn(PawnTeam.PAWN_LOCAL, BASE_POS_1PAWN3 , null));
-		this.turnOrder.add(new Pawn(PawnTeam.PAWN_REMOTE, BASE_POS_2PAWN3 , null));
+		Board.turnOrder.add(new Pawn(PawnTeam.PAWN_LOCAL, BASE_POS_1PAWN3 , null));
+		Board.turnOrder.add(new Pawn(PawnTeam.PAWN_REMOTE, BASE_POS_2PAWN3 , null));
 		
-		this.currentPawn = this.turnOrder.get(0);
+		Board.currentPawn = Board.turnOrder.get(0);
+		
+		this.communication = pCommunication;
 	}
 	
 	/**
@@ -68,28 +77,25 @@ public class Board {
 	public void checkMove(Movement pMovement) throws InvalidMoveException
 	{
 		//If the pawn has enough move points to move
-		if(this.currentPawn.getMovePoints() > pMovement.calculateDistance())
+		if(Board.currentPawn.getMovePoints() > pMovement.calculateDistance())
 		{
 			//Check if the coordinates of the pawn are free (in order to move, the case must be free and not occupated by another pawn)
-			for(int indexArrayList = 0; indexArrayList < this.turnOrder.size(); indexArrayList++)
+			for(int indexArrayList = 0; indexArrayList < Board.turnOrder.size(); indexArrayList++)
 			{
-				if(pMovement.getDestCordinate() == this.turnOrder.get(indexArrayList).getPos())
+				if(pMovement.getDestCordinate() == Board.turnOrder.get(indexArrayList).getPos())
 					throw new InvalidMoveException("Selected position is occupated");
 			}
 			
 			//Move the current pawn to coordinates
-			this.currentPawn.setPos(pMovement.getDestCordinate());
+			Board.currentPawn.setPos(pMovement.getDestCordinate());
 
+			//TODO may be useless
 			//Replace the pawn of the turnOrder (so the current one) by the currentPawn with moved coordinates)
-			this.turnOrder.set(this.turnOrder.indexOf(this.currentPawn), this.currentPawn);
+			Board.turnOrder.set(Board.turnOrder.indexOf(Board.currentPawn), Board.currentPawn);
 			
 			
 			//Send the turn order (need to create myServer and myClient (in Game consctructor and then in play method
-			if(this.isServer)
-				myServer.SendAll(this.turnOrder);
-				
-			else
-				myClient.Send(this.turnOrder);
+				this.communication.sendToOther(Board.turnOrder);
 				
 			//The movement is done
 //	TODO remove =>	return true;
@@ -107,31 +113,31 @@ public class Board {
 	 */
 	public void applyEffect() 
 	{
-		int index = this.turnOrder.indexOf(currentPawn);
+		int index = Board.turnOrder.indexOf(currentPawn);
 		
-		if(this.currentPawn.getEffect().isEmpty())
+		if(Board.currentPawn.getEffect().isEmpty())
 		{
 			System.out.println("Effet vide");
 			return;
 		}
-		for(PawnEffect eff : this.currentPawn.getEffect() )
+		for(PawnEffect eff : Board.currentPawn.getEffect() )
 		{
 			
 			
 			switch(eff.getEffectName())
 			{
 			case "Ignite":
-				this.currentPawn.setHealthPoints(this.currentPawn.getHealthPoints()-5);
+				Board.currentPawn.setHealthPoints(Board.currentPawn.getHealthPoints()-5);
 				break;
 			case "Slow":
-				this.currentPawn.setMovePoints(this.currentPawn.getMovePoints()-2);
+				Board.currentPawn.setMovePoints(Board.currentPawn.getMovePoints()-2);
 				break;
 			case "Silence":
-				this.currentPawn.setActionPoints(this.currentPawn.getActionPoints()-2);
+				Board.currentPawn.setActionPoints(Board.currentPawn.getActionPoints()-2);
 				break;
 			case "stun":
-				this.currentPawn.setMovePoints(this.currentPawn.getMovePoints()-1);
-				this.currentPawn.setActionPoints(this.currentPawn.getActionPoints()-1);
+				Board.currentPawn.setMovePoints(Board.currentPawn.getMovePoints()-1);
+				Board.currentPawn.setActionPoints(Board.currentPawn.getActionPoints()-1);
 				break;
 			case "Crit":
 				//TODO set effect
@@ -144,8 +150,8 @@ public class Board {
 		
 		}
 		
-		this.currentPawn.updateEffect();
-		this.turnOrder.set(index, currentPawn);
+		Board.currentPawn.updateEffect();
+		Board.turnOrder.set(index, currentPawn);
 		//replace current pawn by the right one in turnorder
 	}
 	
@@ -165,7 +171,7 @@ public class Board {
 			//throw new SpellOnCooldownException();
 			System.out.println("Sort en CD");
 		}
-		else if(pSpell.getShape().getSpellCost() > this.currentPawn.getActionPoints())
+		else if(pSpell.getShape().getSpellCost() > Board.currentPawn.getActionPoints())
 		{
 			//The spell cost is bigger than the pawn's action points
 			throw new NotEnoughPointsException();
@@ -180,21 +186,21 @@ public class Board {
 		{
 			//The spell is sent
 			//Remove action points used
-			this.currentPawn.setActionPoints(this.currentPawn.getActionPoints() - pSpell.getShape().getSpellCost());
+			Board.currentPawn.setActionPoints(Board.currentPawn.getActionPoints() - pSpell.getShape().getSpellCost());
 			//Set the cooldown on the spell used
 			//TODO Exception if spell not found next TODO (review or check)
 			pSpell.resetCooldown();
 			int spellIndexInPage = -1;
 			for(int index=0;index < 3;index++)
 			{
-				if(pSpell.equals(this.currentPawn.getSpellPage().getSpell(index)))
+				if(pSpell.equals(Board.currentPawn.getSpellPage().getSpell(index)))
 					spellIndexInPage = index;	
 				//TODO review or check
 				else
 					throw new SpellNotFoundException(pSpell);
 			}
 			
-			this.turnOrder.get(this.turnOrder.indexOf(currentPawn)).getSpellPage().getSpell(spellIndexInPage).resetCooldown();
+			Board.turnOrder.get(Board.turnOrder.indexOf(currentPawn)).getSpellPage().getSpell(spellIndexInPage).resetCooldown();
 			//Check on all case affected by the spell shape
 			ArrayList<Coordinate> effectedCoordinateList = new ArrayList<Coordinate>(Arrays.asList(pSpell.getShape().getEffectedCoordinates()));
 			for(int effectedIndex=0;effectedIndex <effectedCoordinateList.size();effectedIndex++)
@@ -204,12 +210,12 @@ public class Board {
 				if(this.getPawnOnCell(effectedCase)!= null)
 				{
 					Pawn pawnToAffect = this.getPawnOnCell(effectedCase);
-					int indexOfPawnToAffect = this.turnOrder.indexOf(pawnToAffect);
+					int indexOfPawnToAffect = Board.turnOrder.indexOf(pawnToAffect);
 					//Set the new HP on the affected Pawn
 					pawnToAffect.setHealthPoints(pawnToAffect.getHealthPoints()-pSpell.getShape().getDamage());
 					//Add the effect on the affectPawn
 					pawnToAffect.addEffect(new PawnEffect(pSpell.getSpellEffect()));
-					this.turnOrder.set(indexOfPawnToAffect, pawnToAffect);
+					Board.turnOrder.set(indexOfPawnToAffect, pawnToAffect);
 				}
 				
 			}
@@ -217,11 +223,7 @@ public class Board {
 			
 		}
 		
-		if(this.isServer)
-			myServer.SendAll(this.turnOrder);
-			
-		else
-			myClient.Send(this.turnOrder);
+		this.communication.sendToOther(Board.turnOrder);
 	}
 	
 	
@@ -232,16 +234,16 @@ public class Board {
 	 */
 	public void nextPawn() 
 	{
-		int nextPawnIndex = this.turnOrder.indexOf(currentPawn)+1;
+		int nextPawnIndex = Board.turnOrder.indexOf(currentPawn)+1;
 		
 		if(nextPawnIndex==turnOrder.size())
 			{
-				this.currentPawn = this.turnOrder.get(0);
+				Board.currentPawn = Board.turnOrder.get(0);
 
 			}
 		else
 			{
-				this.currentPawn = this.turnOrder.get(nextPawnIndex);
+				Board.currentPawn = Board.turnOrder.get(nextPawnIndex);
 			}
 	}
 	
@@ -253,10 +255,10 @@ public class Board {
 	 */
 	private Pawn getPawnOnCell(Coordinate pCoordinate)
 	{
-		for(int pawnIndex = 0; pawnIndex < this.turnOrder.size();pawnIndex++)
+		for(int pawnIndex = 0; pawnIndex < Board.turnOrder.size();pawnIndex++)
 		{
-			if(this.turnOrder.get(pawnIndex).getPos()==pCoordinate)
-				return this.turnOrder.get(pawnIndex);
+			if(Board.turnOrder.get(pawnIndex).getPos()==pCoordinate)
+				return Board.turnOrder.get(pawnIndex);
 		}
 		return null;
 	}
@@ -267,11 +269,11 @@ public class Board {
 	 */
 	private void removeDeads()
 	{
-		for(int pawnIndex = 0; pawnIndex >this.turnOrder.size();pawnIndex++)
+		for(int pawnIndex = 0; pawnIndex >Board.turnOrder.size();pawnIndex++)
 		{
-			if(this.turnOrder.get(pawnIndex).getHealthPoints()<=0)
+			if(Board.turnOrder.get(pawnIndex).getHealthPoints()<=0)
 			{
-				this.turnOrder.remove(pawnIndex);
+				Board.turnOrder.remove(pawnIndex);
 			}
 		}
 	}
