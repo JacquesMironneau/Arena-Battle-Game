@@ -158,11 +158,11 @@ public class Game
 	 * Constructor for Game
 	 * create the game, and call init to initialize the board.
 	 */
-	public Game()
+	public Game(Player p)
 	{
-		this.localPlayer = new Player(this);
-		this.turnOrder = new ArrayList<Pawn>();
-		this.myNetwork = new Network(this);
+		this.localPlayer = p;
+		//this.turnOrder = new ArrayList<Pawn>();
+		this.myNetwork = new Network();
 		//Server and client are created in play method if the player chose to create a game (create Server) or to join (create Client)
 	}
 	
@@ -186,7 +186,7 @@ public class Game
 		case Choices.CREATE_SPELL_PAGE:
 			try {
 				//createSpellPage();
-				localPlayer.askSPellPageCreation();
+				localPlayer.askSpellPageCreation();
 			} catch (SpellIndexException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -213,7 +213,7 @@ public class Game
 
 			
 			myClient = new Client(Game.PORT,Game.HOST_ADDRESS, myNetwork);
-			myClient.connect(); // Connect the client to the server
+			myClient.init(); // Connect the client to the server
 			
 			//TODO get board from server
 			//TODO Insert champ select
@@ -263,7 +263,7 @@ public class Game
 			if(this.localPlayerTurn)
 			{
 				//Update effects and PA &PM of pawn
-				this.localPlayer.setPawn(Board.getCurrentPawn());
+				//this.localPlayer.setPawn(Board.getCurrentPawn()); TODO FIX
 				Board.getCurrentPawn().setActionPoints(6);
 				Board.getCurrentPawn().setMovePoints(6);
 				//this.board.getTurnOrder().set(this.board.getTurnOrder().indexOf(this.board.getCurrentPawn()), this.board.getCurrentPawn());
@@ -294,15 +294,15 @@ public class Game
 
 							if(this.isServer)
 								{
-									myServer.SendAll(Board.getCurrentPawn());
-									myServer.SendAll(Board.getTurnOrder());
-									myServer.SendAll(this.localPlayerTurn);
+									myServer.sendToOther(Board.getCurrentPawn());
+									myServer.sendToOther(Board.getTurnOrder());
+									myServer.sendToOther(this.localPlayerTurn);
 								}
 							else
 								{
-									myClient.Send(Board.getCurrentPawn());
-									myClient.Send(Board.getTurnOrder());
-									myClient.Send(this.localPlayerTurn);
+									myClient.sendToOther(Board.getCurrentPawn());
+									myClient.sendToOther(Board.getTurnOrder());
+									myClient.sendToOther(this.localPlayerTurn);
 								}
 						}
 						/**else
@@ -342,8 +342,8 @@ public class Game
 					e.printStackTrace();
 				}
 			}
-			this.selectPageForPawns();
-			myClient.Send(CLIENT_READY);
+			this.selectPageForPawns(); //TODO Do this method in game (call method of player to display or ask)
+			myClient.sendToOther(CLIENT_READY);
 		}
 		else
 		{
@@ -399,9 +399,9 @@ public class Game
 				System.out.println(Game.DRAW);
 				
 				if(this.isServer)
-					myServer.SendAll(Game.DRAW);
+					myServer.sendToOther(Game.DRAW);
 				else
-					myClient.Send(Game.DRAW);
+					myClient.sendToOther(Game.DRAW);
 			}
 
 			else if(alivePawnsPlayerServer == 0)
@@ -415,7 +415,7 @@ public class Game
 				//to the current user
 				if(this.isServer)
 				{
-					myServer.SendAll(Game.VICTORY);
+					myServer.sendToOther(Game.VICTORY);
 					System.out.println("You loose :c ");
 				}
 				
@@ -423,7 +423,7 @@ public class Game
 				//to the current user
 				else
 				{
-						myClient.Send(Game.DEFEAT);
+						myClient.sendToOther(Game.DEFEAT);
 						System.out.println("You win !");
 				}
 			}
@@ -439,7 +439,7 @@ public class Game
 				 */
 				if(this.isServer)
 				{
-					myServer.SendAll(Game.DEFEAT);
+					myServer.sendToOther(Game.DEFEAT);
 					System.out.println("You win ");
 				}
 				/*
@@ -448,7 +448,7 @@ public class Game
 				*/
 				else
 				{
-					myClient.Send(Game.VICTORY);
+					myClient.sendToOther(Game.VICTORY);
 					System.out.println("You loose :c");
 				}
 			}
@@ -470,16 +470,16 @@ public class Game
 	}
 	
 	
-	/**
-	 * Display all pages of the player with an index
-	 */
-	private void displaySpellPages()
-	{
-		for(int pageIndex=0;pageIndex < this.localPlayer.getPlayerPage().size();pageIndex++)
-		{
-			System.out.println(pageIndex + ":" + this.localPlayer.getPlayerPage().get(pageIndex));
-		}
-	}
+//	/**TODO REMOVE 
+//	 * Display all pages of the player with an index
+//	 */
+//	private void displaySpellPages()
+//	{
+//		for(int pageIndex=0;pageIndex < this.localPlayer.getPlayerPage().size();pageIndex++)
+//		{
+//			System.out.println(pageIndex + ":" + this.localPlayer.getPlayerPage().get(pageIndex));
+//		}
+//	}
 
 	
 	/**
@@ -542,8 +542,8 @@ public void createSpellPageForTest() throws SpellIndexException
 	p1.setSpell(1,s2);
 	p1.setSpell(2,s3);
 	
-	
-	this.localPlayer.addSpellPage(p1);
+	//TODO DO A ADD SPELL PAGE IN GAME CLASS
+	//this.localPlayer.addSpellPage(p1);
 }
 
 }

@@ -1,15 +1,8 @@
 package fr.iutvalence.projet.battleArenaGame.view;
 
-import java.util.ArrayList;
-
-import fr.iutvalence.projet.battleArenaGame.Game;
-import fr.iutvalence.projet.battleArenaGame.exceptions.InvalidMoveException;
 import fr.iutvalence.projet.battleArenaGame.exceptions.SpellNotFoundException;
 import fr.iutvalence.projet.battleArenaGame.move.Coordinate;
-import fr.iutvalence.projet.battleArenaGame.move.Movement;
-import fr.iutvalence.projet.battleArenaGame.pawn.Pawn;
 import fr.iutvalence.projet.battleArenaGame.spell.Spell;
-import fr.iutvalence.projet.battleArenaGame.spell.SpellPage;
 
 public interface Player {
 
@@ -52,13 +45,17 @@ public interface Player {
 	
 	public void displaySpellPage();
 	
-	public Choices askChoicesMenu();
+	public Choices askChoiceMenu();
 	
-	public void dispalyChoiceMenu();
+	public void displayChoiceMenu();
+	
+	public void displayChoiceAction();
 	
 	public void selectPageForPawns();
 
-	public Choices askActionChoices();
+	public Choices askActionChoice();
 	
 	public void displayEnd();
+	
+	public void askSpellPageCreation();
 }
