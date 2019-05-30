@@ -34,38 +34,46 @@ public class Network {
 		
 		if(transferedObject.getClass() == ArrayList.class)
 		{
-			//TODO remove debug
-			System.out.println(Board.getTurnOrder().size());
 			
-			//Unsafe but works actually
-			@SuppressWarnings("unchecked")
-			ArrayList<Pawn> ModifiedArrayListOfPawns = (ArrayList<Pawn>) transferedObject;
-			System.out.println("[NETWORK]Modification de turnOrder en cours");
-			for(Pawn p: ModifiedArrayListOfPawns)
+			for(Object o: (ArrayList<?>)transferedObject) // TODO TEST this
 			{
-				if(p.getTeam() == PawnTeam.PAWN_LOCAL)
+				if(o instanceof Pawn)
+				{
+					//TODO remove debug
+					System.out.println(Board.getTurnOrder().size());
+					
+					//Unsafe but works actually
+					@SuppressWarnings("unchecked")
+					ArrayList<Pawn> ModifiedArrayListOfPawns = (ArrayList<Pawn>) transferedObject;
+					System.out.println("[NETWORK]Modification de turnOrder en cours");
+					for(Pawn p: ModifiedArrayListOfPawns)
 					{
-						System.out.println(p.getTeam());
-						p.setTeam(PawnTeam.PAWN_REMOTE);
-						System.out.println("[NETWORK]Nouveau: " + p.getTeam());
+						if(p.getTeam() == PawnTeam.PAWN_LOCAL)
+							{
+								System.out.println(p.getTeam());
+								p.setTeam(PawnTeam.PAWN_REMOTE);
+								System.out.println("[NETWORK]Nouveau: " + p.getTeam());
+							}
+						else
+							{	
+								System.out.println(p.getTeam());
+								p.setTeam(PawnTeam.PAWN_LOCAL);
+								System.out.println("[NETWORK]Nouveau: " + p.getTeam());
+							}
 					}
-				else
-					{	
-						System.out.println(p.getTeam());
-						p.setTeam(PawnTeam.PAWN_LOCAL);
-						System.out.println("[NETWORK]Nouveau: " + p.getTeam());
-					}
+					//For each pawn of the arrayList, it does print it (DEBUG ONLY: TODO: REMOVE THESES 3LINES)
+					
+					for(Pawn PawnIndexInTheArrayList : ModifiedArrayListOfPawns)
+						System.out.println(PawnIndexInTheArrayList);
+					
+					
+					//Edit the array list of the current game
+					Board.setTurnOrder(ModifiedArrayListOfPawns);
+					
+					/*System.out.println("After" + this.myGame.getTurnOrder().size());*/
+				}
 			}
-			//For each pawn of the arrayList, it does print it (DEBUG ONLY: TODO: REMOVE THESES 3LINES)
-			
-			for(Pawn PawnIndexInTheArrayList : ModifiedArrayListOfPawns)
-				System.out.println(PawnIndexInTheArrayList);
-			
-			
-			//Edit the array list of the current game
-			Board.setTurnOrder(ModifiedArrayListOfPawns);
-			
-			/*System.out.println("After" + this.myGame.getTurnOrder().size());*/
+		
 
 		}
 		else if(transferedObject.getClass() == Boolean.class) // This is used in order to manage turn in network
@@ -94,7 +102,7 @@ public class Network {
 				 * For now we only display who win
 				 */
 				else {
-					System.out.println("[NETWORK] end game message: " + transferedObject);
+					System.out.println("[NETWORK] end game message: " + transferedObject); //TODO REWORK THIS
 				}
 				
 			}
