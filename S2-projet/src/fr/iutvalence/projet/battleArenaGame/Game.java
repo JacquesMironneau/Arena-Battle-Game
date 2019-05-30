@@ -7,6 +7,7 @@ import fr.iutvalence.projet.battleArenaGame.network.Client;
 import fr.iutvalence.projet.battleArenaGame.network.Communication;
 import fr.iutvalence.projet.battleArenaGame.network.Network;
 import fr.iutvalence.projet.battleArenaGame.network.Server;
+import fr.iutvalence.projet.battleArenaGame.pawn.Pawn;
 import fr.iutvalence.projet.battleArenaGame.pawn.PawnTeam;
 import fr.iutvalence.projet.battleArenaGame.shape.Shape;
 import fr.iutvalence.projet.battleArenaGame.spell.Spell;
@@ -98,13 +99,6 @@ public class Game
 	 */
 	private Network myNetwork;
 	
-	
-
-	/*
-	 * Represents if the user of the system embodies the server or is just a client
-	 * Used 
-	 */
-	private boolean isServer;
 
 	private Communication communication;
 	/**
@@ -145,7 +139,7 @@ public class Game
 	 */
 	public Game(Player p)
 	{
-		this.mySpellPages = new ArrayList<SpellPage>();
+		Game.mySpellPages = new ArrayList<SpellPage>();
 		this.localPlayer = p;
 		//this.turnOrder = new ArrayList<Pawn>();
 		this.myNetwork = new Network();
@@ -165,7 +159,6 @@ public class Game
 		/*
 		 * For now, this represent the menu of the game
 		 */
-			localPlayer.displayMenu();
 		switch(localPlayer.askChoiceMenu())
 		{		
 		case CREATE_SPELL_PAGE:
@@ -177,8 +170,7 @@ public class Game
 			
 			this.communication = new Server(Game.PORT, myNetwork);
 			this.communication.init();
-			this.isServer = true;
-			this.localPlayerTurn = true;
+			Game.localPlayerTurn = true;
 			this.endTurn = false;
 			
 			
@@ -188,8 +180,7 @@ public class Game
 			break;
 		
 		case JOIN_GAME: // client TODO test send from client to server
-			this.isServer = false;
-			this.localPlayerTurn = false;
+			Game.localPlayerTurn = false;
 			this.endTurn = false;
 
 			this.communication = new Client(Game.PORT,Game.HOST_ADDRESS, myNetwork);
@@ -234,7 +225,7 @@ public class Game
 
 		while(!endGame()) // replace by boolean / or method to know if game is finished
 		{
-			System.out.println("Waiting for client-kun.." + this.localPlayerTurn);
+			System.out.println("Waiting for client-kun.." + Game.localPlayerTurn);
 			try {
 				Thread.sleep(1000);
 
@@ -242,7 +233,7 @@ public class Game
 			{
 				
 			}
-			if(this.localPlayerTurn)
+			if(Game.localPlayerTurn)
 			{
 				//Update effects and PA &PM of pawn
 				//this.localPlayer.setPawn(Board.getCurrentPawn()); TODO FIX
@@ -254,16 +245,15 @@ public class Game
 				
 				while(!this.endTurn)
 				{
-					this.localPlayer.displayChoiceAction();
-					
+										
 					switch(this.localPlayer.askActionChoice())
 					{
 					case LAUNCH_SPELL:
-						localPlayer.askSpell();
+						this.board.checkSpell(localPlayer.askSpell(),localPlayer.askMove());
 						break;
 						
 					case MOVE:
-						this.localPlayer.askMove();
+						this.board.checkMove(this.localPlayer.askMove());
 						break;
 						
 					case END_TURN:
@@ -271,11 +261,11 @@ public class Game
 						if(Board.getCurrentPawn().getTeam() == PawnTeam.PAWN_REMOTE)
 						{
 							this.endTurn = true; //  set it to true somewhere
-							this.localPlayerTurn = false; // this one is set to true in the network class
+							Game.localPlayerTurn = false; // this one is set to true in the network class
 
 							this.communication.sendToOther(Board.getCurrentPawn());
 							this.communication.sendToOther(Board.getTurnOrder());
-							this.communication.sendToOther(this.localPlayerTurn);
+							this.communication.sendToOther(Game.localPlayerTurn);
 								
 		
 						}
@@ -311,10 +301,11 @@ public class Game
 		{
 			if(Game.localPlayerTurn)
 			{
-				this.localPlayer.askSpellPageCreation();
+				this.pageSelection();
 				Game.localPlayerTurn = false;
 				this.communication.sendToOther(Board.getTurnOrder());
 				this.communication.sendToOther(Game.localPlayerTurn);
+				break;
 			}
 		}
 		
@@ -410,7 +401,7 @@ public class Game
 		return this.clientMessage;
 	}
 	
-	public ArrayList<SpellPage> getSpellPages()
+	public static ArrayList<SpellPage> getSpellPages()
 	{
 		return Game.mySpellPages;
 	}
@@ -426,17 +417,29 @@ public class Game
 		{
 		Spell spellToAdd = new Spell();
 		this.localPlayer.displaySpellPageDetail(pageToAdd);
-		int indexToAdd = this.localPlayer.askSPellIndex() -1;
+		int indexToAdd = this.localPlayer.askSpellIndex() -1;
 		this.localPlayer.displayElementChoice();
 		spellToAdd.setSpellEffect(this.localPlayer.askSpellElement());
 		this.localPlayer.displayShapeChoice();
-		spellToAdd.setShape(this.localPlayer.askSPellShape(spellToAdd.getSpellEffect().getElementName()));
+		spellToAdd.setShape(this.localPlayer.askSpellShape(spellToAdd.getSpellEffect().getElementName()));
 		pageToAdd.setSpell(indexToAdd,spellToAdd);
 		if(pageToAdd.getSpell(0)!= null && pageToAdd.getSpell(1)!= null && pageToAdd.getSpell(2)!= null)
 			pageFinished = this.localPlayer.askValidation();
 		}
 	}
-
+	
+	public void pageSelection()
+	{
+		for(Pawn p : Board.getTurnOrder())
+		{
+			if(p.getTeam() ==PawnTeam.PAWN_LOCAL)
+				{	
+				this.localPlayer.displaySpellPage();
+				p.setSpellPage(new SpellPage(this.localPlayer.askSpellPageSelection()));
+				}
+			}
+	}
+	
 /**
  * Used for test
  * Create a spell page with 3 spells
@@ -461,7 +464,6 @@ public void createSpellPageForTest() throws SpellIndexException
 	p1.setSpell(1,s2);
 	p1.setSpell(2,s3);
 	
-	//TODO DO A ADD SPELL PAGE IN GAME CLASS
 	//this.localPlayer.addSpellPage(p1);
 }
 

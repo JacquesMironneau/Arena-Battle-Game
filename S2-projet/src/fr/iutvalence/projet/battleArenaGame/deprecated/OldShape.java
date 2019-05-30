@@ -13,7 +13,7 @@ import fr.iutvalence.projet.battleArenaGame.move.Coordinate;
 
 
 /**
- * TODO ENUM OF SHAPES
+ * 
  *
  */
 public class OldShape implements Serializable{

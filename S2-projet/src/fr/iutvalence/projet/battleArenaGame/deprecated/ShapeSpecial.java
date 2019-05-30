@@ -5,9 +5,7 @@ import java.util.ArrayList;
 
 import fr.iutvalence.projet.battleArenaGame.move.Coordinate;
 
-/**
- * TODO ERASE THIS CLASS AND IMPLEMENT IT IN THE SHAPE ENUM
- */
+
 /**
  * DEPRECATED
  * @author durantho

@@ -41,6 +41,12 @@ public class SpellPage implements Serializable{
 		this.spells[2] = new Spell();
 	}
 	
+	public SpellPage(SpellPage pCopiedPage)
+	{
+		this.pageName = pCopiedPage.pageName;
+		this.spells = pCopiedPage.getSpell();
+	}
+	
 	/**
 	 * Getter for the page name
 	 * @return pageName the name off the page.

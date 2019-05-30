@@ -11,7 +11,7 @@ import fr.iutvalence.projet.battleArenaGame.move.Movement;
 import fr.iutvalence.projet.battleArenaGame.pawn.Pawn;
 import fr.iutvalence.projet.battleArenaGame.spell.Spell;
 import fr.iutvalence.projet.battleArenaGame.spell.SpellPage;
-//TODO THIS IS IHM
+// THIS IS IHM
 /*REMINDER:
  * 
  * Player : -> enlever les attributs (currentPawn est useless)
