@@ -2,6 +2,7 @@ package fr.iutvalence.projet.battleArenaGame.network;
 
 import java.util.ArrayList;
 
+import fr.iutvalence.projet.battleArenaGame.Board;
 import fr.iutvalence.projet.battleArenaGame.Game;
 import fr.iutvalence.projet.battleArenaGame.exceptions.NetworkUnknownTypeException;
 import fr.iutvalence.projet.battleArenaGame.pawn.Pawn;
@@ -109,7 +110,7 @@ public class Network {
 		
 		else if(transferedObject.getClass() == Pawn.class)
 		{
-			Game.setCurrentPawn((Pawn) transferedObject);
+			Board.setCurrentPawn((Pawn) transferedObject);
 			System.out.println("[NETWORK] a pawn is sended");
 		}
 		else throw new NetworkUnknownTypeException(transferedObject); //If the type of the sended object is not a boolean or an arrayList
