@@ -116,12 +116,12 @@ public class Game
 	/**
 	 * Message send by the client, used to synchronize
 	 */
-	private String clientMessage;
+	private static String clientMessage;
 	
 	/**
 	 * Message send by the server, used to synchronize 
 	 */
-	private String serverMessage;
+	private static String serverMessage;
 	
 	/**
 	 * Board of the game
@@ -333,7 +333,7 @@ public class Game
 	 * Setter for localPlayerTurn
 	 * @param localPlayerTurn
 	 */
-	public void setLocalPlayerTurn(boolean pLocalPlayerTurn) {
+	public static void setLocalPlayerTurn(boolean pLocalPlayerTurn) {
 		Game.localPlayerTurn = pLocalPlayerTurn;
 	}
 
@@ -379,9 +379,9 @@ public class Game
 	 * Setter for ServerMessage
 	 * @param pMessage : message received
 	 */
-	public void setServerMessage(String pMessage)
+	public static void setServerMessage(String pMessage)
 	{
-		this.serverMessage = pMessage;
+		serverMessage = pMessage;
 	}
 	
 	/**
@@ -397,9 +397,9 @@ public class Game
 	 * Getter for clientMessage
 	 * @param pMessage : message received
 	 */
-	public void setClientMessage(String pMessage)
+	public static void setClientMessage(String pMessage)
 	{
-		this.clientMessage = pMessage;
+		clientMessage = pMessage;
 	}
 	
 	/**
