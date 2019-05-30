@@ -134,7 +134,7 @@ public class Server implements Communication
      * @param pSocket socket of the client
      * @param pInput ObjectInputStream of the client
      */
-    public void receive(Socket pSocket, ObjectInputStream pInput)
+    private void receive(Socket pSocket, ObjectInputStream pInput)
     {
 
         while(socketClient.isConnected())

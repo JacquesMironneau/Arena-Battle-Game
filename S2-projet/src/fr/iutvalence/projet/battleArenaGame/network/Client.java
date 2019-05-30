@@ -92,7 +92,7 @@ public class Client implements Communication
     /**
      * Listen to the server and readObject in the inputStream 
      */
-	public void receive()
+	private void receive()
     {
 
         while(socket.isConnected()){
