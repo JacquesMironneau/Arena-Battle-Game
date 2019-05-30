@@ -43,8 +43,8 @@ public class CheapScanner {
 	 * @throws NumberFormatException
 	 * @throws IOException
 	 */
-	public Object getInt(){
-		Object result = null;
+	public int getInt(){
+		int result = 0;
 		try {
 			result = Integer.valueOf(this.in.readLine());
 		}
