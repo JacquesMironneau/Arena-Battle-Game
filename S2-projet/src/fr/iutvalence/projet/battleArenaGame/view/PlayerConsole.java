@@ -127,8 +127,9 @@ public class PlayerConsole implements Player{
 		int mychoice;
 		
 		do {
-		mychoice = (Integer)scan.getInt();
+		
 		System.out.println("faite votre choix");
+		mychoice = (Integer)scan.getInt();
 		switch (mychoice) {
 		
 		case 1:
@@ -162,8 +163,8 @@ public class PlayerConsole implements Player{
 		CheapScanner scan = new CheapScanner();
 		int mychoice;
 		do {
-		mychoice= (Integer)scan.getInt();
 		System.out.println("faite votre choix");
+		mychoice= (Integer)scan.getInt();
 		
 		switch(mychoice)
 		{
@@ -190,8 +191,8 @@ public class PlayerConsole implements Player{
 	@Override
 	public String askPageName() {
 		CheapScanner scan = new CheapScanner();
-		String myName = scan.getStr();
 		System.out.println("entrez le nom de votre page");
+		String myName = scan.getStr();
 		return myName;
 	}
 
