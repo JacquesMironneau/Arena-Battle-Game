@@ -248,34 +248,33 @@ public class PlayerConsole implements Player{
 		String choose;
 		do
 		{
+		System.out.println("Choisiser la forme du sort a creer");
 		choose = scan.getStr();
 		switch(choose)
 		{
-		case "fist":
+		case "Fist":
 			return Shape.Fist;
-		case "ball":
+		case "Ball":
 			return Shape.Ball;
-		case "sword":
+		case "Sword":
 			return Shape.Sword;
-		case "special":
+		case "Special":
 			switch(eff.getEffectName())
 			{
 			case "Fire": 
-				return Shape.Cross;
 			case "Wind":
 				return Shape.Cross;
 			case "Ice":
-				return Shape.Beam;
 			case "Electricity":
 				return Shape.Beam;
 			case "Stone":
-				return Shape.Square;
 			case "Darkness":
-				return Shape.Square;
+				return Shape.Square;		
+			default:
+				
 			}
-			
-		default:
-			choose = null;
+			default:
+				choose=null;
 		}
 	}while(choose==null);
 	return null;}
@@ -370,9 +369,13 @@ public class PlayerConsole implements Player{
 
 	@Override
 	public void displaySpellPageDetail(SpellPage pPage) {
-		System.out.println("Cooldown max "+ pPage.getSpell(0).getDefaultCooldown()+" shape "+pPage.getSpell(0).getShape()+" element "+pPage.getSpell(0).getSpellEffect());
-		System.out.println("Cooldown max "+ pPage.getSpell(1).getDefaultCooldown()+" shape "+pPage.getSpell(1).getShape()+" element "+pPage.getSpell(1).getSpellEffect());
-		System.out.println("Cooldown max "+ pPage.getSpell(2).getDefaultCooldown()+" shape "+pPage.getSpell(2).getShape()+" element "+pPage.getSpell(2).getSpellEffect());
+		for(int spellIndex =0;spellIndex<3;spellIndex++)
+		{
+			if(pPage.getSpell(spellIndex)!=null)
+				System.out.println(spellIndex+1 +" ) Cooldown max "+ pPage.getSpell(spellIndex).getDefaultCooldown()+" shape "+pPage.getSpell(spellIndex).getShape()+" element "+pPage.getSpell(spellIndex).getSpellEffect());
+			else
+				System.out.println(spellIndex+1 +")\n");
+		}
 	}
 
 

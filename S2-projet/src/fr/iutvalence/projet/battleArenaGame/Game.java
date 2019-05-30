@@ -414,17 +414,28 @@ public class Game
 	public void createSpellPage()
 	{
 		SpellPage pageToAdd = new SpellPage(this.localPlayer.askPageName());
+		try {
+			pageToAdd.setSpell(0,null);
+			pageToAdd.setSpell(1,null);
+			pageToAdd.setSpell(2,null);
+		} catch (SpellIndexException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
 		boolean pageFinished = false;
 		while(!pageFinished)
 		{
 		Spell spellToAdd = new Spell();
 		this.localPlayer.displaySpellPageDetail(pageToAdd);
 		int indexToAdd = this.localPlayer.askSpellIndex() -1;
-		this.localPlayer.displayElementChoice();
 		spellToAdd.setSpellEffect(this.localPlayer.askSpellElement());
-		this.localPlayer.displayShapeChoice();
-		spellToAdd.setShape(this.localPlayer.askSpellShape(spellToAdd.getSpellEffect().getElementName()));
-		pageToAdd.setSpell(indexToAdd,spellToAdd);
+		spellToAdd.setShape(this.localPlayer.askSpellShape(spellToAdd.getSpellEffect()));
+		try {
+			pageToAdd.setSpell(indexToAdd,spellToAdd);
+		} catch (SpellIndexException e) {
+			System.out.println("C'est mort");
+			e.printStackTrace();
+		}
 		if(pageToAdd.getSpell(0)!= null && pageToAdd.getSpell(1)!= null && pageToAdd.getSpell(2)!= null)
 			pageFinished = this.localPlayer.askValidation();
 		}
