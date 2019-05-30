@@ -99,16 +99,7 @@ public class Game
 	private Network myNetwork;
 	
 	
-	/**
-	 * If the user chose to join a game, he will be a Client in the network system.
-	 */
-	private Client myClient;
-	
-	/**
-	 * If the user chose to join a game, he will be represented as the Server in the network system.
-	 */
-	private Server myServer;
-	
+
 	/*
 	 * Represents if the user of the system embodies the server or is just a client
 	 * Used 
@@ -268,15 +259,15 @@ public class Game
 					
 					switch(this.localPlayer.askActionChoice())
 					{
-					case Choices.LAUNCH_SPELL:
+					case LAUNCH_SPELL:
 						localPlayer.askSpell();
 						break;
 						
-					case Choices.MOVE:
+					case MOVE:
 						this.localPlayer.askMove();
 						break;
 						
-					case Choices.END_TURN:
+					case END_TURN:
 						this.board.nextPawn();			
 						if(Board.getCurrentPawn().getTeam() == PawnTeam.PAWN_REMOTE)
 						{
