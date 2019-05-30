@@ -1,25 +1,31 @@
 package fr.iutvalence.projet.battleArenaGame.view;
 
+import fr.iutvalence.projet.battleArenaGame.EndStatus;
 import fr.iutvalence.projet.battleArenaGame.exceptions.SpellIndexException;
 import fr.iutvalence.projet.battleArenaGame.exceptions.SpellNotFoundException;
 import fr.iutvalence.projet.battleArenaGame.move.Coordinate;
+import fr.iutvalence.projet.battleArenaGame.move.Movement;
 import fr.iutvalence.projet.battleArenaGame.shape.Shape;
 import fr.iutvalence.projet.battleArenaGame.spell.Spell;
+import fr.iutvalence.projet.battleArenaGame.spell.SpellEffect;
+import fr.iutvalence.projet.battleArenaGame.spell.SpellPage;
 
 public interface Player {
 
 	
 	/**
 	 * Ask to the system to move a pawn to a wanted destination.
+	 * @return 
 	 * 
 	 */
-	public void askMove();
+	public Movement askMove();
 	
 	/**
 	 * Ask to the system to cast a spell to a wanted position.
+	 * @return 
 	 * @throws SpellNotFoundException in case of the pawn doesn't own the asked spell
 	 */
-	public void askSpell();
+	public Spell askSpell();
 
 	/**
 	 * ask to the system make an action
@@ -28,18 +34,7 @@ public interface Player {
 	public Choices askActionChoice();
 	
 	public Choices askChoiceMenu();
-	
-	/**
-	 * ask to the system to make an new spell page
-	 * @throws SpellIndexException 
-	 */
-	public void askSpellPageCreation() throws SpellIndexException;
-	
-	/**
-	 * display the board
-	 */
-	public void display();
-	
+
 	/**
 	 * display the menu 
 	 */
@@ -51,7 +46,7 @@ public interface Player {
 	
 	public void displayChoiceAction();
 	
-	public void selectPageForPawns();
+	public SpellPage askSpellPageSelection();
 	
 	public void displayEnd(EndStatus Pstat);
 	
@@ -59,9 +54,9 @@ public interface Player {
 	
 	public int askSpellIndex();
 	
-	public String askSpellElement();
+	public SpellEffect askSpellElement();
 	
-	public Shape askSpellShape();
+	public Shape askSpellShape(SpellEffect eff);
 	
 	public boolean askValidation();
 	
@@ -71,7 +66,7 @@ public interface Player {
 	
 	public void displaySpellInCooldown(Spell pSpell);
 	
-	public void displaySpellOutOfRange();
+	public void displaySpellOutOfRange(Spell pSpell);
 	
 	public void displayNotEnoughActionPoints();
 	
@@ -79,5 +74,9 @@ public interface Player {
 	
 	public void displayNextTurn();
 	
+	public void displayNotEnoughMovePoints();
+	
+	public void displayMoveDone();
 
+	public void displaySpellPageDetail(SpellPage pPage); //affiche le detail d'une page (index : element, forme ...)
 }

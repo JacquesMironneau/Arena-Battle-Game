@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.Scanner;
 
 import fr.iutvalence.projet.battleArenaGame.Board;
+import fr.iutvalence.projet.battleArenaGame.EndStatus;
 import fr.iutvalence.projet.battleArenaGame.Game;
 import fr.iutvalence.projet.battleArenaGame.exceptions.InvalidMoveException;
 import fr.iutvalence.projet.battleArenaGame.exceptions.SpellIndexException;
@@ -27,263 +28,71 @@ public class PlayerConsole implements Player{
 	
 	
 	@Override
-	public void askMove() {
-		
+	public Movement askMove() {
+		this.displayboard();
 		CheapScanner scan = new CheapScanner();
 		
 		int xCoord = (Integer)scan.getInt();
-		System.out.println("entrez la coordoné X de la destination de votre sort");
+		System.out.println("entrez la coordoné X de la destination");
 		
 		int yCoord = (Integer)scan.getInt();
-		System.out.println("entre la coordonné Y de la destination de votre sort");
+		System.out.println("entre la coordonné Y de la destination");
 		
 		Coordinate vDest = new Coordinate(xCoord,yCoord);
 		
 		/*
 		 * Create a movement with the coordinates of the currentPawn and the Destination (coordinate) chosen by the player
 		 */
-		Movement mov = new Movement(Board.getCurrentPawn().getPos(), vDest);
-		 // Try the move chosen by the player
-		try {
-			Board.checkMove(mov);
-		} catch (InvalidMoveException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		return new Movement(Board.getCurrentPawn().getPos(), vDest);
+		 
+		
 		
 	}
 
 	@Override
-	public void askSpell() {
+	public Spell askSpell() {
 		/*
 		 * Create a movement with the coordinates of the currentPawn and the Destination (coordinate) chosen by the player
 		 */
-		
-		this.displaySpellPage();
+		this.displayBoard();
+		this.displaySpellPageDetail(Board.getCurrentPawn().getSpellPage());
 		CheapScanner scan = new CheapScanner();
 		int index = (Integer)scan.getInt();
 		System.out.println("entrez l'index du sort a lancer (1 ou 2 ou 3");
 
-		int xCoord = (Integer)scan.getInt();
-		System.out.println("entrez la coordoné X de la destination de votre sort");
-		
-		int yCoord = (Integer)scan.getInt();
-		System.out.println("entre la coordonné Y de la destination de votre sort");
-		
-		Coordinate vDest = new Coordinate(xCoord,yCoord);
-		Spell vSpell = Board.getCurrentPawn().getSpellPage().getSpell(index);
-		
-		
-		Movement mov = new Movement(Board.getCurrentPawn().getPos(), vDest);
-		 // Try to launch the spell to 
-		try {
-			Board.checkSpell(vSpell, mov);
-		}
-		catch(Exception e) 
-		{
-			e.printStackTrace();
-		}
-		
+		return Board.getCurrentPawn().getSpellPage().getSpell(index);
+			
 	}
 	
-	/** TODO
-	 * Create a spell page, including the creation of his 3 spells and add
-	 * it to the player spellPage list
-	 * WORK IN PROGRESS
-	 * @throws SpellIndexException 
-	 */
-	@Override
-	public void askSpellPageCreation() throws SpellIndexException
-	{
-		//Creation of a spellPage
-		Scanner scan = new Scanner(System.in);
-		
-		System.out.println("Entrer le nom de la page de sort");
-		String pageName = scan.nextLine();
-		SpellPage pageToAdd = new SpellPage(pageName);
-		for(int index=0;index<pageToAdd.getSpell().length;index++)
-		{
-			pageToAdd.setSpell(index, null);	
-		}
-		
-		boolean pageFinished = false;
-		
-		while(!pageFinished)
-		{
-			Spell createdSpell = new Spell();
-			String elementName;
-			String shapeName;
-			int spellIndexToCreate;
-			do
-			{
-				System.out.println("Choisir l'index du sort a creer");
-				spellIndexToCreate = scan.nextInt();
-				if(spellIndexToCreate<1 || spellIndexToCreate > 3)
-					spellIndexToCreate = 0;			
-			}while(spellIndexToCreate == 0);
-			
-			do
-			{
-				System.out.println("Choisiser l'element du sort a creer");
-				elementName = scan.next();
-				
-				switch(elementName)
-				{
-				case "Fire":
-					createdSpell.setSpellEffect(SpellEffect.Fire);
-					break;
-				case "Ice":
-					createdSpell.setSpellEffect(SpellEffect.Ice);
-					break;
-				case "Stone":
-					createdSpell.setSpellEffect(SpellEffect.Stone);
-					break;
-				case "Electricity" :
-					createdSpell.setSpellEffect(SpellEffect.Electricity);
-					break;
-				case "Wind":
-					createdSpell.setSpellEffect(SpellEffect.Wind);
-					break;
-				case "Darkness":
-					createdSpell.setSpellEffect(SpellEffect.Darkness);
-					break;
-				default:
-					elementName = null;				
-				}
-			}while(elementName==null);
-			
-			do
-			{
-				System.out.println("Choisiser la forme du sort a creer");
-				shapeName = scan.next();
-				switch(shapeName)
-				{
-				case "fist":
-					createdSpell.setShape(Shape.Fist);
-					break;
-				case "ball":
-					createdSpell.setShape(Shape.Ball);
-					break;
-				case "sword":
-					createdSpell.setShape(Shape.Sword);
-					break;
-				case "special":
-					switch(elementName)
-					{
-					case "Fire": 
-						createdSpell.setShape(Shape.Cross);
-						break;
-					case "Wind":
-						createdSpell.setShape(Shape.Cross);
-						break;
-					case "Ice":
-						createdSpell.setShape(Shape.Beam);
-						break;
-					case "Electricity":
-						createdSpell.setShape(Shape.Beam);
-						break;
-					case "Stone":
-						createdSpell.setShape(Shape.Square);
-						break;
-					case "Darkness":
-						createdSpell.setShape(Shape.Square);
-						break;
-					}
-					break;
-				default:
-					shapeName = null;
-				}
-			}while(shapeName==null);
-			
-		pageToAdd.setSpell(spellIndexToCreate-1,createdSpell);
-		if(pageToAdd.getSpell(0)!= null && pageToAdd.getSpell(1)!= null && pageToAdd.getSpell(2)!= null )
-		{
-			System.out.println("Entrer 'oui' pour terminer la creation / Entrer 'non' pour recreer un sort");
-			String isFinished = scan.next();
-			if(isFinished.equals("oui"))
-				pageFinished = true;		
-		}
-
-			pageToAdd.setSpell(spellIndexToCreate-1,createdSpell);
-			if(pageToAdd.getSpell(0)!= null && pageToAdd.getSpell(1)!= null && pageToAdd.getSpell(2)!= null )
-			{
-				System.out.println("Entrer 'oui' pour terminer la creation / Entrer 'non' pour recreer un sort");
-				String isFinished = scan.nextLine();
-				if(isFinished.equals("oui"))
-					pageFinished = true;		
-			}
-
-		}
-		Game.addSpellPage(pageToAdd);
-	}
 	
 	/**
 	 * Start the selection of the spell pages for the pawns of local player
 	 */
 	@Override
-	public void selectPageForPawns()
+	public SpellPage askSpellPageSelection()
 	{
-		System.out.println("Select page for pawns");
-		Scanner scan = new Scanner(System.in);
-		int selectedPageIndex;
-		Pawn[] temporaryPawns = new Pawn[3];
-		boolean selectionFinished = false;
-		//add every local pawns 
-		int loopCount = 0;
-		for(Pawn p: Board.getTurnOrder())
-			if(p.getTeam()==PawnTeam.PAWN_LOCAL)
-				{
-					temporaryPawns[loopCount]=p;
-					loopCount++;
-				}
-		
-		int pawnNumber = 1;
-			for(Pawn pPawn: temporaryPawns)
-			{
-				this.displaySpellPages();
-				System.out.println("Choisisez l'index de la page que vous voulez donner au pion numÃ©ro" + pawnNumber );
-				selectedPageIndex = scan.nextInt();
-				Board.getTurnOrder.get(Board.getTurnOrder().indexOf(pPawn)).setSpellPage(this.localPlayer.getPlayerPage().get(selectedPageIndex));		
-				pawnNumber++;
-			}
-			while(!selectionFinished)
-			{
-			System.out.println("Taper 'oui' pour terminer la selection / Taper 'non' pour modifier la page d'un pion");
-				if(scan.next().equals("oui"))
-					selectionFinished = true;
-				else
-				{
-					System.out.println("Choisier le numero du pion a modifier");
-					pawnNumber = scan.nextInt();
-					this.displaySpellPage();
-					System.out.println("Choisisez l'index de la page que vous voulez donner au pion numÃ©ro" + pawnNumber );
-					selectedPageIndex = scan.nextInt();
-					Board.getTurnOrder().get(Board.getTurnOrder().indexOf(temporaryPawns[pawnNumber])).setSpellPage(Game.getLocalPlayer().getPlayerPage().get(selectedPageIndex));
-				}
-				
-				
-				}
-			if(isServer)
-				myServer.SendAll(this.turnOrder);
-			else
-				myClient.Send(this.turnOrder);
+		//Afficher toutes les pages et demander d'en choisir une
+		this.displaySpellPage();
+		CheapScanner scan = new CheapScanner();
+		int index;
+		do {
+			System.out.println("choisissez votre page");
+			index=(Integer)scan.getInt();
+		}while (index<0 || index>Game.getSpellPages().size());
+	return Game.getSpellPages().get(index);
 	}
 
 
 	@Override
 	public void displaySpellPage() {
-		for(SpellPage myPage: Game.getSpellPage())
-		{
-			System.out.println(myPage.getPageName());
+		int count=0;
+		for(SpellPage myPage: Game.getSpellPages())
+		{  
+			System.out.println(count+myPage.getPageName());
+			count++;
 		}
 	}
 
-
-	@Override
-	public void display() {
-		// TODO Auto-generated method stub
-		
-	}
 
 
 	@Override
@@ -299,7 +108,17 @@ public class PlayerConsole implements Player{
 
 	@Override
 	public void displayEnd(EndStatus pStat) {
-		// TODO Auto-generated method stub
+		switch(pStat)
+		{
+		case VICTORY:
+			System.out.println("vous etes le boss");
+		case DEFEAT:
+			System.out.println("lol t'as loose");
+		case DRAW:
+			System.out.println("wow c'etait un match d'enfer, hyper close vous etes mort en même temps et ca c'est beau bordel");
+		case RUNNING:
+			break;
+		}
 		
 	}
 
@@ -307,8 +126,12 @@ public class PlayerConsole implements Player{
 	@Override
 	public Choices askChoiceMenu() 
 	{	
+		this.displayMenu();
 		CheapScanner scan = new CheapScanner();
-		int mychoice = (Integer)scan.getInt();
+		int mychoice;
+		
+		do {
+		mychoice = (Integer)scan.getInt();
 		System.out.println("faite votre choix");
 		switch (mychoice) {
 		
@@ -320,14 +143,17 @@ public class PlayerConsole implements Player{
 			return Choices.JOIN_GAME;
 		case 4:
 			return Choices.LOCAL_GAME;
-		
+		default:
+			mychoice=0;
 		}
+		}while(mychoice==0);
+	return null;
 	}
 
 
 	@Override
 	public void displayError() {
-		// TODO Auto-generated method stub
+		System.out.println("il y a une erreur");
 		
 	}
 
@@ -336,8 +162,11 @@ public class PlayerConsole implements Player{
 	@Override
 	public Choices askActionChoice() 
 	{
+		this.displayChoiceAction();
 		CheapScanner scan = new CheapScanner();
-		int mychoice= (Integer)scan.getInt();
+		int mychoice;
+		do {
+		mychoice= (Integer)scan.getInt();
 		System.out.println("faite votre choix");
 		
 		switch(mychoice)
@@ -346,8 +175,11 @@ public class PlayerConsole implements Player{
 			return Choices.MOVE;
 		case 2:
 			return Choices.LAUNCH_SPELL;
+		default:
+			mychoice=0;
 		}
-		
+		}while(mychoice==0);
+	return null;
 	}
 
 
@@ -383,9 +215,9 @@ public class PlayerConsole implements Player{
 
 
 	@Override
-	public String askSpellElement() 
+	public SpellEffect askSpellElement() 
 	{	
-		Spell createdSpell = new Spell();
+		this.displayElementChoice();
 		CheapScanner scan = new CheapScanner();
 		
 		String elementName;
@@ -396,37 +228,64 @@ public class PlayerConsole implements Player{
 		switch(elementName)
 		{
 		case "Fire":
-			createdSpell.setSpellEffect(SpellEffect.Fire);
-			break;
+			return SpellEffect.Fire;
 		case "Ice":
-			createdSpell.setSpellEffect(SpellEffect.Ice);
-			break;
+			return SpellEffect.Ice;
 		case "Stone":
-			createdSpell.setSpellEffect(SpellEffect.Stone);
-			break;
+			return SpellEffect.Stone;
 		case "Electricity" :
-			createdSpell.setSpellEffect(SpellEffect.Electricity);
-			break;
+			return SpellEffect.Electricity;
 		case "Wind":
-			createdSpell.setSpellEffect(SpellEffect.Wind);
-			break;
+			return SpellEffect.Wind;
 		case "Darkness":
-			createdSpell.setSpellEffect(SpellEffect.Darkness);
-			break;
+			return SpellEffect.Darkness;
 		default:
 			elementName = null;
 		} 				
 	}while(elementName ==null);
-	return elementName;
+	return null;
 	}
 
 
 	@Override
-	public Shape askSpellShape() {
+	public Shape askSpellShape(SpellEffect eff) {
 		CheapScanner scan = new CheapScanner();
-		String myShape = scan.getStr();
+		this.displayShapeChoice();
 		
-	}
+		String choose;
+		do
+		{
+		choose = scan.getStr();
+		switch(choose)
+		{
+		case "fist":
+			return Shape.Fist;
+		case "ball":
+			return Shape.Ball;
+		case "sword":
+			return Shape.Sword;
+		case "special":
+			switch(eff.getEffectName())
+			{
+			case "Fire": 
+				return Shape.Cross;
+			case "Wind":
+				return Shape.Cross;
+			case "Ice":
+				return Shape.Beam;
+			case "Electricity":
+				return Shape.Beam;
+			case "Stone":
+				return Shape.Square;
+			case "Darkness":
+				return Shape.Square;
+			}
+			
+		default:
+			choose = null;
+		}
+	}while(choose==null);
+	return null;}
 
 
 	@Override
@@ -484,22 +343,43 @@ public class PlayerConsole implements Player{
 
 	@Override
 	public void displayNotEnoughActionPoints() {
-		
+		System.out.println("tu as seulement "+ Board.getCurrentPawn().getActionPoints());
 		
 	}
 
 
 	@Override
 	public void displaySpellLaunched() {
-		// TODO Auto-generated method stub
+		System.out.println("le sort a été lancé");
 		
 	}
 
 
 	@Override
 	public void displayNextTurn() {
-		// TODO Auto-generated method stub
+		System.out.println("on passe au tour suivant");
 		
+	}
+
+
+	@Override
+	public void displayNotEnoughMovePoints() {
+		System.out.println("tu n'as pas suffisament de points de mouvement");
+		
+	}
+
+
+	@Override
+	public void displayMoveDone() {
+		System.out.println("le mouvement a bien été effectué");
+	}
+
+
+	@Override
+	public void displaySpellPageDetail(SpellPage pPage) {
+		System.out.println("Cooldown max "+ pPage.getSpell(0).getDefaultCooldown()+" shape "+pPage.getSpell(0).getShape()+" element "+pPage.getSpell(0).getSpellEffect());
+		System.out.println("Cooldown max "+ pPage.getSpell(1).getDefaultCooldown()+" shape "+pPage.getSpell(1).getShape()+" element "+pPage.getSpell(1).getSpellEffect());
+		System.out.println("Cooldown max "+ pPage.getSpell(2).getDefaultCooldown()+" shape "+pPage.getSpell(2).getShape()+" element "+pPage.getSpell(2).getSpellEffect());
 	}
 
 	
