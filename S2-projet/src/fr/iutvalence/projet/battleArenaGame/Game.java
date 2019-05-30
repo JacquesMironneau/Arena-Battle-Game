@@ -249,10 +249,12 @@ public class Game
 					switch(this.localPlayer.askActionChoice())
 					{
 					case LAUNCH_SPELL:
+						localPlayer.displayBoard(this.board);
 						this.board.checkSpell(localPlayer.askSpell(),localPlayer.askMove());
 						break;
 						
 					case MOVE:
+						localPlayer.displayBoard(this.board);
 						this.board.checkMove(this.localPlayer.askMove());
 						break;
 						

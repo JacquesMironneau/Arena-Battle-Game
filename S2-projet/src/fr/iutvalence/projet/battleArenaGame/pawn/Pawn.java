@@ -44,6 +44,14 @@ public class Pawn implements Serializable
 	public final static int DEFAULT_ACTION_POINTS = 0 ;
 	
 	/**
+	 * Number of local Pawn 
+	 */
+	private static int localPawnCount = 1;
+	/**
+	 * Number of remote Pawn
+	 */
+	private static int remotePawnCount = 1;
+	/**
 	 * Current amount of health of a Pawn
 	 */
 	private int healthPoints;
@@ -73,6 +81,10 @@ public class Pawn implements Serializable
 	 */
 	private SpellPage mySpellPage;
 	
+	/**
+	 * Id of the pawn (his name)
+	 */
+	private String id;
 
 	/**
 	 * List of all the active effect on the Pawn
@@ -94,6 +106,18 @@ public class Pawn implements Serializable
 		this.currentCoordinate = pBaseCoordinate;
 		this.mySpellPage = pSpellPage;
 		this.activeEffects= new ArrayList<PawnEffect>();
+		
+		if(this.team==PawnTeam.PAWN_LOCAL)
+		{
+			this.id = "J1." + localPawnCount;
+			localPawnCount++;
+		}
+		if(this.team==PawnTeam.PAWN_REMOTE)
+			{
+				this.id = "J2." + remotePawnCount;
+				remotePawnCount++;
+			}
+		
 
 	}
 	
@@ -243,6 +267,11 @@ public class Pawn implements Serializable
 	public void setTeam(PawnTeam theTeam)
 	{
 		this.team = theTeam;
+	}
+	
+	public String getId()
+	{
+		return this.id;
 	}
 }
 

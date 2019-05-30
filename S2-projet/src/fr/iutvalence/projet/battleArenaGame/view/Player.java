@@ -1,5 +1,6 @@
 package fr.iutvalence.projet.battleArenaGame.view;
 
+import fr.iutvalence.projet.battleArenaGame.Board;
 import fr.iutvalence.projet.battleArenaGame.EndStatus;
 import fr.iutvalence.projet.battleArenaGame.exceptions.SpellIndexException;
 import fr.iutvalence.projet.battleArenaGame.exceptions.SpellNotFoundException;
@@ -38,7 +39,7 @@ public interface Player {
 	/**
 	 * display the board
 	 */
-	public void displayBoard();
+	public void displayBoard(Board myBoard);
 	
 	/**
 	 * display the menu 

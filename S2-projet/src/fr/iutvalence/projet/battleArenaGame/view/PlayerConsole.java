@@ -1,14 +1,12 @@
 package fr.iutvalence.projet.battleArenaGame.view;
 
 
-import java.util.ArrayList;
-import java.util.Scanner;
-
 import fr.iutvalence.projet.battleArenaGame.Board;
 import fr.iutvalence.projet.battleArenaGame.EndStatus;
 import fr.iutvalence.projet.battleArenaGame.Game;
 import fr.iutvalence.projet.battleArenaGame.move.Coordinate;
 import fr.iutvalence.projet.battleArenaGame.move.Movement;
+import fr.iutvalence.projet.battleArenaGame.pawn.Pawn;
 import fr.iutvalence.projet.battleArenaGame.shape.Shape;
 import fr.iutvalence.projet.battleArenaGame.spell.Spell;
 import fr.iutvalence.projet.battleArenaGame.spell.SpellEffect;
@@ -25,14 +23,13 @@ public class PlayerConsole implements Player{
 	
 	@Override
 	public Movement askMove() {
-		this.displayBoard();
 		CheapScanner scan = new CheapScanner();
 		
 		int xCoord = (Integer)scan.getInt();
-		System.out.println("entrez la coordoné X de la destination");
+		System.out.println("entrez la coordonï¿½ X de la destination");
 		
 		int yCoord = (Integer)scan.getInt();
-		System.out.println("entre la coordonné Y de la destination");
+		System.out.println("entre la coordonnï¿½ Y de la destination");
 		
 		Coordinate vDest = new Coordinate(xCoord,yCoord);
 		
@@ -50,7 +47,6 @@ public class PlayerConsole implements Player{
 		/*
 		 * Create a movement with the coordinates of the currentPawn and the Destination (coordinate) chosen by the player
 		 */
-		this.displayBoard();
 		this.displaySpellPageDetail(Board.getCurrentPawn().getSpellPage());
 		CheapScanner scan = new CheapScanner();
 		int index = (Integer)scan.getInt();
@@ -97,7 +93,7 @@ public class PlayerConsole implements Player{
 		System.out.println("1) CrÃ©er une page de sort");
 		System.out.println("2) CrÃ©er une partie");
 		System.out.println("3) Rejoindre une partie");
-		System.out.println("4) créé partie local");
+		System.out.println("4) crï¿½ï¿½ partie local");
 		
 	}
 
@@ -111,7 +107,7 @@ public class PlayerConsole implements Player{
 		case DEFEAT:
 			System.out.println("lol t'as loose");
 		case DRAW:
-			System.out.println("wow c'etait un match d'enfer, hyper close vous etes mort en même temps et ca c'est beau bordel");
+			System.out.println("wow c'etait un match d'enfer, hyper close vous etes mort en mï¿½me temps et ca c'est beau bordel");
 		case RUNNING:
 			break;
 		}
@@ -200,7 +196,7 @@ public class PlayerConsole implements Player{
 	@Override
 	public int askSpellIndex() {
 		CheapScanner scan = new CheapScanner();
-		System.out.println("entrez à quel index de votre sort dans la page de sort entre 1 et 3");
+		System.out.println("entrez ï¿½ quel index de votre sort dans la page de sort entre 1 et 3");
 		int index = (Integer)scan.getInt();
 		while (3<index || index<0)
 		{
@@ -327,13 +323,13 @@ public class PlayerConsole implements Player{
 
 	@Override
 	public void displaySpellInCooldown(Spell pSpell) {
-		System.out.println("il reste "+ pSpell.getCurrentCooldown() +"à attendre");
+		System.out.println("il reste "+ pSpell.getCurrentCooldown() +"ï¿½ attendre");
 	}
 
 
 	@Override
 	public void displaySpellOutOfRange(Spell pSpell) {
-		System.out.println("la portée max est "+ pSpell.getShape().getRange());
+		System.out.println("la portï¿½e max est "+ pSpell.getShape().getRange());
 		
 	}
 
@@ -347,7 +343,7 @@ public class PlayerConsole implements Player{
 
 	@Override
 	public void displaySpellLaunched() {
-		System.out.println("le sort a été lancé");
+		System.out.println("le sort a ï¿½tï¿½ lancï¿½");
 		
 	}
 
@@ -368,7 +364,7 @@ public class PlayerConsole implements Player{
 
 	@Override
 	public void displayMoveDone() {
-		System.out.println("le mouvement a bien été effectué");
+		System.out.println("le mouvement a bien ï¿½tï¿½ effectuï¿½");
 	}
 
 
@@ -381,10 +377,53 @@ public class PlayerConsole implements Player{
 
 
 	@Override
-	public void displayBoard() {
-		// TODO Auto-generated method stub
+	public void displayBoard(Board myBoard)
+	{
+		String str = "  |  0 |  1 |  2 |  3 |  4 |  5 |  6 |  7 |  8 |  9 | 10 | 11 | 12 | 13 | 14 | \n"
+				+"  |__________________________________________________________________________|\n";
+				for(int i=0;i<Game.BOARD_SIZE;i++)
+				{
+					if(i<10)
+						str+= i + " ";
+					else
+						str+= i;
+					for(int j=0;j<Game.BOARD_SIZE;j++)
+					{
+						str += "|";
+						if(myBoard.getPawnOnCell(new Coordinate(i,j))!= null)
+							str += myBoard.getPawnOnCell(new Coordinate(i,j)).getId();		
+						else
+							str+="____";
+						
+					}
+					str += "|" +"\n";
+				}
+				
+				str += Board.getCurrentPawn().getId() + " : HP:" + Board.getCurrentPawn().getHealthPoints() + "/100 AP:" + Board.getCurrentPawn().getActionPoints() + "/6 MP:"
+						+ Board.getCurrentPawn().getMovePoints() + "/6\n" 
+						+ "Spell 1 :" + Board.getCurrentPawn().getSpellPage().getSpell(0).getCurrentCooldown() + "/" + Board.getCurrentPawn().getSpellPage().getSpell(0).getDefaultCooldown()
+						+ "\nSpell 2 :" + Board.getCurrentPawn().getSpellPage().getSpell(1).getCurrentCooldown() + "/" + Board.getCurrentPawn().getSpellPage().getSpell(1).getDefaultCooldown()
+						+ "\nSpell 3 :" + Board.getCurrentPawn().getSpellPage().getSpell(2).getCurrentCooldown() + "/" + Board.getCurrentPawn().getSpellPage().getSpell(2).getDefaultCooldown();
+				str+= "\nCurrent effects :" + Board.getCurrentPawn().getEffect().toString()+"\n";
+				
+				str+= "Allied Pawns :\n";
+				for(Pawn p :Board.getTurnOrder())
+				{
+					if(p.getTeam()==Board.getCurrentPawn().getTeam())
+						str += p.getId() + ": " + p.getHealthPoints() + "/100 \n";
+			 	}
+				str+= "Enemy Pawns :\n";
+				for(Pawn p :Board.getTurnOrder())
+				{
+					if(p.getTeam()!=Board.getCurrentPawn().getTeam())
+						str += p.getId() + ": " + p.getHealthPoints() + "/100 \n";
+			 	}
+				
+				System.out.println(str);
+			}
+		
 		
 	}
 
 	
-}
+
