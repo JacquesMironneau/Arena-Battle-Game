@@ -79,7 +79,7 @@ public class Board {
 	public void checkMove(Movement pMovement)
 	{
 		//If the pawn has enough move points to move
-		if(Board.currentPawn.getMovePoints() > pMovement.calculateDistance())
+		if(Board.currentPawn.getMovePoints() >= pMovement.calculateDistance())
 		{
 			//Check if the coordinates of the pawn are free (in order to move, the case must be free and not occupated by another pawn)
 			for(int indexArrayList = 0; indexArrayList < Board.turnOrder.size(); indexArrayList++)
@@ -95,7 +95,7 @@ public class Board {
 			
 			//Move the current pawn to coordinates
 			Board.currentPawn.setPos(pMovement.getDestCordinate());
-
+			Board.currentPawn.setMovePoints(Board.currentPawn.getMovePoints()-pMovement.getDistance());
 			//TODO may be useless
 			//Replace the pawn of the turnOrder (so the current one) by the currentPawn with moved coordinates)
 			Board.turnOrder.set(Board.turnOrder.indexOf(Board.currentPawn), Board.currentPawn);
@@ -109,7 +109,7 @@ public class Board {
 		}
 		else {
 			this.player.displayNotEnoughMovePoints();
-			this.player.askMove();
+			this.player.askActionChoice();
 			//throw new InvalidMoveException("Not enough move points");
 		}
 		//The movement isn't correct
@@ -178,7 +178,7 @@ public class Board {
 		{	
 			//The spell is on cooldown
 			this.player.displaySpellInCooldown(pSpell);
-			this.player.askSpell();
+			this.player.askActionChoice();
 			//throw new SpellOnCooldownException();
 			
 		}
@@ -186,16 +186,14 @@ public class Board {
 		{
 			//The spell cost is bigger than the pawn's action points
 			this.player.displayNotEnoughActionPoints();
-			this.player.askSpell();
-
+			this.player.askActionChoice();
 		//	throw new NotEnoughPointsException();
 		}
 		else if(pMovement.getDistance() > pSpell.getShape().getRange())
 		{
 			//The target is too far away
 			this.player.displaySpellOutOfRange(pSpell);
-			this.player.askSpell();
-
+			this.player.askActionChoice();
 //			throw new SpellOutOfRangeException();
 		}
 		else
@@ -209,15 +207,9 @@ public class Board {
 			for(int index=0;index < 3;index++)
 			{
 				if(pSpell.equals(Board.currentPawn.getSpellPage().getSpell(index)))
-					spellIndexInPage = index;	
-				else
-				{
-					this.player.askSpell();
-					//throw new SpellNotFoundException(pSpell);
-				}
+						Board.currentPawn.getSpellPage().getSpell(index).resetCooldown();
 			}
 			
-			Board.turnOrder.get(Board.turnOrder.indexOf(currentPawn)).getSpellPage().getSpell(spellIndexInPage).resetCooldown();
 			//Check on all case affected by the spell shape
 			ArrayList<Coordinate> effectedCoordinateList = new ArrayList<Coordinate>(Arrays.asList(pSpell.getShape().getEffectedCoordinates()));
 			for(int effectedIndex=0;effectedIndex <effectedCoordinateList.size();effectedIndex++)
@@ -240,6 +232,7 @@ public class Board {
 			
 		}
 		this.player.displaySpellLaunched();
+		this.player.displayBoard(this);
 		this.communication.sendToOther(Board.turnOrder);
 	}
 	
@@ -274,7 +267,7 @@ public class Board {
 	{
 		for(Pawn p : Board.turnOrder)
 		{
-			if(p.getPos().equals(new Coordinate(2,0)))
+			if(p.getPos().equals(pCoordinate))
 			{
 				return p;
 			}

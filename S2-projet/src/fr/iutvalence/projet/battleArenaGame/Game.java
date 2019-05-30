@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import fr.iutvalence.projet.battleArenaGame.exceptions.SpellIndexException;
 import fr.iutvalence.projet.battleArenaGame.network.Client;
 import fr.iutvalence.projet.battleArenaGame.network.Communication;
+import fr.iutvalence.projet.battleArenaGame.network.Local;
 import fr.iutvalence.projet.battleArenaGame.network.Network;
 import fr.iutvalence.projet.battleArenaGame.network.Server;
 import fr.iutvalence.projet.battleArenaGame.pawn.Pawn;
@@ -198,6 +199,9 @@ public class Game
 			this.play();
 			break;
 		case LOCAL_GAME:
+			this.communication = new Local();
+			Game.localPlayerTurn=true;
+			this.board = new Board(this.communication,this.localPlayer);
 			this.pawnSelection();
 			this.play();
 			
@@ -245,29 +249,34 @@ public class Game
 			{
 				//Update effects and PA &PM of pawn
 				//this.localPlayer.setPawn(Board.getCurrentPawn()); TODO FIX
+				System.out.println("reset debut de tour !!!!!!!!!");
 				Board.getCurrentPawn().setActionPoints(6);
 				Board.getCurrentPawn().setMovePoints(6);
 				//this.board.getTurnOrder().set(this.board.getTurnOrder().indexOf(this.board.getCurrentPawn()), this.board.getCurrentPawn());
 				this.board.applyEffect();
+				Board.removeDeads();
+				this.localPlayer.displayBoard(this.board);	
 				
 				
 				while(!this.endTurn)
 				{
-										
+									
 					switch(this.localPlayer.askActionChoice())
 					{
 					case LAUNCH_SPELL:
 						localPlayer.displayBoard(this.board);
 						this.board.checkSpell(localPlayer.askSpell(),localPlayer.askMove());
+						this.localPlayer.displayBoard(this.board);	
 						break;
 						
 					case MOVE:
 						localPlayer.displayBoard(this.board);
 						this.board.checkMove(this.localPlayer.askMove());
+						this.localPlayer.displayBoard(this.board);	
 						break;
 						
 					case END_TURN:
-						this.board.nextPawn();			
+						Board.nextPawn();			
 						if(Board.getCurrentPawn().getTeam() == PawnTeam.PAWN_REMOTE)
 						{
 							this.endTurn = true; //  set it to true somewhere
@@ -279,19 +288,16 @@ public class Game
 								
 		
 						}
-						/**else
+						else
 						{
-							Board.getCurrentPawn().setActionPoints(6);
-							this.currentPawn.setMovePoints(6);
-							this.turnOrder.set(this.turnOrder.indexOf(currentPawn), currentPawn);
-							applyEffect();
-
-
-						}*/
+							this.localPlayer.displayBoard(this.board);	
+							this.endTurn = true;
+						}
 						break;
 					default:
 						localPlayer.displayError();
 					}
+					
 				}
 			}
 			this.endTurn = false; //CARE TODO
@@ -311,6 +317,7 @@ public class Game
 		{
 			if(Game.localPlayerTurn)
 			{
+				System.out.println("AAAAAAAAAAAAAAAAAAAAAAAAAAAAA");//TODO remove
 				this.pageSelection();
 				Game.localPlayerTurn = false;
 				this.communication.sendToOther(Board.getTurnOrder());
@@ -455,7 +462,6 @@ public class Game
 		{
 			if(p.getTeam() ==PawnTeam.PAWN_LOCAL)
 				{	
-				this.localPlayer.displaySpellPage();
 				p.setSpellPage(new SpellPage(this.localPlayer.askSpellPageSelection()));
 				}
 			}
@@ -476,16 +482,16 @@ public void createSpellPageForTest() throws SpellIndexException
 	Spell s3 = new Spell();
 	s1.setShape(Shape.Ball);
 	s2.setShape(Shape.Fist);
-	s3.setShape(Shape.Sword);
+	s3.setShape(Shape.Square);
 	s1.setSpellEffect(SpellEffect.Fire);
 	s2.setSpellEffect(SpellEffect.Ice);
-	s3.setSpellEffect(SpellEffect.Electricity);
+	s3.setSpellEffect(SpellEffect.Fire);
 	
 	p1.setSpell(0,s1);
 	p1.setSpell(1,s2);
 	p1.setSpell(2,s3);
 	
-	//this.localPlayer.addSpellPage(p1);
+	Game.mySpellPages.add(p1);
 }
 
 }

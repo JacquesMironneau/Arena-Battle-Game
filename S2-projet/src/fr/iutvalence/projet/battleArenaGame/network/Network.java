@@ -35,11 +35,8 @@ public class Network {
 		
 		if(transferedObject.getClass() == ArrayList.class)
 		{
+		
 			
-			for(Object o: (ArrayList<?>)transferedObject) // TODO TEST this
-			{
-				if(o instanceof Pawn)
-				{
 					//TODO remove debug
 					System.out.println(Board.getTurnOrder().size());
 					
@@ -51,29 +48,29 @@ public class Network {
 					{
 						if(p.getTeam() == PawnTeam.PAWN_LOCAL)
 							{
-								System.out.println(p.getTeam());
+								//System.out.println(p.getTeam());
 								p.setTeam(PawnTeam.PAWN_REMOTE);
-								System.out.println("[NETWORK]Nouveau: " + p.getTeam());
+								//System.out.println("[NETWORK]Nouveau: " + p.getTeam());
 							}
 						else
 							{	
-								System.out.println(p.getTeam());
+								//System.out.println(p.getTeam());
 								p.setTeam(PawnTeam.PAWN_LOCAL);
-								System.out.println("[NETWORK]Nouveau: " + p.getTeam());
+								//System.out.println("[NETWORK]Nouveau: " + p.getTeam());
 							}
 					}
 					//For each pawn of the arrayList, it does print it (DEBUG ONLY: TODO: REMOVE THESES 3LINES)
 					
-					for(Pawn PawnIndexInTheArrayList : ModifiedArrayListOfPawns)
-						System.out.println(PawnIndexInTheArrayList);
+				//	for(Pawn PawnIndexInTheArrayList : ModifiedArrayListOfPawns)
+						//System.out.println(PawnIndexInTheArrayList);
 					
 					
 					//Edit the array list of the current game
 					Board.setTurnOrder(ModifiedArrayListOfPawns);
 					
 					/*System.out.println("After" + this.myGame.getTurnOrder().size());*/
-				}
-			}
+				
+			
 		
 
 		}

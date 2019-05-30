@@ -25,12 +25,12 @@ public class PlayerConsole implements Player{
 	public Movement askMove() {
 		CheapScanner scan = new CheapScanner();
 		
-		int xCoord = (Integer)scan.getInt();
+		
 		System.out.println("entrez la coordon� X de la destination");
+		int xCoord = (Integer)scan.getInt();
 		
-		int yCoord = (Integer)scan.getInt();
 		System.out.println("entre la coordonn� Y de la destination");
-		
+		int yCoord = (Integer)scan.getInt();
 		Coordinate vDest = new Coordinate(xCoord,yCoord);
 		
 		/*
@@ -44,15 +44,16 @@ public class PlayerConsole implements Player{
 
 	@Override
 	public Spell askSpell() {
+		//TODO Check if index entered is out of limit
 		/*
 		 * Create a movement with the coordinates of the currentPawn and the Destination (coordinate) chosen by the player
 		 */
 		this.displaySpellPageDetail(Board.getCurrentPawn().getSpellPage());
 		CheapScanner scan = new CheapScanner();
-		int index = (Integer)scan.getInt();
+		
 		System.out.println("entrez l'index du sort a lancer (1 ou 2 ou 3");
-
-		return Board.getCurrentPawn().getSpellPage().getSpell(index);
+		int index = (Integer)scan.getInt();
+		return Board.getCurrentPawn().getSpellPage().getSpell(index-1);
 			
 	}
 	
@@ -69,7 +70,7 @@ public class PlayerConsole implements Player{
 		int index;
 		do {
 			System.out.println("choisissez votre page");
-			index=(Integer)scan.getInt();
+			index=(Integer)scan.getInt()-1;
 		}while (index<0 || index>Game.getSpellPages().size());
 	return Game.getSpellPages().get(index);
 	}
@@ -77,10 +78,10 @@ public class PlayerConsole implements Player{
 
 	@Override
 	public void displaySpellPage() {
-		int count=0;
+		int count=1;
 		for(SpellPage myPage: Game.getSpellPages())
 		{  
-			System.out.println(count+myPage.getPageName());
+			System.out.println(count+")"+myPage.getPageName());
 			count++;
 		}
 	}
@@ -168,6 +169,8 @@ public class PlayerConsole implements Player{
 			return Choices.MOVE;
 		case 2:
 			return Choices.LAUNCH_SPELL;
+		case 3:
+			return Choices.END_TURN;
 		default:
 			mychoice=0;
 		}
@@ -178,8 +181,7 @@ public class PlayerConsole implements Player{
 
 	@Override
 	public void displayChoiceAction() {
-		System.out.println("1) bouger mon pion");
-		System.out.println("2) lancer un sort");
+		System.out.println("1) bouger mon pion\n2) lancer un sort\n3)Fin du tour");
 		
 	}
 
@@ -322,7 +324,7 @@ public class PlayerConsole implements Player{
 
 	@Override
 	public void displaySpellInCooldown(Spell pSpell) {
-		System.out.println("il reste "+ pSpell.getCurrentCooldown() +"� attendre");
+		System.out.println("il reste "+ pSpell.getCurrentCooldown() +" a attendre");
 	}
 
 
@@ -372,7 +374,7 @@ public class PlayerConsole implements Player{
 		for(int spellIndex =0;spellIndex<3;spellIndex++)
 		{
 			if(pPage.getSpell(spellIndex)!=null)
-				System.out.println(spellIndex+1 +" ) Cooldown max "+ pPage.getSpell(spellIndex).getDefaultCooldown()+" shape "+pPage.getSpell(spellIndex).getShape()+" element "+pPage.getSpell(spellIndex).getSpellEffect());
+				System.out.println(spellIndex+1 +" )  "+ pPage.getSpell(spellIndex).toString());
 			else
 				System.out.println(spellIndex+1 +")\n");
 		}
