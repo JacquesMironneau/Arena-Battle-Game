@@ -224,13 +224,13 @@ public class Game
 					case LAUNCH_SPELL:
 						this.localPlayer.displaySpellPageDetail(this.board.getTurnOrder().get(this.board.getCurrentPawnIndex()).getSpellPage());
 						this.board.checkSpell(localPlayer.askSpell(),localPlayer.askMove());
-						this.board.removeDeads();
-						
-						this.localPlayer.displayBoard(this.board);
-						
 						if(this.board.getTurnOrder().get(this.board.getCurrentPawnIndex()).getHealthPoints()<=0)
+							{
+							this.board.removeDeads();
 							endTurn();
-						
+							}
+						this.board.removeDeads();
+						this.localPlayer.displayBoard(this.board);
 						endGame();
 						break;
 					case END_TURN:
@@ -327,23 +327,22 @@ public class Game
 	 */
 	private void endTurn()
 	{
+		//TODO  remove debug
 		for(Pawn p :this.board.getTurnOrder())
 		{
 			System.out.println(p.toString() + p.getTeam());
 		}
-		
-		this.board.nextPawn();
-		if(this.board.getTurnOrder().get(this.board.getCurrentPawnIndex()).getTeam()==PawnTeam.PAWN_LOCAL)
-			this.endTurn = true;
-		
-		else if(this.board.getTurnOrder().get(this.board.getCurrentPawnIndex()).getTeam()==PawnTeam.PAWN_REMOTE)
+		//If there is only 1 pawn remaining
+		if(this.board.nextPawn()==1 || this.board.getTurnOrder().get(this.board.getCurrentPawnIndex()).getTeam()==PawnTeam.PAWN_REMOTE)
 		{
 			this.endTurn = true;
 			this.localPlayerTurn = false;
 			this.communication.sendToOther(this.board.getTurnOrder());
-			this.communication.sendToOther(this.board.getTurnOrder().get(this.board.getCurrentPawnIndex()));
+			this.communication.sendToOther(this.board.getCurrentPawnIndex());
 			this.communication.sendToOther(this.localPlayerTurn);
 		}
+		else if(this.board.getTurnOrder().get(this.board.getCurrentPawnIndex()).getTeam()==PawnTeam.PAWN_LOCAL)
+				this.endTurn = true;		
 		else
 			this.localPlayer.displayError(ErrorMessages.PAWN_NO_TEAM);
 	}

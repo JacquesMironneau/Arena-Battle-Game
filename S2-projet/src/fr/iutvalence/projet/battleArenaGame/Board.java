@@ -97,7 +97,7 @@ public class Board{
 			//Check if the coordinates of the pawn are free (in order to move, the case must be free and not occupated by another pawn)
 			for(int indexArrayList = 0; indexArrayList < this.turnOrder.size(); indexArrayList++)
 			{
-				if(pMovement.getDestCordinate() == this.turnOrder.get(indexArrayList).getPos())
+				if(pMovement.getDestCordinate().equals(this.turnOrder.get(indexArrayList).getPos()))
 				{
 					this.player.displayError(ErrorMessages.CASE_OCCUPATED);
 					return;
@@ -204,13 +204,13 @@ public class Board{
 	 * Change the currentPawn of the player to the next one in the turnOrder array List
 	 * If the currentPawn is the last one, change to the first one
 	 */
-	public void nextPawn() 
+	public int nextPawn() 
 	{
 		this.currentPawnIndex++;
 		if(this.currentPawnIndex==this.turnOrder.size())
 			this.currentPawnIndex=0;
-
-	}
+		return this.turnOrder.size()
+;	}
 	
 	
 	

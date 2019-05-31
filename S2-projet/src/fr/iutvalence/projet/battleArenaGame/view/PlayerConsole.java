@@ -46,7 +46,7 @@ public class PlayerConsole implements Player{
 		do {
 			System.out.println("entrez l'index du sort a lancer (1 ou 2 ou 3");
 			index = (Integer)scan.getInt();
-		}while(index < 1 || index < 3);
+		}while(index < 1 || index > 3);
 		
 		return index-1;
 			
