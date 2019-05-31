@@ -212,6 +212,59 @@ public class Pawn implements Serializable
 		return this.team;
 	}
 	
+	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + actionPoints;
+		result = prime * result + ((activeEffects == null) ? 0 : activeEffects.hashCode());
+		result = prime * result + ((currentCoordinate == null) ? 0 : currentCoordinate.hashCode());
+		result = prime * result + healthPoints;
+		result = prime * result + ((id == null) ? 0 : id.hashCode());
+		result = prime * result + movePoints;
+		result = prime * result + ((mySpellPage == null) ? 0 : mySpellPage.hashCode());
+		result = prime * result + ((team == null) ? 0 : team.hashCode());
+		result = prime * result + ((teamId == null) ? 0 : teamId.hashCode());
+		return result;
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Pawn other = (Pawn) obj;
+		if (actionPoints != other.actionPoints)
+			return false;
+		if (activeEffects == null) {
+			if (other.activeEffects != null)
+				return false;
+		} else if (!activeEffects.equals(other.activeEffects))
+			return false;
+		if (currentCoordinate == null) {
+			if (other.currentCoordinate != null)
+				return false;
+		} else if (!currentCoordinate.equals(other.currentCoordinate))
+			return false;
+		if (healthPoints != other.healthPoints)
+			return false;
+		if (id == null) {
+			if (other.id != null)
+				return false;
+		} else if (!id.equals(other.id))
+			return false;
+		if (movePoints != other.movePoints)
+			return false;
+		if (team != other.team)
+			return false;
+		if (teamId != other.teamId)
+			return false;
+		return true;
+	}
+
 	/**
 	 * Add an effect to the current list of Effect of this pawn
 	 * @param pEffect the effect to add

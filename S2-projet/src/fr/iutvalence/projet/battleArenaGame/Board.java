@@ -255,7 +255,12 @@ public class Board {
 	 */
 	public static void nextPawn() 
 	{
-		int nextPawnIndex = Board.turnOrder.indexOf(currentPawn)+1;
+		int nextPawnIndex = -2;
+		for(Pawn p :Board.turnOrder)
+		{
+			if(Board.currentPawn.equals(p))
+				nextPawnIndex = Board.turnOrder.indexOf(p)+1;
+		}
 		
 		if(nextPawnIndex==turnOrder.size())
 			{

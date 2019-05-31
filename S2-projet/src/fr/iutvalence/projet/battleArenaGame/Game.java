@@ -367,12 +367,18 @@ public class Game
 	
 	private void endTurn()
 	{
+		for(Pawn p :Board.getTurnOrder())
+		{
+			System.out.println(p.toString() + p.getTeam());
+		}
+		System.out.println("Le pion actuel est "+Board.getCurrentPawn().getTeam());
 		Board.nextPawn();
+		System.out.println("Le prochain pion est "+Board.getCurrentPawn().getTeam());
 		if(Board.getCurrentPawn().getTeam()==PawnTeam.PAWN_LOCAL)
 		{
 			this.endTurn = true;
 		}
-		else
+		else if(Board.getCurrentPawn().getTeam()==PawnTeam.PAWN_REMOTE)
 		{
 			this.endTurn = true;
 			Game.localPlayerTurn = false;
@@ -381,6 +387,8 @@ public class Game
 			this.communication.sendToOther(Game.localPlayerTurn);
 			
 		}
+		else
+			System.out.println("Exception ni remote ni local");
 	}
 	
 	/**
