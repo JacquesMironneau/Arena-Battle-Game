@@ -6,6 +6,7 @@ import fr.iutvalence.projet.battleArenaGame.exceptions.SpellIndexException;
 import fr.iutvalence.projet.battleArenaGame.exceptions.SpellNotFoundException;
 import fr.iutvalence.projet.battleArenaGame.move.Coordinate;
 import fr.iutvalence.projet.battleArenaGame.move.Movement;
+import fr.iutvalence.projet.battleArenaGame.pawn.TeamId;
 import fr.iutvalence.projet.battleArenaGame.shape.Shape;
 import fr.iutvalence.projet.battleArenaGame.spell.Spell;
 import fr.iutvalence.projet.battleArenaGame.spell.SpellEffect;
@@ -54,7 +55,7 @@ public interface Player {
 	
 	public SpellPage askSpellPageSelection();
 	
-	public void displayEnd(EndStatus Pstat);
+	public void displayEnd(EndStatus Pstat, TeamId teamId);
 	
 	public String askPageName();
 	

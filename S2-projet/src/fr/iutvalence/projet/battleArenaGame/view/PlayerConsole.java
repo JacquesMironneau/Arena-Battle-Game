@@ -7,6 +7,7 @@ import fr.iutvalence.projet.battleArenaGame.Game;
 import fr.iutvalence.projet.battleArenaGame.move.Coordinate;
 import fr.iutvalence.projet.battleArenaGame.move.Movement;
 import fr.iutvalence.projet.battleArenaGame.pawn.Pawn;
+import fr.iutvalence.projet.battleArenaGame.pawn.TeamId;
 import fr.iutvalence.projet.battleArenaGame.shape.Shape;
 import fr.iutvalence.projet.battleArenaGame.spell.Spell;
 import fr.iutvalence.projet.battleArenaGame.spell.SpellEffect;
@@ -100,14 +101,14 @@ public class PlayerConsole implements Player{
 
 
 	@Override
-	public void displayEnd(EndStatus pStat) {
+	public void displayEnd(EndStatus pStat, TeamId teamId) {
 		switch(pStat)
 		{
 		case VICTORY:
-			System.out.println("vous etes le boss");
+			System.out.println("vous etes le boss " + teamId);
 			break;
 		case DEFEAT:
-			System.out.println("lol t'as loose");
+			System.out.println("lol t'as loose" + teamId);
 			break;
 		case DRAW:
 			System.out.println("wow c'etait un match d'enfer, hyper close vous etes mort en m�me temps et ca c'est beau bordel");

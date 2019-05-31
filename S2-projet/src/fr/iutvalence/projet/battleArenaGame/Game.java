@@ -370,7 +370,7 @@ public class Game
 			return false;
 		else
 		{	
-			this.localPlayer.displayEnd(Board.getWinTeam()+Board.getCurrentPawn().getTeamId());
+			this.localPlayer.displayEnd(Board.getWinTeam(),Board.getTurnOrder().get(0).getTeamId());
 			return true;
 		}
 	}
