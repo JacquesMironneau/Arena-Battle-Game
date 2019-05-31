@@ -31,17 +31,17 @@ public class Pawn implements Serializable
 	/**
 	 * Default amount of health for a Pawn
 	 */
-	public final static int DEFAULT_HEALTH_POINTS = 0 ;
+	public final static int DEFAULT_HEALTH_POINTS = 100 ;
 	
 	/**
 	 * Default amount of move points for a Pawn
 	 */
-	public final static int DEFAULT_MOVE_POINTS = 0 ;
+	public final static int DEFAULT_MOVE_POINTS = 6 ;
 	
 	/**
 	 * Default amount of action points for a Pawn
 	 */
-	public final static int DEFAULT_ACTION_POINTS = 0 ;
+	public final static int DEFAULT_ACTION_POINTS = 6 ;
 	
 	/**
 	 * Number of local Pawn 

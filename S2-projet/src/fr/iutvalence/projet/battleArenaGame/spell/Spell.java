@@ -119,6 +119,6 @@ public class Spell implements Serializable{
 	
 	public String toString()
 	{
-		return "[ currentCooldown=" + currentCooldown + ", myShape=" + myShape + ", myEffect=" + myEffect + "]";
+		return "[CurrentCooldown=" + currentCooldown + ", Shape :" + myShape + ", Effect:" + myEffect + "]";
 	}
 }

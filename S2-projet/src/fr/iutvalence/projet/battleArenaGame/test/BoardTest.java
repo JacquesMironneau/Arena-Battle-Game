@@ -11,9 +11,15 @@ import org.junit.jupiter.api.Test;
 import fr.iutvalence.projet.battleArenaGame.Board;
 import fr.iutvalence.projet.battleArenaGame.EndStatus;
 import fr.iutvalence.projet.battleArenaGame.move.Coordinate;
+import fr.iutvalence.projet.battleArenaGame.move.Movement;
+import fr.iutvalence.projet.battleArenaGame.network.Local;
 import fr.iutvalence.projet.battleArenaGame.pawn.Pawn;
 import fr.iutvalence.projet.battleArenaGame.pawn.PawnEffect;
+import fr.iutvalence.projet.battleArenaGame.pawn.PawnTeam;
+import fr.iutvalence.projet.battleArenaGame.shape.Shape;
 import fr.iutvalence.projet.battleArenaGame.spell.SpellEffect;
+import fr.iutvalence.projet.battleArenaGame.spell.SpellPage;
+import fr.iutvalence.projet.battleArenaGame.view.PlayerConsole;
 
 class BoardTest
 {
@@ -27,8 +33,23 @@ class BoardTest
 	@Test
 	void testCheckMove()
 	{
-		fail("Not yet implemented");
-
+		PlayerConsole P1 = new PlayerConsole();
+		Board b = new Board(new Local(), P1);
+		Coordinate coord = new Coordinate(1,1);
+		Movement mov =new Movement(Board.getCurrentPawn().getPos(),coord);
+		b.checkMove(mov);
+		assertTrue("mauvais mouvement X",Board.getCurrentPawn().getPos().getCoordX()==1);
+		assertTrue("mauvais mouvement y",Board.getCurrentPawn().getPos().getCoordY()==1);
+		coord = new Coordinate(100,100);
+		mov =new Movement(Board.getCurrentPawn().getPos(),coord);
+		b.checkMove(mov);
+		assertFalse("gestion de distance",Board.getCurrentPawn().getPos().getCoordX()==100);
+		assertFalse("gestion de distance",Board.getCurrentPawn().getPos().getCoordY()==100);
+		coord = new Coordinate(-1,-1);
+		mov =new Movement(Board.getCurrentPawn().getPos(),coord);
+		b.checkMove(mov);
+		assertFalse("pas dans le plateau",Board.getCurrentPawn().getPos().getCoordX()==-1);
+		assertFalse("pas dans le plateau",Board.getCurrentPawn().getPos().getCoordY()==-1);
 	}
 	
 	@Test
@@ -100,7 +121,26 @@ class BoardTest
 	@Test
 	void testCheckSpell()
 	{
-		fail("Not yet implemented");
+		PlayerConsole P1 = new PlayerConsole();
+		Board b = new Board(new Local(), P1);
+		Coordinate coord = new Coordinate(1,1);
+SpellPage page1 = new SpellPage("Namepage1");
+		
+		Shape fist = Shape.Fist;
+		Shape ball = Shape.Ball;
+		Shape sword = Shape.Sword;
+		
+		page1.getSpell(0).setShape(sword);
+		page1.getSpell(1).setShape(ball);
+		page1.getSpell(2).setShape(fist);
+		
+		SpellEffect anEffect = SpellEffect.Fire;
+		page1.getSpell(0).setSpellEffect(anEffect);
+		coord = new Coordinate(1,2);
+		Board.getCurrentPawn().setSpellPage(page1);
+		Movement mov =new Movement(Board.getCurrentPawn().getPos(),coord);
+		b.checkSpell(Board.getCurrentPawn().getSpellPage().getSpell(0), mov);
+		assertTrue(Board.getCurrentPawn().getSpellPage().getSpell(0).getCurrentCooldown()==Board.getCurrentPawn().getSpellPage().getSpell(0).getDefaultCooldown());
 
 	}
 	
