@@ -231,7 +231,7 @@ public class Game
 	
 	public void play()
 	{	
-		//TODO ??
+		
 		this.pawnSelection();
 		
 		Board.setCurrentPawn(Board.getTurnOrder().get(0));
@@ -256,6 +256,7 @@ public class Game
 				//this.board.getTurnOrder().set(this.board.getTurnOrder().indexOf(this.board.getCurrentPawn()), this.board.getCurrentPawn());
 				this.board.applyEffect();
 				Board.removeDeads();
+				endAllGame();
 				this.localPlayer.displayBoard(this.board);	
 				
 				
@@ -276,6 +277,7 @@ public class Game
 						localPlayer.displayBoard(this.board);
 						this.board.checkSpell(localPlayer.askSpell(),localPlayer.askMove());
 						Board.removeDeads();
+						endAllGame();
 						if(Board.getCurrentPawn().getHealthPoints()<=0)
 							this.localPlayer.displayBoard(this.board);
 							//End turn 
@@ -287,11 +289,6 @@ public class Game
 						
 						
 					case END_TURN:
-						if(endGame())
-						{
-							
-							this.localPlayer.displayEnd(Board.getWinTeam());
-						}
 
 						Board.nextPawn();			
 						if(Board.getCurrentPawn().getTeam() == PawnTeam.PAWN_REMOTE)
@@ -397,8 +394,24 @@ public class Game
 //			System.out.println(pageIndex + ":" + this.localPlayer.getPlayerPage().get(pageIndex));
 //		}
 //	}
-
+	private void endAllGame()
+	{
+		if(endGame())
+		{
+			this.endTurn = true; //  set it to true somewhere
+			Game.localPlayerTurn = false; // this one is set to true in the network class
+			this.communication.sendToOther(Game.localPlayerTurn);
+			
+			this.communication.sendToOther(Board.getCurrentPawn());
+			this.communication.sendToOther(Board.getTurnOrder());
+			this.communication.sendToOther(Game.localPlayerTurn);
+		}
+	}	
 	
+	
+	
+
+
 	/**
 	 * Setter for ServerMessage
 	 * @param pMessage : message received
