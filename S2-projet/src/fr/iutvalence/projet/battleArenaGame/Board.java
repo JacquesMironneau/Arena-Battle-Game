@@ -242,8 +242,6 @@ public class Board {
 			
 		}
 		this.player.displaySpellLaunched();
-		this.player.displayBoard(this);
-		this.communication.sendToOther(Board.turnOrder);
 	}
 	
 	

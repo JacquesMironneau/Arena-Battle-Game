@@ -236,10 +236,9 @@ public class Game
 		
 		Board.setCurrentPawn(Board.getTurnOrder().get(0));
 
-		while(true) // replace by boolean / or method to know if game is finished
+		while(!endGame()) // replace by boolean / or method to know if game is finished
 		{
-			this.endAllGame();
-
+			this.localPlayer.displayBoard(board);
 			System.out.println("Waiting for client-kun.." + Game.localPlayerTurn);
 			try {
 				Thread.sleep(1000);
@@ -251,74 +250,45 @@ public class Game
 			if(Game.localPlayerTurn)
 			{
 				//Update effects and PA &PM of pawn
-				//this.localPlayer.setPawn(Board.getCurrentPawn()); TODO FIX
-				System.out.println("reset debut de tour !!!!!!!!!");
-				Board.getCurrentPawn().setActionPoints(6);
-				Board.getCurrentPawn().setMovePoints(6);
-				//this.board.getTurnOrder().set(this.board.getTurnOrder().indexOf(this.board.getCurrentPawn()), this.board.getCurrentPawn());
+				Board.getCurrentPawn().setActionPoints(Pawn.DEFAULT_ACTION_POINTS);
+				Board.getCurrentPawn().setMovePoints(Pawn.DEFAULT_MOVE_POINTS);
 				this.board.applyEffect();
-				Board.removeDeads();
-				endAllGame();
-				this.localPlayer.displayBoard(this.board);	
-				
-				
+				if(Board.getCurrentPawn().getHealthPoints()<=0)
+				{
+					Board.removeDeads();
+					endGame();
+					endTurn();
+				}
 				while(!this.endTurn)
 				{
-									
 					switch(this.localPlayer.askActionChoice())
 					{
-					
-						
 					case MOVE:
-						localPlayer.displayBoard(this.board);
 						this.board.checkMove(this.localPlayer.askMove());
 						this.localPlayer.displayBoard(this.board);	
 						break;
 						
 					case LAUNCH_SPELL:
-						localPlayer.displayBoard(this.board);
 						this.board.checkSpell(localPlayer.askSpell(),localPlayer.askMove());
 						Board.removeDeads();
-						endAllGame();
+						this.localPlayer.displayBoard(board);
 						if(Board.getCurrentPawn().getHealthPoints()<=0)
-							this.localPlayer.displayBoard(this.board);
-							//End turn 
-						else
 						{
-							this.localPlayer.displayBoard(this.board);
-							break;
+							endTurn();
 						}
-						
-						
+						endGame();
+						break;
 					case END_TURN:
 
-						Board.nextPawn();			
-						if(Board.getCurrentPawn().getTeam() == PawnTeam.PAWN_REMOTE)
-						{
-							this.endTurn = true; //  set it to true somewhere
-							Game.localPlayerTurn = false; // this one is set to true in the network class
-
-							this.communication.sendToOther(Board.getCurrentPawn());
-							this.communication.sendToOther(Board.getTurnOrder());
-							this.communication.sendToOther(Game.localPlayerTurn);
-								
-		
-						}
-						else
-						{
-							this.localPlayer.displayBoard(this.board);	
-							this.endTurn = true;
-						}
+						endTurn();
 						break;
 					default:
 						localPlayer.displayError();
 					}
-					
 				}
 			}
-			this.endTurn = false; //CARE TODO
+			this.endTurn = false; 
 		}
-		//this.closeGame();
 	}
 	
 	/**
@@ -371,6 +341,7 @@ public class Game
 		else
 		{	
 			this.localPlayer.displayEnd(Board.getWinTeam(),Board.getTurnOrder().get(0).getTeamId());
+			endTurn();
 			return true;
 		}
 	}
@@ -386,35 +357,24 @@ public class Game
 	}
 	
 	
-//	/**TODO REMOVE 
-//	 * Display all pages of the player with an index
-//	 */
-//	private void displaySpellPages()
-//	{
-//		for(int pageIndex=0;pageIndex < this.localPlayer.getPlayerPage().size();pageIndex++)
-//		{
-//			System.out.println(pageIndex + ":" + this.localPlayer.getPlayerPage().get(pageIndex));
-//		}
-//	}
-	private void endAllGame()
+	private void endTurn()
 	{
-		if(endGame())
+		Board.nextPawn();
+		if(Board.getCurrentPawn().getTeam()==PawnTeam.PAWN_LOCAL)
 		{
-			this.endTurn = true; //  set it to true somewhere
-			Game.localPlayerTurn = true; // this one is set to true in the network class
-			
-			this.communication.sendToOther(Board.getCurrentPawn());
+			this.endTurn = true;
+		}
+		else
+		{
+			this.endTurn = true;
+			Game.localPlayerTurn = false;
 			this.communication.sendToOther(Board.getTurnOrder());
+			this.communication.sendToOther(Board.getCurrentPawn());
 			this.communication.sendToOther(Game.localPlayerTurn);
 			
-			this.closeGame();
 		}
-	}	
+	}
 	
-	
-	
-
-
 	/**
 	 * Setter for ServerMessage
 	 * @param pMessage : message received
