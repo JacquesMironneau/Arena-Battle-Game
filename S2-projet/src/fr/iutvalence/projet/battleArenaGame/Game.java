@@ -267,11 +267,13 @@ public class Game
 					case MOVE:
 						this.board.checkMove(this.localPlayer.askMove());
 						this.localPlayer.displayBoard(this.board);	
+						this.communication.sendToOther(Board.getTurnOrder());
 						break;
 						
 					case LAUNCH_SPELL:
 						this.board.checkSpell(localPlayer.askSpell(),localPlayer.askMove());
 						Board.removeDeads();
+						this.communication.sendToOther(Board.getTurnOrder());
 						this.localPlayer.displayBoard(board);
 						if(Board.getCurrentPawn().getHealthPoints()<=0)
 						{
