@@ -105,10 +105,13 @@ public class PlayerConsole implements Player{
 		{
 		case VICTORY:
 			System.out.println("vous etes le boss");
+			break;
 		case DEFEAT:
 			System.out.println("lol t'as loose");
+			break;
 		case DRAW:
 			System.out.println("wow c'etait un match d'enfer, hyper close vous etes mort en m�me temps et ca c'est beau bordel");
+			break;
 		case RUNNING:
 			break;
 		}
