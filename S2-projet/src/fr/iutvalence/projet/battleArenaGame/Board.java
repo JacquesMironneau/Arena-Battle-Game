@@ -87,6 +87,9 @@ public class Board {
 		//If the pawn has enough move points to move
 		if(Board.currentPawn.getMovePoints() >= pMovement.calculateDistance())
 		{
+			//if the destination is in board limits
+			if(pMovement.getDestCordinate().getCoordX()>=0 && pMovement.getDestCordinate().getCoordX()<Game.BOARD_SIZE && pMovement.getDestCordinate().getCoordY()>=0 && pMovement.getDestCordinate().getCoordY()<Game.BOARD_SIZE)
+			{
 			//Check if the coordinates of the pawn are free (in order to move, the case must be free and not occupated by another pawn)
 			for(int indexArrayList = 0; indexArrayList < Board.turnOrder.size(); indexArrayList++)
 			{
@@ -113,6 +116,9 @@ public class Board {
 			//The movement is done
 //	TODO remove =>	return true;
 		}
+			else
+				this.player.displayMoveOutOfRange();
+	}
 		else {
 			this.player.displayNotEnoughMovePoints();
 			this.player.askActionChoice();
