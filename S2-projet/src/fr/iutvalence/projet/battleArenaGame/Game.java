@@ -288,7 +288,10 @@ public class Game
 						
 					case END_TURN:
 						if(endGame())
+						{
+							
 							this.localPlayer.displayEnd(Board.getWinTeam());
+						}
 
 						Board.nextPawn();			
 						if(Board.getCurrentPawn().getTeam() == PawnTeam.PAWN_REMOTE)
@@ -316,6 +319,7 @@ public class Game
 			}
 			this.endTurn = false; //CARE TODO
 		}
+		//this.closeGame();
 	}
 	
 	/**
