@@ -362,7 +362,7 @@ public class Game
 
 	/**
 	 * TODO Add theses changes in the Network class
-	 * Might Disconnect the user (myClient.disconnect() and the Server ( myServer.disconnectAll())
+	 * Might Disconnect the user (myClient.disconnect() and the Server ( myServer.disconnectAll())e
 	 */
 	private boolean endGame()
 	{
