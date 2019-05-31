@@ -2,9 +2,7 @@ package fr.iutvalence.projet.battleArenaGame.view;
 
 import fr.iutvalence.projet.battleArenaGame.Board;
 import fr.iutvalence.projet.battleArenaGame.EndStatus;
-import fr.iutvalence.projet.battleArenaGame.exceptions.SpellIndexException;
 import fr.iutvalence.projet.battleArenaGame.exceptions.SpellNotFoundException;
-import fr.iutvalence.projet.battleArenaGame.move.Coordinate;
 import fr.iutvalence.projet.battleArenaGame.move.Movement;
 import fr.iutvalence.projet.battleArenaGame.pawn.TeamId;
 import fr.iutvalence.projet.battleArenaGame.shape.Shape;
@@ -27,7 +25,7 @@ public interface Player {
 	 * @return 
 	 * @throws SpellNotFoundException in case of the pawn doesn't own the asked spell
 	 */
-	public Spell askSpell();
+	public int askSpell();
 
 	/**
 	 * ask to the system make an action
@@ -47,7 +45,7 @@ public interface Player {
 	 */
 	public void displayMenu();
 	
-	public void displayError();
+	public void displayError(ErrorMessages error);
 	
 	public void displaySpellPage();
 	
@@ -71,21 +69,12 @@ public interface Player {
 	
 	public void displayShapeChoice();
 	
-	public void displaySpellInCooldown(Spell pSpell);
-	
-	public void displaySpellOutOfRange(Spell pSpell);
-	
-	public void displayNotEnoughActionPoints();
-	
 	public void displaySpellLaunched();
 	
 	public void displayNextTurn();
-	
-	public void displayNotEnoughMovePoints();
 	
 	public void displayMoveDone();
 
 	public void displaySpellPageDetail(SpellPage pPage); //affiche le detail d'une page (index : element, forme ...)
 	
-	public void displayMoveOutOfRange();
 }

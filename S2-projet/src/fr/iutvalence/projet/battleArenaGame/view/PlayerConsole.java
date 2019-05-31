@@ -44,17 +44,20 @@ public class PlayerConsole implements Player{
 	}
 
 	@Override
-	public Spell askSpell() {
+	public int askSpell() {
 		//TODO Check if index entered is out of limit
 		/*
 		 * Create a movement with the coordinates of the currentPawn and the Destination (coordinate) chosen by the player
 		 */
 		this.displaySpellPageDetail(Board.getCurrentPawn().getSpellPage());
 		CheapScanner scan = new CheapScanner();
+		int index = -1;
+		do {
+			System.out.println("entrez l'index du sort a lancer (1 ou 2 ou 3");
+			index = (Integer)scan.getInt();
+		}while(index < 1 || index < 3);
 		
-		System.out.println("entrez l'index du sort a lancer (1 ou 2 ou 3");
-		int index = (Integer)scan.getInt();
-		return Board.getCurrentPawn().getSpellPage().getSpell(index-1);
+		return index-1;
 			
 	}
 	
@@ -148,16 +151,6 @@ public class PlayerConsole implements Player{
 	return null;
 	}
 
-
-	@Override
-	public void displayError() {
-		System.out.println("Une erreur s'est produite...");
-		
-	}
-
-
-
-	@Override
 	public Choices askActionChoice() 
 	{
 		this.displayChoiceAction();
@@ -325,30 +318,10 @@ public class PlayerConsole implements Player{
 		
 	}
 
-
-	@Override
-	public void displaySpellInCooldown(Spell pSpell) {
-		System.out.println("il reste "+ pSpell.getCurrentCooldown() +" a attendre");
-	}
-
-
-	@Override
-	public void displaySpellOutOfRange(Spell pSpell) {
-		System.out.println("la port�e max est "+ pSpell.getShape().getRange());
 		
-	}
-
-
-	@Override
-	public void displayNotEnoughActionPoints() {
-		System.out.println("tu as seulement "+ Board.getCurrentPawn().getActionPoints());
-		
-	}
-
-
 	@Override
 	public void displaySpellLaunched() {
-		System.out.println("le sort a �t� lanc�");
+		System.out.println("Spell cast !");
 		
 	}
 
@@ -358,14 +331,6 @@ public class PlayerConsole implements Player{
 		System.out.println("on passe au tour suivant");
 		
 	}
-
-
-	@Override
-	public void displayNotEnoughMovePoints() {
-		System.out.println("tu n'as pas suffisament de points de mouvement");
-		
-	}
-
 
 	@Override
 	public void displayMoveDone() {
@@ -433,6 +398,13 @@ public class PlayerConsole implements Player{
 		public void displayMoveOutOfRange()
 		{
 			System.out.println("Mouvement en dehors de limits du plateau");
+		}
+
+
+		@Override
+		public void displayError(ErrorMessages error)
+		{
+			System.out.println(error.getErrorMessage());
 		}
 		
 	}
