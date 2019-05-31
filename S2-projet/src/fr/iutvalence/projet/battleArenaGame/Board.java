@@ -1,6 +1,5 @@
 package fr.iutvalence.projet.battleArenaGame;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 
 import fr.iutvalence.projet.battleArenaGame.move.Coordinate;
@@ -10,7 +9,7 @@ import fr.iutvalence.projet.battleArenaGame.pawn.Pawn;
 import fr.iutvalence.projet.battleArenaGame.pawn.PawnEffect;
 import fr.iutvalence.projet.battleArenaGame.pawn.PawnTeam;
 import fr.iutvalence.projet.battleArenaGame.pawn.TeamId;
-import fr.iutvalence.projet.battleArenaGame.spell.Spell;
+import fr.iutvalence.projet.battleArenaGame.view.ErrorMessages;
 import fr.iutvalence.projet.battleArenaGame.view.Player;
 
 public class Board{
@@ -38,12 +37,12 @@ public class Board{
 	/**
 	 * This list represent Pawns currently living and define the turn order
 	 */
-	private static ArrayList<Pawn> turnOrder;
+	private ArrayList<Pawn> turnOrder;
 	
 	/**
 	 * Represent the currentPawn of the game = the one that can be moved or can use spell.
 	 */
-	private static Pawn currentPawn;
+	private int currentPawnIndex;
 
 	/**
 	 * Type of communication
@@ -55,18 +54,18 @@ public class Board{
 	 */
 	public Board(Communication pCommunication, Player pPlayer)
 	{
-		Board.turnOrder = new ArrayList<Pawn>();
-		Board.turnOrder.add(new Pawn(PawnTeam.PAWN_LOCAL,TeamId.TEAM_1,BASE_POS_1PAWN1 , null));
-		Board.turnOrder.add(new Pawn(PawnTeam.PAWN_REMOTE,TeamId.TEAM_2, BASE_POS_2PAWN1 , null));
+		this.turnOrder = new ArrayList<Pawn>();
+		this.turnOrder.add(new Pawn(PawnTeam.PAWN_LOCAL,TeamId.TEAM_1,BASE_POS_1PAWN1 , null));
+		this.turnOrder.add(new Pawn(PawnTeam.PAWN_REMOTE,TeamId.TEAM_2, BASE_POS_2PAWN1 , null));
 		
-		Board.turnOrder.add(new Pawn(PawnTeam.PAWN_LOCAL,TeamId.TEAM_1, BASE_POS_1PAWN2 , null));
-		Board.turnOrder.add(new Pawn(PawnTeam.PAWN_REMOTE,TeamId.TEAM_2, BASE_POS_2PAWN2 , null));
+		this.turnOrder.add(new Pawn(PawnTeam.PAWN_LOCAL,TeamId.TEAM_1, BASE_POS_1PAWN2 , null));
+		this.turnOrder.add(new Pawn(PawnTeam.PAWN_REMOTE,TeamId.TEAM_2, BASE_POS_2PAWN2 , null));
 		
-		Board.turnOrder.add(new Pawn(PawnTeam.PAWN_LOCAL,TeamId.TEAM_1, BASE_POS_1PAWN3 , null));
-		Board.turnOrder.add(new Pawn(PawnTeam.PAWN_REMOTE,TeamId.TEAM_2, BASE_POS_2PAWN3 , null));
+		this.turnOrder.add(new Pawn(PawnTeam.PAWN_LOCAL,TeamId.TEAM_1, BASE_POS_1PAWN3 , null));
+		this.turnOrder.add(new Pawn(PawnTeam.PAWN_REMOTE,TeamId.TEAM_2, BASE_POS_2PAWN3 , null));
 		
 		this.player = pPlayer;
-		Board.currentPawn = Board.turnOrder.get(0);
+		this.currentPawnIndex = 0;
 		
 		this.communication = pCommunication;
 	}
@@ -78,58 +77,36 @@ public class Board{
 	 * @param Move pMove: A movement chose by the player
 	 * @return true if the chosen move by the player is valid and authorized
 	 */
-	public void checkMove(Movement pMovement)
+	public boolean checkMove(Movement pMovement)
 	{
-		//If the pawn has enough move points to move
-		if(Board.currentPawn.getMovePoints() >= pMovement.calculateDistance())
+		//If the pawn don't have enough move points to move
+		if(this.turnOrder.get(currentPawnIndex).getMovePoints() < pMovement.calculateDistance())
 		{
-			//if the destination is in board limits
-			if(pMovement.getDestCordinate().getCoordX()>=0 && pMovement.getDestCordinate().getCoordX()<Game.BOARD_SIZE && pMovement.getDestCordinate().getCoordY()>=0 && pMovement.getDestCordinate().getCoordY()<Game.BOARD_SIZE)
+			this.player.displayError(ErrorMessages.NOT_ENOUGH_MOVE_POINT); 
+			return false;
+		}
+		
+		//if the destination isn't in board limits
+		if(pMovement.getDestCordinate().getCoordX()<0 || pMovement.getDestCordinate().getCoordX()>=Game.BOARD_SIZE || pMovement.getDestCordinate().getCoordY()<0 || pMovement.getDestCordinate().getCoordY()>=Game.BOARD_SIZE)
 			{
+				this.player.displayError(ErrorMessages.MOVE_OUT_OF_BOARD); 
+				return false;
+			}
 			//Check if the coordinates of the pawn are free (in order to move, the case must be free and not occupated by another pawn)
-			for(int indexArrayList = 0; indexArrayList < Board.turnOrder.size(); indexArrayList++)
+			for(int indexArrayList = 0; indexArrayList < this.turnOrder.size(); indexArrayList++)
 			{
-				if(pMovement.getDestCordinate() == Board.turnOrder.get(indexArrayList).getPos())
+				if(pMovement.getDestCordinate() == this.turnOrder.get(indexArrayList).getPos())
 				{
-					//this.player.displayNo
-					//TODO something to display
-					this.player.askMove();
-					//throw new InvalidMoveException("Selected position is occupated");
+					this.player.displayError(ErrorMessages.CASE_OCCUPATED);
+					return false;
 				}
 			}
-			
+			//If the move is good
 			//Move the current pawn to coordinates
-			Board.currentPawn.setPos(pMovement.getDestCordinate());
-			Board.currentPawn.setMovePoints(Board.currentPawn.getMovePoints()-pMovement.getDistance());
-			//Replace the pawn of the turnOrder (so the current one) by the currentPawn with moved coordinates)
-			
-			for(Pawn p : Board.turnOrder)
-			{
-				if(p.equals(Board.currentPawn))
-					{
-						Board.turnOrder.set(Board.turnOrder.indexOf(p),Board.currentPawn);
-						System.out.println(Board.turnOrder.indexOf(p));
-					}
-					
-			}
-			
-				this.player.displayMoveDone();
-			//Send the turn order (need to create myServer and myClient (in Game consctructor and then in play method
-				//this.communication.sendToOther(Board.turnOrder);
-				
-			//The movement is done
-//	TODO remove =>	return true;
-		}
-			else
-				this.player.displayMoveOutOfRange();
-	}
-		else {
-			this.player.displayNotEnoughMovePoints();
-			this.player.askActionChoice();
-			//throw new InvalidMoveException("Not enough move points");
-		}
-		//The movement isn't correct
-//	TODO remove =>	return false; 
+			this.turnOrder.get(currentPawnIndex).setPos(pMovement.getDestCordinate());
+			this.turnOrder.get(currentPawnIndex).setMovePoints(this.turnOrder.get(currentPawnIndex).getMovePoints()-pMovement.getDistance());				
+			this.player.displayMoveDone();
+			return true;
 	}
 	
 	
@@ -138,46 +115,33 @@ public class Board{
 	 */
 	public void applyEffect() 
 	{
-		int index = Board.turnOrder.indexOf(currentPawn);
-		
-		if(Board.currentPawn.getEffect().isEmpty())
+		if(this.turnOrder.get(currentPawnIndex).getEffect().isEmpty()) return;
+		for(PawnEffect eff : this.turnOrder.get(currentPawnIndex).getEffect() )
 		{
-			System.out.println("Effet vide");
-			return;
-		}
-		for(PawnEffect eff : Board.currentPawn.getEffect() )
-		{
-			
-			
 			switch(eff.getEffectName())
 			{
 			case "Ignite":
-				Board.currentPawn.setHealthPoints(Board.currentPawn.getHealthPoints()-5);
+				this.turnOrder.get(currentPawnIndex).setHealthPoints(this.turnOrder.get(currentPawnIndex).getHealthPoints()-5);
 				break;
 			case "Slow":
-				Board.currentPawn.setMovePoints(Board.currentPawn.getMovePoints()-2);
+				this.turnOrder.get(currentPawnIndex).setMovePoints(this.turnOrder.get(currentPawnIndex).getMovePoints()-2);
 				break;
 			case "Silence":
-				Board.currentPawn.setActionPoints(Board.currentPawn.getActionPoints()-2);
+				this.turnOrder.get(currentPawnIndex).setActionPoints(this.turnOrder.get(currentPawnIndex).getActionPoints()-2);
 				break;
 			case "Stun":
-				Board.currentPawn.setMovePoints(Board.currentPawn.getMovePoints()-1);
-				Board.currentPawn.setActionPoints(Board.currentPawn.getActionPoints()-1);
+				this.turnOrder.get(currentPawnIndex).setMovePoints(this.turnOrder.get(currentPawnIndex).getMovePoints()-1);
+				this.turnOrder.get(currentPawnIndex).setActionPoints(this.turnOrder.get(currentPawnIndex).getActionPoints()-1);
 				break;
 			case "Crit":
 				//TODO set effect
 				break;
-			case "weakness":
+			case "Weakness":
 				//TODO set effect
 				break;
-			
 			}
-		
 		}
-		
-		Board.currentPawn.updateEffect();
-		Board.turnOrder.set(index, currentPawn);
-		//replace current pawn by the right one in turnorder
+		this.turnOrder.get(currentPawnIndex).updateEffect();
 	}
 	
 	/**
@@ -186,64 +150,50 @@ public class Board{
 	
 	 * @return  true if the chosen spell by the player is valid and authorized
 	 */
-	public void checkSpell(Spell pSpell, Movement pMovement)
+	public boolean checkSpell(int pSpellIndex, Movement pMovement)
 	{
-		
-		
-		if(pSpell.getCurrentCooldown() > 0)
+		//If the spell is on cooldown
+		if(this.turnOrder.get(currentPawnIndex).getSpellPage().getSpell(pSpellIndex).getCurrentCooldown() > 0)
 		{	
-			//The spell is on cooldown
-			this.player.displaySpellInCooldown(pSpell);
-			this.player.askActionChoice();
-			//throw new SpellOnCooldownException();
-			
+			this.player.displayError(ErrorMessages.SPELL_IN_COOLDOWN);
+			return false;
 		}
-		else if(pSpell.getShape().getSpellCost() > Board.currentPawn.getActionPoints())
+		//If the pawn has not enought action points (cost too much)
+		if(this.turnOrder.get(currentPawnIndex).getSpellPage().getSpell(pSpellIndex).getShape().getSpellCost() > this.turnOrder.get(currentPawnIndex).getActionPoints())
 		{
-			//The spell cost is bigger than the pawn's action points
-			this.player.displayNotEnoughActionPoints();
-			this.player.askActionChoice();
-		//	throw new NotEnoughPointsException();
+			this.player.displayError(ErrorMessages.NOT_ENOUGH_ACTION_POINT);
+			return false;
 		}
-		else if(pMovement.getDistance() > pSpell.getShape().getRange())
+		//If the spell target is too far (range too short)
+		if(pMovement.getDistance() > this.turnOrder.get(currentPawnIndex).getSpellPage().getSpell(pSpellIndex).getShape().getRange())
 		{
-			//The target is too far away
-			this.player.displaySpellOutOfRange(pSpell);
-			this.player.askActionChoice();
-//			throw new SpellOutOfRangeException();
+			this.player.displayError(ErrorMessages.SPELL_TARGET_OUT_OF_RANGE);
+			return false;
 		}
-		else
-		{
-			//The spell is sent
-			//Remove action points used
-			Board.currentPawn.setActionPoints(Board.currentPawn.getActionPoints() - pSpell.getShape().getSpellCost());
-			//Set the cooldown on the spell used
-			pSpell.resetCooldown(); 
-			for(int index=0;index < 3;index++)
-			{
-				if(pSpell.equals(Board.currentPawn.getSpellPage().getSpell(index)))
-						Board.currentPawn.getSpellPage().getSpell(index).resetCooldown();
-			}
-			//Check on all case affected by the shape
-			for(Coordinate addedCoordinate : pSpell.getShape().getEffectedCoordinates())
+		
+		//The spell is send
+		//Remove cost in action points
+		this.turnOrder.get(currentPawnIndex).setActionPoints(this.turnOrder.get(currentPawnIndex).getActionPoints() - this.turnOrder.get(currentPawnIndex).getSpellPage().getSpell(pSpellIndex).getShape().getSpellCost());
+		//Set the cooldown on the spell used
+		this.turnOrder.get(currentPawnIndex).getSpellPage().getSpell(pSpellIndex).resetCooldown(); 
+		//Check all case affected by the shape
+			for(Coordinate addedCoordinate : this.turnOrder.get(currentPawnIndex).getSpellPage().getSpell(pSpellIndex).getShape().getEffectedCoordinates())
 			{
 				Coordinate coordinateToAffect = Coordinate.addCoordinate(pMovement.getDestCordinate(),addedCoordinate);
 				//If there is a pawn on affected case
-				if(this.getPawnOnCell(coordinateToAffect)!= null)
+				for(Pawn p : this.turnOrder)
 				{
-					Pawn pawnToAffect = this.getPawnOnCell(coordinateToAffect);
-					int indexPawnToAffect = Board.turnOrder.indexOf(pawnToAffect);
-					//Set HP
-					pawnToAffect.setHealthPoints(pawnToAffect.getHealthPoints()-pSpell.getShape().getDamage());
-					//Add effect
-					pawnToAffect.addEffect(new PawnEffect(pSpell.getSpellEffect()));
-					Board.turnOrder.set(indexPawnToAffect, pawnToAffect);
+					if(p.getPos().equals(coordinateToAffect))
+					{
+						//Update HP
+						p.setHealthPoints(p.getHealthPoints()-this.turnOrder.get(currentPawnIndex).getSpellPage().getSpell(pSpellIndex).getShape().getDamage());
+						//Add effect
+						p.addEffect(new PawnEffect(this.turnOrder.get(currentPawnIndex).getSpellPage().getSpell(pSpellIndex).getSpellEffect()));
+					}
 				}
 			}
-			//And send data to the other player, use:  Send(this.turnOrder); (might need a try catch statement)
-			
-		}
 		this.player.displaySpellLaunched();
+		return true;
 	}
 	
 	
@@ -252,75 +202,39 @@ public class Board{
 	 * Change the currentPawn of the player to the next one in the turnOrder array List
 	 * If the currentPawn is the last one, change to the first one
 	 */
-	public static void nextPawn() 
+	public void nextPawn() 
 	{
-		int nextPawnIndex = -2;
-		for(Pawn p :Board.turnOrder)
-		{
-			if(Board.currentPawn.equals(p))
-				nextPawnIndex = Board.turnOrder.indexOf(p)+1;
-		}
-		
-		if(nextPawnIndex==turnOrder.size())
-			{
-				Board.currentPawn = Board.turnOrder.get(0);
+		this.currentPawnIndex++;
+		if(this.currentPawnIndex==this.turnOrder.size())
+			this.currentPawnIndex=0;
 
-			}
-		else if(Board.turnOrder.size()==1)
-		{
-			
-		}
-		else
-			{
-				System.out.println(" DU NOUVEUA INDEX " + nextPawnIndex);
-				Board.currentPawn = Board.turnOrder.get(nextPawnIndex);
-			}
 	}
-	
-	
-	/**
-	 *  Check if a pawn is on coordinates passed in parameters
-	 *  If it exists return the pawn
-	 *  else returns null
-	 */
-	public Pawn getPawnOnCell(Coordinate pCoordinate)
-	{
-		for(Pawn p : Board.turnOrder)
-		{
-			if(p.getPos().equals(pCoordinate))
-			{
-				return p;
-			}
-		}
-		return null;
-	}
-	
 	
 	
 	
 	/**
 	 * Remove the dead pawns (hp <= 0) from the arrayList every time a new turn begin
 	 */
-	public static void removeDeads()
+	public void removeDeads()
 	{
 		ArrayList<Pawn> temp = new ArrayList<Pawn>();
-		for(Pawn p: Board.turnOrder)
+		for(Pawn p: this.turnOrder)
 			if(p.getHealthPoints() <= 0)
 				temp.add(p);
-		Board.getTurnOrder().removeAll(temp);
+		this.turnOrder.removeAll(temp);
 	}
 	
 	/**
 	 * Give the status of the game
 	 * @return EndStatus enum (Draw, Victory, Defeat or Running)
 	 */
-	public static EndStatus getWinTeam()
+	public EndStatus getWinTeam()
 	{
-		if(Board.turnOrder.size()==0)
+		if(this.turnOrder.size()==0)
 			return EndStatus.DRAW;
 		int vLocal = 0;
 		int vRemote = 0;
-		for(Pawn p : Board.turnOrder)
+		for(Pawn p : this.turnOrder)
 		{
 			if(p.getTeam()==PawnTeam.PAWN_LOCAL)
 				vLocal++;
@@ -332,42 +246,35 @@ public class Board{
 		if(vLocal==0)
 			return EndStatus.DEFEAT;
 		if(vRemote==0)
-			return EndStatus.VICTORY;
-		
+			return EndStatus.VICTORY;		
 		return null;
-	
 	}
 	
-	/*
-	 * Edit in turnOrder is mainly done in the network package
-	 * (To apply the modifications done by a player to the other
-	 */
 	/**
 	 * Getter for turnOrder
 	 * @return the turnOrder
 	 */
-	public static ArrayList<Pawn> getTurnOrder()
+	public ArrayList<Pawn> getTurnOrder()
 	{
-		return turnOrder;
+		return this.turnOrder;
 	}
 	
 	/**
 	 * Setter for turnOrder
 	 * @param pTurnOrder : the new turnOrder to set
-	 * TODO: might need to be synchronized
 	 */
-	public static void setTurnOrder(ArrayList<Pawn> pTurnOrder)
+	public void setTurnOrder(ArrayList<Pawn> pTurnOrder)
 	{
-		Board.turnOrder = pTurnOrder;
+		this.turnOrder = pTurnOrder;
 	}
 	
-	public static void setCurrentPawn(Pawn thePawn)
+	public void setCurrentPawnIndex(int pPawnIndex)
 	{
-		Board.currentPawn = thePawn;
+		this.currentPawnIndex = pPawnIndex;
 	}
 	
-	public static Pawn getCurrentPawn()
+	public int getCurrentPawnIndex()
 	{
-		return currentPawn;
+		return this.currentPawnIndex;
 	}
 }
