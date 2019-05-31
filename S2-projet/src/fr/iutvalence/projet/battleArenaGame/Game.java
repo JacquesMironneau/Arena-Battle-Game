@@ -232,7 +232,7 @@ public class Game
 							endTurn();
 							}
 						this.board.removeDeads();
-						this.localPlayer.displayBoard(this.board);
+						//this.localPlayer.displayBoard(this.board);
 						endGame();
 						this.communication.sendToOther(this.board.getTurnOrder());
 
