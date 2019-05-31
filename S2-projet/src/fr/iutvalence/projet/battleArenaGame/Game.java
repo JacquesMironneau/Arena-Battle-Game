@@ -350,11 +350,11 @@ public class Game
 	 */
 	private boolean endGame()
 	{
-		if(this.board.getWinTeam()==EndStatus.RUNNING)
+		if(Board.getWinTeam()==EndStatus.RUNNING)
 			return false;
 		else
 		{	
-			this.localPlayer.displayEnd(this.board.getWinTeam());
+			this.localPlayer.displayEnd(Board.getWinTeam());
 			return true;
 		}
 	}
@@ -397,7 +397,7 @@ public class Game
 	 */
 	public String getServerMessage()
 	{
-		return this.serverMessage;
+		return serverMessage;
 	}
 	
 	/**
@@ -415,7 +415,7 @@ public class Game
 	 */
 	public String getClientMessage()
 	{
-		return this.clientMessage;
+		return clientMessage;
 	}
 	
 	public static ArrayList<SpellPage> getSpellPages()
@@ -458,6 +458,7 @@ public class Game
 	
 	public void pageSelection()
 	{
+		
 		for(Pawn p : Board.getTurnOrder())
 		{
 			if(p.getTeam() ==PawnTeam.PAWN_LOCAL)
