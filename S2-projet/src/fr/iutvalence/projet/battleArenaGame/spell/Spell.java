@@ -45,6 +45,12 @@ public class Spell implements Serializable{
 		this.myEffect = null;
 	}
 	
+	public Spell(Spell pSpell)
+	{
+		this.currentCooldown = pSpell.currentCooldown;
+		this.myShape = pSpell.myShape;
+		this.myEffect = pSpell.myEffect;
+	}
 	
 	/**
 	 * Getter for the default cooldown of the spell
