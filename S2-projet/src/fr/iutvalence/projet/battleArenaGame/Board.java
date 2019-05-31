@@ -269,6 +269,7 @@ public class Board {
 			}
 		else
 			{
+				System.out.println(" DU NOUVEUA INDEX " + nextPawnIndex);
 				Board.currentPawn = Board.turnOrder.get(nextPawnIndex);
 			}
 	}

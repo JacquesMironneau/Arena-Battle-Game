@@ -54,7 +54,7 @@ public class Game
      * Used in the network: IP address of the server (might be deleted when UDP auto IP will be implemented
      */
     
-    public final static String HOST_ADDRESS = "192.168.0.16";
+    public final static String HOST_ADDRESS = "192.168.0.11";
     
     /** 
      * Winning message that will be send to the winner
@@ -371,9 +371,10 @@ public class Game
 		{
 			System.out.println(p.toString() + p.getTeam());
 		}
-		System.out.println("Le pion actuel est "+Board.getCurrentPawn().getTeam());
+		
+		System.out.println("Le pion actuel est "+Board.getCurrentPawn().getTeam()+" " + Board.getCurrentPawn());
 		Board.nextPawn();
-		System.out.println("Le prochain pion est "+Board.getCurrentPawn().getTeam());
+		System.out.println("Le prochain pion est "+Board.getCurrentPawn().getTeam()+ " " + Board.getCurrentPawn());
 		if(Board.getCurrentPawn().getTeam()==PawnTeam.PAWN_LOCAL)
 		{
 			this.endTurn = true;
