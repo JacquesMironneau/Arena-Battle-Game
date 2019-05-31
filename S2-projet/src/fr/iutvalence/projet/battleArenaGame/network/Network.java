@@ -102,6 +102,10 @@ public class Network {
 		{
 			myGame.getBoard().setCurrentPawnIndex((Integer)transferedObject);
 		}
+		else if(transferedObject.getClass() == String.class)
+		{
+			myGame.setGameLive((String)transferedObject);
+		}
 		else throw new NetworkUnknownTypeException(transferedObject); //If the type of the sended object is not a boolean or an arrayList
 	}
 }
