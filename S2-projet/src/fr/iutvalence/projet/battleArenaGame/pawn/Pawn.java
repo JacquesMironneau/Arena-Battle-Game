@@ -216,17 +216,11 @@ public class Pawn implements Serializable
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + actionPoints;
-		result = prime * result + ((activeEffects == null) ? 0 : activeEffects.hashCode());
-		result = prime * result + ((currentCoordinate == null) ? 0 : currentCoordinate.hashCode());
-		result = prime * result + healthPoints;
 		result = prime * result + ((id == null) ? 0 : id.hashCode());
-		result = prime * result + movePoints;
-		result = prime * result + ((mySpellPage == null) ? 0 : mySpellPage.hashCode());
-		result = prime * result + ((team == null) ? 0 : team.hashCode());
-		result = prime * result + ((teamId == null) ? 0 : teamId.hashCode());
 		return result;
 	}
+
+
 
 	@Override
 	public boolean equals(Object obj) {
@@ -237,7 +231,10 @@ public class Pawn implements Serializable
 		if (getClass() != obj.getClass())
 			return false;
 		Pawn other = (Pawn) obj;
-		if (teamId != other.teamId)
+		if (id == null) {
+			if (other.id != null)
+				return false;
+		} else if (!id.equals(other.id))
 			return false;
 		return true;
 	}
