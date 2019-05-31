@@ -28,6 +28,7 @@ public class Network {
 	 * 
 	 * @param o: the received object 
 	 */
+	@SuppressWarnings("unchecked")
 	public void Transform(Object transferedObject) throws NetworkUnknownTypeException
 	{
 		//TODO: remove that(debug only)
@@ -108,6 +109,11 @@ public class Network {
 		{
 			Board.setCurrentPawn((Pawn) transferedObject);
 			System.out.println("[NETWORK] a pawn is sended");
+		}
+		
+		else if(transferedObject.getClass()==Board.class)
+		{
+			Board.setTurnOrder((ArrayList<Pawn>) transferedObject);
 		}
 		else throw new NetworkUnknownTypeException(transferedObject); //If the type of the sended object is not a boolean or an arrayList
 	}

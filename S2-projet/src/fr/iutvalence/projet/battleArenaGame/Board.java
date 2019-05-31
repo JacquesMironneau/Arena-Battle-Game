@@ -1,14 +1,8 @@
 package fr.iutvalence.projet.battleArenaGame;
 
+import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.Arrays;
 
-import fr.iutvalence.projet.battleArenaGame.exceptions.InvalidMoveException;
-import fr.iutvalence.projet.battleArenaGame.exceptions.NotEnoughPointsException;
-import fr.iutvalence.projet.battleArenaGame.exceptions.SpellIndexException;
-import fr.iutvalence.projet.battleArenaGame.exceptions.SpellNotFoundException;
-import fr.iutvalence.projet.battleArenaGame.exceptions.SpellOnCooldownException;
-import fr.iutvalence.projet.battleArenaGame.exceptions.SpellOutOfRangeException;
 import fr.iutvalence.projet.battleArenaGame.move.Coordinate;
 import fr.iutvalence.projet.battleArenaGame.move.Movement;
 import fr.iutvalence.projet.battleArenaGame.network.Communication;
@@ -19,8 +13,12 @@ import fr.iutvalence.projet.battleArenaGame.pawn.TeamId;
 import fr.iutvalence.projet.battleArenaGame.spell.Spell;
 import fr.iutvalence.projet.battleArenaGame.view.Player;
 
-public class Board {
+public class Board implements Serializable{
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	/**
 	 * These values are the default position of pawns at the start of the game
 	 * The first number is the player's number and the second is the pawn's number
@@ -39,7 +37,7 @@ public class Board {
 	public final static Coordinate BASE_POS_2PAWN2 = new Coordinate(3,3);
 	public final static Coordinate BASE_POS_2PAWN3 = new Coordinate(3,2);
 	
-	private Player player;
+	private transient Player player;
 	/**
 	 * This list represent Pawns currently living and define the turn order
 	 */
@@ -48,12 +46,12 @@ public class Board {
 	/**
 	 * Represent the currentPawn of the game = the one that can be moved or can use spell.
 	 */
-	private static Pawn currentPawn;
+	private static transient Pawn currentPawn;
 
 	/**
 	 * Type of communication
 	 */
-	private Communication communication;
+	private transient Communication communication;
 	
 	/**
 	 * Create the board including creation of pawns 
