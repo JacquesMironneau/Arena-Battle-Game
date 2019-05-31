@@ -14,6 +14,7 @@ import fr.iutvalence.projet.battleArenaGame.shape.Shape;
 import fr.iutvalence.projet.battleArenaGame.spell.Spell;
 import fr.iutvalence.projet.battleArenaGame.spell.SpellEffect;
 import fr.iutvalence.projet.battleArenaGame.spell.SpellPage;
+import fr.iutvalence.projet.battleArenaGame.view.ErrorMessages;
 import fr.iutvalence.projet.battleArenaGame.view.Player;
 
 /**
@@ -43,7 +44,6 @@ public class Game
      */
     public final static String QUIT = "quit";
 	
-    
     /**
      * Used in the network: Port 
      */
@@ -56,73 +56,32 @@ public class Game
     
     public final static String HOST_ADDRESS = "192.168.0.11";
     
-    /** 
-     * Winning message that will be send to the winner
-     */
-    public final static String VICTORY = "Victory";
-    
-    /**
-     * Defeat message that will be send to the looser
-     */
-    
-    public final static String DEFEAT = "Defeat";
-    
-    /**
-     * Draw message that will be send to the other player
-     */
-    public final static String DRAW = "Draw";
-    
-    /**
-     * Message saying that client is ready to start
-     */
-    public final static String CLIENT_READY = "ClientIsReady";
-    
-    /**
-     * Message saying that server is ready to start
-     */
-    public final static String SERVER_READY = "ServerIsReady";
-    
 	
 	/**
 	 * First player of the game, the one who start in the first turn
 	 */
 	private Player localPlayer;
 
-	
-	/**
-	 * Represent the GUI of the game
-	 *TODO might be removed
-	 */
-	private GraphicUserInterface myGui;
-
 	/**
 	 * Represents the network of the game, it enables the players's computers to communicates game Data.
 	 */
 	private Network myNetwork;
 	
-
+	/**
+	 * Represents how the Game is sending and receiving data (With others computers or with itself)
+	 */
 	private Communication communication;
 	/**
 	 * Represents if a user the local player is playing now.
 	 * It is used to manage when a player can play.
 	 * If it's true the local player can play, else it can't. 
 	 */
-	private static boolean localPlayerTurn;
+	private boolean localPlayerTurn;
 
 	/**
 	 * True if player decide to stop his turn, false either
 	 */
 	private boolean endTurn;
-	
-	/**
-	 * Message send by the client, used to synchronize
-	 */
-	private static String clientMessage;
-	
-	/**
-	 * Message send by the server, used to synchronize 
-	 */
-	private static String serverMessage;
 	
 	/**
 	 * Board of the game
@@ -134,17 +93,17 @@ public class Game
 	 */
 	private static ArrayList<SpellPage> mySpellPages;
 	
+	
+	
 	/**
 	 * Constructor for Game
 	 * create the game, and call init to initialize the board.
 	 */
 	public Game(Player p)
 	{
-		Game.mySpellPages = new ArrayList<SpellPage>();
+		Game.mySpellPages = new ArrayList<SpellPage>(); //TODO remove (do not create it every time we launch (will evolve to file read /DB)
 		this.localPlayer = p;
-		//this.turnOrder = new ArrayList<Pawn>();
-		this.myNetwork = new Network();
-		//Server and client are created in play method if the player chose to create a game (create Server) or to join (create Client)
+		this.myNetwork = new Network(this);
 	}
 	
 	
@@ -152,69 +111,61 @@ public class Game
 	 * The first method call, set up the network
 	 * and allow the player to navigate in the menu
 	 */
-	@SuppressWarnings("resource")
 	public void launch()
 	{			
 		while(true) 
 		{		
-		/*
-		 * For now, this represent the menu of the game
-		 */
-		switch(localPlayer.askChoiceMenu())
-		{		
-		case CREATE_SPELL_PAGE:
-				//createSpellPage();
-			try {
-				this.createSpellPageForTest();
-			} catch (SpellIndexException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+			switch(localPlayer.askChoiceMenu())
+			{		
+			case CREATE_SPELL_PAGE:
+				try {
+					this.createSpellPageForTest();
+				} catch (SpellIndexException e) {
+					e.printStackTrace();
+				}
+				break;
+				
+			case HOST_GAME: // server
+				
+				this.communication = new Server(Game.PORT, myNetwork);
+				this.communication.init();
+				this.localPlayerTurn = true;
+				this.endTurn = false;
+				
+				
+				this.board = new Board(this.communication,this.localPlayer);
+				this.play();
+				break;
+			
+			case JOIN_GAME: //Client
+				
+				this.localPlayerTurn = false;
+				this.endTurn = false;
+	
+				this.communication = new Client(Game.PORT,Game.HOST_ADDRESS, myNetwork);
+				this.communication.init();
+				this.board = new Board(this.communication,this.localPlayer);
+				this.play();
+				break;
+				
+			case LOCAL_GAME:
+				
+				this.communication = new Local(this);
+				this.localPlayerTurn=true;
+				this.board = new Board(this.communication,this.localPlayer);
+				this.pawnSelection();
+				this.play();
+				break;
+				
+			default:
+				localPlayer.displayError(ErrorMessages.SYSTEM_ERROR);
 			}
-			break;
-			
-		case HOST_GAME: // server
-			//TODO review network
-			
-			this.communication = new Server(Game.PORT, myNetwork);
-			this.communication.init();
-			Game.localPlayerTurn = true;
-			this.endTurn = false;
-			
-			
-			this.board = new Board(this.communication,this.localPlayer);
-			//TODO insert champSelect
-			this.play();
-			break;
 		
-		case JOIN_GAME: // client TODO test send from client to server
-			Game.localPlayerTurn = false;
-			this.endTurn = false;
-
-			this.communication = new Client(Game.PORT,Game.HOST_ADDRESS, myNetwork);
-			//myClient = new Client(Game.PORT,Game.HOST_ADDRESS, myNetwork);
-			//myClient.init(); // Connect the client to the server
-			this.communication.init();
-			this.board = new Board(this.communication,this.localPlayer);
-			System.out.println("AIHJGHSDJIFGHSDFIL");
-			this.play();
-			break;
-		case LOCAL_GAME:
-			this.communication = new Local();
-			Game.localPlayerTurn=true;
-			this.board = new Board(this.communication,this.localPlayer);
-			this.pawnSelection();
-			this.play();
-			break;
-			
-		default:
-			localPlayer.displayError();
 		}
-		
-	}
 	}
 	
 
-	/**
+	/**TODO update this doc
 	 * Manage method for turns
 	 * First the play method check if game is ended: No more pawns in one team player.
 	 * It first select the currentPawn
@@ -225,21 +176,16 @@ public class Game
 	 * 
 	 */
 	
-	//TODO Manage the two players, the two different ArrayList (Does the pawn of the LocalPlayer are the odd ones ?
-	// Manage turn, one player should not play while it's the other turn
-	//Might need to send if the player can play or not
-	
 	public void play()
 	{	
 		
 		this.pawnSelection();
 		
-		Board.setCurrentPawn(Board.getTurnOrder().get(0));
 
 		while(!endGame()) // replace by boolean / or method to know if game is finished
 		{
-			this.localPlayer.displayBoard(board);
-			System.out.println("Waiting for client-kun.." + Game.localPlayerTurn);
+			this.localPlayer.displayBoard(this.board);
+			System.out.println("Waiting for client-kun.." + this.localPlayerTurn);
 			try {
 				Thread.sleep(1000);
 
@@ -247,16 +193,18 @@ public class Game
 			{
 				
 			}
-			if(Game.localPlayerTurn)
+			if(this.localPlayerTurn)
 			{
 				this.localPlayer.displayBoard(board);
 				//Update effects and PA &PM of pawn
-				Board.getCurrentPawn().setActionPoints(Pawn.DEFAULT_ACTION_POINTS);
-				Board.getCurrentPawn().setMovePoints(Pawn.DEFAULT_MOVE_POINTS);
+				this.board.getTurnOrder().get(board.getCurrentPawnIndex()).setActionPoints(Pawn.DEFAULT_ACTION_POINTS);
+				this.board.getTurnOrder().get(board.getCurrentPawnIndex()).setMovePoints(Pawn.DEFAULT_MOVE_POINTS);
+				
 				this.board.applyEffect();
-				if(Board.getCurrentPawn().getHealthPoints()<=0)
+				
+				if(board.getTurnOrder().get(board.getCurrentPawnIndex()).getHealthPoints()<=0)
 				{
-					Board.removeDeads();
+					board.removeDeads();
 					endGame();
 					endTurn();
 				}
@@ -264,19 +212,22 @@ public class Game
 				{
 					switch(this.localPlayer.askActionChoice())
 					{
+					
 					case MOVE:
 						this.board.checkMove(this.localPlayer.askMove());
 						this.localPlayer.displayBoard(this.board);	
 						break;
 						
 					case LAUNCH_SPELL:
+						
 						this.board.checkSpell(localPlayer.askSpell(),localPlayer.askMove());
-						Board.removeDeads();
-						this.localPlayer.displayBoard(board);
-						if(Board.getCurrentPawn().getHealthPoints()<=0)
-						{
+						this.board.removeDeads();
+						
+						this.localPlayer.displayBoard(this.board);
+						
+						if(this.board.getTurnOrder().get(this.board.getCurrentPawnIndex()).getHealthPoints()<=0)
 							endTurn();
-						}
+						
 						endGame();
 						break;
 					case END_TURN:
@@ -284,7 +235,7 @@ public class Game
 						endTurn();
 						break;
 					default:
-						localPlayer.displayError();
+						localPlayer.displayError(ErrorMessages.SYSTEM_ERROR);
 					}
 				}
 			}
@@ -310,12 +261,12 @@ public class Game
 				e.printStackTrace();
 			}
 			
-			if(Game.localPlayerTurn)
+			if(this.localPlayerTurn)
 			{
 				this.pageSelection();
-				Game.localPlayerTurn = false;
-				this.communication.sendToOther(Board.getTurnOrder());
-				this.communication.sendToOther(Game.localPlayerTurn);
+				this.localPlayerTurn = false;
+				this.communication.sendToOther(this.board.getTurnOrder());
+				this.communication.sendToOther(this.localPlayerTurn);
 				break;
 			}
 		}
@@ -326,16 +277,16 @@ public class Game
 	 * Getter for LocalPlayerTurn
 	 * @return
 	 */
-	public static boolean getLocalPlayerTurn() {
-		return localPlayerTurn;
+	public  boolean getLocalPlayerTurn() {
+		return this.localPlayerTurn;
 	}
 
 	/**
 	 * Setter for localPlayerTurn
 	 * @param localPlayerTurn
 	 */
-	public static void setLocalPlayerTurn(boolean pLocalPlayerTurn) {
-		Game.localPlayerTurn = pLocalPlayerTurn;
+	public void setLocalPlayerTurn(boolean pLocalPlayerTurn) {
+		this.localPlayerTurn = pLocalPlayerTurn;
 	}
 
 	/**
@@ -344,11 +295,11 @@ public class Game
 	 */
 	private boolean endGame()
 	{
-		if(Board.getWinTeam()==EndStatus.RUNNING)
+		if(this.board.getWinTeam()==EndStatus.RUNNING)
 			return false;
 		else
 		{	
-			this.localPlayer.displayEnd(Board.getWinTeam(),Board.getTurnOrder().get(0).getTeamId());
+			this.localPlayer.displayEnd(this.board.getWinTeam(),this.board.getTurnOrder().get(0).getTeamId());
 			endTurn();
 			return true;
 		}
@@ -362,79 +313,54 @@ public class Game
 	private void closeGame()
 	{
 		System.exit(1); // This stop in a clean way the application
+	
 	}
 	
-	
+	/**
+	 * End the turn of the player: if the next pawn is a remote one, send to other player the turnOrder + the autorisation to play
+	 */
 	private void endTurn()
 	{
-		for(Pawn p :Board.getTurnOrder())
+		for(Pawn p :this.board.getTurnOrder())
 		{
 			System.out.println(p.toString() + p.getTeam());
 		}
 		
-		System.out.println("Le pion actuel est "+Board.getCurrentPawn().getTeam()+" " + Board.getCurrentPawn());
-		Board.nextPawn();
-		System.out.println("Le prochain pion est "+Board.getCurrentPawn().getTeam()+ " " + Board.getCurrentPawn());
-		if(Board.getCurrentPawn().getTeam()==PawnTeam.PAWN_LOCAL)
+		this.board.nextPawn();
+		if(this.board.getTurnOrder().get(this.board.getCurrentPawnIndex()).getTeam()==PawnTeam.PAWN_LOCAL)
+			this.endTurn = true;
+		
+		else if(this.board.getTurnOrder().get(this.board.getCurrentPawnIndex()).getTeam()==PawnTeam.PAWN_REMOTE)
 		{
 			this.endTurn = true;
-		}
-		else if(Board.getCurrentPawn().getTeam()==PawnTeam.PAWN_REMOTE)
-		{
-			this.endTurn = true;
-			Game.localPlayerTurn = false;
-			this.communication.sendToOther(Board.getTurnOrder());
-			this.communication.sendToOther(Board.getCurrentPawn());
-			this.communication.sendToOther(Game.localPlayerTurn);
-			
+			this.localPlayerTurn = false;
+			this.communication.sendToOther(this.board.getTurnOrder());
+			this.communication.sendToOther(this.board.getTurnOrder().get(this.board.getCurrentPawnIndex()));
+			this.communication.sendToOther(this.localPlayerTurn);
 		}
 		else
-			System.out.println("Exception ni remote ni local");
+			this.localPlayer.displayError(ErrorMessages.PAWN_NO_TEAM);
 	}
 	
 	/**
-	 * Setter for ServerMessage
-	 * @param pMessage : message received
+	 * Getter for spellspages
+	 * @return
 	 */
-	public static void setServerMessage(String pMessage)
-	{
-		serverMessage = pMessage;
-	}
-	
-	/**
-	 * Getter for serverMessage
-	 * @return message corresponding to the server status
-	 */
-	public String getServerMessage()
-	{
-		return serverMessage;
-	}
-	
-	/**
-	 * Getter for clientMessage
-	 * @param pMessage : message received
-	 */
-	public static void setClientMessage(String pMessage)
-	{
-		clientMessage = pMessage;
-	}
-	
-	/**
-	 * Getter for clientMessage
-	 * @return message corresponding to client status
-	 */
-	public String getClientMessage()
-	{
-		return clientMessage;
-	}
-	
 	public static ArrayList<SpellPage> getSpellPages()
 	{
 		return Game.mySpellPages;
 	}
 	
 	/**
-	 * Creation of a spellPage using player HMI selection
+	 * @return the board of the current Game
+	 */
+	public Board getBoard()
+	{
+		return this.board;
+	}
+	
+	/**
+	 * Creation of a spellPage using player HMI selection //TODO remove this later
 	 */
 	public void createSpellPage()
 	{
@@ -444,7 +370,6 @@ public class Game
 			pageToAdd.setSpell(1,null);
 			pageToAdd.setSpell(2,null);
 		} catch (SpellIndexException e1) {
-			// TODO Auto-generated catch block
 			e1.printStackTrace();
 		}
 		boolean pageFinished = false;
@@ -452,7 +377,7 @@ public class Game
 		{
 		Spell spellToAdd = new Spell();
 		this.localPlayer.displaySpellPageDetail(pageToAdd);
-		int indexToAdd = this.localPlayer.askSpellIndex() -1;
+		int indexToAdd = this.localPlayer.askSpell() -1;
 		spellToAdd.setSpellEffect(this.localPlayer.askSpellElement());
 		spellToAdd.setShape(this.localPlayer.askSpellShape(spellToAdd.getSpellEffect()));
 		try {
@@ -468,16 +393,14 @@ public class Game
 		Game.mySpellPages.add(pageToAdd);
 	}
 	
+	/**
+	 * Select page for every pawn of the player Team
+	 */
 	public void pageSelection()
 	{
-		
-		for(Pawn p : Board.getTurnOrder())
-		{
+		for(Pawn p : this.board.getTurnOrder())
 			if(p.getTeam() ==PawnTeam.PAWN_LOCAL)
-				{	
 				p.setSpellPage(new SpellPage(this.localPlayer.askSpellPageSelection()));
-				}
-			}
 	}
 	
 /**
