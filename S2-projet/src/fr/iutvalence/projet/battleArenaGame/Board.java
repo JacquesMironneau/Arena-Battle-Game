@@ -106,7 +106,11 @@ public class Board{
 			for(Pawn p : Board.turnOrder)
 			{
 				if(p.equals(Board.currentPawn))
-					Board.turnOrder.set(Board.turnOrder.indexOf(p),Board.currentPawn);
+					{
+						Board.turnOrder.set(Board.turnOrder.indexOf(p),Board.currentPawn);
+						System.out.println(Board.turnOrder.indexOf(p));
+					}
+					
 			}
 			
 				this.player.displayMoveDone();
