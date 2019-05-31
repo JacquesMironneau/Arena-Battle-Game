@@ -85,4 +85,6 @@ public interface Player {
 	public void displayMoveDone();
 
 	public void displaySpellPageDetail(SpellPage pPage); //affiche le detail d'une page (index : element, forme ...)
+	
+	public void displayMoveOutOfRange();
 }
