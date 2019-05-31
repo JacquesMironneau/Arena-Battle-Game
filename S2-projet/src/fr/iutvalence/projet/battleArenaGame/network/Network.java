@@ -111,10 +111,10 @@ public class Network {
 			System.out.println("[NETWORK] a pawn is sended");
 		}
 		
-		else if(transferedObject.getClass()==Board.class)
-		{
-			Board.setTurnOrder((ArrayList<Pawn>) transferedObject);
-		}
+//		else if(transferedObject.getClass()==Board.class)
+//		{
+//			Board.setTurnOrder(Board.getTurnOrder());
+//		}
 		else throw new NetworkUnknownTypeException(transferedObject); //If the type of the sended object is not a boolean or an arrayList
 	}
 }

@@ -13,12 +13,9 @@ import fr.iutvalence.projet.battleArenaGame.pawn.TeamId;
 import fr.iutvalence.projet.battleArenaGame.spell.Spell;
 import fr.iutvalence.projet.battleArenaGame.view.Player;
 
-public class Board implements Serializable{
+public class Board{
 	
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
+
 	/**
 	 * These values are the default position of pawns at the start of the game
 	 * The first number is the player's number and the second is the pawn's number
@@ -37,7 +34,7 @@ public class Board implements Serializable{
 	public final static Coordinate BASE_POS_2PAWN2 = new Coordinate(3,3);
 	public final static Coordinate BASE_POS_2PAWN3 = new Coordinate(3,2);
 	
-	private transient Player player;
+	private Player player;
 	/**
 	 * This list represent Pawns currently living and define the turn order
 	 */
@@ -46,12 +43,12 @@ public class Board implements Serializable{
 	/**
 	 * Represent the currentPawn of the game = the one that can be moved or can use spell.
 	 */
-	private static transient Pawn currentPawn;
+	private static Pawn currentPawn;
 
 	/**
 	 * Type of communication
 	 */
-	private transient Communication communication;
+	private  Communication communication;
 	
 	/**
 	 * Create the board including creation of pawns 
