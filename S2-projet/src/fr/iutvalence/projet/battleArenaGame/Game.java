@@ -277,10 +277,8 @@ public class Game
 						this.board.checkSpell(localPlayer.askSpell(),localPlayer.askMove());
 						Board.removeDeads();
 						if(Board.getCurrentPawn().getHealthPoints()<=0)
-						{
 							this.localPlayer.displayBoard(this.board);
 							//End turn 
-						}
 						else
 						{
 							this.localPlayer.displayBoard(this.board);
@@ -289,6 +287,9 @@ public class Game
 						
 						
 					case END_TURN:
+						if(endGame())
+							this.localPlayer.displayEnd(Board.getWinTeam());
+
 						Board.nextPawn();			
 						if(Board.getCurrentPawn().getTeam() == PawnTeam.PAWN_REMOTE)
 						{
