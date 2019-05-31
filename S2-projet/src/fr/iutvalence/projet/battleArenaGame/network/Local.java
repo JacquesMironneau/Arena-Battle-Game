@@ -1,5 +1,6 @@
 package fr.iutvalence.projet.battleArenaGame.network;
 
+import fr.iutvalence.projet.battleArenaGame.Game;
 import fr.iutvalence.projet.battleArenaGame.exceptions.NetworkUnknownTypeException;
 /**
  * Local class is a  way of communication in a local way.
@@ -14,9 +15,11 @@ public class Local implements Communication
 	 */
 	private Network myNetwork;
 	
-	public Local()
+	private Game myGame;
+	
+	public Local(Game pGame)
 	{
-		this.myNetwork = new Network();
+		this.myNetwork = new Network(pGame);
 	}
 	
 	/**

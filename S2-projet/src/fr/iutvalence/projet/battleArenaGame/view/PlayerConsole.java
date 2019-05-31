@@ -190,22 +190,6 @@ public class PlayerConsole implements Player{
 		String myName = scan.getStr();
 		return myName;
 	}
-
-
-	@Override
-	public int askSpellIndex() {
-		CheapScanner scan = new CheapScanner();
-		System.out.println("entrez � quel index de votre sort dans la page de sort entre 1 et 3");
-		int index = (Integer)scan.getInt();
-		while (3<index || index<0)
-		{
-			index = (Integer)scan.getInt();
-			System.out.println("j'ai dis entre 1 et 3");
-		}
-		return index;
-	}
-
-
 	@Override
 	public SpellEffect askSpellElement() 
 	{	
