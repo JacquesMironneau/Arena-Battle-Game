@@ -219,11 +219,28 @@ public class Board{
 	 */
 	public void removeDeads()
 	{
+		boolean find = false;
+		Pawn tempPawn = this.turnOrder.get(currentPawnIndex);
+		
 		ArrayList<Pawn> temp = new ArrayList<Pawn>();
 		for(Pawn p: this.turnOrder)
 			if(p.getHealthPoints() <= 0)
 				temp.add(p);
 		this.turnOrder.removeAll(temp);
+		/**
+		 * 
+		 */
+		for(Pawn p: this.turnOrder)
+		{
+			if(p.equals(tempPawn))
+			{
+				this.currentPawnIndex = this.turnOrder.indexOf(tempPawn);
+				find = true;
+			}
+		}
+		if(!find)
+			this.nextPawn();
+		
 	}
 	
 	/**
