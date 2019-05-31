@@ -77,8 +77,10 @@ public class Board{
 	 * @param Move pMove: A movement chose by the player
 	 * @return true if the chosen move by the player is valid and authorized
 	 */
-	public boolean checkMove(Movement pMovement)
+	public boolean checkMove(Coordinate pDest)
 	{
+		
+		Movement pMovement = new Movement(this.turnOrder.get(currentPawnIndex).getPos(),pDest);
 		//If the pawn don't have enough move points to move
 		if(this.turnOrder.get(currentPawnIndex).getMovePoints() < pMovement.calculateDistance())
 		{

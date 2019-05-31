@@ -23,33 +23,24 @@ public class PlayerConsole implements Player{
 	
 	
 	@Override
-	public Movement askMove() {
+	public Coordinate askMove() {
 		CheapScanner scan = new CheapScanner();
-		
 		
 		System.out.println("entrez la coordon� X de la destination");
 		int xCoord = (Integer)scan.getInt();
 		
 		System.out.println("entre la coordonn� Y de la destination");
 		int yCoord = (Integer)scan.getInt();
-		Coordinate vDest = new Coordinate(xCoord,yCoord);
-		
-		/*
-		 * Create a movement with the coordinates of the currentPawn and the Destination (coordinate) chosen by the player
-		 */
-		return new Movement(Board.getCurrentPawn().getPos(), vDest);
-		 
-		
-		
+		return new Coordinate(xCoord,yCoord);
 	}
 
 	@Override
-	public int askSpell() {
-		//TODO Check if index entered is out of limit
-		/*
-		 * Create a movement with the coordinates of the currentPawn and the Destination (coordinate) chosen by the player
-		 */
-		this.displaySpellPageDetail(Board.getCurrentPawn().getSpellPage());
+	/**
+	 * Ask to the player which spell he want's to cast
+	 * @return the index of the spell chosen
+	 */
+	public int askSpell() 
+	{
 		CheapScanner scan = new CheapScanner();
 		int index = -1;
 		do {
@@ -337,6 +328,7 @@ public class PlayerConsole implements Player{
 	@Override
 	public void displayBoard(Board myBoard)
 	{
+		Boolean noPawn = true;
 		String str = "  |  0 |  1 |  2 |  3 |  4 |  5 |  6 |  7 |  8 |  9 | 10 | 11 | 12 | 13 | 14 | \n"
 				+"  |__________________________________________________________________________|\n";
 				for(int i=0;i<Game.BOARD_SIZE;i++)
@@ -348,32 +340,39 @@ public class PlayerConsole implements Player{
 					for(int j=0;j<Game.BOARD_SIZE;j++)
 					{
 						str += "|";
-						if(myBoard.getPawnOnCell(new Coordinate(i,j))!= null)
-							str += myBoard.getPawnOnCell(new Coordinate(i,j)).getId();		
-						else
+						noPawn = true;
+						for(Pawn p: myBoard.getTurnOrder())
+						{
+							if(p.getPos()== new Coordinate(i,j))
+								{
+									str+= p.getId();
+									noPawn = false;
+								}
+						}	
+						if(noPawn)
 							str+="____";
 						
 					}
 					str += "|" +"\n";
 				}
 				
-				str += Board.getCurrentPawn().getId() + " : HP:" + Board.getCurrentPawn().getHealthPoints() + "/100 AP:" + Board.getCurrentPawn().getActionPoints() + "/6 MP:"
-						+ Board.getCurrentPawn().getMovePoints() + "/6\n" 
-						+ "Spell 1 :" + Board.getCurrentPawn().getSpellPage().getSpell(0).getCurrentCooldown() + "/" + Board.getCurrentPawn().getSpellPage().getSpell(0).getDefaultCooldown()
-						+ "\nSpell 2 :" + Board.getCurrentPawn().getSpellPage().getSpell(1).getCurrentCooldown() + "/" + Board.getCurrentPawn().getSpellPage().getSpell(1).getDefaultCooldown()
-						+ "\nSpell 3 :" + Board.getCurrentPawn().getSpellPage().getSpell(2).getCurrentCooldown() + "/" + Board.getCurrentPawn().getSpellPage().getSpell(2).getDefaultCooldown();
-				str+= "\nCurrent effects :" + Board.getCurrentPawn().getEffect().toString()+"\n";
+				str += myBoard.getTurnOrder().get(myBoard.getCurrentPawnIndex()).getId() + " : HP:" + myBoard.getTurnOrder().get(myBoard.getCurrentPawnIndex()).getHealthPoints() + "/100 AP:" + myBoard.getTurnOrder().get(myBoard.getCurrentPawnIndex()).getActionPoints() + "/6 MP:"
+						+ myBoard.getTurnOrder().get(myBoard.getCurrentPawnIndex()).getMovePoints() + "/6\n" 
+						+ "Spell 1 :" + myBoard.getTurnOrder().get(myBoard.getCurrentPawnIndex()).getSpellPage().getSpell(0).getCurrentCooldown() + "/" + myBoard.getTurnOrder().get(myBoard.getCurrentPawnIndex()).getSpellPage().getSpell(0).getDefaultCooldown()
+						+ "\nSpell 2 :" + myBoard.getTurnOrder().get(myBoard.getCurrentPawnIndex()).getSpellPage().getSpell(1).getCurrentCooldown() + "/" + myBoard.getTurnOrder().get(myBoard.getCurrentPawnIndex()).getSpellPage().getSpell(1).getDefaultCooldown()
+						+ "\nSpell 3 :" + myBoard.getTurnOrder().get(myBoard.getCurrentPawnIndex()).getSpellPage().getSpell(2).getCurrentCooldown() + "/" + myBoard.getTurnOrder().get(myBoard.getCurrentPawnIndex()).getSpellPage().getSpell(2).getDefaultCooldown();
+				str+= "\nCurrent effects :" + myBoard.getTurnOrder().get(myBoard.getCurrentPawnIndex()).getEffect().toString()+"\n";
 				
 				str+= "Allied Pawns :\n";
-				for(Pawn p :Board.getTurnOrder())
+				for(Pawn p :myBoard.getTurnOrder())
 				{
-					if(p.getTeam()==Board.getCurrentPawn().getTeam())
+					if(p.getTeam()==myBoard.getTurnOrder().get(myBoard.getCurrentPawnIndex()).getTeam())
 						str += p.getId() + ": " + p.getHealthPoints() + "/100 \n";
 			 	}
 				str+= "Enemy Pawns :\n";
-				for(Pawn p :Board.getTurnOrder())
+				for(Pawn p :myBoard.getTurnOrder())
 				{
-					if(p.getTeam()!=Board.getCurrentPawn().getTeam())
+					if(p.getTeam()!=myBoard.getTurnOrder().get(myBoard.getCurrentPawnIndex()).getTeam())
 						str += p.getId() + ": " + p.getHealthPoints() + "/100 \n";
 			 	}
 				

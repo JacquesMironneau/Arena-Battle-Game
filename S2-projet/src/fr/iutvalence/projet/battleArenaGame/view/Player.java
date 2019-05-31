@@ -3,10 +3,9 @@ package fr.iutvalence.projet.battleArenaGame.view;
 import fr.iutvalence.projet.battleArenaGame.Board;
 import fr.iutvalence.projet.battleArenaGame.EndStatus;
 import fr.iutvalence.projet.battleArenaGame.exceptions.SpellNotFoundException;
-import fr.iutvalence.projet.battleArenaGame.move.Movement;
+import fr.iutvalence.projet.battleArenaGame.move.Coordinate;
 import fr.iutvalence.projet.battleArenaGame.pawn.TeamId;
 import fr.iutvalence.projet.battleArenaGame.shape.Shape;
-import fr.iutvalence.projet.battleArenaGame.spell.Spell;
 import fr.iutvalence.projet.battleArenaGame.spell.SpellEffect;
 import fr.iutvalence.projet.battleArenaGame.spell.SpellPage;
 /**
@@ -30,11 +29,10 @@ public interface Player {
 	 * @return the movement chosen 
 	 * 
 	 */
-	public Movement askMove();
+	public Coordinate askMove();
 	/**
-	 * Ask to the system to cast a spell to a wanted position.
+	 * Ask to the player which spell he want's to cast
 	 * @return the index of the spell chosen
-	 * @throws SpellNotFoundException in case of the pawn doesn't own the asked spell
 	 */
 	public int askSpell();
 	
