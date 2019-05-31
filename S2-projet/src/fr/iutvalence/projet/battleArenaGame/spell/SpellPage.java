@@ -34,6 +34,7 @@ public class SpellPage implements Serializable{
 	 */
 	public SpellPage(String pName)
 	{
+		this.spells = new Spell[3];
 		this.pageName = pName;
 		this.spells = new Spell[3];
 		this.spells[0] = new Spell();
@@ -43,9 +44,12 @@ public class SpellPage implements Serializable{
 	
 	public SpellPage(SpellPage pCopiedPage)
 	{
+		this.spells = new Spell[3];
 		this.pageName = pCopiedPage.pageName;
-		for(int i = 0; i < pCopiedPage.spells.length; i++)
-			this.spells[i] = new Spell(pCopiedPage.spells[i]);
+		this.spells[0] = new Spell(pCopiedPage.getSpell(0));
+		this.spells[1] = new Spell(pCopiedPage.getSpell(1));
+		this.spells[2] = new Spell(pCopiedPage.getSpell(2));
+
 		
 	}
 	

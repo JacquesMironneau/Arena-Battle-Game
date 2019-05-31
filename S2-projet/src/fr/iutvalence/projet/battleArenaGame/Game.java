@@ -236,8 +236,10 @@ public class Game
 		
 		Board.setCurrentPawn(Board.getTurnOrder().get(0));
 
-		while(!endGame()) // replace by boolean / or method to know if game is finished
+		while(true) // replace by boolean / or method to know if game is finished
 		{
+			this.endAllGame();
+
 			System.out.println("Waiting for client-kun.." + Game.localPlayerTurn);
 			try {
 				Thread.sleep(1000);
@@ -405,6 +407,7 @@ public class Game
 			this.communication.sendToOther(Board.getCurrentPawn());
 			this.communication.sendToOther(Board.getTurnOrder());
 			this.communication.sendToOther(Game.localPlayerTurn);
+			//this.closeGame();
 		}
 	}	
 	
@@ -483,7 +486,9 @@ public class Game
 		}
 		if(pageToAdd.getSpell(0)!= null && pageToAdd.getSpell(1)!= null && pageToAdd.getSpell(2)!= null)
 			pageFinished = this.localPlayer.askValidation();
+		
 		}
+		Game.mySpellPages.add(pageToAdd);
 	}
 	
 	public void pageSelection()
