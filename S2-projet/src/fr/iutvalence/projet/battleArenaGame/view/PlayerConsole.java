@@ -150,7 +150,7 @@ public class PlayerConsole implements Player{
 
 	@Override
 	public void displayError() {
-		System.out.println("il y a une erreur");
+		System.out.println("Une erreur s'est produite...");
 		
 	}
 
