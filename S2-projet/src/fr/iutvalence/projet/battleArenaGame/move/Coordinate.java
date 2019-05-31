@@ -60,15 +60,15 @@ public class Coordinate implements Serializable {
 	}
 	
 	/**
-	 * Add Coordinate value (x and y) to this coordinate
-	 * @param pCoordinate Coordinate to add
+	 * Add Coordinate value (x and y) to an other coordinate
+	 * @param firstCoordinate Coordinate to add
+	 * @param secondCoordinate the second one to add
 	 * @return a new Coordinate which is the sum of the 2 Coordinate
-	 */
-	public Coordinate addCoordinate(Coordinate pCoordinate)
+	 */	
+	public static Coordinate addCoordinate(Coordinate firstCoordinate, Coordinate secondCoordinate)
 	{
-		this.coordX  += pCoordinate.getCoordX();
-		this.coordY += pCoordinate.getCoordY();
-		return this;
+		
+		return new Coordinate(firstCoordinate.coordX+secondCoordinate.coordX, firstCoordinate.coordY + secondCoordinate.coordY);
 	}
 	
 	@Override
