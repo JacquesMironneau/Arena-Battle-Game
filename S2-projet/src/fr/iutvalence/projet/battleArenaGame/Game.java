@@ -332,8 +332,9 @@ public class Game
 		{
 			System.out.println(p.toString() + p.getTeam());
 		}
+		this.board.nextPawn();
 		//If there is only 1 pawn remaining
-		if(this.board.nextPawn()==1 || this.board.getTurnOrder().get(this.board.getCurrentPawnIndex()).getTeam()==PawnTeam.PAWN_REMOTE)
+		if(this.board.getTurnOrder().size()==1 || this.board.getTurnOrder().get(this.board.getCurrentPawnIndex()).getTeam()==PawnTeam.PAWN_REMOTE)
 		{
 			this.endTurn = true;
 			this.localPlayerTurn = false;
