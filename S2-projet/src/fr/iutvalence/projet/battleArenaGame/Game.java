@@ -401,8 +401,7 @@ public class Game
 		if(endGame())
 		{
 			this.endTurn = true; //  set it to true somewhere
-			Game.localPlayerTurn = false; // this one is set to true in the network class
-			this.communication.sendToOther(Game.localPlayerTurn);
+			Game.localPlayerTurn = true; // this one is set to true in the network class
 			
 			this.communication.sendToOther(Board.getCurrentPawn());
 			this.communication.sendToOther(Board.getTurnOrder());
