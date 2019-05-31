@@ -77,7 +77,7 @@ public class Board{
 	 * @param Move pMove: A movement chose by the player
 	 * @return true if the chosen move by the player is valid and authorized
 	 */
-	public boolean checkMove(Coordinate pDest)
+	public void checkMove(Coordinate pDest)
 	{
 		
 		Movement pMovement = new Movement(this.turnOrder.get(currentPawnIndex).getPos(),pDest);
@@ -85,14 +85,14 @@ public class Board{
 		if(this.turnOrder.get(currentPawnIndex).getMovePoints() < pMovement.calculateDistance())
 		{
 			this.player.displayError(ErrorMessages.NOT_ENOUGH_MOVE_POINT); 
-			return false;
+			return;
 		}
 		
 		//if the destination isn't in board limits
 		if(pMovement.getDestCordinate().getCoordX()<0 || pMovement.getDestCordinate().getCoordX()>=Game.BOARD_SIZE || pMovement.getDestCordinate().getCoordY()<0 || pMovement.getDestCordinate().getCoordY()>=Game.BOARD_SIZE)
 			{
 				this.player.displayError(ErrorMessages.MOVE_OUT_OF_BOARD); 
-				return false;
+				return;
 			}
 			//Check if the coordinates of the pawn are free (in order to move, the case must be free and not occupated by another pawn)
 			for(int indexArrayList = 0; indexArrayList < this.turnOrder.size(); indexArrayList++)
@@ -100,7 +100,7 @@ public class Board{
 				if(pMovement.getDestCordinate() == this.turnOrder.get(indexArrayList).getPos())
 				{
 					this.player.displayError(ErrorMessages.CASE_OCCUPATED);
-					return false;
+					return;
 				}
 			}
 			//If the move is good
@@ -108,7 +108,6 @@ public class Board{
 			this.turnOrder.get(currentPawnIndex).setPos(pMovement.getDestCordinate());
 			this.turnOrder.get(currentPawnIndex).setMovePoints(this.turnOrder.get(currentPawnIndex).getMovePoints()-pMovement.getDistance());				
 			this.player.displayMoveDone();
-			return true;
 	}
 	
 	
@@ -152,25 +151,27 @@ public class Board{
 	
 	 * @return  true if the chosen spell by the player is valid and authorized
 	 */
-	public boolean checkSpell(int pSpellIndex, Movement pMovement)
+	public void checkSpell(int pSpellIndex, Coordinate pDest)
 	{
+		
+		Movement pMovement = new Movement(this.turnOrder.get(currentPawnIndex).getPos(),pDest);
 		//If the spell is on cooldown
 		if(this.turnOrder.get(currentPawnIndex).getSpellPage().getSpell(pSpellIndex).getCurrentCooldown() > 0)
 		{	
 			this.player.displayError(ErrorMessages.SPELL_IN_COOLDOWN);
-			return false;
+			return;
 		}
 		//If the pawn has not enought action points (cost too much)
 		if(this.turnOrder.get(currentPawnIndex).getSpellPage().getSpell(pSpellIndex).getShape().getSpellCost() > this.turnOrder.get(currentPawnIndex).getActionPoints())
 		{
 			this.player.displayError(ErrorMessages.NOT_ENOUGH_ACTION_POINT);
-			return false;
+			return;
 		}
 		//If the spell target is too far (range too short)
 		if(pMovement.getDistance() > this.turnOrder.get(currentPawnIndex).getSpellPage().getSpell(pSpellIndex).getShape().getRange())
 		{
 			this.player.displayError(ErrorMessages.SPELL_TARGET_OUT_OF_RANGE);
-			return false;
+			return;
 		}
 		
 		//The spell is send
@@ -195,7 +196,6 @@ public class Board{
 				}
 			}
 		this.player.displaySpellLaunched();
-		return true;
 	}
 	
 	
@@ -228,28 +228,23 @@ public class Board{
 	
 	/**
 	 * Give the status of the game
-	 * @return EndStatus enum (Draw, Victory, Defeat or Running)
+	 * @return EndStatus enum (Draw, Victory, or Running)
 	 */
 	public EndStatus getWinTeam()
 	{
 		if(this.turnOrder.size()==0)
 			return EndStatus.DRAW;
-		int vLocal = 0;
 		int vRemote = 0;
 		for(Pawn p : this.turnOrder)
 		{
-			if(p.getTeam()==PawnTeam.PAWN_LOCAL)
-				vLocal++;
-			else
+			if(p.getTeam()==PawnTeam.PAWN_REMOTE)
 				vRemote++;
 		}
-		if(vLocal>0 && vRemote>0)
-			return EndStatus.RUNNING;
-		if(vLocal==0)
-			return EndStatus.DEFEAT;
 		if(vRemote==0)
-			return EndStatus.VICTORY;		
-		return null;
+			return EndStatus.VICTORY;
+		else
+			return EndStatus.RUNNING;
+		
 	}
 	
 	/**

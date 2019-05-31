@@ -101,9 +101,6 @@ public class PlayerConsole implements Player{
 		case VICTORY:
 			System.out.println("vous etes le boss " + teamId);
 			break;
-		case DEFEAT:
-			System.out.println("lol t'as loose" + teamId);
-			break;
 		case DRAW:
 			System.out.println("wow c'etait un match d'enfer, hyper close vous etes mort en m�me temps et ca c'est beau bordel");
 			break;
@@ -343,7 +340,7 @@ public class PlayerConsole implements Player{
 						noPawn = true;
 						for(Pawn p: myBoard.getTurnOrder())
 						{
-							if(p.getPos()== new Coordinate(i,j))
+							if(p.getPos().equals(new Coordinate(i,j)))
 								{
 									str+= p.getId();
 									noPawn = false;

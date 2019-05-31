@@ -93,6 +93,8 @@ public class Game
 	 */
 	private static ArrayList<SpellPage> mySpellPages;
 	
+	private String gameLive;
+	
 	
 	
 	/**
@@ -104,6 +106,7 @@ public class Game
 		Game.mySpellPages = new ArrayList<SpellPage>(); //TODO remove (do not create it every time we launch (will evolve to file read /DB)
 		this.localPlayer = p;
 		this.myNetwork = new Network(this);
+		this.gameLive = "ALIVE";
 	}
 	
 	
@@ -182,7 +185,7 @@ public class Game
 		this.pawnSelection();
 		
 
-		while(!endGame()) // replace by boolean / or method to know if game is finished
+		while(!endGame() && this.gameLive.equals("ALIVE")) // replace by boolean / or method to know if game is finished
 		{
 			this.localPlayer.displayBoard(this.board);
 			System.out.println("Waiting for client-kun.." + this.localPlayerTurn);
@@ -219,7 +222,7 @@ public class Game
 						break;
 						
 					case LAUNCH_SPELL:
-						
+						this.localPlayer.displaySpellPageDetail(this.board.getTurnOrder().get(this.board.getCurrentPawnIndex()).getSpellPage());
 						this.board.checkSpell(localPlayer.askSpell(),localPlayer.askMove());
 						this.board.removeDeads();
 						
@@ -241,6 +244,7 @@ public class Game
 			}
 			this.endTurn = false; 
 		}
+		this.closeGame();
 	}
 	
 	/**
@@ -300,6 +304,8 @@ public class Game
 		else
 		{	
 			this.localPlayer.displayEnd(this.board.getWinTeam(),this.board.getTurnOrder().get(0).getTeamId());
+			this.gameLive = "DEAD";
+			this.communication.sendToOther("DEAD");
 			endTurn();
 			return true;
 		}
@@ -401,6 +407,11 @@ public class Game
 		for(Pawn p : this.board.getTurnOrder())
 			if(p.getTeam() ==PawnTeam.PAWN_LOCAL)
 				p.setSpellPage(new SpellPage(this.localPlayer.askSpellPageSelection()));
+	}
+	
+	public void setGameLive(String pString)
+	{
+		this.gameLive = pString;
 	}
 	
 /**

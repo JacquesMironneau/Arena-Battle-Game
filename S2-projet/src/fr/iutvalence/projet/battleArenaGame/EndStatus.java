@@ -7,7 +7,6 @@ package fr.iutvalence.projet.battleArenaGame;
 public enum EndStatus {
 
 	VICTORY,
-	DEFEAT,
 	DRAW,
 	RUNNING;
 }
