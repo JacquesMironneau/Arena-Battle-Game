@@ -24,13 +24,19 @@ public class Board {
 	 * These values are the default position of pawns at the start of the game
 	 * The first number is the player's number and the second is the pawn's number
 	 */
-	public final static Coordinate BASE_POS_1PAWN1 = new Coordinate(2,0);
+/**	public final static Coordinate BASE_POS_1PAWN1 = new Coordinate(2,0);
 	public final static Coordinate BASE_POS_1PAWN2 = new Coordinate(7,1);
 	public final static Coordinate BASE_POS_1PAWN3 = new Coordinate(12,0);
 	public final static Coordinate BASE_POS_2PAWN1 = new Coordinate(2,14);
 	public final static Coordinate BASE_POS_2PAWN2 = new Coordinate(7,13);
 	public final static Coordinate BASE_POS_2PAWN3 = new Coordinate(12,14);
-
+*/
+	public final static Coordinate BASE_POS_1PAWN1 = new Coordinate(2,0);
+	public final static Coordinate BASE_POS_1PAWN2 = new Coordinate(2,1);
+	public final static Coordinate BASE_POS_1PAWN3 = new Coordinate(2,2);
+	public final static Coordinate BASE_POS_2PAWN1 = new Coordinate(3,1);
+	public final static Coordinate BASE_POS_2PAWN2 = new Coordinate(3,3);
+	public final static Coordinate BASE_POS_2PAWN3 = new Coordinate(3,2);
 	
 	private Player player;
 	/**
@@ -209,24 +215,21 @@ public class Board {
 				if(pSpell.equals(Board.currentPawn.getSpellPage().getSpell(index)))
 						Board.currentPawn.getSpellPage().getSpell(index).resetCooldown();
 			}
-			
-			//Check on all case affected by the spell shape
-			ArrayList<Coordinate> effectedCoordinateList = new ArrayList<Coordinate>(Arrays.asList(pSpell.getShape().getEffectedCoordinates()));
-			for(int effectedIndex=0;effectedIndex <effectedCoordinateList.size();effectedIndex++)
+			//Check on all case affected by the shape
+			for(Coordinate addedCoordinate : pSpell.getShape().getEffectedCoordinates())
 			{
-				//If there is a pawn on the affected case
-				Coordinate effectedCase = pMovement.getDestCordinate().addCoordinate(effectedCoordinateList.get(effectedIndex));
-				if(this.getPawnOnCell(effectedCase)!= null)
+				Coordinate coordinateToAffect = Coordinate.addCoordinate(pMovement.getDestCordinate(),addedCoordinate);
+				//If there is a pawn on affected case
+				if(this.getPawnOnCell(coordinateToAffect)!= null)
 				{
-					Pawn pawnToAffect = this.getPawnOnCell(effectedCase);
-					int indexOfPawnToAffect = Board.turnOrder.indexOf(pawnToAffect);
-					//Set the new HP on the affected Pawn
+					Pawn pawnToAffect = this.getPawnOnCell(coordinateToAffect);
+					int indexPawnToAffect = Board.turnOrder.indexOf(pawnToAffect);
+					//Set HP
 					pawnToAffect.setHealthPoints(pawnToAffect.getHealthPoints()-pSpell.getShape().getDamage());
-					//Add the effect on the affectPawn
+					//Add effect
 					pawnToAffect.addEffect(new PawnEffect(pSpell.getSpellEffect()));
-					Board.turnOrder.set(indexOfPawnToAffect, pawnToAffect);
+					Board.turnOrder.set(indexPawnToAffect, pawnToAffect);
 				}
-				
 			}
 			//And send data to the other player, use:  Send(this.turnOrder); (might need a try catch statement)
 			

@@ -204,6 +204,7 @@ public class Game
 			this.board = new Board(this.communication,this.localPlayer);
 			this.pawnSelection();
 			this.play();
+			break;
 			
 		default:
 			localPlayer.displayError();
@@ -263,17 +264,29 @@ public class Game
 									
 					switch(this.localPlayer.askActionChoice())
 					{
-					case LAUNCH_SPELL:
-						localPlayer.displayBoard(this.board);
-						this.board.checkSpell(localPlayer.askSpell(),localPlayer.askMove());
-						this.localPlayer.displayBoard(this.board);	
-						break;
+					
 						
 					case MOVE:
 						localPlayer.displayBoard(this.board);
 						this.board.checkMove(this.localPlayer.askMove());
 						this.localPlayer.displayBoard(this.board);	
 						break;
+						
+					case LAUNCH_SPELL:
+						localPlayer.displayBoard(this.board);
+						this.board.checkSpell(localPlayer.askSpell(),localPlayer.askMove());
+						Board.removeDeads();
+						if(Board.getCurrentPawn().getHealthPoints()<=0)
+						{
+							this.localPlayer.displayBoard(this.board);
+							//End turn 
+						}
+						else
+						{
+							this.localPlayer.displayBoard(this.board);
+							break;
+						}
+						
 						
 					case END_TURN:
 						Board.nextPawn();			
@@ -317,7 +330,6 @@ public class Game
 		{
 			if(Game.localPlayerTurn)
 			{
-				System.out.println("AAAAAAAAAAAAAAAAAAAAAAAAAAAAA");//TODO remove
 				this.pageSelection();
 				Game.localPlayerTurn = false;
 				this.communication.sendToOther(Board.getTurnOrder());
