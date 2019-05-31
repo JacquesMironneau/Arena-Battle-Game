@@ -429,7 +429,7 @@ public class PlayerConsole implements Player{
 				
 				System.out.println(str);
 			}
-		public void displayMoveOutOfRange()
+		public void displayOutOfRange()
 		{
 			System.out.println("Mouvement en dehors de limits du plateau");
 		}

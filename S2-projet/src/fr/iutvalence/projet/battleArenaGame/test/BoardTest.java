@@ -24,12 +24,7 @@ import fr.iutvalence.projet.battleArenaGame.view.PlayerConsole;
 class BoardTest
 {
 
-	@Test
-	void test()
-	{
-		fail("Not yet implemented");
-	}
-	
+
 	@Test
 	void testCheckMove()
 	{
@@ -70,13 +65,13 @@ class BoardTest
 		assertFalse("Effet vide", Board.getCurrentPawn().getEffect().isEmpty());
 		//insert two test
 		assertFalse("Full Actions points", Board.getCurrentPawn().getActionPoints()==Pawn.DEFAULT_ACTION_POINTS);
-		assertTrue("Actions points not decreased", Board.getCurrentPawn().getActionPoints()==-2);
+		assertTrue("Actions points not decreased", Board.getCurrentPawn().getActionPoints()==Pawn.DEFAULT_ACTION_POINTS-2);
 		b.applyEffect();
-		assertTrue("Nb points égaux", Board.getCurrentPawn().getHealthPoints()==0);
+		assertTrue("Nb points égaux", Board.getCurrentPawn().getHealthPoints()==Pawn.DEFAULT_HEALTH_POINTS-10);
 		b.applyEffect();
-		assertTrue("HP != 0", Board.getCurrentPawn().getHealthPoints()==0);
+		assertTrue("HP != 85", Board.getCurrentPawn().getHealthPoints()==Pawn.DEFAULT_HEALTH_POINTS-15);
 		b.applyEffect();
-		assertTrue("HP négatifs", Board.getCurrentPawn().getHealthPoints()==0);
+		assertTrue("HP négatifs", Board.getCurrentPawn().getHealthPoints()==Pawn.DEFAULT_HEALTH_POINTS-15);
 
 		
 		//Update element test
@@ -95,10 +90,11 @@ class BoardTest
 		assertTrue("Base de point de vie mauvaise", Board.getCurrentPawn().getMovePoints()==Pawn.DEFAULT_MOVE_POINTS);
 		
 		b.applyEffect();
-		assertTrue("Base de point de vie mauvaise", Board.getCurrentPawn().getMovePoints()==-2);
+		assertTrue("Base de point de vie mauvaise", Board.getCurrentPawn().getMovePoints()==Pawn.DEFAULT_MOVE_POINTS-2);
 		b.applyEffect();
 		b.applyEffect();
-		assertTrue("Base de point de vie mauvaise", Board.getCurrentPawn().getMovePoints()==-6);
+		b.applyEffect();
+		assertTrue("Base de point de vie mauvaise", Board.getCurrentPawn().getMovePoints()==Pawn.DEFAULT_MOVE_POINTS-6);
 
 		assertTrue("Effets non vide", Board.getCurrentPawn().getEffect().isEmpty());
 		Board.getCurrentPawn().getEffect().clear();
@@ -107,13 +103,13 @@ class BoardTest
 		Board.getCurrentPawn().addEffect(new PawnEffect(SpellEffect.Stone));
 		b.applyEffect();
 
-		assertTrue("Echec stone action", Board.getCurrentPawn().getActionPoints()==-1);
-		assertTrue("Echec stone move", Board.getCurrentPawn().getMovePoints()==-1);
+		assertTrue("Echec stone action", Board.getCurrentPawn().getActionPoints()==Pawn.DEFAULT_ACTION_POINTS-1);
+		assertTrue("Echec stone move", Board.getCurrentPawn().getMovePoints()==Pawn.DEFAULT_MOVE_POINTS-1);
 		b.applyEffect();
 		b.applyEffect();
 		b.applyEffect();
-		assertTrue("Echec stone action", Board.getCurrentPawn().getActionPoints()==-3);
-		assertTrue("Echec stone move", Board.getCurrentPawn().getMovePoints()==-3);
+		assertTrue("Echec stone action", Board.getCurrentPawn().getActionPoints()==Pawn.DEFAULT_ACTION_POINTS-3);
+		assertTrue("Echec stone move", Board.getCurrentPawn().getMovePoints()==Pawn.DEFAULT_MOVE_POINTS-3);
 		assertTrue("Non vide", Board.getCurrentPawn().getEffect().isEmpty());
 		
 	}
@@ -140,8 +136,18 @@ SpellPage page1 = new SpellPage("Namepage1");
 		Board.getCurrentPawn().setSpellPage(page1);
 		Movement mov =new Movement(Board.getCurrentPawn().getPos(),coord);
 		b.checkSpell(Board.getCurrentPawn().getSpellPage().getSpell(0), mov);
-		assertTrue(Board.getCurrentPawn().getSpellPage().getSpell(0).getCurrentCooldown()==Board.getCurrentPawn().getSpellPage().getSpell(0).getDefaultCooldown());
-
+		assertFalse("getion de port�e",Board.getCurrentPawn().getSpellPage().getSpell(0).getCurrentCooldown()==Board.getCurrentPawn().getSpellPage().getSpell(0).getDefaultCooldown());
+		mov = new Movement(new Coordinate(0,0),new Coordinate(1,0));
+		b.checkSpell(Board.getCurrentPawn().getSpellPage().getSpell(0), mov);
+		assertTrue("gestion range",Board.getCurrentPawn().getSpellPage().getSpell(0).getCurrentCooldown()==Board.getCurrentPawn().getSpellPage().getSpell(0).getDefaultCooldown());
+		b.checkSpell(Board.getCurrentPawn().getSpellPage().getSpell(0), mov);
+		assertTrue("gestion range",Board.getCurrentPawn().getSpellPage().getSpell(0).getCurrentCooldown()==Board.getCurrentPawn().getSpellPage().getSpell(0).getDefaultCooldown());
+		Board.getCurrentPawn().setActionPoints(0);
+		b.checkSpell(Board.getCurrentPawn().getSpellPage().getSpell(1), mov);
+		assertTrue("gestion points action",Board.getCurrentPawn().getActionPoints()==0);
+		assertTrue("gestion action-cooldown",Board.getCurrentPawn().getSpellPage().getSpell(1).getCurrentCooldown()==0);
+		
+	
 	}
 	
 	/**
@@ -157,14 +163,16 @@ SpellPage page1 = new SpellPage("Namepage1");
 		Board.nextPawn();
 		assertFalse("Suivant de P1 = p1", previousPawn == Board.getCurrentPawn());
 		//assertFalse("P1 != P1",  );
-		for(Pawn p: list)
-		{
-			int i = 0;
-			Board.nextPawn();
-			assertTrue("Allo", Board.getTurnOrder().indexOf(p)==i);
-			i++;
-		}
 		
+		assertTrue("Allo", 1==Board.getTurnOrder().indexOf(Board.getCurrentPawn()));
+		Board.nextPawn();
+		Board.nextPawn();
+		Board.nextPawn();
+		Board.nextPawn();
+		Board.nextPawn();
+		
+		
+		assertTrue("Allo", 0==Board.getTurnOrder().indexOf(Board.getCurrentPawn()));
 		//Pawn pLast = Board.getTurnOrder().get(Board.getTurnOrder().size()-1);
 	}
 	
@@ -175,6 +183,12 @@ SpellPage page1 = new SpellPage("Namepage1");
 		//Board.getCurrentPawn().setHealthPoints(10);
 		System.out.println(Board.getTurnOrder().size());
 		assertTrue("Turn order correct", Board.getTurnOrder().size()==6);
+		Board.getTurnOrder().get(0).setHealthPoints(0);
+		Board.getTurnOrder().get(1).setHealthPoints(0);
+		Board.getTurnOrder().get(2).setHealthPoints(0);
+		Board.getTurnOrder().get(3).setHealthPoints(0);
+		Board.getTurnOrder().get(4).setHealthPoints(0);
+		Board.getTurnOrder().get(5).setHealthPoints(0);
 		Board.removeDeads();
 		
 		
@@ -195,7 +209,7 @@ SpellPage page1 = new SpellPage("Namepage1");
 		Board b1 = new Board(null, null);
 		System.out.println(b1.getPawnOnCell(new Coordinate(2,9)));
 		assertTrue("Erreur méthode", Board.getCurrentPawn()==b1.getPawnOnCell(new Coordinate(2,0)));
-		assertFalse("N'existe pas", b1.getPawnOnCell(new Coordinate(200,200))==null);
+		assertTrue("N'existe pas", b1.getPawnOnCell(new Coordinate(200,200))==null);
 	}
 	@Test
 	void testGetWinTeam()
@@ -204,11 +218,24 @@ SpellPage page1 = new SpellPage("Namepage1");
 		
 		assertTrue("Should be running", Board.getWinTeam()==EndStatus.RUNNING);
 		
-		
+		Board.getTurnOrder().get(0).setHealthPoints(0);
+		Board.getTurnOrder().get(1).setHealthPoints(0);
+		Board.getTurnOrder().get(2).setHealthPoints(0);
+		Board.getTurnOrder().get(3).setHealthPoints(0);
+		Board.getTurnOrder().get(4).setHealthPoints(0);
+		Board.getTurnOrder().get(5).setHealthPoints(0);
 		Board.removeDeads();
 		assertTrue("Should draw", Board.getWinTeam()==EndStatus.DRAW);
 		
 		Board b3 = new Board(null, null);
+		Board.getCurrentPawn().setHealthPoints(10);
+		Board.removeDeads();
+		Board.getTurnOrder().get(0).setHealthPoints(0);
+		Board.getTurnOrder().get(1).setHealthPoints(0);
+		Board.getTurnOrder().get(2).setHealthPoints(0);
+		Board.getTurnOrder().get(3).setHealthPoints(0);
+		Board.getTurnOrder().get(4).setHealthPoints(0);
+		Board.getTurnOrder().get(5).setHealthPoints(0);
 		Board.getCurrentPawn().setHealthPoints(10);
 		Board.removeDeads();
 		assertTrue("Should victory", Board.getWinTeam()==EndStatus.VICTORY);
@@ -216,7 +243,14 @@ SpellPage page1 = new SpellPage("Namepage1");
 		b3 = new Board(null, null);
 
 		Board.nextPawn();
+		Board.getTurnOrder().get(0).setHealthPoints(0);
+		Board.getTurnOrder().get(1).setHealthPoints(0);
+		Board.getTurnOrder().get(2).setHealthPoints(0);
+		Board.getTurnOrder().get(3).setHealthPoints(0);
+		Board.getTurnOrder().get(4).setHealthPoints(0);
+		Board.getTurnOrder().get(5).setHealthPoints(0);
 		Board.getCurrentPawn().setHealthPoints(10);
+		
 		Board.removeDeads();
 		assertTrue("aa", Board.getWinTeam()==EndStatus.DEFEAT);
 	}
