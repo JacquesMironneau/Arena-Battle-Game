@@ -237,29 +237,6 @@ public class Pawn implements Serializable
 		if (getClass() != obj.getClass())
 			return false;
 		Pawn other = (Pawn) obj;
-		if (actionPoints != other.actionPoints)
-			return false;
-		if (activeEffects == null) {
-			if (other.activeEffects != null)
-				return false;
-		} else if (!activeEffects.equals(other.activeEffects))
-			return false;
-		if (currentCoordinate == null) {
-			if (other.currentCoordinate != null)
-				return false;
-		} else if (!currentCoordinate.equals(other.currentCoordinate))
-			return false;
-		if (healthPoints != other.healthPoints)
-			return false;
-		if (id == null) {
-			if (other.id != null)
-				return false;
-		} else if (!id.equals(other.id))
-			return false;
-		if (movePoints != other.movePoints)
-			return false;
-		if (team != other.team)
-			return false;
 		if (teamId != other.teamId)
 			return false;
 		return true;
