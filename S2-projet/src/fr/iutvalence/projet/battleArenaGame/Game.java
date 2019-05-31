@@ -219,6 +219,8 @@ public class Game
 					case MOVE:
 						this.board.checkMove(this.localPlayer.askMove());
 						this.localPlayer.displayBoard(this.board);	
+						
+						this.communication.sendToOther(this.board.getTurnOrder());
 						break;
 						
 					case LAUNCH_SPELL:
@@ -232,6 +234,8 @@ public class Game
 						this.board.removeDeads();
 						this.localPlayer.displayBoard(this.board);
 						endGame();
+						this.communication.sendToOther(this.board.getTurnOrder());
+
 						break;
 					case END_TURN:
 
@@ -244,7 +248,7 @@ public class Game
 			}
 			this.endTurn = false; 
 		}
-		this.closeGame();
+		//this.closeGame();
 	}
 	
 	/**
