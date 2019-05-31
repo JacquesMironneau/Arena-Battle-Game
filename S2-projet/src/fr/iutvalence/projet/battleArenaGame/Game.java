@@ -370,7 +370,7 @@ public class Game
 			return false;
 		else
 		{	
-			this.localPlayer.displayEnd(Board.getWinTeam());
+			this.localPlayer.displayEnd(Board.getWinTeam(),Board.getTurnOrder().get(0).getTeamId());
 			return true;
 		}
 	}
@@ -401,13 +401,13 @@ public class Game
 		if(endGame())
 		{
 			this.endTurn = true; //  set it to true somewhere
-			Game.localPlayerTurn = false; // this one is set to true in the network class
-			this.communication.sendToOther(Game.localPlayerTurn);
+			Game.localPlayerTurn = true; // this one is set to true in the network class
 			
 			this.communication.sendToOther(Board.getCurrentPawn());
 			this.communication.sendToOther(Board.getTurnOrder());
 			this.communication.sendToOther(Game.localPlayerTurn);
-			//this.closeGame();
+			
+			this.closeGame();
 		}
 	}	
 	

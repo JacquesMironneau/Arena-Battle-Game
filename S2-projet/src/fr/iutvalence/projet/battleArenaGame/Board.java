@@ -15,6 +15,7 @@ import fr.iutvalence.projet.battleArenaGame.network.Communication;
 import fr.iutvalence.projet.battleArenaGame.pawn.Pawn;
 import fr.iutvalence.projet.battleArenaGame.pawn.PawnEffect;
 import fr.iutvalence.projet.battleArenaGame.pawn.PawnTeam;
+import fr.iutvalence.projet.battleArenaGame.pawn.TeamId;
 import fr.iutvalence.projet.battleArenaGame.spell.Spell;
 import fr.iutvalence.projet.battleArenaGame.view.Player;
 
@@ -60,14 +61,14 @@ public class Board {
 	public Board(Communication pCommunication, Player pPlayer)
 	{
 		Board.turnOrder = new ArrayList<Pawn>();
-		Board.turnOrder.add(new Pawn(PawnTeam.PAWN_LOCAL, BASE_POS_1PAWN1 , null));
-		Board.turnOrder.add(new Pawn(PawnTeam.PAWN_REMOTE, BASE_POS_2PAWN1 , null));
+		Board.turnOrder.add(new Pawn(PawnTeam.PAWN_LOCAL,TeamId.TEAM_1,BASE_POS_1PAWN1 , null));
+		Board.turnOrder.add(new Pawn(PawnTeam.PAWN_REMOTE,TeamId.TEAM_2, BASE_POS_2PAWN1 , null));
 		
-		Board.turnOrder.add(new Pawn(PawnTeam.PAWN_LOCAL, BASE_POS_1PAWN2 , null));
-		Board.turnOrder.add(new Pawn(PawnTeam.PAWN_REMOTE, BASE_POS_2PAWN2 , null));
+		Board.turnOrder.add(new Pawn(PawnTeam.PAWN_LOCAL,TeamId.TEAM_1, BASE_POS_1PAWN2 , null));
+		Board.turnOrder.add(new Pawn(PawnTeam.PAWN_REMOTE,TeamId.TEAM_2, BASE_POS_2PAWN2 , null));
 		
-		Board.turnOrder.add(new Pawn(PawnTeam.PAWN_LOCAL, BASE_POS_1PAWN3 , null));
-		Board.turnOrder.add(new Pawn(PawnTeam.PAWN_REMOTE, BASE_POS_2PAWN3 , null));
+		Board.turnOrder.add(new Pawn(PawnTeam.PAWN_LOCAL,TeamId.TEAM_1, BASE_POS_1PAWN3 , null));
+		Board.turnOrder.add(new Pawn(PawnTeam.PAWN_REMOTE,TeamId.TEAM_2, BASE_POS_2PAWN3 , null));
 		
 		this.player = pPlayer;
 		Board.currentPawn = Board.turnOrder.get(0);

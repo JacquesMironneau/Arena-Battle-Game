@@ -72,9 +72,14 @@ public class Pawn implements Serializable
 	private Coordinate currentCoordinate;
 	
 	/**
-	 * The team which the pawn's belong to
+	 * The team which the pawn's belong to (remote / local)
 	 */
 	private PawnTeam team;
+	
+	/**
+	 * Id of the team which the paw's belong to 
+	 */
+	private TeamId teamId;
 	
 	/**
 	 * The SpellPage of the Pawn
@@ -97,7 +102,7 @@ public class Pawn implements Serializable
 	 * @param pBaseCoordinate : The Pawn's coordinate when he is created
 	 * @param pSpellPage : The Pawn's spell page, selected by the player
 	 */
-	public Pawn(PawnTeam pteam,Coordinate pBaseCoordinate,SpellPage pSpellPage)
+	public Pawn(PawnTeam pteam,TeamId pTeamId,Coordinate pBaseCoordinate,SpellPage pSpellPage)
 	{
 		this.team = pteam;
 		this.healthPoints = Pawn.DEFAULT_HEALTH_POINTS;
@@ -106,7 +111,7 @@ public class Pawn implements Serializable
 		this.currentCoordinate = pBaseCoordinate;
 		this.mySpellPage = pSpellPage;
 		this.activeEffects= new ArrayList<PawnEffect>();
-		
+		this.teamId = pTeamId;
 		if(this.team==PawnTeam.PAWN_LOCAL)
 		{
 			this.id = "J1." + localPawnCount;
@@ -272,6 +277,11 @@ public class Pawn implements Serializable
 	public String getId()
 	{
 		return this.id;
+	}
+	
+	public TeamId getTeamId()
+	{
+		return this.teamId;
 	}
 }
 
