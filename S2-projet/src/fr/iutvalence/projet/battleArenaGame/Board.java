@@ -106,9 +106,13 @@ public class Board {
 			//Move the current pawn to coordinates
 			Board.currentPawn.setPos(pMovement.getDestCordinate());
 			Board.currentPawn.setMovePoints(Board.currentPawn.getMovePoints()-pMovement.getDistance());
-			//TODO may be useless
 			//Replace the pawn of the turnOrder (so the current one) by the currentPawn with moved coordinates)
-			Board.turnOrder.set(Board.turnOrder.indexOf(Board.currentPawn), Board.currentPawn);
+			
+			for(Pawn p : Board.turnOrder)
+			{
+				if(p.equals(Board.currentPawn))
+					Board.turnOrder.set(Board.turnOrder.indexOf(p),Board.currentPawn);
+			}
 			
 				this.player.displayMoveDone();
 			//Send the turn order (need to create myServer and myClient (in Game consctructor and then in play method
@@ -215,8 +219,7 @@ public class Board {
 			//Remove action points used
 			Board.currentPawn.setActionPoints(Board.currentPawn.getActionPoints() - pSpell.getShape().getSpellCost());
 			//Set the cooldown on the spell used
-			pSpell.resetCooldown();
-			int spellIndexInPage = -1;
+			pSpell.resetCooldown(); 
 			for(int index=0;index < 3;index++)
 			{
 				if(pSpell.equals(Board.currentPawn.getSpellPage().getSpell(index)))

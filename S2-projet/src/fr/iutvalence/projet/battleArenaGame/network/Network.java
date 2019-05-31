@@ -37,8 +37,7 @@ public class Network {
 		{
 		
 			
-					//TODO remove debug
-					System.out.println(Board.getTurnOrder().size());
+					
 					
 					//Unsafe but works actually
 					@SuppressWarnings("unchecked")

@@ -54,7 +54,7 @@ public class Game
      * Used in the network: IP address of the server (might be deleted when UDP auto IP will be implemented
      */
     
-    public final static String HOST_ADDRESS = "172.26.105.6";
+    public final static String HOST_ADDRESS = "192.168.0.16";
     
     /** 
      * Winning message that will be send to the winner
@@ -194,8 +194,8 @@ public class Game
 			//myClient = new Client(Game.PORT,Game.HOST_ADDRESS, myNetwork);
 			//myClient.init(); // Connect the client to the server
 			this.communication.init();
-			//TODO get board from server
-			//TODO Insert champ select
+			this.board = new Board(this.communication,this.localPlayer);
+			System.out.println("AIHJGHSDJIFGHSDFIL");
 			this.play();
 			break;
 		case LOCAL_GAME:
@@ -302,6 +302,13 @@ public class Game
 
 		while(true)
 		{
+			try {
+				Thread.sleep(1000);
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			
 			if(Game.localPlayerTurn)
 			{
 				this.pageSelection();
