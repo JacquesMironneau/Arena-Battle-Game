@@ -87,9 +87,6 @@ public class Board {
 		//If the pawn has enough move points to move
 		if(Board.currentPawn.getMovePoints() >= pMovement.calculateDistance())
 		{
-			//if the destination is in board limits
-			if(pMovement.getDestCordinate().getCoordX()>=0 && pMovement.getDestCordinate().getCoordX()<Game.BOARD_SIZE && pMovement.getDestCordinate().getCoordY()>=0 && pMovement.getDestCordinate().getCoordY()<Game.BOARD_SIZE)
-			{
 			//Check if the coordinates of the pawn are free (in order to move, the case must be free and not occupated by another pawn)
 			for(int indexArrayList = 0; indexArrayList < Board.turnOrder.size(); indexArrayList++)
 			{
@@ -116,9 +113,6 @@ public class Board {
 			//The movement is done
 //	TODO remove =>	return true;
 		}
-			else
-				this.player.displayMoveOutOfRange();
-	}
 		else {
 			this.player.displayNotEnoughMovePoints();
 			this.player.askActionChoice();
@@ -221,21 +215,24 @@ public class Board {
 				if(pSpell.equals(Board.currentPawn.getSpellPage().getSpell(index)))
 						Board.currentPawn.getSpellPage().getSpell(index).resetCooldown();
 			}
-			//Check on all case affected by the shape
-			for(Coordinate addedCoordinate : pSpell.getShape().getEffectedCoordinates())
+			
+			//Check on all case affected by the spell shape
+			ArrayList<Coordinate> effectedCoordinateList = new ArrayList<Coordinate>(Arrays.asList(pSpell.getShape().getEffectedCoordinates()));
+			for(int effectedIndex=0;effectedIndex <effectedCoordinateList.size();effectedIndex++)
 			{
-				Coordinate coordinateToAffect = Coordinate.addCoordinate(pMovement.getDestCordinate(),addedCoordinate);
-				//If there is a pawn on affected case
-				if(this.getPawnOnCell(coordinateToAffect)!= null)
+				//If there is a pawn on the affected case
+				Coordinate effectedCase = pMovement.getDestCordinate().addCoordinate(effectedCoordinateList.get(effectedIndex));
+				if(this.getPawnOnCell(effectedCase)!= null)
 				{
-					Pawn pawnToAffect = this.getPawnOnCell(coordinateToAffect);
-					int indexPawnToAffect = Board.turnOrder.indexOf(pawnToAffect);
-					//Set HP
+					Pawn pawnToAffect = this.getPawnOnCell(effectedCase);
+					int indexOfPawnToAffect = Board.turnOrder.indexOf(pawnToAffect);
+					//Set the new HP on the affected Pawn
 					pawnToAffect.setHealthPoints(pawnToAffect.getHealthPoints()-pSpell.getShape().getDamage());
-					//Add effect
+					//Add the effect on the affectPawn
 					pawnToAffect.addEffect(new PawnEffect(pSpell.getSpellEffect()));
-					Board.turnOrder.set(indexPawnToAffect, pawnToAffect);
+					Board.turnOrder.set(indexOfPawnToAffect, pawnToAffect);
 				}
+				
 			}
 			//And send data to the other player, use:  Send(this.turnOrder); (might need a try catch statement)
 			
