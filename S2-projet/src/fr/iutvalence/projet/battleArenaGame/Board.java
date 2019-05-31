@@ -116,7 +116,7 @@ public class Board {
 			
 				this.player.displayMoveDone();
 			//Send the turn order (need to create myServer and myClient (in Game consctructor and then in play method
-				this.communication.sendToOther(Board.turnOrder);
+				//this.communication.sendToOther(Board.turnOrder);
 				
 			//The movement is done
 //	TODO remove =>	return true;

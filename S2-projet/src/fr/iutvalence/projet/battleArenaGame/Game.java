@@ -249,6 +249,7 @@ public class Game
 			}
 			if(Game.localPlayerTurn)
 			{
+				this.localPlayer.displayBoard(board);
 				//Update effects and PA &PM of pawn
 				Board.getCurrentPawn().setActionPoints(Pawn.DEFAULT_ACTION_POINTS);
 				Board.getCurrentPawn().setMovePoints(Pawn.DEFAULT_MOVE_POINTS);
