@@ -231,8 +231,8 @@ public class Pawn implements Serializable
 	 */
 	public void resetPoints()
 	{
-		this.movePoints = this.DEFAULT_MOVE_POINTS;
-		this.actionPoints = this.DEFAULT_ACTION_POINTS;
+		this.movePoints = DEFAULT_MOVE_POINTS;
+		this.actionPoints = DEFAULT_ACTION_POINTS;
 	}
 	
 	
@@ -324,6 +324,15 @@ public class Pawn implements Serializable
 	public TeamId getTeamId()
 	{
 		return this.teamId;
+	}
+	
+	/**
+	 * Return true if the pawn have a spellPage
+	 * @return
+	 */
+	public boolean haveSpellPage()
+	{
+		return this.mySpellPage != null;
 	}
 }
 
