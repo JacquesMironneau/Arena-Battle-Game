@@ -96,9 +96,9 @@ public class Game
 	/**
 	 * Id of the player who win the game
 	 */
-	private int winnerID;
+	private TeamId winnerID;
 	
-	private Set myIDs;
+	private Set myIds;
 	
 	
 	
@@ -111,8 +111,8 @@ public class Game
 		Game.mySpellPages = new ArrayList<SpellPage>(); //TODO remove (do not create it every time we launch (will evolve to file read /DB)
 		this.localPlayer = p;
 		this.myNetwork = new Network(this);
-		this.winnerID = -1;
-		this.myIDs = new HashSet<TeamId>();
+		this.winnerID = null;
+		this.myIds = new HashSet<TeamId>();
 		}
 	
 	
@@ -191,7 +191,7 @@ public class Game
 		this.pawnSelection();
 		
 
-		while(this.winnerID == -1) 
+		while(this.winnerID == null) 
 		{
 			this.localPlayer.displayBoard(board);
 			System.out.println("Waiting for others...");
@@ -205,33 +205,47 @@ public class Game
 			this.communication.sendToOther(this.board.getTurnOrder().get(this.board.getCurrentPawnIndex()).getId());
 			this.communication.broadcast(this.board.getTurnOrder(),this.board.getTurnOrder().get(this.board.getCurrentPawnIndex()).getId());
 			
-			if(this.myIDs.contains(this.board.getTurnOrder().get(this.board.getCurrentPawnIndex()).getId()));
+			if(this.myIds.contains(this.board.getTurnOrder().get(this.board.getCurrentPawnIndex()).getId()));
 			{
 				boolean myTurn = true;
 				while(myTurn)
 				{
-					this.board.getTurnOrder().get(this.board.getCurrentPawnIndex()).
+					this.board.getTurnOrder().get(this.board.getCurrentPawnIndex()).resetPoints();
+					this.board.applyEffect();
+					if(this.board.getTurnOrder().get(this.board.getCurrentPawnIndex()).getHealthPoints()<=0)
+					{
+						this.board.removeDeads();
+						myTurn = false;
+					}
 					switch(this.localPlayer.askActionChoice())
 					{
-					
 					case MOVE:
-				
-						
+						this.localPlayer.displayBoard(board);
+						this.board.checkMove(this.localPlayer.askMove());
+						this.communication.sendToOther(this.board.getTurnOrder());
+						break;
 					case LAUNCH_SPELL:
-						
+						this.localPlayer.displayBoard(board);
+						this.localPlayer.displaySpellPageDetail(this.board.getTurnOrder().get(this.board.getCurrentPawnIndex()).getSpellPage());
+						this.board.checkSpell(this.localPlayer.askSpell(), this.localPlayer.askMove());
+						if(this.board.getTurnOrder().get(this.board.getCurrentPawnIndex()).getHealthPoints()<=0)
+						{
+							myTurn =false;
+						}
+						this.board.removeDeads();
 						break;
 					case END_TURN:
-
-					
+						myTurn = false;
 						break;
 					default:
 						localPlayer.displayError(ErrorMessages.SYSTEM_ERROR);
 					}
 				}
+				this.communication.sendToOther(this.board.getTurnOrder());
+				this.board.nextPawn();
+				this.communication.sendToOther(this.board.getCurrentPawnIndex());
 			}
-			this.endTurn = false; 
 		}
-		//this.closeGame();
 	}
 	
 	/**
@@ -396,11 +410,10 @@ public class Game
 				p.setSpellPage(new SpellPage(this.localPlayer.askSpellPageSelection()));
 	}
 	
-	public void setGameLive(String pString)
+	public Set getMyIds() 
 	{
-		this.gameLive = pString;
+		return this.myIds;
 	}
-	
 /**
  * Used for test
  * Create a spell page with 3 spells
