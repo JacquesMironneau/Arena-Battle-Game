@@ -277,12 +277,16 @@ public class Board{
 		}return false;
 	}
 	
-	public void initTurnOrder()
+	private void initTurnOrder()
 	{
 		int X;
 		int Y;
 		Random rand = new Random();
-		for (int i=0;i<= this.getNbPawn();i++)
+		this.nbPawn = this.player.askNbPawn();
+		do {
+		Game.boardSize = this.player.askBoardSize();
+		}while(Game.boardSize<this.nbPawn*Game.maxPlayer);
+		for (int i=0;i<= this.nbPawn;i++)
 			{for(int k=0;k<=Game.maxPlayer;k++)
 			{
 				do {
@@ -295,7 +299,6 @@ public class Board{
 	}
 	
 	
-	
 	public boolean areAllPageSet()
 	{
 		for(Pawn p : this.getTurnOrder())
@@ -303,6 +306,4 @@ public class Board{
 				return false;
 		return true;
 	}
-
-
 }

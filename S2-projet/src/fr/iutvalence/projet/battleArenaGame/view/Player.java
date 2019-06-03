@@ -150,5 +150,10 @@ public interface Player {
 	public int askNbPlayer();
 	
 	public int askNbPawn();
+
+	public int askBoardSize();
 	
+	public void diplaySizeError();
+	
+	public void displaySelectForThisPawn(String Pawn);
 }

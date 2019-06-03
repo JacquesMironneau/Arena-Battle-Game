@@ -473,7 +473,31 @@ public class PlayerConsole implements Player{
 			}while (res < 0);
 			return res;
 		}
+		
+		
+	public int askBoardSize()
+	{
+		int res = -1;
+		CheapScanner scan = new CheapScanner();
+		System.out.println("entrez la taille du tableau");
+		try {
+			res = scan.getInt();
+		} catch (NumberFormatException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return res;
 	}
+	
+	public void diplaySizeError(){
+		System.out.println("entrez une taille plus grande");
+	}
+	public void displaySelectForThisPawn(String pawn) {
+		System.out.println("la voila t'as methode de merde")
+		System.out.println("choisissez une page pour le pion "+ pawn);
+	}
+}
 
 	
 

@@ -204,48 +204,8 @@ SpellPage page1 = new SpellPage("Namepage1");
 	}
 	
 	@Test
-	void testGetWinTeam()
-	{
-		Board b = new Board(null, null);
-		b.getTurnOrder().get(b.getCurrentPawnIndex()).setHealthPoints(10);
-		b.removeDeads();
-		b.getTurnOrder().get(0).setHealthPoints(0);
-		b.getTurnOrder().get(1).setHealthPoints(0);
-		b.getTurnOrder().get(2).setHealthPoints(0);
-		b.getTurnOrder().get(3).setHealthPoints(0);
-		b.getTurnOrder().get(4).setHealthPoints(0);
-		b.getTurnOrder().get(5).setHealthPoints(0);
-		b.getTurnOrder().get(b.getCurrentPawnIndex()).setHealthPoints(10);
-		b.removeDeads();
-		assertTrue("Should victory", b.getWinTeam()==EndStatus.VICTORY);
-
-		b = new Board(null, null);
-		
-		b.nextPawn();
-		b.getTurnOrder().get(0).setHealthPoints(0);
-		b.getTurnOrder().get(1).setHealthPoints(0);
-		b.getTurnOrder().get(2).setHealthPoints(0);
-		b.getTurnOrder().get(3).setHealthPoints(0);
-		b.getTurnOrder().get(4).setHealthPoints(0);
-		b.getTurnOrder().get(5).setHealthPoints(0);
-		b.getTurnOrder().get(b.getCurrentPawnIndex()).setHealthPoints(10);
-		
-		b.removeDeads();
-		assertTrue("victoire adverse", b.getWinTeam()==EndStatus.VICTORY);
-		
-		b = new Board(null, null);
-		
-		assertTrue("Should be running", b.getWinTeam()==EndStatus.RUNNING);
-		
-		b.getTurnOrder().get(0).setHealthPoints(0);
-		b.getTurnOrder().get(1).setHealthPoints(0);
-		b.getTurnOrder().get(2).setHealthPoints(0);
-		b.getTurnOrder().get(3).setHealthPoints(0);
-		b.getTurnOrder().get(4).setHealthPoints(0);
-		b.getTurnOrder().get(5).setHealthPoints(0);
-		b.removeDeads();
-		assertTrue("Should draw", b.getWinTeam()==EndStatus.DRAW);
-		
-		
-	}
+	void testAre()
+	
+	
+	
 }
