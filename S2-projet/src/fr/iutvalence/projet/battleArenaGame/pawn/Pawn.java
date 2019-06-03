@@ -71,11 +71,7 @@ public class Pawn implements Serializable
 	 */
 	private Coordinate currentCoordinate;
 	
-	/**
-	 * The team which the pawn's belong to (remote / local)
-	 */
-	private PawnTeam team;
-	
+
 	/**
 	 * Id of the team which the paw's belong to 
 	 */
@@ -102,9 +98,8 @@ public class Pawn implements Serializable
 	 * @param pBaseCoordinate : The Pawn's coordinate when he is created
 	 * @param pSpellPage : The Pawn's spell page, selected by the player
 	 */
-	public Pawn(PawnTeam pteam,TeamId pTeamId,Coordinate pBaseCoordinate,SpellPage pSpellPage)
+	public Pawn(TeamId pTeamId,Coordinate pBaseCoordinate,SpellPage pSpellPage)
 	{
-		this.team = pteam;
 		this.healthPoints = Pawn.DEFAULT_HEALTH_POINTS;
 		this.actionPoints = Pawn.DEFAULT_ACTION_POINTS;
 		this.movePoints = Pawn.DEFAULT_MOVE_POINTS;
@@ -112,18 +107,6 @@ public class Pawn implements Serializable
 		this.mySpellPage = pSpellPage;
 		this.activeEffects= new ArrayList<PawnEffect>();
 		this.teamId = pTeamId;
-		if(this.team==PawnTeam.PAWN_LOCAL)
-		{
-			this.id = "J1." + localPawnCount;
-			localPawnCount++;
-		}
-		if(this.team==PawnTeam.PAWN_REMOTE)
-			{
-				this.id = "J2." + remotePawnCount;
-				remotePawnCount++;
-			}
-		
-
 	}
 	
 	/**
@@ -203,14 +186,6 @@ public class Pawn implements Serializable
 		return this.healthPoints;
 	}
 	
-	/**
-	 * Getter for the team of the pawn
-	 * @return in which team the pawn is
-	 */
-	public PawnTeam getTeam()
-	{
-		return this.team;
-	}
 	
 	/**
 	 * Add an effect to the current list of Effect of this pawn
@@ -262,9 +237,10 @@ public class Pawn implements Serializable
 	
 	
 	
+
+
 	@Override
-	public int hashCode()
-	{
+	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
 		result = prime * result + actionPoints;
@@ -274,14 +250,12 @@ public class Pawn implements Serializable
 		result = prime * result + ((id == null) ? 0 : id.hashCode());
 		result = prime * result + movePoints;
 		result = prime * result + ((mySpellPage == null) ? 0 : mySpellPage.hashCode());
-		result = prime * result + ((team == null) ? 0 : team.hashCode());
 		result = prime * result + ((teamId == null) ? 0 : teamId.hashCode());
 		return result;
 	}
 
 	@Override
-	public boolean equals(Object obj)
-	{
+	public boolean equals(Object obj) {
 		if (this == obj)
 			return true;
 		if (obj == null)
@@ -291,37 +265,34 @@ public class Pawn implements Serializable
 		Pawn other = (Pawn) obj;
 		if (actionPoints != other.actionPoints)
 			return false;
-		if (activeEffects == null)
-		{
+		if (activeEffects == null) {
 			if (other.activeEffects != null)
 				return false;
 		} else if (!activeEffects.equals(other.activeEffects))
 			return false;
-		if (currentCoordinate == null)
-		{
+		if (currentCoordinate == null) {
 			if (other.currentCoordinate != null)
 				return false;
 		} else if (!currentCoordinate.equals(other.currentCoordinate))
 			return false;
 		if (healthPoints != other.healthPoints)
 			return false;
-		if (id == null)
-		{
+		if (id == null) {
 			if (other.id != null)
 				return false;
 		} else if (!id.equals(other.id))
 			return false;
 		if (movePoints != other.movePoints)
 			return false;
-		if (mySpellPage == null)
-		{
+		if (mySpellPage == null) {
 			if (other.mySpellPage != null)
 				return false;
 		} else if (!mySpellPage.equals(other.mySpellPage))
 			return false;
-		if (team != other.team)
-			return false;
-		if (teamId != other.teamId)
+		if (teamId == null) {
+			if (other.teamId != null)
+				return false;
+		} else if (!teamId.equals(other.teamId))
 			return false;
 		return true;
 	}
@@ -344,10 +315,6 @@ public class Pawn implements Serializable
 		return this.mySpellPage;
 	}
 	
-	public void setTeam(PawnTeam theTeam)
-	{
-		this.team = theTeam;
-	}
 	
 	public String getId()
 	{
