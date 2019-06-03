@@ -79,6 +79,7 @@ public interface Player {
 	 */
 	public boolean askValidation();
 
+	public int askHowManyPlayers();
 	
 	/**
 	 * Displays

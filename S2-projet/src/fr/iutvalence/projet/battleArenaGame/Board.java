@@ -1,16 +1,16 @@
 package fr.iutvalence.projet.battleArenaGame;
 
 import java.util.ArrayList;
-
+import java.util.Random;
 import fr.iutvalence.projet.battleArenaGame.move.Coordinate;
 import fr.iutvalence.projet.battleArenaGame.move.Movement;
 import fr.iutvalence.projet.battleArenaGame.network.Communication;
 import fr.iutvalence.projet.battleArenaGame.pawn.Pawn;
 import fr.iutvalence.projet.battleArenaGame.pawn.PawnEffect;
-import fr.iutvalence.projet.battleArenaGame.pawn.PawnTeam;
 import fr.iutvalence.projet.battleArenaGame.pawn.TeamId;
 import fr.iutvalence.projet.battleArenaGame.view.ErrorMessages;
 import fr.iutvalence.projet.battleArenaGame.view.Player;
+
 
 public class Board{
 	
@@ -44,10 +44,9 @@ public class Board{
 	 */
 	private int currentPawnIndex;
 
-	/**
-	 * Type of communication
-	 */
-	private  Communication communication;
+	
+	private int nbPawn;
+	
 	
 	/**
 	 * Create the board including creation of pawns 
@@ -55,19 +54,10 @@ public class Board{
 	public Board(Communication pCommunication, Player pPlayer)
 	{
 		this.turnOrder = new ArrayList<Pawn>();
-		this.turnOrder.add(new Pawn(PawnTeam.PAWN_LOCAL,TeamId.TEAM_1,BASE_POS_1PAWN1 , null));
-		this.turnOrder.add(new Pawn(PawnTeam.PAWN_REMOTE,TeamId.TEAM_2, BASE_POS_2PAWN1 , null));
-		
-		this.turnOrder.add(new Pawn(PawnTeam.PAWN_LOCAL,TeamId.TEAM_1, BASE_POS_1PAWN2 , null));
-		this.turnOrder.add(new Pawn(PawnTeam.PAWN_REMOTE,TeamId.TEAM_2, BASE_POS_2PAWN2 , null));
-		
-		this.turnOrder.add(new Pawn(PawnTeam.PAWN_LOCAL,TeamId.TEAM_1, BASE_POS_1PAWN3 , null));
-		this.turnOrder.add(new Pawn(PawnTeam.PAWN_REMOTE,TeamId.TEAM_2, BASE_POS_2PAWN3 , null));
+		this.initTurnOrder();
 		
 		this.player = pPlayer;
 		this.currentPawnIndex = 0;
-		
-		this.communication = pCommunication;
 	}
 	
 	/**
@@ -243,26 +233,6 @@ public class Board{
 		
 	}
 	
-	/**
-	 * Give the status of the game
-	 * @return EndStatus enum (Draw, Victory, or Running)
-	 */
-	public EndStatus getWinTeam()
-	{
-		if(this.turnOrder.size()==0)
-			return EndStatus.DRAW;
-		int vRemote = 0;
-		for(Pawn p : this.turnOrder)
-		{
-			if(p.getTeam()==PawnTeam.PAWN_REMOTE)
-				vRemote++;
-		}
-		if(vRemote==0)
-			return EndStatus.VICTORY;
-		else
-			return EndStatus.RUNNING;
-		
-	}
 	
 	/**
 	 * Getter for turnOrder
@@ -291,4 +261,48 @@ public class Board{
 	{
 		return this.currentPawnIndex;
 	}
+	
+	public int getNbPawn() {
+		return this.nbPawn;
+	}
+	
+	
+	private Boolean exist(int X,int Y)
+	{
+		if (this.getTurnOrder().isEmpty())
+			return false;
+		else for(Pawn p : this.getTurnOrder())
+		{if (p.getPos().getCoordX()==X && p.getPos().getCoordY()==Y)
+		return true;
+		}return false;
+	}
+	
+	public void initTurnOrder()
+	{
+		int X;
+		int Y;
+		Random rand = new Random();
+		for (int i=0;i<= this.getNbPawn();i++)
+			{for(int k=0;k<=Game.maxPlayer;k++)
+			{
+				do {
+				X = rand.nextInt(Game.BOARD_SIZE);
+				Y = rand.nextInt(Game.BOARD_SIZE);
+				}while(this.exist(X,Y));
+			this.getTurnOrder().add(new Pawn(new TeamId(k),new Coordinate(X,Y),null));
+			}
+		}
+	}
+	
+	
+	
+	public boolean areAllPageSet()
+	{
+		for(Pawn p : this.getTurnOrder())
+			if(p.getSpellPage()==null)
+				return false;
+		return true;
+	}
+
+
 }

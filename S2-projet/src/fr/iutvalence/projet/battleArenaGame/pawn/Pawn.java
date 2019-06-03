@@ -44,14 +44,6 @@ public class Pawn implements Serializable
 	public final static int DEFAULT_ACTION_POINTS = 6 ;
 	
 	/**
-	 * Number of local Pawn 
-	 */
-	private static int localPawnCount = 1;
-	/**
-	 * Number of remote Pawn
-	 */
-	private static int remotePawnCount = 1;
-	/**
 	 * Current amount of health of a Pawn
 	 */
 	private int healthPoints;
@@ -231,8 +223,8 @@ public class Pawn implements Serializable
 	 */
 	public void resetPoints()
 	{
-		this.movePoints = this.DEFAULT_MOVE_POINTS;
-		this.actionPoints = this.DEFAULT_ACTION_POINTS;
+		this.movePoints = DEFAULT_MOVE_POINTS;
+		this.actionPoints = DEFAULT_ACTION_POINTS;
 	}
 	
 	
@@ -324,6 +316,15 @@ public class Pawn implements Serializable
 	public TeamId getTeamId()
 	{
 		return this.teamId;
+	}
+	
+	/**
+	 * Return true if the pawn have a spellPage
+	 * @return
+	 */
+	public boolean haveSpellPage()
+	{
+		return this.mySpellPage != null;
 	}
 }
 
