@@ -251,6 +251,15 @@ public class Pawn implements Serializable
 		}
 	}
 	
+	/**
+	 * Set move and action points of the pawn to his default values (values at the start of the turn)
+	 */
+	public void resetPoints()
+	{
+		this.movePoints = this.DEFAULT_MOVE_POINTS;
+		this.actionPoints = this.DEFAULT_ACTION_POINTS;
+	}
+	
 	
 	
 	@Override
