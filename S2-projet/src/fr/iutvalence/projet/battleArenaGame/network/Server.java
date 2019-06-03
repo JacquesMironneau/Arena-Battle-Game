@@ -51,7 +51,7 @@ public class Server implements Communication
     {
         this.port = port;
         this.playersConnected = 0;
-        this.clients = new Object[Game.MAXPLAYERS][3];
+        this.clients = new Object[Game.maxPlayer][3];
         this.myNetwork = pNetwork;
 
     }
@@ -84,7 +84,7 @@ public class Server implements Communication
 
 
         //The server starts to emit or send when every player are connected
-        while(this.playersConnected < Game.MAXPLAYERS)
+        while(this.playersConnected < Game.maxPlayer)
         {
             try{
 

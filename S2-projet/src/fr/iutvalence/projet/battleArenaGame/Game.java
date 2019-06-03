@@ -34,7 +34,7 @@ public class Game
 	/**
 	 * Size of the board (length of the square)
 	 */
-	public final static int BOARD_SIZE = 15;
+	public static int boardSize;
 	
 	/**
 	 * Used in the network : Numbers of player (excluding the host)
@@ -198,10 +198,10 @@ public class Game
 			{
 				
 			}
-			this.communication.sendToOther(this.board.getTurnOrder().get(this.board.getCurrentPawnIndex()).getId());
-			this.communication.broadcast(this.board.getTurnOrder(),this.board.getTurnOrder().get(this.board.getCurrentPawnIndex()).getId());
+			this.communication.sendToOther(this.board.getTurnOrder().get(this.board.getCurrentPawnIndex()).getTeamId());
+			this.communication.broadcast(this.board.getTurnOrder().get(this.board.getCurrentPawnIndex()).getTeamId().getId(),this.board.getTurnOrder());
 			
-			if(this.myIds.contains(this.board.getTurnOrder().get(this.board.getCurrentPawnIndex()).getId()));
+			if(this.myIds.contains(this.board.getTurnOrder().get(this.board.getCurrentPawnIndex()).getTeamId()));
 			{
 				boolean myTurn = true;
 				while(myTurn)
@@ -242,6 +242,7 @@ public class Game
 				this.communication.sendToOther(this.board.getCurrentPawnIndex());
 			}
 		}
+		closeGame();
 	}
 	
 	/**
@@ -267,7 +268,7 @@ public class Game
 				if(this.myIds.contains(this.board.getTurnOrder().get(this.board.getCurrentPawnIndex()).getTeamId()))
 				{
 					this.localPlayer.displaySpellPage();
-					this.localPlayer.displaySelectForThisPawn()
+					this.localPlayer.displaySelectForThisPawn(this.board.getTurnOrder().get(this.board.getCurrentPawnIndex()).getName());
 					this.localPlayer.askSpellPageSelection();
 					this.board.nextPawn();
 					this.communication.sendToOther(this.board.getTurnOrder());
