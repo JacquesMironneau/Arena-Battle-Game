@@ -10,6 +10,7 @@ import org.junit.jupiter.api.Test;
 
 import fr.iutvalence.projet.battleArenaGame.Board;
 import fr.iutvalence.projet.battleArenaGame.EndStatus;
+import fr.iutvalence.projet.battleArenaGame.Game;
 import fr.iutvalence.projet.battleArenaGame.move.Coordinate;
 import fr.iutvalence.projet.battleArenaGame.move.Movement;
 import fr.iutvalence.projet.battleArenaGame.network.Local;
@@ -29,22 +30,20 @@ class BoardTest
 	void testCheckMove()
 	{
 		PlayerConsole P1 = new PlayerConsole();
-		Board b = new Board(new Local(), P1);
+		Game G1 = new Game(P1);
+		Board b = new Board(new Local(G1), P1);
 		Coordinate coord = new Coordinate(1,1);
-		Movement mov =new Movement(Board.getCurrentPawn().getPos(),coord);
-		b.checkMove(mov);
-		assertTrue("mauvais mouvement X",Board.getCurrentPawn().getPos().getCoordX()==1);
-		assertTrue("mauvais mouvement y",Board.getCurrentPawn().getPos().getCoordY()==1);
+		b.checkMove(coord);
+		assertTrue("mauvais mouvement X",b.getTurnOrder().get(b.getCurrentPawnIndex()).getPos().getCoordX()==1);
+		assertTrue("mauvais mouvement y",b.getTurnOrder().get(b.getCurrentPawnIndex()).getPos().getCoordY()==1);
 		coord = new Coordinate(100,100);
-		mov =new Movement(Board.getCurrentPawn().getPos(),coord);
-		b.checkMove(mov);
-		assertFalse("gestion de distance",Board.getCurrentPawn().getPos().getCoordX()==100);
-		assertFalse("gestion de distance",Board.getCurrentPawn().getPos().getCoordY()==100);
+		b.checkMove(coord);
+		assertFalse("gestion de distance",b.getTurnOrder().get(b.getCurrentPawnIndex()).getPos().getCoordX()==100);
+		assertFalse("gestion de distance",b.getTurnOrder().get(b.getCurrentPawnIndex()).getPos().getCoordY()==100);
 		coord = new Coordinate(-1,-1);
-		mov =new Movement(Board.getCurrentPawn().getPos(),coord);
-		b.checkMove(mov);
-		assertFalse("pas dans le plateau",Board.getCurrentPawn().getPos().getCoordX()==-1);
-		assertFalse("pas dans le plateau",Board.getCurrentPawn().getPos().getCoordY()==-1);
+		b.checkMove(coord);
+		assertFalse("pas dans le plateau",b.getTurnOrder().get(b.getCurrentPawnIndex()).getPos().getCoordX()==-1);
+		assertFalse("pas dans le plateau",b.getTurnOrder().get(b.getCurrentPawnIndex()).getPos().getCoordY()==-1);
 	}
 	
 	@Test
@@ -52,65 +51,66 @@ class BoardTest
 	{
 		
 		Board b = new Board(null, null);
-		System.out.println(Board.getCurrentPawn());
+		System.out.println(b.getTurnOrder().get(b.getCurrentPawnIndex()));
 		//primary tests
 		
-		assertTrue("effets Non vide", Board.getCurrentPawn().getEffect().isEmpty());
-		Board.getCurrentPawn().addEffect(new PawnEffect(SpellEffect.Fire));
-		Board.getCurrentPawn().addEffect(new PawnEffect(SpellEffect.Electricity));
-		assertTrue("Full life", Board.getCurrentPawn().getHealthPoints()==Pawn.DEFAULT_HEALTH_POINTS);
-		assertTrue("Full Actions points", Board.getCurrentPawn().getActionPoints()==Pawn.DEFAULT_ACTION_POINTS);
+		assertTrue("effets Non vide",b.getTurnOrder().get(b.getCurrentPawnIndex()).getEffect().isEmpty());
+		b.getTurnOrder().get(b.getCurrentPawnIndex()).addEffect(new PawnEffect(SpellEffect.Fire));
+		b.getTurnOrder().get(b.getCurrentPawnIndex()).addEffect(new PawnEffect(SpellEffect.Electricity));
+		assertTrue("Full life",b.getTurnOrder().get(b.getCurrentPawnIndex()).getHealthPoints()==Pawn.DEFAULT_HEALTH_POINTS);
+		assertTrue("Full Actions points",b.getTurnOrder().get(b.getCurrentPawnIndex()).getActionPoints()==Pawn.DEFAULT_ACTION_POINTS);
 		b.applyEffect();
-		assertTrue("??", Board.getCurrentPawn().getEffect().size()==2);
-		assertFalse("Effet vide", Board.getCurrentPawn().getEffect().isEmpty());
+		assertTrue("??", b.getTurnOrder().get(b.getCurrentPawnIndex()).getEffect().size()==2);
+		assertFalse("Effet vide", b.getTurnOrder().get(b.getCurrentPawnIndex()).getEffect().isEmpty());
 		//insert two test
-		assertFalse("Full Actions points", Board.getCurrentPawn().getActionPoints()==Pawn.DEFAULT_ACTION_POINTS);
-		assertTrue("Actions points not decreased", Board.getCurrentPawn().getActionPoints()==Pawn.DEFAULT_ACTION_POINTS-2);
+		assertFalse("Full Actions points", b.getTurnOrder().get(b.getCurrentPawnIndex()).getActionPoints()==Pawn.DEFAULT_ACTION_POINTS);
+		assertTrue("Actions points not decreased", b.getTurnOrder().get(b.getCurrentPawnIndex()).getActionPoints()==Pawn.DEFAULT_ACTION_POINTS-2);
 		b.applyEffect();
-		assertTrue("Nb points égaux", Board.getCurrentPawn().getHealthPoints()==Pawn.DEFAULT_HEALTH_POINTS-10);
+		assertTrue("Nb points égaux", b.getTurnOrder().get(b.getCurrentPawnIndex()).getHealthPoints()==Pawn.DEFAULT_HEALTH_POINTS-10);
 		b.applyEffect();
-		assertTrue("HP != 85", Board.getCurrentPawn().getHealthPoints()==Pawn.DEFAULT_HEALTH_POINTS-15);
+		assertTrue("HP != 85", b.getTurnOrder().get(b.getCurrentPawnIndex()).getHealthPoints()==Pawn.DEFAULT_HEALTH_POINTS-15);
+		
 		b.applyEffect();
-		assertTrue("HP négatifs", Board.getCurrentPawn().getHealthPoints()==Pawn.DEFAULT_HEALTH_POINTS-15);
+		assertTrue("HP négatifs", b.getTurnOrder().get(b.getCurrentPawnIndex()).getHealthPoints()==Pawn.DEFAULT_HEALTH_POINTS-15);
 
 		
 		//Update element test
-		Board b4 = new Board(null, null);
-		Board.getCurrentPawn().addEffect(new PawnEffect(SpellEffect.Fire));
+		b = new Board(null, null);
+		b.getTurnOrder().get(b.getCurrentPawnIndex()).addEffect(new PawnEffect(SpellEffect.Fire));
 		b.applyEffect();
-		assertFalse("Effect disapears", Board.getCurrentPawn().getEffect().size()==0);
+		assertFalse("Effect disapears", b.getTurnOrder().get(b.getCurrentPawnIndex()).getEffect().size()==0);
 		b.applyEffect();
-		assertFalse("Effect disapears", Board.getCurrentPawn().getEffect().size()==0);
+		assertFalse("Effect disapears", b.getTurnOrder().get(b.getCurrentPawnIndex()).getEffect().size()==0);
 		b.applyEffect();
 
-		assertTrue("Effect do dis", Board.getCurrentPawn().getEffect().size()==0);
+		assertTrue("Effect do dis", b.getTurnOrder().get(b.getCurrentPawnIndex()).getEffect().size()==0);
 
 		//ICE TEST
-		Board.getCurrentPawn().addEffect(new PawnEffect(SpellEffect.Ice));
-		assertTrue("Base de point de vie mauvaise", Board.getCurrentPawn().getMovePoints()==Pawn.DEFAULT_MOVE_POINTS);
+		b.getTurnOrder().get(b.getCurrentPawnIndex()).addEffect(new PawnEffect(SpellEffect.Ice));
+		assertTrue("Base de point de vie mauvaise", b.getTurnOrder().get(b.getCurrentPawnIndex()).getMovePoints()==Pawn.DEFAULT_MOVE_POINTS);
 		
 		b.applyEffect();
-		assertTrue("Base de point de vie mauvaise", Board.getCurrentPawn().getMovePoints()==Pawn.DEFAULT_MOVE_POINTS-2);
+		assertTrue("Base de point de vie mauvaise", b.getTurnOrder().get(b.getCurrentPawnIndex()).getMovePoints()==Pawn.DEFAULT_MOVE_POINTS-2);
 		b.applyEffect();
 		b.applyEffect();
 		b.applyEffect();
-		assertTrue("Base de point de vie mauvaise", Board.getCurrentPawn().getMovePoints()==Pawn.DEFAULT_MOVE_POINTS-6);
+		assertTrue("Base de point de vie mauvaise", b.getTurnOrder().get(b.getCurrentPawnIndex()).getMovePoints()==Pawn.DEFAULT_MOVE_POINTS-6);
 
-		assertTrue("Effets non vide", Board.getCurrentPawn().getEffect().isEmpty());
-		Board.getCurrentPawn().getEffect().clear();
-		Board.getCurrentPawn().setActionPoints(Pawn.DEFAULT_ACTION_POINTS);;
-		Board.getCurrentPawn().setMovePoints(Pawn.DEFAULT_MOVE_POINTS);
-		Board.getCurrentPawn().addEffect(new PawnEffect(SpellEffect.Stone));
+		assertTrue("Effets non vide", b.getTurnOrder().get(b.getCurrentPawnIndex()).getEffect().isEmpty());
+		b.getTurnOrder().get(b.getCurrentPawnIndex()).getEffect().clear();
+		b.getTurnOrder().get(b.getCurrentPawnIndex()).setActionPoints(Pawn.DEFAULT_ACTION_POINTS);;
+		b.getTurnOrder().get(b.getCurrentPawnIndex()).setMovePoints(Pawn.DEFAULT_MOVE_POINTS);
+		b.getTurnOrder().get(b.getCurrentPawnIndex()).addEffect(new PawnEffect(SpellEffect.Stone));
 		b.applyEffect();
 
-		assertTrue("Echec stone action", Board.getCurrentPawn().getActionPoints()==Pawn.DEFAULT_ACTION_POINTS-1);
-		assertTrue("Echec stone move", Board.getCurrentPawn().getMovePoints()==Pawn.DEFAULT_MOVE_POINTS-1);
+		assertTrue("Echec stone action", b.getTurnOrder().get(b.getCurrentPawnIndex()).getActionPoints()==Pawn.DEFAULT_ACTION_POINTS-1);
+		assertTrue("Echec stone move", b.getTurnOrder().get(b.getCurrentPawnIndex()).getMovePoints()==Pawn.DEFAULT_MOVE_POINTS-1);
 		b.applyEffect();
 		b.applyEffect();
 		b.applyEffect();
-		assertTrue("Echec stone action", Board.getCurrentPawn().getActionPoints()==Pawn.DEFAULT_ACTION_POINTS-3);
-		assertTrue("Echec stone move", Board.getCurrentPawn().getMovePoints()==Pawn.DEFAULT_MOVE_POINTS-3);
-		assertTrue("Non vide", Board.getCurrentPawn().getEffect().isEmpty());
+		assertTrue("Echec stone action", b.getTurnOrder().get(b.getCurrentPawnIndex()).getActionPoints()==Pawn.DEFAULT_ACTION_POINTS-3);
+		assertTrue("Echec stone move", b.getTurnOrder().get(b.getCurrentPawnIndex()).getMovePoints()==Pawn.DEFAULT_MOVE_POINTS-3);
+		assertTrue("Non vide", b.getTurnOrder().get(b.getCurrentPawnIndex()).getEffect().isEmpty());
 		
 	}
 	
@@ -118,7 +118,8 @@ class BoardTest
 	void testCheckSpell()
 	{
 		PlayerConsole P1 = new PlayerConsole();
-		Board b = new Board(new Local(), P1);
+		Game G1 = new Game(P1);
+		Board b = new Board(new Local(G1), P1);
 		Coordinate coord = new Coordinate(1,1);
 SpellPage page1 = new SpellPage("Namepage1");
 		
@@ -133,19 +134,19 @@ SpellPage page1 = new SpellPage("Namepage1");
 		SpellEffect anEffect = SpellEffect.Fire;
 		page1.getSpell(0).setSpellEffect(anEffect);
 		coord = new Coordinate(1,2);
-		Board.getCurrentPawn().setSpellPage(page1);
-		Movement mov =new Movement(Board.getCurrentPawn().getPos(),coord);
-		b.checkSpell(Board.getCurrentPawn().getSpellPage().getSpell(0), mov);
-		assertFalse("getion de port�e",Board.getCurrentPawn().getSpellPage().getSpell(0).getCurrentCooldown()==Board.getCurrentPawn().getSpellPage().getSpell(0).getDefaultCooldown());
-		mov = new Movement(new Coordinate(0,0),new Coordinate(1,0));
-		b.checkSpell(Board.getCurrentPawn().getSpellPage().getSpell(0), mov);
-		assertTrue("gestion range",Board.getCurrentPawn().getSpellPage().getSpell(0).getCurrentCooldown()==Board.getCurrentPawn().getSpellPage().getSpell(0).getDefaultCooldown());
-		b.checkSpell(Board.getCurrentPawn().getSpellPage().getSpell(0), mov);
-		assertTrue("gestion range",Board.getCurrentPawn().getSpellPage().getSpell(0).getCurrentCooldown()==Board.getCurrentPawn().getSpellPage().getSpell(0).getDefaultCooldown());
-		Board.getCurrentPawn().setActionPoints(0);
-		b.checkSpell(Board.getCurrentPawn().getSpellPage().getSpell(1), mov);
-		assertTrue("gestion points action",Board.getCurrentPawn().getActionPoints()==0);
-		assertTrue("gestion action-cooldown",Board.getCurrentPawn().getSpellPage().getSpell(1).getCurrentCooldown()==0);
+		b.getTurnOrder().get(b.getCurrentPawnIndex()).setSpellPage(page1);
+		b.checkSpell(0, coord);
+		assertFalse("getion de port�e",b.getTurnOrder().get(b.getCurrentPawnIndex()).getSpellPage().getSpell(0).getCurrentCooldown()==b.getTurnOrder().get(b.getCurrentPawnIndex()).getSpellPage().getSpell(0).getDefaultCooldown());
+		//mov = new Movement(new Coordinate(0,0),new Coordinate(1,0));
+		Coordinate c1 = new Coordinate(b.getTurnOrder().get(b.getCurrentPawnIndex()).getPos().getCoordX()+1,b.getTurnOrder().get(b.getCurrentPawnIndex()).getPos().getCoordY());
+		b.checkSpell(0, c1);
+		assertTrue("gestion range",b.getTurnOrder().get(b.getCurrentPawnIndex()).getSpellPage().getSpell(0).getCurrentCooldown()==b.getTurnOrder().get(b.getCurrentPawnIndex()).getSpellPage().getSpell(0).getDefaultCooldown());
+		b.checkSpell(0, c1);
+		assertTrue("gestion range",b.getTurnOrder().get(b.getCurrentPawnIndex()).getSpellPage().getSpell(0).getCurrentCooldown()==b.getTurnOrder().get(b.getCurrentPawnIndex()).getSpellPage().getSpell(0).getDefaultCooldown());
+		b.getTurnOrder().get(b.getCurrentPawnIndex()).setActionPoints(0);
+		b.checkSpell(1, c1);
+		assertTrue("gestion points action",b.getTurnOrder().get(b.getCurrentPawnIndex()).getActionPoints()==0);
+		assertTrue("gestion action-cooldown",b.getTurnOrder().get(b.getCurrentPawnIndex()).getSpellPage().getSpell(1).getCurrentCooldown()==0);
 		
 	
 	}
@@ -158,100 +159,93 @@ SpellPage page1 = new SpellPage("Namepage1");
 	{
 
 		Board b = new Board(null, null);
-		Pawn previousPawn = Board.getCurrentPawn();
-		ArrayList<Pawn> list = Board.getTurnOrder();
-		Board.nextPawn();
-		assertFalse("Suivant de P1 = p1", previousPawn == Board.getCurrentPawn());
+		Pawn previousPawn = b.getTurnOrder().get(b.getCurrentPawnIndex());
+		b.nextPawn();
+		assertFalse("Suivant de P1 = p1", previousPawn == b.getTurnOrder().get(b.getCurrentPawnIndex()));
 		//assertFalse("P1 != P1",  );
 		
-		assertTrue("Allo", 1==Board.getTurnOrder().indexOf(Board.getCurrentPawn()));
-		Board.nextPawn();
-		Board.nextPawn();
-		Board.nextPawn();
-		Board.nextPawn();
-		Board.nextPawn();
+		assertTrue("Allo", 1==b.getTurnOrder().indexOf(b.getTurnOrder().get(b.getCurrentPawnIndex())));
+		b.nextPawn();
+		b.nextPawn();
+		b.nextPawn();
+		b.nextPawn();
+		b.nextPawn();
 		
 		
-		assertTrue("Allo", 0==Board.getTurnOrder().indexOf(Board.getCurrentPawn()));
-		//Pawn pLast = Board.getTurnOrder().get(Board.getTurnOrder().size()-1);
+		assertTrue("Allo", 0==b.getTurnOrder().indexOf(b.getTurnOrder().get(b.getCurrentPawnIndex())));
+		//Pawn pLast = b.getTurnOrder().get(b.getTurnOrder().size()-1);
 	}
 	
 	@Test
 	void testRemoveDead()
 	{
 		Board b = new Board(null, null);
-		//Board.getCurrentPawn().setHealthPoints(10);
-		System.out.println(Board.getTurnOrder().size());
-		assertTrue("Turn order correct", Board.getTurnOrder().size()==6);
-		Board.getTurnOrder().get(0).setHealthPoints(0);
-		Board.getTurnOrder().get(1).setHealthPoints(0);
-		Board.getTurnOrder().get(2).setHealthPoints(0);
-		Board.getTurnOrder().get(3).setHealthPoints(0);
-		Board.getTurnOrder().get(4).setHealthPoints(0);
-		Board.getTurnOrder().get(5).setHealthPoints(0);
-		Board.removeDeads();
+		//(b.getTurnOrder().get(b.getCurrentPawnIndex()).setHealthPoints(10);
+		System.out.println(b.getTurnOrder().size());
+		assertTrue("Turn order correct", b.getTurnOrder().size()==6);
+		b.getTurnOrder().get(0).setHealthPoints(0);
+		b.getTurnOrder().get(1).setHealthPoints(0);
+		b.getTurnOrder().get(2).setHealthPoints(0);
+		b.getTurnOrder().get(3).setHealthPoints(0);
+		b.getTurnOrder().get(4).setHealthPoints(0);
+		b.getTurnOrder().get(5).setHealthPoints(0);
+		b.removeDeads();
 		
 		
-		//System.out.println(Board.getTurnOrder().size());
-		assertTrue("Turn order non vide", Board.getTurnOrder().isEmpty());
+		//System.out.println(b.getTurnOrder().size());
+		assertTrue("Turn order non vide", b.getTurnOrder().isEmpty());
 		
-		Board b2 = new Board(null, null);
-		Board.getCurrentPawn().setHealthPoints(10);
-		assertFalse("Turn order non vide", Board.getTurnOrder().isEmpty());
+		b = new Board(null, null);
+		b.getTurnOrder().get(b.getCurrentPawnIndex()).setHealthPoints(10);
+		assertFalse("Turn order non vide", b.getTurnOrder().isEmpty());
 
 
 
 	}
 	
 	@Test
-	void testGetPawnOnCell()
-	{
-		Board b1 = new Board(null, null);
-		System.out.println(b1.getPawnOnCell(new Coordinate(2,9)));
-		assertTrue("Erreur méthode", Board.getCurrentPawn()==b1.getPawnOnCell(new Coordinate(2,0)));
-		assertTrue("N'existe pas", b1.getPawnOnCell(new Coordinate(200,200))==null);
-	}
-	@Test
 	void testGetWinTeam()
 	{
-		Board b1 = new Board(null, null);
-		
-		assertTrue("Should be running", Board.getWinTeam()==EndStatus.RUNNING);
-		
-		Board.getTurnOrder().get(0).setHealthPoints(0);
-		Board.getTurnOrder().get(1).setHealthPoints(0);
-		Board.getTurnOrder().get(2).setHealthPoints(0);
-		Board.getTurnOrder().get(3).setHealthPoints(0);
-		Board.getTurnOrder().get(4).setHealthPoints(0);
-		Board.getTurnOrder().get(5).setHealthPoints(0);
-		Board.removeDeads();
-		assertTrue("Should draw", Board.getWinTeam()==EndStatus.DRAW);
-		
-		Board b3 = new Board(null, null);
-		Board.getCurrentPawn().setHealthPoints(10);
-		Board.removeDeads();
-		Board.getTurnOrder().get(0).setHealthPoints(0);
-		Board.getTurnOrder().get(1).setHealthPoints(0);
-		Board.getTurnOrder().get(2).setHealthPoints(0);
-		Board.getTurnOrder().get(3).setHealthPoints(0);
-		Board.getTurnOrder().get(4).setHealthPoints(0);
-		Board.getTurnOrder().get(5).setHealthPoints(0);
-		Board.getCurrentPawn().setHealthPoints(10);
-		Board.removeDeads();
-		assertTrue("Should victory", Board.getWinTeam()==EndStatus.VICTORY);
+		Board b = new Board(null, null);
+		b.getTurnOrder().get(b.getCurrentPawnIndex()).setHealthPoints(10);
+		b.removeDeads();
+		b.getTurnOrder().get(0).setHealthPoints(0);
+		b.getTurnOrder().get(1).setHealthPoints(0);
+		b.getTurnOrder().get(2).setHealthPoints(0);
+		b.getTurnOrder().get(3).setHealthPoints(0);
+		b.getTurnOrder().get(4).setHealthPoints(0);
+		b.getTurnOrder().get(5).setHealthPoints(0);
+		b.getTurnOrder().get(b.getCurrentPawnIndex()).setHealthPoints(10);
+		b.removeDeads();
+		assertTrue("Should victory", b.getWinTeam()==EndStatus.VICTORY);
 
-		b3 = new Board(null, null);
-
-		Board.nextPawn();
-		Board.getTurnOrder().get(0).setHealthPoints(0);
-		Board.getTurnOrder().get(1).setHealthPoints(0);
-		Board.getTurnOrder().get(2).setHealthPoints(0);
-		Board.getTurnOrder().get(3).setHealthPoints(0);
-		Board.getTurnOrder().get(4).setHealthPoints(0);
-		Board.getTurnOrder().get(5).setHealthPoints(0);
-		Board.getCurrentPawn().setHealthPoints(10);
+		b = new Board(null, null);
 		
-		Board.removeDeads();
-		assertTrue("aa", Board.getWinTeam()==EndStatus.DEFEAT);
+		b.nextPawn();
+		b.getTurnOrder().get(0).setHealthPoints(0);
+		b.getTurnOrder().get(1).setHealthPoints(0);
+		b.getTurnOrder().get(2).setHealthPoints(0);
+		b.getTurnOrder().get(3).setHealthPoints(0);
+		b.getTurnOrder().get(4).setHealthPoints(0);
+		b.getTurnOrder().get(5).setHealthPoints(0);
+		b.getTurnOrder().get(b.getCurrentPawnIndex()).setHealthPoints(10);
+		
+		b.removeDeads();
+		assertTrue("victoire adverse", b.getWinTeam()==EndStatus.VICTORY);
+		
+		b = new Board(null, null);
+		
+		assertTrue("Should be running", b.getWinTeam()==EndStatus.RUNNING);
+		
+		b.getTurnOrder().get(0).setHealthPoints(0);
+		b.getTurnOrder().get(1).setHealthPoints(0);
+		b.getTurnOrder().get(2).setHealthPoints(0);
+		b.getTurnOrder().get(3).setHealthPoints(0);
+		b.getTurnOrder().get(4).setHealthPoints(0);
+		b.getTurnOrder().get(5).setHealthPoints(0);
+		b.removeDeads();
+		assertTrue("Should draw", b.getWinTeam()==EndStatus.DRAW);
+		
+		
 	}
 }

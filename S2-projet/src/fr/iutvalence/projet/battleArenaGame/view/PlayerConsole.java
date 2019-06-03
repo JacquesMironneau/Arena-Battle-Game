@@ -48,7 +48,7 @@ public class PlayerConsole implements Player{
 			index = (Integer)scan.getInt();
 		}while(index < 1 || index > 3);
 		
-		return index-1;
+		return index;
 			
 	}
 	
@@ -230,7 +230,7 @@ public class PlayerConsole implements Player{
 		case "Sword":
 			return Shape.Sword;
 		case "Special":
-			switch(eff.getEffectName())
+			switch(eff.getElementName())
 			{
 			case "Fire": 
 			case "Wind":
@@ -283,11 +283,7 @@ public class PlayerConsole implements Player{
 
 	@Override
 	public void displayShapeChoice() {
-		for(Shape i :Shape.values())
-		{
-			System.out.println(i.getType());
-		}
-		
+		System.out.println("Ball - Fist - Sword - Special");
 	}
 
 		
