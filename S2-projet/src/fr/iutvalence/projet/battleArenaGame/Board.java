@@ -44,10 +44,6 @@ public class Board{
 	 */
 	private int currentPawnIndex;
 
-	/**
-	 * Type of communication
-	 */
-	private  Communication communication;
 	
 	private int nbPawn;
 	
@@ -62,8 +58,6 @@ public class Board{
 		
 		this.player = pPlayer;
 		this.currentPawnIndex = 0;
-		
-		this.communication = pCommunication;
 	}
 	
 	/**
@@ -289,7 +283,7 @@ public class Board{
 		int Y;
 		Random rand = new Random();
 		for (int i=0;i<= this.getNbPawn();i++)
-			{for(int k=0;k<=Game.MAXPLAYERS;k++)
+			{for(int k=0;k<=Game.maxPlayer;k++)
 			{
 				do {
 				X = rand.nextInt(Game.BOARD_SIZE);

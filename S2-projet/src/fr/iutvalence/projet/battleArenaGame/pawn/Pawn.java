@@ -44,14 +44,6 @@ public class Pawn implements Serializable
 	public final static int DEFAULT_ACTION_POINTS = 6 ;
 	
 	/**
-	 * Number of local Pawn 
-	 */
-	private static int localPawnCount = 1;
-	/**
-	 * Number of remote Pawn
-	 */
-	private static int remotePawnCount = 1;
-	/**
 	 * Current amount of health of a Pawn
 	 */
 	private int healthPoints;
