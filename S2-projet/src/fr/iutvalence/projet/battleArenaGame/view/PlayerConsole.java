@@ -405,7 +405,7 @@ public class PlayerConsole implements Player{
 				
 				for(Pawn p: myBoard.getTurnOrder())
 				{
-					for(int teamIndex = 0; teamIndex <= Game.MAXPLAYERS; teamIndex++)
+					for(int teamIndex = 0; teamIndex <= Game.maxPlayer; teamIndex++)
 					{
 						str += "Team" + teamIndex;
 						for(Pawn p1 : myBoard.getTurnOrder())
@@ -416,10 +416,6 @@ public class PlayerConsole implements Player{
 				
 				System.out.println(str);
 			}
-		public void displayMoveOutOfRange()
-		{
-			System.out.println("Mouvement en dehors de limits du plateau");
-		}
 
 
 		@Override
