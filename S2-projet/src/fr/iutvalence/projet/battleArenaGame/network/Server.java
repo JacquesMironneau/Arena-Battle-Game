@@ -7,6 +7,7 @@ import java.net.ServerSocket;
 import java.net.Socket;
 
 import fr.iutvalence.projet.battleArenaGame.Game;
+import fr.iutvalence.projet.battleArenaGame.pawn.TeamId;
 
 /**
  * Server class represent one of the player which receive and send data to other player and manage the game
@@ -113,6 +114,7 @@ public class Server implements Communication
 
                 new Thread(() -> receive(((Socket)clients[playersConnected-1][0]), ((ObjectInputStream)clients[playersConnected-1][1]))).start();
 
+                this.Send(this.playersConnected, new TeamId());
 
                 //Increase the number of connected player
                 this.playersConnected++;

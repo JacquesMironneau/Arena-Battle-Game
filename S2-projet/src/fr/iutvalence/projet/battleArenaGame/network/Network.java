@@ -7,6 +7,7 @@ import fr.iutvalence.projet.battleArenaGame.Game;
 import fr.iutvalence.projet.battleArenaGame.exceptions.NetworkUnknownTypeException;
 import fr.iutvalence.projet.battleArenaGame.pawn.Pawn;
 import fr.iutvalence.projet.battleArenaGame.pawn.PawnTeam;
+import fr.iutvalence.projet.battleArenaGame.pawn.TeamId;
 
 /**
  * Represents the network of the game,
@@ -38,74 +39,25 @@ public class Network {
 		
 		if(transferedObject.getClass() == ArrayList.class)
 		{
-		
-			
-					
-					
-					//Unsafe but works actually
-					@SuppressWarnings("unchecked")
-					ArrayList<Pawn> ModifiedArrayListOfPawns = (ArrayList<Pawn>) transferedObject;
-					System.out.println("[NETWORK]Modification de turnOrder en cours");
-					
-					
-					System.out.println("Turn order actuel");
-					for(Pawn PawnIndexInTheArrayList : myGame.getBoard().getTurnOrder())
-							System.out.println(PawnIndexInTheArrayList.getTeam());
-					
-					System.out.println();
-					
-					
-					for(Pawn PawnIndexInTheArrayList : (ArrayList<Pawn>)transferedObject)
-							System.out.println(PawnIndexInTheArrayList.getTeam());
-						
-				for(Pawn PawnIndexInTheArrayList : ModifiedArrayListOfPawns)
-						System.out.println(PawnIndexInTheArrayList.getTeam());
-					
-					System.out.println();
-					for(Pawn p: ModifiedArrayListOfPawns)
-					{
-						if(p.getTeam() == PawnTeam.PAWN_LOCAL)
-							{
-								//System.out.println(p.getTeam());
-								p.setTeam(PawnTeam.PAWN_REMOTE);
-								//System.out.println("[NETWORK]Nouveau: " + p.getTeam());
-							}
-						else
-							{	
-								//System.out.println(p.getTeam());
-								p.setTeam(PawnTeam.PAWN_LOCAL);
-								//System.out.println("[NETWORK]Nouveau: " + p.getTeam());
-							}
-					}
-					//For each pawn of the arrayList, it does print it (DEBUG ONLY: TODO: REMOVE THESES 3LINES)
-					
-				//	for(Pawn PawnIndexInTheArrayList : ModifiedArrayListOfPawns)
-						//System.out.println(PawnIndexInTheArrayList);
-					
-					
-					for(Pawn PawnIndexInTheArrayList : ModifiedArrayListOfPawns)
-						System.out.println(PawnIndexInTheArrayList.getTeam());
-					
-					//Edit the array list of the current game
-					myGame.getBoard().setTurnOrder(ModifiedArrayListOfPawns);
-					
-					/*System.out.println("After" + this.myGame.getTurnOrder().size());*/
-				
-			
-		
-
+			ArrayList<Pawn> ModifiedList = (ArrayList<Pawn>) transferedObject;
+			myGame.getBoard().setTurnOrder(ModifiedList);
 		}
-		else if(transferedObject.getClass() == Boolean.class) // This is used in order to manage turn in network
-			myGame.setLocalPlayerTurn(!(Boolean)transferedObject);
-		
+//		else if(transferedObject.getClass() == Boolean.class) // This is used in order to manage turn in network
+//			myGame.setLocalPlayerTurn(!(Boolean)transferedObject);
+
 		else if(transferedObject.getClass() == Integer.class)
 		{
 			myGame.getBoard().setCurrentPawnIndex((Integer)transferedObject);
 		}
-		else if(transferedObject.getClass() == String.class)
+		
+		else if(transferedObject.getClass() == TeamId.class)
 		{
-			myGame.setGameLive((String)transferedObject);
+			this.myGame.getMyIds().add(TeamId)transferedObject);
 		}
+//		else if(transferedObject.getClass() == String.class)
+//		{
+//			myGame.setGameLive((String)transferedObject);
+//		}
 		else throw new NetworkUnknownTypeException(transferedObject); //If the type of the sended object is not a boolean or an arrayList
 	}
 }
