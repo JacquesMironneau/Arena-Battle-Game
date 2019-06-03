@@ -77,7 +77,7 @@ public class Pawn implements Serializable
 	/**
 	 * Id of the pawn (his name)
 	 */
-	private String id;
+	private String name;
 
 	/**
 	 * List of all the active effect on the Pawn
@@ -239,7 +239,7 @@ public class Pawn implements Serializable
 		result = prime * result + ((activeEffects == null) ? 0 : activeEffects.hashCode());
 		result = prime * result + ((currentCoordinate == null) ? 0 : currentCoordinate.hashCode());
 		result = prime * result + healthPoints;
-		result = prime * result + ((id == null) ? 0 : id.hashCode());
+		result = prime * result + ((name == null) ? 0 : name.hashCode());
 		result = prime * result + movePoints;
 		result = prime * result + ((mySpellPage == null) ? 0 : mySpellPage.hashCode());
 		result = prime * result + ((teamId == null) ? 0 : teamId.hashCode());
@@ -269,10 +269,10 @@ public class Pawn implements Serializable
 			return false;
 		if (healthPoints != other.healthPoints)
 			return false;
-		if (id == null) {
-			if (other.id != null)
+		if (name == null) {
+			if (other.name != null)
 				return false;
-		} else if (!id.equals(other.id))
+		} else if (!name.equals(other.name))
 			return false;
 		if (movePoints != other.movePoints)
 			return false;
@@ -308,9 +308,9 @@ public class Pawn implements Serializable
 	}
 	
 	
-	public String getId()
+	public String getName()
 	{
-		return this.id;
+		return this.name;
 	}
 	
 	public TeamId getTeamId()
