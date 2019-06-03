@@ -382,7 +382,28 @@ public class PlayerConsole implements Player{
 		{
 			System.out.println(error.getErrorMessage());
 		}
+
+
+		@Override
+		public int askNbPlayer() {
+			int res;
+			CheapScanner scan = new CheapScanner();
+			do {
+				System.out.println("entrez le nombre de joueur");
+				res = scan.getInt();
+			}while (res<1);
+			return res;
+		}
 		
+		public int askNbPawn() {
+			int res;
+			CheapScanner scan = new CheapScanner();
+			do {
+				System.out.println("entrez le nombre de pion par joueur");
+				res = scan.getInt();
+			}while (res < 0);
+		return res;
+		}
 	}
 
 	
