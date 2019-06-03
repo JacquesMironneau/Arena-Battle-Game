@@ -20,6 +20,6 @@ public interface Communication
 	public void sendToOther(Object o);
 	
 	
-	public void Broadcast(int id, Object o);
+	public void broadcast(int id, Object o);
 	
 }

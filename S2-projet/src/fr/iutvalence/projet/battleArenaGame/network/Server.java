@@ -114,10 +114,11 @@ public class Server implements Communication
 
                 new Thread(() -> receive(((Socket)clients[playersConnected-1][0]), ((ObjectInputStream)clients[playersConnected-1][1]))).start();
 
-                this.Send(this.playersConnected, new TeamId(this.playersConnected));
 
                 //Increase the number of connected player
                 this.playersConnected++;
+                this.Send(this.playersConnected, new TeamId(this.playersConnected));
+
 
             } catch(Exception e)
             {
@@ -234,7 +235,7 @@ public class Server implements Communication
      * @param id id of the emitter
      * @param o Object sended
      */
-    public void Broadcast(int id, Object o)
+    public void broadcast(int id, Object o)
     {
         System.out.println("Sending to everyone except " + ((Socket)this.clients[id][0]).getInetAddress().getHostName());
 
