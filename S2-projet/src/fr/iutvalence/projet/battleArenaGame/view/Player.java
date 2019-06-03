@@ -147,4 +147,8 @@ public interface Player {
 	 */
 	public void displaySpellPageDetail(SpellPage pPage);
 	
+	public int askNbPlayer();
+	
+	public int askNbPawn();
+	
 }
