@@ -1,6 +1,8 @@
 package fr.iutvalence.projet.battleArenaGame.view;
 
 
+import java.io.IOException;
+
 import fr.iutvalence.projet.battleArenaGame.Board;
 import fr.iutvalence.projet.battleArenaGame.EndStatus;
 import fr.iutvalence.projet.battleArenaGame.Game;
@@ -22,15 +24,29 @@ public class PlayerConsole implements Player{
 	}
 	
 	
-	@Override
+	//TODO catch errors
 	public Coordinate askMove() {
 		CheapScanner scan = new CheapScanner();
 		
-		System.out.println("entrez la coordon� X de la destination");
-		int xCoord = (Integer)scan.getInt();
 		
+		System.out.println("entrez la coordon� X de la destination");
+		int xCoord = -1;
+		try
+		{
+			xCoord = (Integer)scan.getInt();
+		} catch (NumberFormatException | IOException e)
+		{}
+		
+		if(xCoord == -1) askMove();
 		System.out.println("entre la coordonn� Y de la destination");
-		int yCoord = (Integer)scan.getInt();
+		int yCoord = -1;
+		try
+		{
+			yCoord = (Integer)scan.getInt();
+		} catch (NumberFormatException | IOException e)
+		{}
+		
+		if(yCoord == -1) askMove();
 		return new Coordinate(xCoord,yCoord);
 	}
 
@@ -45,7 +61,13 @@ public class PlayerConsole implements Player{
 		int index = -1;
 		do {
 			System.out.println("entrez l'index du sort a lancer (1 ou 2 ou 3");
-			index = (Integer)scan.getInt();
+			try
+			{
+				index = (Integer)scan.getInt();
+			} catch (NumberFormatException | IOException e)
+			{
+				e.printStackTrace();
+			}
 		}while(index < 1 || index > 3);
 		
 		return index;
@@ -62,10 +84,16 @@ public class PlayerConsole implements Player{
 		//Afficher toutes les pages et demander d'en choisir une
 		this.displaySpellPage();
 		CheapScanner scan = new CheapScanner();
-		int index;
+		int index = -1;
 		do {
 			System.out.println("choisissez votre page");
-			index=(Integer)scan.getInt()-1;
+			try
+			{
+				index=(Integer)scan.getInt()-1;
+			} catch (NumberFormatException | IOException e)
+			{
+				e.printStackTrace();
+			}
 		}while (index<0 || index>Game.getSpellPages().size());
 	return Game.getSpellPages().get(index);
 	}
@@ -116,12 +144,18 @@ public class PlayerConsole implements Player{
 	{	
 		this.displayMenu();
 		CheapScanner scan = new CheapScanner();
-		int mychoice;
+		int mychoice = -1;
 		
 		do {
 		
 		System.out.println("faite votre choix");
-		mychoice = (Integer)scan.getInt();
+		try
+		{
+			mychoice = (Integer)scan.getInt();
+		} catch (NumberFormatException | IOException e)
+		{
+			e.printStackTrace();
+		}
 		switch (mychoice) {
 		
 		case 1:
@@ -143,10 +177,16 @@ public class PlayerConsole implements Player{
 	{
 		this.displayChoiceAction();
 		CheapScanner scan = new CheapScanner();
-		int mychoice;
+		int mychoice = -1;
 		do {
 		System.out.println("faite votre choix");
-		mychoice= (Integer)scan.getInt();
+		try
+		{
+			mychoice= (Integer)scan.getInt();
+		} catch (NumberFormatException | IOException e)
+		{
+			e.printStackTrace();
+		}
 		
 		switch(mychoice)
 		{
@@ -256,10 +296,17 @@ public class PlayerConsole implements Player{
 		CheapScanner scan = new CheapScanner();
 		System.out.println("validez votre saisie?");
 		System.out.println("1) oui       2)non");
-		int myChoice;
+		int myChoice = -1;
 		do
 		{
-			myChoice = (Integer)scan.getInt();
+			try
+			{
+				myChoice = (Integer)scan.getInt();
+			} catch (NumberFormatException | IOException e)
+			{
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 			switch (myChoice)
 			{
 			case 1:return true;
@@ -356,18 +403,16 @@ public class PlayerConsole implements Player{
 						+ "\nSpell 3 :" + myBoard.getTurnOrder().get(myBoard.getCurrentPawnIndex()).getSpellPage().getSpell(2).getCurrentCooldown() + "/" + myBoard.getTurnOrder().get(myBoard.getCurrentPawnIndex()).getSpellPage().getSpell(2).getDefaultCooldown();
 				str+= "\nCurrent effects :" + myBoard.getTurnOrder().get(myBoard.getCurrentPawnIndex()).getEffect().toString()+"\n";
 				
-				str+= "Allied Pawns :\n";
-				for(Pawn p :myBoard.getTurnOrder())
+				for(Pawn p: myBoard.getTurnOrder())
 				{
-					if(p.getTeam()==myBoard.getTurnOrder().get(myBoard.getCurrentPawnIndex()).getTeam())
-						str += p.getId() + ": " + p.getHealthPoints() + "/100 \n";
-			 	}
-				str+= "Enemy Pawns :\n";
-				for(Pawn p :myBoard.getTurnOrder())
-				{
-					if(p.getTeam()!=myBoard.getTurnOrder().get(myBoard.getCurrentPawnIndex()).getTeam())
-						str += p.getId() + ": " + p.getHealthPoints() + "/100 \n";
-			 	}
+					for(int teamIndex = 0; teamIndex <= Game.MAXPLAYERS; teamIndex++)
+					{
+						str += "Team" + teamIndex;
+						for(Pawn p1 : myBoard.getTurnOrder())
+							if(p1.getTeamId().getId()==teamIndex)
+								str += p.getTeamId().getId();
+					}
+				}
 				
 				System.out.println(str);
 			}
@@ -386,21 +431,35 @@ public class PlayerConsole implements Player{
 
 		@Override
 		public int askNbPlayer() {
-			int res;
+			int res = -1;
 			CheapScanner scan = new CheapScanner();
 			do {
 				System.out.println("entrez le nombre de joueur");
-				res = scan.getInt();
+				try
+				{
+					res = scan.getInt();
+				} catch (NumberFormatException | IOException e)
+				{
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 			}while (res<1);
 			return res;
 		}
 		
 		public int askNbPawn() {
-			int res;
+			int res = -1;
 			CheapScanner scan = new CheapScanner();
 			do {
 				System.out.println("entrez le nombre de pion par joueur");
-				res = scan.getInt();
+				try
+				{
+					res = scan.getInt();
+				} catch (NumberFormatException | IOException e)
+				{
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 			}while (res < 0);
 		return res;
 		}
