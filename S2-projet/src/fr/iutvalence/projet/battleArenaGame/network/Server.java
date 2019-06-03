@@ -112,13 +112,12 @@ public class Server implements Communication
                 //TODO remove debug
                 //System.out.println("Nb joueurs courants:" + this.playersConnected + "Socket" + this.clients[this.playersConnected][0] + " OutputStream " + this.clients[this.playersConnected][1]);
 
-                new Thread(() -> receive(((Socket)clients[playersConnected-1][0]), ((ObjectInputStream)clients[playersConnected-1][1]))).start();
+                new Thread(() -> receive(((Socket)clients[playersConnected][0]), ((ObjectInputStream)clients[playersConnected][1]))).start();
 
 
                 //Increase the number of connected player
-                this.playersConnected++;
                 this.Send(this.playersConnected, new TeamId(this.playersConnected));
-
+                this.playersConnected++;
 
             } catch(Exception e)
             {
