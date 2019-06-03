@@ -43,14 +43,9 @@ public class CheapScanner {
 	 * @throws NumberFormatException
 	 * @throws IOException
 	 */
-	public int getInt(){
+	public int getInt() throws NumberFormatException, IOException{
 		int result = 0;
-		try {
 			result = Integer.valueOf(this.in.readLine());
-		}
-		catch(Exception e){
-			System.out.println("Un nombre est attendu");
-		}
 		return result;
 	}
 	

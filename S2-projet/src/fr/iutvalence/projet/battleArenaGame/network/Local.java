@@ -44,4 +44,11 @@ public class Local implements Communication
 		}
 	}
 
+	@Override
+	public void Broadcast(int id, Object o)
+	{
+		// TODO Auto-generated method stub
+		
+	}
+
 }
