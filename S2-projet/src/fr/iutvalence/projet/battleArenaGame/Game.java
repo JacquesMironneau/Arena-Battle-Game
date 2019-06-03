@@ -1,6 +1,8 @@
 package fr.iutvalence.projet.battleArenaGame;
 
 import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Set;
 
 import fr.iutvalence.projet.battleArenaGame.exceptions.SpellIndexException;
 import fr.iutvalence.projet.battleArenaGame.network.Client;
@@ -10,6 +12,7 @@ import fr.iutvalence.projet.battleArenaGame.network.Network;
 import fr.iutvalence.projet.battleArenaGame.network.Server;
 import fr.iutvalence.projet.battleArenaGame.pawn.Pawn;
 import fr.iutvalence.projet.battleArenaGame.pawn.PawnTeam;
+import fr.iutvalence.projet.battleArenaGame.pawn.TeamId;
 import fr.iutvalence.projet.battleArenaGame.shape.Shape;
 import fr.iutvalence.projet.battleArenaGame.spell.Spell;
 import fr.iutvalence.projet.battleArenaGame.spell.SpellEffect;
@@ -78,10 +81,6 @@ public class Game
 	 */
 	private boolean localPlayerTurn;
 
-	/**
-	 * True if player decide to stop his turn, false either
-	 */
-	private boolean endTurn;
 	
 	/**
 	 * Board of the game
@@ -92,8 +91,14 @@ public class Game
 	 * List of all spellPages of the player
 	 */
 	private static ArrayList<SpellPage> mySpellPages;
+		
 	
-	private String gameLive;
+	/**
+	 * Id of the player who win the game
+	 */
+	private int winnerID;
+	
+	private Set myIDs;
 	
 	
 	
@@ -106,8 +111,9 @@ public class Game
 		Game.mySpellPages = new ArrayList<SpellPage>(); //TODO remove (do not create it every time we launch (will evolve to file read /DB)
 		this.localPlayer = p;
 		this.myNetwork = new Network(this);
-		this.gameLive = "ALIVE";
-	}
+		this.winnerID = -1;
+		this.myIDs = new HashSet<TeamId>();
+		}
 	
 	
 	/**
@@ -185,10 +191,10 @@ public class Game
 		this.pawnSelection();
 		
 
-		while(!endGame() && this.gameLive.equals("ALIVE")) // replace by boolean / or method to know if game is finished
+		while(this.winnerID == -1) 
 		{
-			this.localPlayer.displayBoard(this.board);
-			System.out.println("Waiting for client-kun.." + this.localPlayerTurn);
+			this.localPlayer.displayBoard(board);
+			System.out.println("Waiting for others...");
 			try {
 				Thread.sleep(1000);
 
@@ -196,50 +202,27 @@ public class Game
 			{
 				
 			}
-			if(this.localPlayerTurn)
+			this.communication.sendToOther(this.board.getTurnOrder().get(this.board.getCurrentPawnIndex()).getId());
+			this.communication.broadcast(this.board.getTurnOrder(),this.board.getTurnOrder().get(this.board.getCurrentPawnIndex()).getId());
+			
+			if(this.myIDs.contains(this.board.getTurnOrder().get(this.board.getCurrentPawnIndex()).getId()));
 			{
-				this.localPlayer.displayBoard(board);
-				//Update effects and PA &PM of pawn
-				this.board.getTurnOrder().get(board.getCurrentPawnIndex()).setActionPoints(Pawn.DEFAULT_ACTION_POINTS);
-				this.board.getTurnOrder().get(board.getCurrentPawnIndex()).setMovePoints(Pawn.DEFAULT_MOVE_POINTS);
-				
-				this.board.applyEffect();
-				
-				if(board.getTurnOrder().get(board.getCurrentPawnIndex()).getHealthPoints()<=0)
+				boolean myTurn = true;
+				while(myTurn)
 				{
-					board.removeDeads();
-					endGame();
-					endTurn();
-				}
-				while(!this.endTurn)
-				{
+					this.board.getTurnOrder().get(this.board.getCurrentPawnIndex()).
 					switch(this.localPlayer.askActionChoice())
 					{
 					
 					case MOVE:
-						this.board.checkMove(this.localPlayer.askMove());
-						this.localPlayer.displayBoard(this.board);	
-						
-						this.communication.sendToOther(this.board.getTurnOrder());
-						break;
+				
 						
 					case LAUNCH_SPELL:
-						this.localPlayer.displaySpellPageDetail(this.board.getTurnOrder().get(this.board.getCurrentPawnIndex()).getSpellPage());
-						this.board.checkSpell(localPlayer.askSpell(),localPlayer.askMove());
-						if(this.board.getTurnOrder().get(this.board.getCurrentPawnIndex()).getHealthPoints()<=0)
-							{
-							this.board.removeDeads();
-							endTurn();
-							}
-						this.board.removeDeads();
-						//this.localPlayer.displayBoard(this.board);
-						endGame();
-						this.communication.sendToOther(this.board.getTurnOrder());
-
+						
 						break;
 					case END_TURN:
 
-						endTurn();
+					
 						break;
 					default:
 						localPlayer.displayError(ErrorMessages.SYSTEM_ERROR);
