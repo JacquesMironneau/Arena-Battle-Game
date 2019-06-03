@@ -81,8 +81,6 @@ public class PlayerConsole implements Player{
 	@Override
 	public SpellPage askSpellPageSelection()
 	{
-		//Afficher toutes les pages et demander d'en choisir une
-		this.displaySpellPage();
 		CheapScanner scan = new CheapScanner();
 		int index = -1;
 		do {
