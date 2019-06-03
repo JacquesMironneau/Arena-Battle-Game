@@ -445,4 +445,9 @@ public void createSpellPageForTest() throws SpellIndexException
 	Game.mySpellPages.add(p1);
 }
 
+public void setBoard(Board b) {
+	this.board=b;	
+
+}
+
 }
