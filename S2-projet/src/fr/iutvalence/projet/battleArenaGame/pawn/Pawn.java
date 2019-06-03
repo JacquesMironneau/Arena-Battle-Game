@@ -99,6 +99,7 @@ public class Pawn implements Serializable
 		this.mySpellPage = pSpellPage;
 		this.activeEffects= new ArrayList<PawnEffect>();
 		this.teamId = pTeamId;
+		this.name = "J" + this.teamId.getId() + "  ";
 	}
 	
 	/**

@@ -119,10 +119,11 @@ public class Game
 	 * and allow the player to navigate in the menu
 	 */
 	public void launch()
-	{			
+	{		
+		Game.maxPlayer = this.localPlayer.askHowManyPlayers();
 		while(true) 
 		{	
-			Game.maxPlayer = this.localPlayer.askHowManyPlayers();
+			
 			switch(localPlayer.askChoiceMenu())
 			{		
 			case CREATE_SPELL_PAGE:
@@ -254,7 +255,7 @@ public class Game
 	{
 		System.out.println("Syncrhonize");
 
-		while(true)
+		while(!this.board.areAllPageSet())
 		{
 			try {
 				Thread.sleep(1000);
@@ -262,19 +263,16 @@ public class Game
 				e.printStackTrace();
 			}
 			
-			if(!this.board.areAllPageSet())
-				
-			{
 				if(this.myIds.contains(this.board.getTurnOrder().get(this.board.getCurrentPawnIndex()).getTeamId()))
 				{
 					this.localPlayer.displaySpellPage();
-					this.localPlayer.displaySelectForThisPawn(this.board.getTurnOrder().get(this.board.getCurrentPawnIndex()).getName());
-					this.localPlayer.askSpellPageSelection();
+					this.localPlayer.displaySelectForThisPawn(this.board.getTurnOrder().get(this.board.getCurrentPawnIndex()).toString());
+					this.board.getTurnOrder().get(this.board.getCurrentPawnIndex()).setSpellPage(this.localPlayer.askSpellPageSelection());
 					this.board.nextPawn();
 					this.communication.sendToOther(this.board.getTurnOrder());
 					this.communication.sendToOther(this.board.getCurrentPawnIndex());
 				}
-			}
+			
 		}
 		
 	}

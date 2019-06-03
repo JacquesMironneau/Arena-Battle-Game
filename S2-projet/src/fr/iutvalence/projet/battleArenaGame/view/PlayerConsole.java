@@ -367,13 +367,13 @@ public class PlayerConsole implements Player{
 		Boolean noPawn = true;
 		String str = "  |  0 |  1 |  2 |  3 |  4 |  5 |  6 |  7 |  8 |  9 | 10 | 11 | 12 | 13 | 14 | \n"
 				+"  |__________________________________________________________________________|\n";
-				for(int i=0;i<Game.BOARD_SIZE;i++)
+				for(int i=0;i<Game.boardSize;i++)
 				{
 					if(i<10)
 						str+= i + " ";
 					else
 						str+= i;
-					for(int j=0;j<Game.BOARD_SIZE;j++)
+					for(int j=0;j<Game.boardSize;j++)
 					{
 						str += "|";
 						noPawn = true;
@@ -381,7 +381,7 @@ public class PlayerConsole implements Player{
 						{
 							if(p.getPos().equals(new Coordinate(i,j)))
 								{
-									str+= p.getId();
+									str+= p.getName();
 									noPawn = false;
 								}
 						}	
@@ -392,7 +392,7 @@ public class PlayerConsole implements Player{
 					str += "|" +"\n";
 				}
 				
-				str += myBoard.getTurnOrder().get(myBoard.getCurrentPawnIndex()).getId() + " : HP:" + myBoard.getTurnOrder().get(myBoard.getCurrentPawnIndex()).getHealthPoints() + "/100 AP:" + myBoard.getTurnOrder().get(myBoard.getCurrentPawnIndex()).getActionPoints() + "/6 MP:"
+				str += myBoard.getTurnOrder().get(myBoard.getCurrentPawnIndex()).getName() + " : HP:" + myBoard.getTurnOrder().get(myBoard.getCurrentPawnIndex()).getHealthPoints() + "/100 AP:" + myBoard.getTurnOrder().get(myBoard.getCurrentPawnIndex()).getActionPoints() + "/6 MP:"
 						+ myBoard.getTurnOrder().get(myBoard.getCurrentPawnIndex()).getMovePoints() + "/6\n" 
 						+ "Spell 1 :" + myBoard.getTurnOrder().get(myBoard.getCurrentPawnIndex()).getSpellPage().getSpell(0).getCurrentCooldown() + "/" + myBoard.getTurnOrder().get(myBoard.getCurrentPawnIndex()).getSpellPage().getSpell(0).getDefaultCooldown()
 						+ "\nSpell 2 :" + myBoard.getTurnOrder().get(myBoard.getCurrentPawnIndex()).getSpellPage().getSpell(1).getCurrentCooldown() + "/" + myBoard.getTurnOrder().get(myBoard.getCurrentPawnIndex()).getSpellPage().getSpell(1).getDefaultCooldown()
@@ -493,8 +493,8 @@ public class PlayerConsole implements Player{
 	public void diplaySizeError(){
 		System.out.println("entrez une taille plus grande");
 	}
-	public void displaySelectForThisPawn(String pawn) {
-		System.out.println("la voila t'as methode de merde")
+	public void displaySelectForThisPawn(String pawn)
+	{
 		System.out.println("choisissez une page pour le pion "+ pawn);
 	}
 }

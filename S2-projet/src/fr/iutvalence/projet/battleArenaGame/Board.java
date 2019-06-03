@@ -54,10 +54,9 @@ public class Board{
 	public Board(Communication pCommunication, Player pPlayer)
 	{
 		this.turnOrder = new ArrayList<Pawn>();
-		this.initTurnOrder();
-		
 		this.player = pPlayer;
 		this.currentPawnIndex = 0;
+		this.initTurnOrder();
 	}
 	
 	/**
@@ -79,7 +78,7 @@ public class Board{
 		}
 		
 		//if the destination isn't in board limits
-		if(pMovement.getDestCordinate().getCoordX()<0 || pMovement.getDestCordinate().getCoordX()>=Game.BOARD_SIZE || pMovement.getDestCordinate().getCoordY()<0 || pMovement.getDestCordinate().getCoordY()>=Game.BOARD_SIZE)
+		if(pMovement.getDestCordinate().getCoordX()<0 || pMovement.getDestCordinate().getCoordX()>=Game.boardSize || pMovement.getDestCordinate().getCoordY()<0 || pMovement.getDestCordinate().getCoordY()>=Game.boardSize)
 			{
 				this.player.displayError(ErrorMessages.MOVE_OUT_OF_BOARD); 
 				return;
@@ -267,7 +266,7 @@ public class Board{
 	}
 	
 	
-	private Boolean exist(int X,int Y)
+	private boolean exist(int X,int Y)
 	{
 		if (this.getTurnOrder().isEmpty())
 			return false;
@@ -286,14 +285,16 @@ public class Board{
 		do {
 		Game.boardSize = this.player.askBoardSize();
 		}while(Game.boardSize<this.nbPawn*Game.maxPlayer);
-		for (int i=0;i<= this.nbPawn;i++)
-			{for(int k=0;k<=Game.maxPlayer;k++)
+		for (int i=0;i< this.nbPawn;i++)
 			{
-				do {
-				X = rand.nextInt(Game.BOARD_SIZE);
-				Y = rand.nextInt(Game.BOARD_SIZE);
+			for(int k=0;k<Game.maxPlayer;k++)
+			{
+				do
+				{
+				X = rand.nextInt(Game.boardSize);
+				Y = rand.nextInt(Game.boardSize);
 				}while(this.exist(X,Y));
-			this.getTurnOrder().add(new Pawn(new TeamId(k),new Coordinate(X,Y),null));
+				this.getTurnOrder().add(new Pawn(new TeamId(k),new Coordinate(X,Y),null));
 			}
 		}
 	}
