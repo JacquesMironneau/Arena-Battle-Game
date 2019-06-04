@@ -133,12 +133,13 @@ public class Game
 				break;
 				
 			case HOST_GAME: // server
-				
+				this.myIds.add(new TeamId(1));
+				this.maxPlayer= this.localPlayer.askNbPlayer();
+				this.board = new Board(this.localPlayer,maxPlayer,this.localPlayer.askNbPawn(),this.localPlayer.askBoardSize());
 				this.communication = new Server(Game.PORT, myNetwork, this.maxPlayer-1);
 				this.communication.init();
-				this.myIds.add(new TeamId(1));
-				this.board = new Board(this.localPlayer,this.localPlayer.askNbPlayer(),this.localPlayer.askNbPawn(),this.localPlayer.askBoardSize());
-				this.communication.sendToOther(new GameConfig(maxPlayer,this.board.getNbPawn(),this.board.getBoardSize()));
+				this.communication.sendToOther(this.board);
+				this.communication.sendToOther(this.board.getTurnOrder());
 				pawnSelection();
 				this.play();
 				break;
@@ -272,9 +273,10 @@ public class Game
 
 		while(!this.board.areAllPageSet())
 		{
-			
 				if(this.myIds.contains(this.board.getTurnOrder().get(this.board.getCurrentPawnIndex()).getTeamId()))
 				{
+					for(Pawn p :this.board.getTurnOrder())
+						System.out.println(p + ""+p.getSpellPage());
 					this.localPlayer.displaySpellPage();
 					this.localPlayer.displaySelectForThisPawn(this.board.getTurnOrder().get(this.board.getCurrentPawnIndex()).getName());
 					this.board.getTurnOrder().get(this.board.getCurrentPawnIndex()).setSpellPage(Game.mySpellPages.get(this.localPlayer.askSpellPageSelection()));

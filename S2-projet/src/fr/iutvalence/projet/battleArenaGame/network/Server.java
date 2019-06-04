@@ -121,7 +121,8 @@ public class Server implements Communication
 
                 Thread.sleep(1000);
                 //Increase the number of connected player
-                this.Send(this.playersConnected, new TeamId(this.playersConnected));
+                System.out.println(this.playersConnected+2);
+                this.Send(this.playersConnected, new TeamId(this.playersConnected+2));
                 this.playersConnected++;
 
             } catch(Exception e)
@@ -218,7 +219,7 @@ public class Server implements Communication
     {
         System.out.println("Sending to " + ((Socket)this.clients[playerId][0]).getInetAddress().getHostName());
         
-        if(playerId >= 0 && playerId < this.playersConnected)
+        if(playerId >= 0 && playerId < this.numberOfClients)
         {
             try {
                 ((ObjectOutputStream)clients[playerId][2]).writeObject(o);
