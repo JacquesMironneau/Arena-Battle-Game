@@ -1,21 +1,23 @@
 package fr.iutvalence.projet.battleArenaGame;
 
-import java.util.ArrayList;
-
-import fr.iutvalence.projet.battleArenaGame.pawn.Pawn;
+import java.io.Serializable;
 
 /**
  * Contains all needs to configure a game (to send config to clients)
  * @author charvevi
  *
  */
-public class GameConfig {
+public class GameConfig implements Serializable {
+	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	
 	private int nbPlayers;
 	private int boardSize;
 	private int nbPawns;
-	private ArrayList<Pawn> turnOrder;
-	private int currentPawnIndex;
+
 	
 	public int getNbPlayers()
 	{
@@ -29,23 +31,14 @@ public class GameConfig {
 	{
 		return nbPawns;
 	}
-	public ArrayList<Pawn> getTurnOrder()
-	{
-		return turnOrder;
-	}
+
 	
-	public int getCurrentPawnIndex()
-	{
-		return this.currentPawnIndex;
-	}
-	
-	public GameConfig(int pNbPlayer,int pNbPawns,int pBoardSize,ArrayList<Pawn> pTurnOrder,int pCurrentPawnIndex)
+	public GameConfig(int pNbPlayer,int pNbPawns,int pBoardSize)
 	{
 		this.nbPlayers = pNbPlayer;
 		this.nbPawns = pNbPawns;
 		this.boardSize = pBoardSize;
-		this.turnOrder = pTurnOrder;
-		this.currentPawnIndex = pCurrentPawnIndex;
+
 	}
 
 }

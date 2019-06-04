@@ -43,6 +43,8 @@ public class Board{
 		this.turnOrder = new ArrayList<Pawn>();
 		this.player = pPlayer;
 		this.currentPawnIndex = 0;
+		this.nbPawn = -1;
+		this.boardSize = -1;
 		this.initTurnOrder(maxPlayer);
 	}
 	
@@ -268,9 +270,11 @@ public class Board{
 		int X;
 		int Y;
 		Random rand = new Random();
-		this.nbPawn = this.player.askNbPawn();
+		if(this.nbPawn==-1)
+			this.nbPawn = this.player.askNbPawn();
 		do {
-		this.boardSize = this.player.askBoardSize();
+		if(this.boardSize==-1)
+			this.boardSize = this.player.askBoardSize();
 		}while(this.boardSize*this.boardSize<this.nbPawn*maxPlayer);
 		for (int i=1;i<= this.nbPawn;i++)
 			{

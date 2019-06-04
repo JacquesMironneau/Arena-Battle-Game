@@ -122,7 +122,6 @@ public class Game
 	{		
 		while(true) 
 		{	
-			
 			switch(localPlayer.askChoiceMenu())
 			{		
 			case CREATE_SPELL_PAGE:
@@ -140,17 +139,22 @@ public class Game
 				this.maxPlayer = this.localPlayer.askHowManyPlayers();
 				this.myIds.add(new TeamId(1));
 				this.board = new Board(this.communication,this.localPlayer,maxPlayer);
-				this.communication.sendToOther(new GameConfig(maxPlayer,this.board.getNbPawn(),this.board.getBoardSize(),this.board.getTurnOrder(),0));
+				this.communication.sendToOther(new GameConfig(maxPlayer,this.board.getNbPawn(),this.board.getBoardSize()));
 				pawnSelection();
 				this.play();
 				break;
 			
 			case JOIN_GAME: //Client
-				
+				this.maxPlayer=-1;
+
 				this.communication = new Client(Game.PORT,Game.HOST_ADDRESS, myNetwork);
 				this.communication.init();
 				//Receive board from host
-				//	this.board = new Board(this.communication,this.localPlayer);
+				while(this.maxPlayer==-1) {}
+				
+				this.board = new Board(this.communication,this.localPlayer, this.maxPlayer);
+				
+				
 				pawnSelection();
 				this.play();
 				break;
@@ -269,11 +273,6 @@ public class Game
 
 		while(!this.board.areAllPageSet())
 		{
-			try {
-				Thread.sleep(1000);
-			} catch (InterruptedException e) {
-				e.printStackTrace();
-			}
 			
 				if(this.myIds.contains(this.board.getTurnOrder().get(this.board.getCurrentPawnIndex()).getTeamId()))
 				{
