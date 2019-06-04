@@ -122,7 +122,7 @@ public class Game
 	{		
 		while(true) 
 		{	
-			switch(localPlayer.askChoiceMenu())
+switch(localPlayer.askChoiceMenu())
 			{		
 			case CREATE_SPELL_PAGE:
 				try {
@@ -174,7 +174,7 @@ public class Game
 	}
 	
 
-	public Player getLocalPlayer() {
+	public synchronized Player getLocalPlayer() {
 		return localPlayer;
 	}
 
@@ -288,6 +288,7 @@ public class Game
 				}
 			
 		}
+//		this.communication.sendToOther(this.board.getTurnOrder());
 		
 	}
 	
@@ -332,7 +333,7 @@ public class Game
 	/**
 	 * @return the board of the current Game
 	 */
-	public Board getBoard()
+	public synchronized Board getBoard()
 	{
 		return this.board;
 	}
@@ -372,7 +373,7 @@ public class Game
 	}
 	
 	
-	public Set<TeamId> getMyIds() 
+	public synchronized Set<TeamId> getMyIds() 
 	{
 		return this.myIds;
 	}
@@ -403,7 +404,7 @@ public void createSpellPageForTest() throws SpellIndexException
 	this.mySpellPages.add(p1);
 }
 
-public void setBoard(Board b) {
+public synchronized void setBoard(Board b) {
 	this.board=b;	
 
 }
@@ -414,19 +415,19 @@ public TeamId getWinnerID() {
 }
 
 
-public void setWinnerID(TeamId winnerID) 
+public synchronized void setWinnerID(TeamId winnerID) 
 {
 	this.winnerID = winnerID;
 }
 
 
 
-public int getMaxPlayer() {
+public  synchronized int getMaxPlayer() {
 	return maxPlayer;
 }
 
 
-public void setNbPlayer(int nbPlayers)
+public  synchronized void setNbPlayer(int nbPlayers)
 {
 	this.maxPlayer = nbPlayers;
 }

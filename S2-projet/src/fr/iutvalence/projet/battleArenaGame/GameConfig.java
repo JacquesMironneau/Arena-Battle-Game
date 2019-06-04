@@ -19,7 +19,7 @@ public class GameConfig implements Serializable {
 //	private int nbPawns;
 
 	
-	public int getNbPlayers()
+	public synchronized int getNbPlayers()
 	{
 		return nbPlayers;
 	}

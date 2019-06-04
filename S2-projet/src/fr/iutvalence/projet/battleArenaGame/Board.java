@@ -240,12 +240,12 @@ public class Board implements Serializable{
 	 * Setter for turnOrder
 	 * @param pTurnOrder : the new turnOrder to set
 	 */
-	public void setTurnOrder(ArrayList<Pawn> pTurnOrder)
+	public synchronized void setTurnOrder(ArrayList<Pawn> pTurnOrder)
 	{
 		this.turnOrder = pTurnOrder;
 	}
 	
-	public void setCurrentPawnIndex(int pPawnIndex)
+	public synchronized void setCurrentPawnIndex(int pPawnIndex)
 	{
 		this.currentPawnIndex = pPawnIndex;
 	}
@@ -255,7 +255,7 @@ public class Board implements Serializable{
 		return this.currentPawnIndex;
 	}
 	
-	public int getNbPawn() {
+	public synchronized int getNbPawn() {
 		return this.nbPawn;
 	}
 	
@@ -290,7 +290,7 @@ public class Board implements Serializable{
 	}
 	
 	
-	public int getBoardSize() {
+	public synchronized int getBoardSize() {
 		return boardSize;
 	}
 
