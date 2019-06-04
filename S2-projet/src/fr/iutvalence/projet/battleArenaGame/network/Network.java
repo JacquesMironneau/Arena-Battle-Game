@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import fr.iutvalence.projet.battleArenaGame.Board;
 import fr.iutvalence.projet.battleArenaGame.Game;
+import fr.iutvalence.projet.battleArenaGame.GameConfig;
 import fr.iutvalence.projet.battleArenaGame.exceptions.NetworkUnknownTypeException;
 import fr.iutvalence.projet.battleArenaGame.pawn.Pawn;
 import fr.iutvalence.projet.battleArenaGame.pawn.TeamId;
@@ -51,10 +52,22 @@ public class Network {
 		
 		else if(transferedObject.getClass() == TeamId.class)
 		{
-			this.myGame.getMyIds().add((TeamId)transferedObject);
+			if(this.myGame.getMyIds().size()==0)
+				this.myGame.getMyIds().add((TeamId)transferedObject);
+			else
+				this.myGame.setWinnerID((TeamId)transferedObject);
 		}
-		else if(transferedObject.getClass()==Board.class)
+//		else if(transferedObject.getClass()==Board.class)
+//		{
+//			
+//		}
+		else if(transferedObject.getClass() == GameConfig.class)
 		{
+			GameConfig conf = (GameConfig) transferedObject;
+			this.myGame.setNbPlayer(conf.getNbPlayers());
+			this.myGame.getBoard().setBoardSize(conf.getBoardSize());
+			this.myGame.getBoard().setTurnOrder(conf.getTurnOrder());
+			this.myGame.getBoard().setNbPawns(conf.getNbPawns());
 			
 		}
 //		else if(transferedObject.getClass() == String.class)

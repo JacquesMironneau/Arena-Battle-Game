@@ -15,5 +15,22 @@ public class GameConfig {
 	private int boardSize;
 	private int nbPawns;
 	private ArrayList<Pawn> turnOrder;
+	
+	public int getNbPlayers()
+	{
+		return nbPlayers;
+	}
+	public int getBoardSize()
+	{
+		return boardSize;
+	}
+	public int getNbPawns()
+	{
+		return nbPawns;
+	}
+	public ArrayList<Pawn> getTurnOrder()
+	{
+		return turnOrder;
+	}
 
 }

@@ -135,7 +135,7 @@ public class Game
 				
 			case HOST_GAME: // server
 				
-				this.communication = new Server(Game.PORT, myNetwork);
+				this.communication = new Server(Game.PORT, myNetwork, this.maxPlayer-1);
 				this.communication.init();
 				this.maxPlayer = this.localPlayer.askHowManyPlayers();
 				this.myIds.add(new TeamId(0));
@@ -412,8 +412,15 @@ public TeamId getWinnerID() {
 }
 
 
-public void setWinnerID(TeamId winnerID) {
+public void setWinnerID(TeamId winnerID) 
+{
 	this.winnerID = winnerID;
+}
+
+
+public void setNbPlayer(int nbPlayers)
+{
+	this.maxPlayer = nbPlayers;
 }
 
 

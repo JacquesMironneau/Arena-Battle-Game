@@ -40,6 +40,9 @@ public class Server implements Communication
     
     //Network of the system: Used to translate received object into methods calls
     private Network myNetwork;
+    
+    //
+    private int numberOfClients;
  
     
     /**
@@ -47,11 +50,13 @@ public class Server implements Communication
      * When the server is started there is no player connected
      * @param port chosen in the Game class
      */
-    public Server(int port, Network pNetwork)
+    public Server(int port, Network pNetwork, int numberOfClients)
     {
         this.port = port;
         this.playersConnected = 0;
-        this.clients = new Object[Game.maxPlayer][3];
+    	this.numberOfClients = numberOfClients;
+
+        this.clients = new Object[numberOfClients][3];
         this.myNetwork = pNetwork;
 
     }
@@ -84,7 +89,7 @@ public class Server implements Communication
 
 
         //The server starts to emit or send when every player are connected
-        while(this.playersConnected < Game.maxPlayer)
+        while(this.playersConnected < this.numberOfClients)
         {
             try{
 

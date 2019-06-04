@@ -302,4 +302,9 @@ public class Board{
 				return false;
 		return true;
 	}
+
+	public void setNbPawns(int nbPawns)
+	{
+		this.nbPawn = nbPawns;
+	}
 }
