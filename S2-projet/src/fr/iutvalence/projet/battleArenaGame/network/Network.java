@@ -68,6 +68,7 @@ public class Network {
 			this.myGame.getBoard().setBoardSize(conf.getBoardSize());
 			this.myGame.getBoard().setTurnOrder(conf.getTurnOrder());
 			this.myGame.getBoard().setNbPawns(conf.getNbPawns());
+			this.myGame.getBoard().setCurrentPawnIndex(conf.getCurrentPawnIndex());
 			
 		}
 //		else if(transferedObject.getClass() == String.class)

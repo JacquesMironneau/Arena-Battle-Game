@@ -138,9 +138,9 @@ public class Game
 				this.communication = new Server(Game.PORT, myNetwork, this.maxPlayer-1);
 				this.communication.init();
 				this.maxPlayer = this.localPlayer.askHowManyPlayers();
-				this.myIds.add(new TeamId(0));
+				this.myIds.add(new TeamId(1));
 				this.board = new Board(this.communication,this.localPlayer,maxPlayer);
-				this.communication.sendToOther(this.board);
+				this.communication.sendToOther(new GameConfig(maxPlayer,this.board.getNbPawn(),this.board.getBoardSize(),this.board.getTurnOrder(),0));
 				pawnSelection();
 				this.play();
 				break;
