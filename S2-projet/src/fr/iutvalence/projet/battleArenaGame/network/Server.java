@@ -5,8 +5,10 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.ArrayList;
 
 import fr.iutvalence.projet.battleArenaGame.Game;
+import fr.iutvalence.projet.battleArenaGame.pawn.Pawn;
 import fr.iutvalence.projet.battleArenaGame.pawn.TeamId;
 
 /**
@@ -149,7 +151,16 @@ public class Server implements Communication
         {
             Object msg = null;
             try {
+
                 msg = pInput.readObject();
+                if(msg.getClass()==ArrayList.class)
+                {
+                	@SuppressWarnings("unchecked")
+    				ArrayList<Pawn> al = (ArrayList<Pawn>) msg;
+                	for(Pawn p: al)
+                		System.out.println("RECEIVE"+p.getSpellPage());
+                }
+
                 myNetwork.Transform(msg);
 
             } catch (Exception e) {
@@ -193,11 +204,21 @@ public class Server implements Communication
      */
     public void sendToOther(Object o)
     {
+    	if(o.getClass()==ArrayList.class)
+    	{    	@SuppressWarnings("unchecked")
+		ArrayList<Pawn> al = (ArrayList<Pawn>) o;
+    	for(Pawn p: al)
+    		System.out.println("SEND"+p.getSpellPage());
+    		
+    	}
+
         System.out.println("Sending to all : " +o);
         for (int playerID = 0; playerID < this.playersConnected; ++playerID)
         {
             try {
                 ((ObjectOutputStream)clients[playerID][2]).writeObject(o);
+                ((ObjectOutputStream)clients[playerID][2]).flush();
+                
             }
             catch (Exception e) {
             	//TODO Replace this
@@ -223,6 +244,8 @@ public class Server implements Communication
         {
             try {
                 ((ObjectOutputStream)clients[playerId][2]).writeObject(o);
+                ((ObjectOutputStream)clients[playerId][2]).flush();
+
             }
             catch (Exception e) {
                 e.printStackTrace();
@@ -242,7 +265,7 @@ public class Server implements Communication
      */
     public void broadcast(int id, Object o)
     {
-        System.out.println("Sending to everyone except " + ((Socket)this.clients[id][0]).getInetAddress().getHostName());
+
 
         for (int playerIndex = 0; playerIndex < this.playersConnected; playerIndex++)
         {
@@ -250,6 +273,8 @@ public class Server implements Communication
             {
                 try {
                     ((ObjectOutputStream)clients[playerIndex][2]).writeObject(o);
+                    ((ObjectOutputStream)clients[playerIndex][2]).flush();
+
                 }
                 catch (Exception e) {
                     e.printStackTrace();
