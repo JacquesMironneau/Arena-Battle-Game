@@ -4,7 +4,6 @@ package fr.iutvalence.projet.battleArenaGame.view;
 import java.io.IOException;
 
 import fr.iutvalence.projet.battleArenaGame.Board;
-import fr.iutvalence.projet.battleArenaGame.EndStatus;
 import fr.iutvalence.projet.battleArenaGame.Game;
 import fr.iutvalence.projet.battleArenaGame.move.Coordinate;
 import fr.iutvalence.projet.battleArenaGame.pawn.Pawn;
@@ -119,19 +118,9 @@ public class PlayerConsole implements Player{
 
 
 	@Override
-	public void displayEnd(EndStatus pStat, TeamId teamId) {
-		switch(pStat)
-		{
-		case VICTORY:
-			System.out.println("vous etes le boss " + teamId);
-			break;
-		case DRAW:
-			System.out.println("wow c'etait un match d'enfer, hyper close vous etes mort en m�me temps et ca c'est beau bordel");
-			break;
-		case RUNNING:
-			break;
-		}
-		
+	public void displayEnd(TeamId winTeam) 
+	{
+		System.out.println("Victoire de l'équipe " + winTeam.getId());
 	}
 
 
@@ -362,18 +351,57 @@ public class PlayerConsole implements Player{
 
 
 	@Override
-	public void displayBoard(Board myBoard)
+	public void displayBoard(Board myBoard,int nbPlayer)
 	{
 		Boolean noPawn = true;
-		String str = "  |  0 |  1 |  2 |  3 |  4 |  5 |  6 |  7 |  8 |  9 | 10 | 11 | 12 | 13 | 14 | \n"
-				+"  |__________________________________________________________________________|\n";
-				for(int i=0;i<Game.boardSize;i++)
+		int maxCharLength = (int)Math.log10(myBoard.getBoardSize())+1;
+		int pawnCharLength = (int)Math.log10(myBoard.getNbPawn())+1+(int)Math.log10(nbPlayer)+1+2;
+		if(maxCharLength < pawnCharLength)
+			maxCharLength = pawnCharLength;
+		String str = "";
+		//Display the grid
+		for(int iShift=0;iShift<(int)Math.log10(myBoard.boardSize)+1;iShift++)
+		{
+			str += " ";
+		}		
+			str+= "|0";
+			for(int rShift=0;rShift<maxCharLength-1;rShift++)
+				str+=" ";
+			for(int i=1;i<myBoard.boardSize;i++)
+			{
+					str+= "|";
+					str+= i;
+					for(int j=0;j<maxCharLength-((int)Math.log10(i)+1);j++)
+					{
+						str+=" ";
+					}			
+			}			
+			str+="|";
+			str+="\n";
+			for(int iShift=0;iShift<(int)Math.log10(myBoard.boardSize)+1;iShift++)
+			{
+				str += " ";
+			}	
+			str+=" ";
+			for(int lineCount=0;lineCount<myBoard.getBoardSize()*(maxCharLength+1);lineCount++)
+				str+="-";
+			str+="\n";
+				for(int i=0;i<myBoard.boardSize;i++)
 				{
-					if(i<10)
-						str+= i + " ";
+					str+= i;
+					if(i==0)
+					{
+						for(int iShift=0;iShift<(int)Math.log10(myBoard.boardSize);iShift++)
+						{
+							str += " ";
+						}
+					}
 					else
-						str+= i;
-					for(int j=0;j<Game.boardSize;j++)
+						for(int iShift=0;iShift<(int)Math.log10(myBoard.boardSize)+1-((int)Math.log10(i)+1);iShift++)
+						{
+							str += " ";
+						}
+					for(int j=0;j<myBoard.boardSize;j++)
 					{
 						str += "|";
 						noPawn = true;
@@ -382,16 +410,20 @@ public class PlayerConsole implements Player{
 							if(p.getPos().equals(new Coordinate(i,j)))
 								{
 									str+= p.getName();
+									for(int missName=0;missName<maxCharLength-p.getName().length();missName++)
+										str+=" ";
 									noPawn = false;
 								}
 						}	
 						if(noPawn)
-							str+="____";
-						
+							for(int k=0;k<maxCharLength;k++)
+							{
+								str+="_";
+							}
 					}
 					str += "|" +"\n";
 				}
-				
+				//Pawns detail
 				str += myBoard.getTurnOrder().get(myBoard.getCurrentPawnIndex()).getName() + " : HP:" + myBoard.getTurnOrder().get(myBoard.getCurrentPawnIndex()).getHealthPoints() + "/100 AP:" + myBoard.getTurnOrder().get(myBoard.getCurrentPawnIndex()).getActionPoints() + "/6 MP:"
 						+ myBoard.getTurnOrder().get(myBoard.getCurrentPawnIndex()).getMovePoints() + "/6\n" 
 						+ "Spell 1 :" + myBoard.getTurnOrder().get(myBoard.getCurrentPawnIndex()).getSpellPage().getSpell(0).getCurrentCooldown() + "/" + myBoard.getTurnOrder().get(myBoard.getCurrentPawnIndex()).getSpellPage().getSpell(0).getDefaultCooldown()
@@ -400,12 +432,12 @@ public class PlayerConsole implements Player{
 				str+= "\nCurrent effects :" + myBoard.getTurnOrder().get(myBoard.getCurrentPawnIndex()).getEffect().toString()+"\n";
 				
 				
-					for(int teamIndex = 0; teamIndex <= Game.maxPlayer; teamIndex++)
+					for(int teamIndex = 1; teamIndex <= nbPlayer; teamIndex++)
 					{
 						str += "Team" + teamIndex +":\n";
 						for(Pawn p1 : myBoard.getTurnOrder())
 							if(p1.getTeamId().getId()==teamIndex)
-								str += p1.getName()+"\n";
+								str += p1.getName()+": HP:"+p1.getHealthPoints()+"/"+Pawn.DEFAULT_HEALTH_POINTS+"   Effects :"+p1.getEffect().toString()+"\n";
 					}
 				
 				

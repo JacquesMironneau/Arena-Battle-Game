@@ -1,7 +1,6 @@
 package fr.iutvalence.projet.battleArenaGame.view;
 
 import fr.iutvalence.projet.battleArenaGame.Board;
-import fr.iutvalence.projet.battleArenaGame.EndStatus;
 import fr.iutvalence.projet.battleArenaGame.move.Coordinate;
 import fr.iutvalence.projet.battleArenaGame.pawn.TeamId;
 import fr.iutvalence.projet.battleArenaGame.shape.Shape;
@@ -87,7 +86,7 @@ public interface Player {
 	 * Displays the board 
 	 * @param myBoard
 	 */
-	public void displayBoard(Board myBoard);
+	public void displayBoard(Board myBoard, int nbPlayer);
 
 	/**
 	 * Display the launch menu with the differents choices(Create Spells/Host/Join/localGame)
@@ -114,7 +113,7 @@ public interface Player {
 	 * @param Pstat status of the Game (victory,defeat,draw)
 	 * @param teamId display the team linked to the status
 	 */
-	public void displayEnd(EndStatus Pstat, TeamId teamId);
+	public void displayEnd(TeamId winTeam);
 	
 	/**
 	 * Displays every possible choices for element

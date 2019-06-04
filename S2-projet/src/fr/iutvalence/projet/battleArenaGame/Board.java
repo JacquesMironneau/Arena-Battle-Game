@@ -29,16 +29,21 @@ public class Board{
 	
 	private int nbPawn;
 	
+	/**
+	 * Size of the board (length of the square)
+	 */
+	public int boardSize;
+	
 	
 	/**
 	 * Create the board including creation of pawns 
 	 */
-	public Board(Communication pCommunication, Player pPlayer)
+	public Board(Communication pCommunication, Player pPlayer,int maxPlayer)
 	{
 		this.turnOrder = new ArrayList<Pawn>();
 		this.player = pPlayer;
 		this.currentPawnIndex = 0;
-		this.initTurnOrder();
+		this.initTurnOrder(maxPlayer);
 	}
 	
 	/**
@@ -60,7 +65,7 @@ public class Board{
 		}
 		
 		//if the destination isn't in board limits
-		if(pMovement.getDestCordinate().getCoordX()<0 || pMovement.getDestCordinate().getCoordX()>=Game.boardSize || pMovement.getDestCordinate().getCoordY()<0 || pMovement.getDestCordinate().getCoordY()>=Game.boardSize)
+		if(pMovement.getDestCordinate().getCoordX()<0 || pMovement.getDestCordinate().getCoordX()>=this.boardSize || pMovement.getDestCordinate().getCoordY()<0 || pMovement.getDestCordinate().getCoordY()>=this.boardSize)
 			{
 				this.player.displayError(ErrorMessages.MOVE_OUT_OF_BOARD); 
 				return;
@@ -258,23 +263,23 @@ public class Board{
 		}return false;
 	}
 	
-	private void initTurnOrder()
+	private void initTurnOrder(int maxPlayer)
 	{
 		int X;
 		int Y;
 		Random rand = new Random();
 		this.nbPawn = this.player.askNbPawn();
 		do {
-		Game.boardSize = this.player.askBoardSize();
-		}while(Game.boardSize<this.nbPawn*Game.maxPlayer);
+		this.boardSize = this.player.askBoardSize();
+		}while(this.boardSize*this.boardSize<this.nbPawn*maxPlayer);
 		for (int i=1;i<= this.nbPawn;i++)
 			{
-			for(int k=1;k<=Game.maxPlayer;k++)
+			for(int k=1;k<=maxPlayer;k++)
 			{
 				do
 				{
-				X = rand.nextInt(Game.boardSize);
-				Y = rand.nextInt(Game.boardSize);
+				X = rand.nextInt(this.boardSize);
+				Y = rand.nextInt(this.boardSize);
 				}while(this.exist(X,Y));
 				this.getTurnOrder().add(new Pawn(new TeamId(k),new Coordinate(X,Y),"J"+k +"."+i));
 			}
@@ -282,6 +287,14 @@ public class Board{
 	}
 	
 	
+	public int getBoardSize() {
+		return boardSize;
+	}
+
+	public void setBoardSize(int boardSize) {
+		this.boardSize = boardSize;
+	}
+
 	public boolean areAllPageSet()
 	{
 		for(Pawn p : this.getTurnOrder())

@@ -31,15 +31,12 @@ import fr.iutvalence.projet.battleArenaGame.view.Player;
 
 public class Game
 {
-	/**
-	 * Size of the board (length of the square)
-	 */
-	public static int boardSize;
+	
 	
 	/**
 	 * Used in the network : Numbers of player (excluding the host)
 	 */
-    public static int maxPlayer;
+    public int maxPlayer;
     
     /**
      * Used in the network : Message send by a Client to left the application
@@ -96,6 +93,9 @@ public class Game
 	 */
 	private TeamId winnerID;
 	
+	/**
+	 * 
+	 */
 	private Set<TeamId> myIds;
 	
 	
@@ -137,9 +137,9 @@ public class Game
 				
 				this.communication = new Server(Game.PORT, myNetwork);
 				this.communication.init();
-				Game.maxPlayer = this.localPlayer.askHowManyPlayers();
+				this.maxPlayer = this.localPlayer.askHowManyPlayers();
 				this.myIds.add(new TeamId(0));
-				this.board = new Board(this.communication,this.localPlayer);
+				this.board = new Board(this.communication,this.localPlayer,maxPlayer);
 				this.communication.sendToOther(this.board);
 				pawnSelection();
 				this.play();
@@ -158,10 +158,10 @@ public class Game
 			case LOCAL_GAME:
 				
 				this.communication = new Local(this);
-				Game.maxPlayer = this.localPlayer.askHowManyPlayers();
-				for(int index = 0; index<=Game.maxPlayer;index++)
+				this.maxPlayer = this.localPlayer.askHowManyPlayers();
+				for(int index = 1; index<=this.maxPlayer;index++)
 					this.myIds.add(new TeamId(index));				
-				this.board = new Board(this.communication,this.localPlayer);
+				this.board = new Board(this.communication,this.localPlayer,maxPlayer);
 				pawnSelection();
 				this.play();
 				break;
@@ -190,7 +190,7 @@ public class Game
 
 		while(this.winnerID == null) 
 		{
-			this.localPlayer.displayBoard(board);
+			this.localPlayer.displayBoard(board,this.maxPlayer);
 			System.out.println("Waiting for others...");
 			try {
 				Thread.sleep(1000);
@@ -222,13 +222,13 @@ public class Game
 					switch(this.localPlayer.askActionChoice())
 					{
 					case MOVE:
-						this.localPlayer.displayBoard(board);
+						this.localPlayer.displayBoard(board,this.maxPlayer);
 						this.board.checkMove(this.localPlayer.askMove());
-						this.localPlayer.displayBoard(board);
+						this.localPlayer.displayBoard(board,this.maxPlayer);
 						this.communication.sendToOther(this.board.getTurnOrder());
 						break;
 					case LAUNCH_SPELL:
-						this.localPlayer.displayBoard(board);
+						this.localPlayer.displayBoard(board,this.maxPlayer);
 						this.localPlayer.displaySpellPageDetail(this.board.getTurnOrder().get(this.board.getCurrentPawnIndex()).getSpellPage());
 						this.board.checkSpell(this.localPlayer.askSpell(), this.localPlayer.askMove());
 						if(this.board.getTurnOrder().get(this.board.getCurrentPawnIndex()).getHealthPoints()<=0)
@@ -240,7 +240,7 @@ public class Game
 							{
 								myTurn = false;
 							}
-						this.localPlayer.displayBoard(board);
+						this.localPlayer.displayBoard(board,this.maxPlayer);
 						break;
 					case END_TURN:
 						myTurn = false;
@@ -254,7 +254,8 @@ public class Game
 				this.communication.sendToOther(this.board.getCurrentPawnIndex());
 			}
 		}
-		closeGame();
+		this.localPlayer.displayEnd(this.winnerID);
+		//closeGame();
 	}
 	
 	/**
