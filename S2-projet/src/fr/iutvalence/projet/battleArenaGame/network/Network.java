@@ -2,6 +2,7 @@ package fr.iutvalence.projet.battleArenaGame.network;
 
 import java.util.ArrayList;
 
+import fr.iutvalence.projet.battleArenaGame.Board;
 import fr.iutvalence.projet.battleArenaGame.Game;
 import fr.iutvalence.projet.battleArenaGame.exceptions.NetworkUnknownTypeException;
 import fr.iutvalence.projet.battleArenaGame.pawn.Pawn;
@@ -51,6 +52,10 @@ public class Network {
 		else if(transferedObject.getClass() == TeamId.class)
 		{
 			this.myGame.getMyIds().add((TeamId)transferedObject);
+		}
+		else if(transferedObject.getClass()==Board.class)
+		{
+			
 		}
 //		else if(transferedObject.getClass() == String.class)
 //		{

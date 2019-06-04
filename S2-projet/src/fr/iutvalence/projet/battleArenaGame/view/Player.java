@@ -51,7 +51,7 @@ public interface Player {
 	 * Ask the player to choose between his pages
 	 * @return the chosen page
 	 */
-	public SpellPage askSpellPageSelection();
+	public int askSpellPageSelection();
 	
 	/**
 	 * Ask the user to pick a name for his page

@@ -51,7 +51,7 @@ public class PlayerConsole implements Player{
 	@Override
 	/**
 	 * Ask to the player which spell he want's to cast
-	 * @return the index of the spell chosen
+	 * @return the index of the spell chosen (chose -1)
 	 */
 	public int askSpell() 
 	{
@@ -68,7 +68,7 @@ public class PlayerConsole implements Player{
 			}
 		}while(index < 1 || index > 3);
 		
-		return index;
+		return index-1;
 			
 	}
 	
@@ -77,7 +77,7 @@ public class PlayerConsole implements Player{
 	 * Start the selection of the spell pages for the pawns of local player
 	 */
 	@Override
-	public SpellPage askSpellPageSelection()
+	public int askSpellPageSelection()
 	{
 		CheapScanner scan = new CheapScanner();
 		int index = -1;
@@ -91,7 +91,7 @@ public class PlayerConsole implements Player{
 				e.printStackTrace();
 			}
 		}while (index<0 || index>Game.getSpellPages().size());
-	return Game.getSpellPages().get(index);
+	return index;
 	}
 
 
@@ -399,19 +399,18 @@ public class PlayerConsole implements Player{
 						+ "\nSpell 3 :" + myBoard.getTurnOrder().get(myBoard.getCurrentPawnIndex()).getSpellPage().getSpell(2).getCurrentCooldown() + "/" + myBoard.getTurnOrder().get(myBoard.getCurrentPawnIndex()).getSpellPage().getSpell(2).getDefaultCooldown();
 				str+= "\nCurrent effects :" + myBoard.getTurnOrder().get(myBoard.getCurrentPawnIndex()).getEffect().toString()+"\n";
 				
-				for(Pawn p: myBoard.getTurnOrder())
-				{
+				
 					for(int teamIndex = 0; teamIndex <= Game.maxPlayer; teamIndex++)
 					{
-						str += "Team" + teamIndex;
+						str += "Team" + teamIndex +":\n";
 						for(Pawn p1 : myBoard.getTurnOrder())
 							if(p1.getTeamId().getId()==teamIndex)
-								str += p.getTeamId().getId();
+								str += p1.getName()+"\n";
 					}
-				}
+				
 				
 				System.out.println(str);
-			}
+	}
 
 
 		@Override

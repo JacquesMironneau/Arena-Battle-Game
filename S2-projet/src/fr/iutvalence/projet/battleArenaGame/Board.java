@@ -267,16 +267,16 @@ public class Board{
 		do {
 		Game.boardSize = this.player.askBoardSize();
 		}while(Game.boardSize<this.nbPawn*Game.maxPlayer);
-		for (int i=0;i< this.nbPawn;i++)
+		for (int i=1;i<= this.nbPawn;i++)
 			{
-			for(int k=0;k<Game.maxPlayer;k++)
+			for(int k=1;k<=Game.maxPlayer;k++)
 			{
 				do
 				{
 				X = rand.nextInt(Game.boardSize);
 				Y = rand.nextInt(Game.boardSize);
 				}while(this.exist(X,Y));
-				this.getTurnOrder().add(new Pawn(new TeamId(k),new Coordinate(X,Y),null));
+				this.getTurnOrder().add(new Pawn(new TeamId(k),new Coordinate(X,Y),"J"+k +"."+i));
 			}
 		}
 	}

@@ -90,16 +90,15 @@ public class Pawn implements Serializable
 	 * @param pBaseCoordinate : The Pawn's coordinate when he is created
 	 * @param pSpellPage : The Pawn's spell page, selected by the player
 	 */
-	public Pawn(TeamId pTeamId,Coordinate pBaseCoordinate,SpellPage pSpellPage)
+	public Pawn(TeamId pTeamId,Coordinate pBaseCoordinate,String pName)
 	{
 		this.healthPoints = Pawn.DEFAULT_HEALTH_POINTS;
 		this.actionPoints = Pawn.DEFAULT_ACTION_POINTS;
 		this.movePoints = Pawn.DEFAULT_MOVE_POINTS;
 		this.currentCoordinate = pBaseCoordinate;
-		this.mySpellPage = pSpellPage;
 		this.activeEffects= new ArrayList<PawnEffect>();
 		this.teamId = pTeamId;
-		this.name = "J" + this.teamId.getId() + "  ";
+		this.name = pName;
 	}
 	
 	/**

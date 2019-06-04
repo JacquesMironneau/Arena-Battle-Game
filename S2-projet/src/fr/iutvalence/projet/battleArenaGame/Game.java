@@ -120,7 +120,6 @@ public class Game
 	 */
 	public void launch()
 	{		
-		Game.maxPlayer = this.localPlayer.askHowManyPlayers();
 		while(true) 
 		{	
 			
@@ -138,8 +137,10 @@ public class Game
 				
 				this.communication = new Server(Game.PORT, myNetwork);
 				this.communication.init();
+				Game.maxPlayer = this.localPlayer.askHowManyPlayers();
 				this.myIds.add(new TeamId(0));
 				this.board = new Board(this.communication,this.localPlayer);
+				this.communication.sendToOther(this.board);
 				pawnSelection();
 				this.play();
 				break;
@@ -148,7 +149,8 @@ public class Game
 				
 				this.communication = new Client(Game.PORT,Game.HOST_ADDRESS, myNetwork);
 				this.communication.init();
-				this.board = new Board(this.communication,this.localPlayer);
+				//Receive board from host
+				//	this.board = new Board(this.communication,this.localPlayer);
 				pawnSelection();
 				this.play();
 				break;
@@ -156,8 +158,9 @@ public class Game
 			case LOCAL_GAME:
 				
 				this.communication = new Local(this);
+				Game.maxPlayer = this.localPlayer.askHowManyPlayers();
 				for(int index = 0; index<=Game.maxPlayer;index++)
-					this.myIds.add(new TeamId(index));
+					this.myIds.add(new TeamId(index));				
 				this.board = new Board(this.communication,this.localPlayer);
 				pawnSelection();
 				this.play();
@@ -182,11 +185,8 @@ public class Game
 	 * 
 	 */
 	
-	public void play()
+	private void play()
 	{	
-		
-		this.pawnSelection();
-		
 
 		while(this.winnerID == null) 
 		{
@@ -201,7 +201,6 @@ public class Game
 			}
 			this.communication.sendToOther(this.board.getTurnOrder().get(this.board.getCurrentPawnIndex()).getTeamId());
 			this.communication.broadcast(this.board.getTurnOrder().get(this.board.getCurrentPawnIndex()).getTeamId().getId(),this.board.getTurnOrder());
-			
 			if(this.myIds.contains(this.board.getTurnOrder().get(this.board.getCurrentPawnIndex()).getTeamId()));
 			{
 				boolean myTurn = true;
@@ -213,12 +212,19 @@ public class Game
 					{
 						this.board.removeDeads();
 						myTurn = false;
+						break;
 					}
+					if(endGame())
+						{
+						myTurn = false;
+						break;
+						}
 					switch(this.localPlayer.askActionChoice())
 					{
 					case MOVE:
 						this.localPlayer.displayBoard(board);
 						this.board.checkMove(this.localPlayer.askMove());
+						this.localPlayer.displayBoard(board);
 						this.communication.sendToOther(this.board.getTurnOrder());
 						break;
 					case LAUNCH_SPELL:
@@ -230,6 +236,11 @@ public class Game
 							myTurn =false;
 						}
 						this.board.removeDeads();
+						if(this.endGame())
+							{
+								myTurn = false;
+							}
+						this.localPlayer.displayBoard(board);
 						break;
 					case END_TURN:
 						myTurn = false;
@@ -266,8 +277,8 @@ public class Game
 				if(this.myIds.contains(this.board.getTurnOrder().get(this.board.getCurrentPawnIndex()).getTeamId()))
 				{
 					this.localPlayer.displaySpellPage();
-					this.localPlayer.displaySelectForThisPawn(this.board.getTurnOrder().get(this.board.getCurrentPawnIndex()).toString());
-					this.board.getTurnOrder().get(this.board.getCurrentPawnIndex()).setSpellPage(this.localPlayer.askSpellPageSelection());
+					this.localPlayer.displaySelectForThisPawn(this.board.getTurnOrder().get(this.board.getCurrentPawnIndex()).getName());
+					this.board.getTurnOrder().get(this.board.getCurrentPawnIndex()).setSpellPage(Game.mySpellPages.get(this.localPlayer.askSpellPageSelection()));
 					this.board.nextPawn();
 					this.communication.sendToOther(this.board.getTurnOrder());
 					this.communication.sendToOther(this.board.getCurrentPawnIndex());
@@ -281,13 +292,18 @@ public class Game
 	 * TODO Add theses changes in the Network class
 	 * Might Disconnect the user (myClient.disconnect() and the Server ( myServer.disconnectAll())e
 	 */
-	public void endGame()
+	public boolean endGame()
 	{
 		if(this.board.getTurnOrder().size()<= this.board.getNbPawn())
+		{
 			for(Pawn p : this.board.getTurnOrder())
 				if(p.getTeamId().getId()!=this.board.getTurnOrder().get(0).getTeamId().getId())
-					return;
-		this.winnerID = this.board.getTurnOrder().get(0).getTeamId();
+					return false;		
+			this.winnerID = this.board.getTurnOrder().get(0).getTeamId();
+			return true;
+			
+		}
+		return false;
 	}
 	
 	
@@ -336,7 +352,7 @@ public class Game
 		{
 		Spell spellToAdd = new Spell();
 		this.localPlayer.displaySpellPageDetail(pageToAdd);
-		int indexToAdd = this.localPlayer.askSpell() -1;
+		int indexToAdd = this.localPlayer.askSpell();
 		spellToAdd.setSpellEffect(this.localPlayer.askSpellElement());
 		spellToAdd.setShape(this.localPlayer.askSpellShape(spellToAdd.getSpellEffect()));
 		try {
@@ -388,5 +404,17 @@ public void setBoard(Board b) {
 	this.board=b;	
 
 }
+
+
+public TeamId getWinnerID() {
+	return winnerID;
+}
+
+
+public void setWinnerID(TeamId winnerID) {
+	this.winnerID = winnerID;
+}
+
+
 
 }
