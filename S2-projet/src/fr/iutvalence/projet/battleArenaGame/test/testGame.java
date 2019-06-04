@@ -10,6 +10,7 @@ import fr.iutvalence.projet.battleArenaGame.Board;
 import fr.iutvalence.projet.battleArenaGame.Game;
 import fr.iutvalence.projet.battleArenaGame.exceptions.SpellIndexException;
 import fr.iutvalence.projet.battleArenaGame.network.Local;
+import fr.iutvalence.projet.battleArenaGame.pawn.TeamId;
 import fr.iutvalence.projet.battleArenaGame.shape.Shape;
 import fr.iutvalence.projet.battleArenaGame.spell.Spell;
 import fr.iutvalence.projet.battleArenaGame.spell.SpellEffect;
@@ -17,16 +18,6 @@ import fr.iutvalence.projet.battleArenaGame.spell.SpellPage;
 import fr.iutvalence.projet.battleArenaGame.view.PlayerConsole;
 
 class testGame {
-
-	@Test
-	void testLaunch() {
-		fail("Not yet implemented");
-	}
-
-	@Test
-	void testPlay() {
-		fail("Not yet implemented");
-	}
 
 	@Test
 	void testCreateSpellPage() {
@@ -50,9 +41,10 @@ class testGame {
 	}
 
 	@Test
-	void testPageSelection() {
+	void testPawnSelection() {
 		PlayerConsole P1 = new PlayerConsole();
 		Game G1 =new Game(P1);
+		G1.setWinnerID(new TeamId(4));
 		Board b = new Board(new Local(G1), P1);
 		G1.setBoard(b);
 		SpellPage p1 = new SpellPage("page1");
@@ -85,7 +77,7 @@ class testGame {
 			e.printStackTrace();
 		}
 		Game.getSpellPages().add(p1);
-		G1.pageSelection();
+		G1.launch();
 		assertFalse("même ref",b.getTurnOrder().get(0).getSpellPage()==b.getTurnOrder().get(1).getSpellPage());
 		assertTrue("mauvais element",b.getTurnOrder().get(0).getSpellPage().getSpell(0).getSpellEffect().getElementName()=="Fire");
 		assertTrue("mauvais Shape",b.getTurnOrder().get(0).getSpellPage().getSpell(1).getShape().equals(Shape.Fist));

@@ -26,13 +26,13 @@ class PawnTest
 		page1.getSpell(1).setShape(ball);
 		page1.getSpell(2).setShape(fist);
 		
-		PawnTeam team1 = PawnTeam.PAWN_LOCAL;
+		
 		page1.getSpell(0).setCurrentCooldown(page1.getSpell(0).getDefaultCooldown());
 		SpellEffect anEffect = SpellEffect.Fire;
 		page1.getSpell(0).setSpellEffect(anEffect);
 		Coordinate coord = new Coordinate(1,2);
-		Pawn pawn1 = new Pawn(team1,coord,page1);
-		assertEquals(true,pawn1.getTeam() == PawnTeam.PAWN_LOCAL);
+		Pawn pawn1 = new Pawn(new TeamId(0),coord,"lol");
+		assertEquals(true,pawn1.getTeamId().getId() == 0);
 	}
 	
 
@@ -49,14 +49,13 @@ class PawnTest
 		page1.getSpell(1).setShape(ball);
 		page1.getSpell(2).setShape(fist);
 		
-		PawnTeam team1 = PawnTeam.PAWN_LOCAL;
 		page1.getSpell(0).setCurrentCooldown(page1.getSpell(0).getDefaultCooldown());
 		
 		SpellEffect anEffect = SpellEffect.Fire;
 		page1.getSpell(0).setSpellEffect(anEffect);
 		
 		Coordinate coord = new Coordinate(1,2);
-		Pawn pawn1 = new Pawn(team1,coord,page1);
+		Pawn pawn1 = new Pawn(new TeamId(0),coord,"lol");
 		
 		PawnEffect eff = new PawnEffect(anEffect);
 		ArrayList<PawnEffect> theEffects = new ArrayList<PawnEffect>();
@@ -81,7 +80,6 @@ class PawnTest
 		page1.getSpell(1).setShape(ball);
 		page1.getSpell(2).setShape(fist);
 		
-		PawnTeam team1 = PawnTeam.PAWN_LOCAL;
 		page1.getSpell(0).setCurrentCooldown(page1.getSpell(0).getDefaultCooldown());
 		
 		SpellEffect anEffect = SpellEffect.Fire;
@@ -89,11 +87,10 @@ class PawnTest
 		page1.getSpell(0).setSpellEffect(anEffect);
 		Coordinate coord = new Coordinate(1,2);
 		
-		Pawn pawn1 = new Pawn(team1,coord,page1);
+		Pawn pawn1 = new Pawn(new TeamId(0),coord,"lol");
 		
 		PawnEffect eff = new PawnEffect(anEffect);
 		
-		ArrayList<PawnEffect> theEffects = new ArrayList<PawnEffect>();
 		assertEquals(true,pawn1.getEffect().isEmpty());
 		
 		pawn1.addEffect(eff);
@@ -116,15 +113,13 @@ class PawnTest
 		page1.getSpell(1).setShape(ball);
 		page1.getSpell(2).setShape(fist);
 		
-		PawnTeam team1 = PawnTeam.PAWN_LOCAL;
-		
 		page1.getSpell(0).setCurrentCooldown(page1.getSpell(0).getDefaultCooldown());
 		
 		SpellEffect anEffect = SpellEffect.Fire;
 		
 		page1.getSpell(0).setSpellEffect(anEffect);
 		Coordinate coord = new Coordinate(1,2);
-		Pawn pawn1 = new Pawn(team1,coord,page1);
+		Pawn pawn1 = new Pawn(new TeamId(0),coord,"lol");
 		PawnEffect eff = new PawnEffect(anEffect);
 		pawn1.addEffect(eff);
 		pawn1.updateEffect();
