@@ -2,9 +2,9 @@ package fr.iutvalence.projet.battleArenaGame.view;
 
 
 import java.io.IOException;
+import java.util.ArrayList;
 
 import fr.iutvalence.projet.battleArenaGame.Board;
-import fr.iutvalence.projet.battleArenaGame.Game;
 import fr.iutvalence.projet.battleArenaGame.move.Coordinate;
 import fr.iutvalence.projet.battleArenaGame.pawn.Pawn;
 import fr.iutvalence.projet.battleArenaGame.pawn.TeamId;
@@ -76,7 +76,7 @@ public class PlayerConsole implements Player{
 	 * Start the selection of the spell pages for the pawns of local player
 	 */
 	@Override
-	public int askSpellPageSelection()
+	public int askSpellPageSelection(ArrayList<SpellPage> listPages)
 	{
 		CheapScanner scan = new CheapScanner();
 		int index = -1;
@@ -89,15 +89,15 @@ public class PlayerConsole implements Player{
 			{
 				e.printStackTrace();
 			}
-		}while (index<0 || index>Game.getSpellPages().size());
+		}while (index<0 || index>listPages.size());
 	return index;
 	}
 
 
 	@Override
-	public void displaySpellPage() {
+	public void displaySpellPage(ArrayList<SpellPage> listPages) {
 		int count=1;
-		for(SpellPage myPage: Game.getSpellPages())
+		for(SpellPage myPage: listPages)
 		{  
 			System.out.println(count+")"+myPage.getPageName());
 			count++;

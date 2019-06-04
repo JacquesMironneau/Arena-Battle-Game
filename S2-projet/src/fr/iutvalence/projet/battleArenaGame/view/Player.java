@@ -1,5 +1,7 @@
 package fr.iutvalence.projet.battleArenaGame.view;
 
+import java.util.ArrayList;
+
 import fr.iutvalence.projet.battleArenaGame.Board;
 import fr.iutvalence.projet.battleArenaGame.move.Coordinate;
 import fr.iutvalence.projet.battleArenaGame.pawn.TeamId;
@@ -45,7 +47,7 @@ public interface Player {
 	 * Ask the player to choose between his pages
 	 * @return the chosen page
 	 */
-	public int askSpellPageSelection();
+	public int askSpellPageSelection(ArrayList<SpellPage> listPages);
 	
 	/**
 	 * Ask the user to pick a name for his page
@@ -90,7 +92,7 @@ public interface Player {
 	/**
 	 * Display the owned spellpages
 	 */
-	public void displaySpellPage();
+	public void displaySpellPage(ArrayList<SpellPage> listPages);
 	
 	/**
 	 * Display the actions that the player can move

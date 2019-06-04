@@ -53,7 +53,7 @@ public class Game
      * Used in the network: IP address of the server (might be deleted when UDP auto IP will be implemented
      */
     
-    public final static String HOST_ADDRESS = "192.168.0.11";
+    public final static String HOST_ADDRESS = "192.168.0.16";
     
 	
 	/**
@@ -85,7 +85,7 @@ public class Game
 	/**
 	 * List of all spellPages of the player
 	 */
-	private static ArrayList<SpellPage> mySpellPages;
+	private ArrayList<SpellPage> mySpellPages;
 		
 	
 	/**
@@ -106,7 +106,7 @@ public class Game
 	 */
 	public Game(Player p)
 	{
-		Game.mySpellPages = new ArrayList<SpellPage>(); //TODO remove (do not create it every time we launch (will evolve to file read /DB) in V8
+		this.mySpellPages = new ArrayList<SpellPage>(); //TODO remove (do not create it every time we launch (will evolve to file read /DB) in V8
 		this.localPlayer = p;
 		this.myNetwork = new Network(this);
 		this.winnerID = null;
@@ -161,7 +161,7 @@ public class Game
 				this.maxPlayer = this.localPlayer.askNbPlayer();
 				for(int index = 1; index<=this.maxPlayer;index++)
 					this.myIds.add(new TeamId(index));				
-				this.board = new Board(this.localPlayer,this.localPlayer.askNbPlayer(),this.localPlayer.askNbPawn(),this.localPlayer.askBoardSize());
+				this.board = new Board(this.localPlayer,maxPlayer,this.localPlayer.askNbPawn(),this.localPlayer.askBoardSize());
 				pawnSelection();
 				this.play();
 				break;
@@ -211,6 +211,7 @@ public class Game
 				boolean myTurn = true;
 				while(myTurn)
 				{
+					
 					this.board.getTurnOrder().get(this.board.getCurrentPawnIndex()).resetPoints();
 					this.board.applyEffect();
 					if(this.board.getTurnOrder().get(this.board.getCurrentPawnIndex()).getHealthPoints()<=0)
@@ -278,9 +279,9 @@ public class Game
 				{
 					for(Pawn p :this.board.getTurnOrder())
 						System.out.println(p + ""+p.getSpellPage());
-					this.localPlayer.displaySpellPage();
+					this.localPlayer.displaySpellPage(this.mySpellPages);
 					this.localPlayer.displaySelectForThisPawn(this.board.getTurnOrder().get(this.board.getCurrentPawnIndex()).getName());
-					this.board.getTurnOrder().get(this.board.getCurrentPawnIndex()).setSpellPage(Game.mySpellPages.get(this.localPlayer.askSpellPageSelection()));
+					this.board.getTurnOrder().get(this.board.getCurrentPawnIndex()).setSpellPage(this.mySpellPages.get(this.localPlayer.askSpellPageSelection(this.mySpellPages)));
 					this.board.nextPawn();
 					this.communication.sendToOther(this.board.getTurnOrder());
 					this.communication.sendToOther(this.board.getCurrentPawnIndex());
@@ -323,9 +324,9 @@ public class Game
 	 * Getter for spellspages
 	 * @return
 	 */
-	public static ArrayList<SpellPage> getSpellPages()
+	public ArrayList<SpellPage> getSpellPages()
 	{
-		return Game.mySpellPages;
+		return this.mySpellPages;
 	}
 	
 	/**
@@ -367,7 +368,7 @@ public class Game
 			pageFinished = this.localPlayer.askValidation();
 		
 		}
-		Game.mySpellPages.add(pageToAdd);
+		this.mySpellPages.add(pageToAdd);
 	}
 	
 	
@@ -399,7 +400,7 @@ public void createSpellPageForTest() throws SpellIndexException
 	p1.setSpell(1,s2);
 	p1.setSpell(2,s3);
 	
-	Game.mySpellPages.add(p1);
+	this.mySpellPages.add(p1);
 }
 
 public void setBoard(Board b) {
