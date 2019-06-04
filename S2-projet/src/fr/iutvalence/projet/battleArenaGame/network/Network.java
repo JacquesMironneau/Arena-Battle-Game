@@ -57,10 +57,11 @@ public class Network {
 			else
 				this.myGame.setWinnerID((TeamId)transferedObject);
 		}
-//		else if(transferedObject.getClass()==Board.class)
-//		{
-//			
-//		}
+		else if(transferedObject.getClass()==Board.class)
+		{
+			Board b = (Board)transferedObject;
+			this.myGame.setBoard(new Board(this.myGame.getLocalPlayer(),this.myGame.getMaxPlayer(),b.getNbPawn(),b.getBoardSize()));
+		}
 		else if(transferedObject.getClass() == GameConfig.class)
 		{
 			GameConfig conf = (GameConfig) transferedObject;

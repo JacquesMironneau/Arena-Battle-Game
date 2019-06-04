@@ -36,7 +36,7 @@ public class Game
 	/**
 	 * Used in the network : Numbers of player (excluding the host)
 	 */
-    public int maxPlayer;
+    private int maxPlayer;
     
     /**
      * Used in the network : Message send by a Client to left the application
@@ -136,25 +136,19 @@ public class Game
 				
 				this.communication = new Server(Game.PORT, myNetwork, this.maxPlayer-1);
 				this.communication.init();
-				this.maxPlayer = this.localPlayer.askNbPlayer();
 				this.myIds.add(new TeamId(1));
-				this.board = new Board(this.communication,this.localPlayer,maxPlayer);
+				this.board = new Board(this.localPlayer,this.localPlayer.askNbPlayer(),this.localPlayer.askNbPawn(),this.localPlayer.askBoardSize());
 				this.communication.sendToOther(new GameConfig(maxPlayer,this.board.getNbPawn(),this.board.getBoardSize()));
 				pawnSelection();
 				this.play();
 				break;
 			
 			case JOIN_GAME: //Client
-				this.maxPlayer=-1;
-
 				this.communication = new Client(Game.PORT,Game.HOST_ADDRESS, myNetwork);
 				this.communication.init();
 				//Receive board from host
-				while(this.maxPlayer==-1) {}
-				
-				this.board = new Board(this.communication,this.localPlayer, this.maxPlayer);
-				
-				
+				while(this.board == null)
+					{}							
 				pawnSelection();
 				this.play();
 				break;
@@ -165,7 +159,7 @@ public class Game
 				this.maxPlayer = this.localPlayer.askNbPlayer();
 				for(int index = 1; index<=this.maxPlayer;index++)
 					this.myIds.add(new TeamId(index));				
-				this.board = new Board(this.communication,this.localPlayer,maxPlayer);
+				this.board = new Board(this.localPlayer,this.localPlayer.askNbPlayer(),this.localPlayer.askNbPawn(),this.localPlayer.askBoardSize());
 				pawnSelection();
 				this.play();
 				break;
@@ -177,6 +171,11 @@ public class Game
 		}
 	}
 	
+
+	public Player getLocalPlayer() {
+		return localPlayer;
+	}
+
 
 	/**TODO update this doc
 	 * Manage method for turns
@@ -414,6 +413,12 @@ public TeamId getWinnerID() {
 public void setWinnerID(TeamId winnerID) 
 {
 	this.winnerID = winnerID;
+}
+
+
+
+public int getMaxPlayer() {
+	return maxPlayer;
 }
 
 

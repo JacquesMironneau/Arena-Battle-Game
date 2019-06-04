@@ -1,5 +1,6 @@
 package fr.iutvalence.projet.battleArenaGame;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Random;
 import fr.iutvalence.projet.battleArenaGame.move.Coordinate;
@@ -12,10 +13,14 @@ import fr.iutvalence.projet.battleArenaGame.view.ErrorMessages;
 import fr.iutvalence.projet.battleArenaGame.view.Player;
 
 
-public class Board{
+public class Board implements Serializable{
 	
 	
-	private Player player;
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	private transient Player player;
 	/**
 	 * This list represent Pawns currently living and define the turn order
 	 */
@@ -38,14 +43,14 @@ public class Board{
 	/**
 	 * Create the board including creation of pawns 
 	 */
-	public Board(Communication pCommunication, Player pPlayer,int maxPlayer)
+	public Board(Player pPlayer,int pNbPlayer,int pNbPawn,int pBoardSize)
 	{
 		this.turnOrder = new ArrayList<Pawn>();
 		this.player = pPlayer;
 		this.currentPawnIndex = 0;
-		this.nbPawn = -1;
-		this.boardSize = -1;
-		this.initTurnOrder(maxPlayer);
+		this.nbPawn = pNbPawn;
+		this.boardSize = pBoardSize;
+		this.initTurnOrder(pNbPlayer);
 	}
 	
 	/**
@@ -270,12 +275,6 @@ public class Board{
 		int X;
 		int Y;
 		Random rand = new Random();
-		if(this.nbPawn==-1)
-			this.nbPawn = this.player.askNbPawn();
-		do {
-		if(this.boardSize==-1)
-			this.boardSize = this.player.askBoardSize();
-		}while(this.boardSize*this.boardSize<this.nbPawn*maxPlayer);
 		for (int i=1;i<= this.nbPawn;i++)
 			{
 			for(int k=1;k<=maxPlayer;k++)

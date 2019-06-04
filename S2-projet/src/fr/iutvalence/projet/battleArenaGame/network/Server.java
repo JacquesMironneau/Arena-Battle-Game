@@ -119,7 +119,7 @@ public class Server implements Communication
 
                 new Thread(() -> receive(((Socket)clients[playersConnected][0]), ((ObjectInputStream)clients[playersConnected][1]))).start();
 
-
+                Thread.sleep(1000);
                 //Increase the number of connected player
                 this.Send(this.playersConnected, new TeamId(this.playersConnected));
                 this.playersConnected++;
