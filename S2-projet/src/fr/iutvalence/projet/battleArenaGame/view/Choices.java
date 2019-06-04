@@ -1,5 +1,9 @@
 package fr.iutvalence.projet.battleArenaGame.view;
-
+/**
+ * All possible choices in different menu
+ * @author jules chapelle
+ *
+ */
 public enum Choices {
 	
 	CREATE_SPELL_PAGE,

@@ -463,7 +463,6 @@ public class PlayerConsole implements Player{
 					res = scan.getInt();
 				} catch (NumberFormatException | IOException e)
 				{
-					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 			}while (res<1);
@@ -485,24 +484,6 @@ public class PlayerConsole implements Player{
 				}
 			}while (res < 0);
 		return res;
-		}
-
-
-		public int askHowManyPlayers()
-		{	
-			int res = -1;
-			CheapScanner scan = new CheapScanner();
-			do {
-				System.out.println("Combien de joueurs pour votre partie ?");
-				try
-				{
-					res = scan.getInt();
-				} catch (NumberFormatException | IOException e)
-				{
-					e.printStackTrace();
-				}
-			}while (res < 0);
-			return res;
 		}
 		
 		

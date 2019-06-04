@@ -23,7 +23,7 @@ import fr.iutvalence.projet.battleArenaGame.view.PlayerConsole;
 class BoardTest
 {
 
-
+	
 	@Test
 	void testCheckMove()
 	{

@@ -1,4 +1,4 @@
-package fr.iutvalence.projet.battleArenaGame.move;
+  package fr.iutvalence.projet.battleArenaGame.move;
 import java.io.Serializable;
 import java.lang.Math;
 
@@ -53,11 +53,17 @@ public class Movement implements Serializable{
 		return this.distance;
 	}
 	
+	/**
+	 * getter for originDestination
+	 */
 	public Coordinate getOriginCoordinate()
 	{
 		return this.originCoordinate;
 	}
 	
+	/**
+	 * getter for DestCoordinate
+	 */
 	public Coordinate getDestCordinate()
 	{
 		return this.destCoordinate;

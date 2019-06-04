@@ -10,7 +10,7 @@ import java.io.InputStreamReader;
 
 /**
  * This class reads inputs from an input Stream
- * Be carefull of not enter an String when you want to read an int :)
+ * Be careful of not enter an String when you want to read an int :)
  * @author durantho
  *
  */
@@ -38,7 +38,7 @@ public class CheapScanner {
 	}
 	
 	/**
-	 * @return An int value from the InputStream
+	 * @return An integer value from the InputStream
 	 * 
 	 * @throws NumberFormatException
 	 * @throws IOException

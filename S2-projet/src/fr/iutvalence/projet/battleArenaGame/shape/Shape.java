@@ -48,7 +48,7 @@ public enum Shape implements Serializable {
 	private Coordinate[] effectedCoordinates;
 	
 	/**
-	 * 
+	 * initialize a new shape with a given type,damage,cooldown range spellCost and an array of coordinate
 	 * @param type the type of the Shape
 	 * @param damage the damage that the shape will inflict
 	 * @param cooldown the cooldown of the shape
