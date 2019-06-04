@@ -30,6 +30,7 @@ public class SpellPage implements Serializable{
 
 	/**
 	 * Constructor of a spell page
+	 * create a SpellPage with 3 empty spell
 	 * @param pName The name you give to this SpellPage.
 	 */
 	public SpellPage(String pName)
@@ -41,7 +42,11 @@ public class SpellPage implements Serializable{
 		this.spells[1] = new Spell();
 		this.spells[2] = new Spell();
 	}
-	
+
+	/**
+	 * copy an other spell Page
+	 * @param pCopiedPage the SpellPage Copied
+	 */
 	public SpellPage(SpellPage pCopiedPage)
 	{
 		this.spells = new Spell[3];
@@ -80,6 +85,11 @@ public class SpellPage implements Serializable{
 		return this.spells[spellIndex];
 	}
 	
+	/**
+	 * setter for Spell
+	 * @param pageIndex the index in Spell[] 
+	 * @param pSpell the Spell set
+	 */
 	public void setSpell(int pageIndex,Spell pSpell) throws SpellIndexException
 	{
 		if(pageIndex>2 || pageIndex<0) throw new SpellIndexException(pageIndex);

@@ -61,6 +61,9 @@ public class TeamId implements Serializable
 
 	}
 	
+	/**
+	 * getter for id
+	 */
 	public int getId()
 	{
 		return this.id;

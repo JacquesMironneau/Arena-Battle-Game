@@ -16,18 +16,13 @@ import fr.iutvalence.projet.battleArenaGame.spell.SpellPage;
 public interface Player {
 
 	
-
-	
-	/**
-	 * ASKS PARTS
-	 */
-	
 	/**
 	 * Ask to the system to move a pawn to a wanted destination.
 	 * @return the movement chosen 
 	 * 
 	 */
 	public Coordinate askMove();
+	
 	/**
 	 * Ask to the player which spell he want's to cast
 	 * @return the index of the spell chosen
@@ -58,7 +53,6 @@ public interface Player {
 	 */
 	public String askPageName();
 	
-
 	/**
 	 * Ask the user to pick between every spell element for his spell
 	 * @return
@@ -76,12 +70,7 @@ public interface Player {
 	 * @return if player validate his choices
 	 */
 	public boolean askValidation();
-
-	public int askHowManyPlayers();
 	
-	/**
-	 * Displays
-	 */
 	/**
 	 * Displays the board 
 	 * @param myBoard
@@ -146,13 +135,32 @@ public interface Player {
 	 */
 	public void displaySpellPageDetail(SpellPage pPage);
 	
+	/**
+	 * asker the number of player in the game
+	 * @return the number of player
+	 */
 	public int askNbPlayer();
 	
+	/**
+	 * ask the number of pawn for each player
+	 * @return the number of pawn
+	 */
 	public int askNbPawn();
 
+	/**
+	 * ask the size of the side of the board
+	 * @return the size
+	 */
 	public int askBoardSize();
 	
+	/**
+	 * say Size is tp small foe the amount of pawns
+	 */
 	public void diplaySizeError();
 	
+	/**
+	 * show for which pawn you have to select a page
+	 * @param Pawn
+	 */
 	public void displaySelectForThisPawn(String Pawn);
 }

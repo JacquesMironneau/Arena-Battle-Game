@@ -45,6 +45,10 @@ public class Spell implements Serializable{
 		this.myEffect = null;
 	}
 	
+	/**
+	 * copy a Spell
+	 * @param pSpell the Spell copied
+	 */
 	public Spell(Spell pSpell)
 	{
 		this.currentCooldown = pSpell.currentCooldown;

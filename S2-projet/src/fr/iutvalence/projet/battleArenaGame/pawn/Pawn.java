@@ -105,7 +105,6 @@ public class Pawn implements Serializable
 	 * Setter for currentCoordinate
 	 * @param pDestination : the destination of the Pawn
 	 */
-	
 	public void setPos(Coordinate pDestination)
 	{
 		this.currentCoordinate = pDestination;
@@ -307,12 +306,18 @@ public class Pawn implements Serializable
 		return this.mySpellPage;
 	}
 	
-	
+	/**
+	 * getter for Name
+	 * @return
+	 */
 	public String getName()
 	{
 		return this.name;
 	}
 	
+	/**
+	 * getter for TeamId
+	 */
 	public TeamId getTeamId()
 	{
 		return this.teamId;
