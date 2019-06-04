@@ -136,7 +136,7 @@ public class Game
 				
 				this.communication = new Server(Game.PORT, myNetwork, this.maxPlayer-1);
 				this.communication.init();
-				this.maxPlayer = this.localPlayer.askHowManyPlayers();
+				this.maxPlayer = this.localPlayer.askNbPlayer();
 				this.myIds.add(new TeamId(1));
 				this.board = new Board(this.communication,this.localPlayer,maxPlayer);
 				this.communication.sendToOther(new GameConfig(maxPlayer,this.board.getNbPawn(),this.board.getBoardSize()));
@@ -162,7 +162,7 @@ public class Game
 			case LOCAL_GAME:
 				
 				this.communication = new Local(this);
-				this.maxPlayer = this.localPlayer.askHowManyPlayers();
+				this.maxPlayer = this.localPlayer.askNbPlayer();
 				for(int index = 1; index<=this.maxPlayer;index++)
 					this.myIds.add(new TeamId(index));				
 				this.board = new Board(this.communication,this.localPlayer,maxPlayer);
