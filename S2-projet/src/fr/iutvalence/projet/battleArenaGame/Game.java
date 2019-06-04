@@ -150,7 +150,14 @@ switch(localPlayer.askChoiceMenu())
 				this.communication.init();
 				//Receive board from host
 				while(this.board == null)
-					{}							
+					{
+					try {
+						Thread.sleep(1000);
+					} catch (InterruptedException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+					}	
 				pawnSelection();
 				this.play();
 				break;
@@ -163,6 +170,7 @@ switch(localPlayer.askChoiceMenu())
 					this.myIds.add(new TeamId(index));				
 				this.board = new Board(this.localPlayer,maxPlayer,this.localPlayer.askNbPawn(),this.localPlayer.askBoardSize());
 				pawnSelection();
+				this.board.setCurrentPawnIndex(0);
 				this.play();
 				break;
 				
@@ -204,8 +212,8 @@ switch(localPlayer.askChoiceMenu())
 			{
 				
 			}
-			this.communication.sendToOther(this.board.getTurnOrder().get(this.board.getCurrentPawnIndex()).getTeamId());
-			this.communication.broadcast(this.board.getTurnOrder().get(this.board.getCurrentPawnIndex()).getTeamId().getId(),this.board.getTurnOrder());
+			this.communication.sendToOther(this.board.getCurrentPawnIndex());
+			this.communication.broadcast(this.board.getTurnOrder().get(this.board.getCurrentPawnIndex()).getTeamId().getId()-2,this.board.getTurnOrder());
 			if(this.myIds.contains(this.board.getTurnOrder().get(this.board.getCurrentPawnIndex()).getTeamId()));
 			{
 				boolean myTurn = true;
@@ -274,7 +282,7 @@ switch(localPlayer.askChoiceMenu())
 		System.out.println("Syncrhonize");
 
 		while(!this.board.areAllPageSet())
-		{
+		{	
 				if(this.myIds.contains(this.board.getTurnOrder().get(this.board.getCurrentPawnIndex()).getTeamId()))
 				{
 					for(Pawn p :this.board.getTurnOrder())

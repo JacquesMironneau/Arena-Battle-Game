@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
-
 import fr.iutvalence.projet.battleArenaGame.Game;
 
 /**
@@ -98,9 +97,7 @@ public class Client implements Communication
         while(socket.isConnected()){
         	Object obj_receive = null;
             try{
-                
-            	
-                obj_receive = this.in.readObject();
+            	 obj_receive = this.in.readObject();
                 System.out.println(socket.getInetAddress() + " (server) : " + obj_receive);
                 if(obj_receive != null)
                 	myNetwork.Transform(obj_receive);
@@ -144,6 +141,7 @@ public class Client implements Communication
             try
             {
                 out.writeObject(o);
+                out.flush();
             }
             catch(IOException io)
             {

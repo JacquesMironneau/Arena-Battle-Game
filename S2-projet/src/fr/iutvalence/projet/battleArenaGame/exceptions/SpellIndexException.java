@@ -1,12 +1,13 @@
 package fr.iutvalence.projet.battleArenaGame.exceptions;
 
+import java.io.Serializable;
 
 /**
  * This exception is raised if the player select an index for a spell that is not existing
  * @author pashmi
  *
  */
-public class SpellIndexException extends Exception
+public class SpellIndexException extends Exception implements Serializable
 {
 	/**
 	 *serialVersionUID is an hash code, which allow the JVM to check if attributes, names and type are the same for the object 
