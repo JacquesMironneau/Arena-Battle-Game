@@ -66,8 +66,8 @@ public class Network {
 		{
 			GameConfig conf = (GameConfig) transferedObject;
 			this.myGame.setNbPlayer(conf.getNbPlayers());
-			this.myGame.getBoard().setBoardSize(conf.getBoardSize());
-			this.myGame.getBoard().setNbPawns(conf.getNbPawns());
+//			this.myGame.getBoard().setBoardSize(conf.getBoardSize());
+//			this.myGame.getBoard().setNbPawns(conf.getNbPawns());
 			
 		}
 //		else if(transferedObject.getClass() == String.class)

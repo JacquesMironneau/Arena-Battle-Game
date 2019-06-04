@@ -138,6 +138,7 @@ public class Game
 				this.board = new Board(this.localPlayer,maxPlayer,this.localPlayer.askNbPawn(),this.localPlayer.askBoardSize());
 				this.communication = new Server(Game.PORT, myNetwork, this.maxPlayer-1);
 				this.communication.init();
+				this.communication.sendToOther(new GameConfig(this.maxPlayer));
 				this.communication.sendToOther(this.board);
 				this.communication.sendToOther(this.board.getTurnOrder());
 				pawnSelection();
