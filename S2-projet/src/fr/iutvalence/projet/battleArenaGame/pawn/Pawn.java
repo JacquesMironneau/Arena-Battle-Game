@@ -67,7 +67,7 @@ public class Pawn implements Serializable
 	/**
 	 * Id of the team which the paw's belong to 
 	 */
-	private TeamId teamId;
+	private int teamId;
 	
 	/**
 	 * The SpellPage of the Pawn
@@ -90,7 +90,7 @@ public class Pawn implements Serializable
 	 * @param pBaseCoordinate : The Pawn's coordinate when he is created
 	 * @param pSpellPage : The Pawn's spell page, selected by the player
 	 */
-	public Pawn(TeamId pTeamId,Coordinate pBaseCoordinate,String pName)
+	public Pawn(int pTeamId,Coordinate pBaseCoordinate,String pName)
 	{
 		this.healthPoints = Pawn.DEFAULT_HEALTH_POINTS;
 		this.actionPoints = Pawn.DEFAULT_ACTION_POINTS;
@@ -238,10 +238,10 @@ public class Pawn implements Serializable
 		result = prime * result + ((activeEffects == null) ? 0 : activeEffects.hashCode());
 		result = prime * result + ((currentCoordinate == null) ? 0 : currentCoordinate.hashCode());
 		result = prime * result + healthPoints;
-		result = prime * result + ((name == null) ? 0 : name.hashCode());
 		result = prime * result + movePoints;
 		result = prime * result + ((mySpellPage == null) ? 0 : mySpellPage.hashCode());
-		result = prime * result + ((teamId == null) ? 0 : teamId.hashCode());
+		result = prime * result + ((name == null) ? 0 : name.hashCode());
+		result = prime * result + teamId;
 		return result;
 	}
 
@@ -268,11 +268,6 @@ public class Pawn implements Serializable
 			return false;
 		if (healthPoints != other.healthPoints)
 			return false;
-		if (name == null) {
-			if (other.name != null)
-				return false;
-		} else if (!name.equals(other.name))
-			return false;
 		if (movePoints != other.movePoints)
 			return false;
 		if (mySpellPage == null) {
@@ -280,10 +275,12 @@ public class Pawn implements Serializable
 				return false;
 		} else if (!mySpellPage.equals(other.mySpellPage))
 			return false;
-		if (teamId == null) {
-			if (other.teamId != null)
+		if (name == null) {
+			if (other.name != null)
 				return false;
-		} else if (!teamId.equals(other.teamId))
+		} else if (!name.equals(other.name))
+			return false;
+		if (teamId != other.teamId)
 			return false;
 		return true;
 	}
@@ -318,7 +315,7 @@ public class Pawn implements Serializable
 	/**
 	 * getter for TeamId
 	 */
-	public TeamId getTeamId()
+	public int getTeamId()
 	{
 		return this.teamId;
 	}

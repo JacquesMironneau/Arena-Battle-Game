@@ -45,7 +45,7 @@ import fr.iutvalence.projet.battleArenaGame.spell.SpellPage;
  * @author durantho
  *
  */
-public class PlayerWindow extends JFrame implements Player{
+public class PlayerWindow extends JFrame implements GameView{
 	
 	/**
 	 * 

@@ -1,6 +1,6 @@
 package fr.iutvalence.projet.battleArenaGame.test;
 
-import fr.iutvalence.projet.battleArenaGame.view.Player;
+import fr.iutvalence.projet.battleArenaGame.view.GameView;
 import fr.iutvalence.projet.battleArenaGame.pawn.*;
 import fr.iutvalence.projet.battleArenaGame.shape.Shape;
 import fr.iutvalence.projet.battleArenaGame.spell.SpellEffect;
