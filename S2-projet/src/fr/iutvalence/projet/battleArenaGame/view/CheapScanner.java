@@ -53,6 +53,10 @@ public class CheapScanner {
 		{
 			return -1;
 		}
+		catch(IOException e)
+		{
+			return -1;
+		}
 	}
 	
 	/**
