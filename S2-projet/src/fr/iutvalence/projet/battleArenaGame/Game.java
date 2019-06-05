@@ -17,7 +17,7 @@ import fr.iutvalence.projet.battleArenaGame.spell.Spell;
 import fr.iutvalence.projet.battleArenaGame.spell.SpellEffect;
 import fr.iutvalence.projet.battleArenaGame.spell.SpellPage;
 import fr.iutvalence.projet.battleArenaGame.view.ErrorMessages;
-import fr.iutvalence.projet.battleArenaGame.view.Player;
+import fr.iutvalence.projet.battleArenaGame.view.GameView;
 
 /**
  * Game class stands for the system of the BattleArena Game:
@@ -33,11 +33,6 @@ public class Game implements GameController
 {
 	
 	
-	/**
-	 * Used in the network : Numbers of player (excluding the host)
-	 */
-    private int maxPlayer;
-    
     /**
      * Used in the network : Message send by a Client to left the application
      */
@@ -55,30 +50,17 @@ public class Game implements GameController
     
     public final static String HOST_ADDRESS = "192.168.0.16";
     
+    /**
+	 * Used in the network : Numbers of player (excluding the host)
+	 */
+    private int maxPlayer;
+    
 	
 	/**
 	 * First player of the game, the one who start in the first turn
 	 */
-	private Player localPlayer;
-
-	/**
-	 * Represents the network of the game, it enables the players's computers to communicates game Data.
-	 */
-	private Network myNetwork;
+	private ArrayList<GameView> players;
 	
-	/**
-	 * Represents how the Game is sending and receiving data (With others computers or with itself)
-	 */
-	private Communication communication;
-	
-	
-	private GameView myView; 
-	/**
-	 * Represents if a user the local player is playing now.
-	 * It is used to manage when a player can play.
-	 * If it's true the local player can play, else it can't. 
-	 */
-
 	
 	/**
 	 * Board of the game
@@ -94,12 +76,9 @@ public class Game implements GameController
 	/**
 	 * Id of the player who win the game
 	 */
-	private TeamId winnerID;
+	private int winnerID;
 	
-	/**
-	 * 
-	 */
-	private Set<TeamId> myIds;
+
 	
 	
 	
@@ -107,89 +86,23 @@ public class Game implements GameController
 	 * Constructor for Game
 	 * create the game, and call init to initialize the board.
 	 */
-	public Game(Player p)
+	public Game(ArrayList<GameView> gameViews,int nbPlayer,int nbPawn,int boardSize)
 	{
 		this.mySpellPages = new ArrayList<SpellPage>(); //TODO remove (do not create it every time we launch (will evolve to file read /DB) in V8
-		this.localPlayer = p;
-		this.myNetwork = new Network(this);
-		this.winnerID = null;
-		this.myIds = new HashSet<TeamId>();
+		this.maxPlayer = nbPlayer;
+		this.players = gameViews;
+		this.board = new Board(gameViews,nbPlayer,nbPawn,boardSize);
+		try {
+			this.createSpellPageForTest();
+		} catch (SpellIndexException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
-	
-	
-	/**
-	 * The first method call, set up the network
-	 * and allow the player to navigate in the menu
-	 */
-	public void launch()
-	{		
-		while(true) 
-		{	
-switch(localPlayer.askChoiceMenu())
-			{		
-			case CREATE_SPELL_PAGE:
-				try {
-					this.createSpellPageForTest();
-				} catch (SpellIndexException e) {
-					e.printStackTrace();
-				}
-				break;
-				
-			case HOST_GAME: // server
-				this.myIds.add(new TeamId(1));
-				this.maxPlayer= this.localPlayer.askNbPlayer();
-				this.board = new Board(this.localPlayer,maxPlayer,this.localPlayer.askNbPawn(),this.localPlayer.askBoardSize());
-				this.communication = new Server(Game.PORT, myNetwork, this.maxPlayer-1);
-				this.communication.init();
-				this.communication.sendToOther(new GameConfig(this.maxPlayer));
-				this.communication.sendToOther(this.board);
-				this.communication.sendToOther(this.board.getTurnOrder());
-				pawnSelection();
-				this.play();
-				break;
 			
-			case JOIN_GAME: //Client
-				this.communication = new Client(Game.PORT,Game.HOST_ADDRESS, myNetwork);
-				this.communication.init();
-				//Receive board from host
-				while(this.board == null)
-					{
-					try {
-						Thread.sleep(1000);
-					} catch (InterruptedException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
-					}	
-				pawnSelection();
-				this.play();
-				break;
-				
-			case LOCAL_GAME:
-				
-				this.communication = new Local(this);
-				this.maxPlayer = this.localPlayer.askNbPlayer();
-				for(int index = 1; index<=this.maxPlayer;index++)
-					this.myIds.add(new TeamId(index));				
-				this.board = new Board(this.localPlayer,maxPlayer,this.localPlayer.askNbPawn(),this.localPlayer.askBoardSize());
-				pawnSelection();
-				this.board.setCurrentPawnIndex(0);
-				this.play();
-				break;
-				
-			default:
-				localPlayer.displayError(ErrorMessages.SYSTEM_ERROR);
-			}
 		
 		}
-	}
 	
-
-	public synchronized Player getLocalPlayer() {
-		return localPlayer;
-	}
-
-
+	
 	/**TODO update this doc
 	 * Manage method for turns
 	 * First the play method check if game is ended: No more pawns in one team player.
@@ -201,77 +114,93 @@ switch(localPlayer.askChoiceMenu())
 	 * 
 	 */
 	
-	private void play()
+	public void play()
 	{	
-
-		while(this.winnerID == null) 
+		int currentPlayerIndex = 0;
+		while(true) 
 		{
-			this.localPlayer.displayBoard(board,this.maxPlayer);
-			System.out.println("Waiting for others...");
-			try {
-				Thread.sleep(1000);
-
-			}catch(Exception e)
-			{
-				
-			}
-			this.communication.sendToOther(this.board.getCurrentPawnIndex());
-			this.communication.broadcast(this.board.getTurnOrder().get(this.board.getCurrentPawnIndex()).getTeamId().getId()-2,this.board.getTurnOrder());
-			if(this.myIds.contains(this.board.getTurnOrder().get(this.board.getCurrentPawnIndex()).getTeamId()));
-			{
-				boolean myTurn = true;
-				while(myTurn)
+			for(GameView gv : players)
 				{
-					
+					gv.displayBoard(board,this.maxPlayer);
+					if(this.board.getTurnOrder().get(this.board.getCurrentPawnIndex()).getTeamId()==players.indexOf(gv))
+						currentPlayerIndex = players.indexOf(gv);
+				}
+		
 					this.board.getTurnOrder().get(this.board.getCurrentPawnIndex()).resetPoints();
 					this.board.applyEffect();
 					if(this.board.getTurnOrder().get(this.board.getCurrentPawnIndex()).getHealthPoints()<=0)
 					{
 						this.board.removeDeads();
-						myTurn = false;
+						this.board.nextPawn();
 						break;
 					}
 					if(endGame())
 						{
-						myTurn = false;
 						break;
 						}
-					switch(this.localPlayer.askActionChoice())
+					this.players.get(currentPlayerIndex).displayChoiceAction();
+					switch(this.players.get(currentPlayerIndex).askActionChoice())
 					{
 					case MOVE:
-						this.localPlayer.displayBoard(board,this.maxPlayer);
-						this.board.checkMove(this.localPlayer.askMove());
-						this.localPlayer.displayBoard(board,this.maxPlayer);
-						this.communication.sendToOther(this.board.getTurnOrder());
+						for(GameView gv : players)
+						{
+							gv.displayBoard(board,this.maxPlayer);
+						}
+						this.players.get(currentPlayerIndex).displayMoveSelection();
+						this.board.checkMove(currentPlayerIndex,this.players.get(currentPlayerIndex).askMove());
+						for(GameView gv : players)
+						{
+							gv.displayBoard(board,this.maxPlayer);
+						}
 						break;
 					case LAUNCH_SPELL:
-						this.localPlayer.displayBoard(board,this.maxPlayer);
-						this.localPlayer.displaySpellPageDetail(this.board.getTurnOrder().get(this.board.getCurrentPawnIndex()).getSpellPage());
-						this.board.checkSpell(this.localPlayer.askSpell(), this.localPlayer.askMove());
+						this.players.get(currentPlayerIndex).displayBoard(board,this.maxPlayer);
+						this.players.get(currentPlayerIndex).displaySpellPageDetail(this.board.getTurnOrder().get(this.board.getCurrentPawnIndex()).getSpellPage());
+						int spellIndex = this.players.get(currentPlayerIndex).askIndexSelection()-1;
+						this.players.get(currentPlayerIndex).displayMoveSelection();
+						this.board.checkSpell(currentPlayerIndex,spellIndex, this.players.get(currentPlayerIndex).askMove());
 						if(this.board.getTurnOrder().get(this.board.getCurrentPawnIndex()).getHealthPoints()<=0)
 						{
-							myTurn =false;
+							this.board.nextPawn();
 						}
 						this.board.removeDeads();
-						if(this.endGame())
-							{
-								myTurn = false;
-							}
-						this.localPlayer.displayBoard(board,this.maxPlayer);
+						if(endGame())
+							break;
+						for(GameView gv : players)
+						{
+							gv.displayBoard(board,this.maxPlayer);
+						}
 						break;
 					case END_TURN:
-						myTurn = false;
+						this.board.nextPawn();
 						break;
 					default:
-						localPlayer.displayError(ErrorMessages.SYSTEM_ERROR);
+						for(GameView gv : players)
+						{
+							gv.displayError(ErrorMessages.SYSTEM_ERROR);
+						}
+					}
+					if(endGame())
+					{
+						break;
+					}
+					for(GameView gv : players)
+					{
+						gv.displayNextTurn(currentPlayerIndex+1);
 					}
 				}
-				this.communication.sendToOther(this.board.getTurnOrder());
-				this.board.nextPawn();
-				this.communication.sendToOther(this.board.getCurrentPawnIndex());
+		if(this.winnerID==-1)
+		{
+			for(GameView gv : players)
+			{
+				gv.displayEnd("Tout le monde est mort ! Egalité !");
 			}
 		}
-		this.localPlayer.displayEnd(this.winnerID);
+		else
+			for(GameView gv : players)
+			{
+				gv.displayEnd("Victoire du joueur " + this.winnerID + "! GG !");
+			}
 		//closeGame();
 	}
 	
@@ -280,27 +209,23 @@ switch(localPlayer.askChoiceMenu())
 	 * It wait until both side have selected their pages for their pawn in order to start the game loop
 	 * Make the page selection for the client
 	 */
-	private void pawnSelection()
+	public void pawnSelection()
 	{
 		System.out.println("Syncrhonize");
 
 		while(!this.board.areAllPageSet())
 		{	
-				if(this.myIds.contains(this.board.getTurnOrder().get(this.board.getCurrentPawnIndex()).getTeamId()))
-				{
-					for(Pawn p :this.board.getTurnOrder())
-						System.out.println(p + ""+p.getSpellPage());
-					this.localPlayer.displaySpellPage(this.mySpellPages);
-					this.localPlayer.displaySelectForThisPawn(this.board.getTurnOrder().get(this.board.getCurrentPawnIndex()).getName());
-					this.board.getTurnOrder().get(this.board.getCurrentPawnIndex()).setSpellPage(this.mySpellPages.get(this.localPlayer.askSpellPageSelection(this.mySpellPages)));
-					this.board.nextPawn();
-					this.communication.sendToOther(this.board.getTurnOrder());
-					this.communication.sendToOther(this.board.getCurrentPawnIndex());
-				}
-			
+			int currentPlayerIndex = 0;
+			for(GameView gv : players)
+			{
+				if(this.board.getTurnOrder().get(this.board.getCurrentPawnIndex()).getTeamId()==players.indexOf(gv))
+					currentPlayerIndex = players.indexOf(gv);
+			}	
+			this.players.get(currentPlayerIndex).displaySpellPage(this.mySpellPages);
+			this.players.get(currentPlayerIndex).displaySelectForThisPawn(this.board.getTurnOrder().get(this.board.getCurrentPawnIndex()));
+			this.board.getTurnOrder().get(this.board.getCurrentPawnIndex()).setSpellPage(new SpellPage(this.mySpellPages.get(this.players.get(currentPlayerIndex).askIndexSelection())));
+			this.board.nextPawn();
 		}
-//		this.communication.sendToOther(this.board.getTurnOrder());
-		
 	}
 	
 	/**
@@ -309,14 +234,17 @@ switch(localPlayer.askChoiceMenu())
 	 */
 	public boolean endGame()
 	{
+		if(this.board.getTurnOrder().size()==0)
+			{
+			this.winnerID = -1;
+			return true;
+			}
 		if(this.board.getTurnOrder().size()<= this.board.getNbPawn())
 		{
 			for(Pawn p : this.board.getTurnOrder())
-				if(p.getTeamId().getId()!=this.board.getTurnOrder().get(0).getTeamId().getId())
-					return false;		
-			this.winnerID = this.board.getTurnOrder().get(0).getTeamId();
+				if(p.getTeamId()!=this.board.getTurnOrder().get(0).getTeamId())
+					return false;			
 			return true;
-			
 		}
 		return false;
 	}
@@ -333,7 +261,7 @@ switch(localPlayer.askChoiceMenu())
 	}
 	
 	/**
-	 * Getter for spellspages
+	 * Getter for spell pages
 	 * @return
 	 */
 	public ArrayList<SpellPage> getSpellPages()
@@ -344,15 +272,17 @@ switch(localPlayer.askChoiceMenu())
 	/**
 	 * @return the board of the current Game
 	 */
-	public synchronized Board getBoard()
+	public Board getBoard()
 	{
 		return this.board;
 	}
 	
 	/**
-	 * Creation of a spellPage using player HMI selection //TODO remove this later
+	 * Creation of a spellPage using player HMI selection 
 	 */
-	public void createSpellPage()
+	//TODO fix that and think about how and when players can create their page, think how to keep pages saved
+	//and how players access to their own pages only
+/*	public void createSpellPage()
 	{
 		SpellPage pageToAdd = new SpellPage(this.localPlayer.askPageName());
 		try {
@@ -387,7 +317,7 @@ switch(localPlayer.askChoiceMenu())
 	public synchronized Set<TeamId> getMyIds() 
 	{
 		return this.myIds;
-	}
+	}*/
 /**
  * Used for test
  * Create a spell page with 3 spells
@@ -415,30 +345,19 @@ public void createSpellPageForTest() throws SpellIndexException
 	this.mySpellPages.add(p1);
 }
 
-public synchronized void setBoard(Board b) {
+public void setBoard(Board b) {
 	this.board=b;	
 
 }
 
 
-public TeamId getWinnerID() {
-	return winnerID;
-}
 
-
-public synchronized void setWinnerID(TeamId winnerID) 
-{
-	this.winnerID = winnerID;
-}
-
-
-
-public  synchronized int getMaxPlayer() {
+public int getMaxPlayer() {
 	return maxPlayer;
 }
 
 
-public  synchronized void setNbPlayer(int nbPlayers)
+public  void setNbPlayer(int nbPlayers)
 {
 	this.maxPlayer = nbPlayers;
 }

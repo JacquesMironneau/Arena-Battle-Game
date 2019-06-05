@@ -10,7 +10,7 @@ import fr.iutvalence.projet.battleArenaGame.pawn.Pawn;
 import fr.iutvalence.projet.battleArenaGame.pawn.PawnEffect;
 import fr.iutvalence.projet.battleArenaGame.pawn.TeamId;
 import fr.iutvalence.projet.battleArenaGame.view.ErrorMessages;
-import fr.iutvalence.projet.battleArenaGame.view.Player;
+import fr.iutvalence.projet.battleArenaGame.view.GameView;
 
 
 public class Board implements Serializable{
@@ -20,7 +20,7 @@ public class Board implements Serializable{
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	private transient Player player;
+	private ArrayList<GameView> players;
 	/**
 	 * This list represent Pawns currently living and define the turn order
 	 */
@@ -43,10 +43,10 @@ public class Board implements Serializable{
 	/**
 	 * Create the board including creation of pawns 
 	 */
-	public Board(Player pPlayer,int pNbPlayer,int pNbPawn,int pBoardSize)
+	public Board(ArrayList<GameView> gameViews,int pNbPlayer,int pNbPawn,int pBoardSize)
 	{
 		this.turnOrder = new ArrayList<Pawn>();
-		this.player = pPlayer;
+		this.players = gameViews;
 		this.currentPawnIndex = 0;
 		this.nbPawn = pNbPawn;
 		this.boardSize = pBoardSize;
@@ -60,21 +60,21 @@ public class Board implements Serializable{
 	 * @param Move pMove: A movement chose by the player
 	 * @return true if the chosen move by the player is valid and authorized
 	 */
-	public void checkMove(Coordinate pDest)
+	public void checkMove(int currentPlayerIndex,Coordinate pDest)
 	{
 		
 		Movement pMovement = new Movement(this.turnOrder.get(currentPawnIndex).getPos(),pDest);
 		//If the pawn don't have enough move points to move
 		if(this.turnOrder.get(currentPawnIndex).getMovePoints() < pMovement.calculateDistance())
 		{
-			this.player.displayError(ErrorMessages.NOT_ENOUGH_MOVE_POINT); 
+			this.players.get(currentPlayerIndex).displayError(ErrorMessages.NOT_ENOUGH_MOVE_POINT); 
 			return;
 		}
 		
 		//if the destination isn't in board limits
 		if(pMovement.getDestCordinate().getCoordX()<0 || pMovement.getDestCordinate().getCoordX()>=this.boardSize || pMovement.getDestCordinate().getCoordY()<0 || pMovement.getDestCordinate().getCoordY()>=this.boardSize)
 			{
-				this.player.displayError(ErrorMessages.MOVE_OUT_OF_BOARD); 
+			this.players.get(currentPlayerIndex).displayError(ErrorMessages.MOVE_OUT_OF_BOARD); 
 				return;
 			}
 			//Check if the coordinates of the pawn are free (in order to move, the case must be free and not occupated by another pawn)
@@ -82,7 +82,7 @@ public class Board implements Serializable{
 			{
 				if(pMovement.getDestCordinate().equals(this.turnOrder.get(indexArrayList).getPos()))
 				{
-					this.player.displayError(ErrorMessages.CASE_OCCUPATED);
+					this.players.get(currentPlayerIndex).displayError(ErrorMessages.CASE_OCCUPATED);
 					return;
 				}
 			}
@@ -90,7 +90,7 @@ public class Board implements Serializable{
 			//Move the current pawn to coordinates
 			this.turnOrder.get(currentPawnIndex).setPos(pMovement.getDestCordinate());
 			this.turnOrder.get(currentPawnIndex).setMovePoints(this.turnOrder.get(currentPawnIndex).getMovePoints()-pMovement.getDistance());				
-			this.player.displayMoveDone();
+			this.players.get(currentPlayerIndex).displayMoveDone();
 	}
 	
 	
@@ -134,26 +134,26 @@ public class Board implements Serializable{
 	
 	 * @return  true if the chosen spell by the player is valid and authorized
 	 */
-	public void checkSpell(int pSpellIndex, Coordinate pDest)
+	public void checkSpell(int currentPlayerIndex,int pSpellIndex, Coordinate pDest)
 	{
 		
 		Movement pMovement = new Movement(this.turnOrder.get(currentPawnIndex).getPos(),pDest);
 		//If the spell is on cooldown
 		if(this.turnOrder.get(currentPawnIndex).getSpellPage().getSpell(pSpellIndex).getCurrentCooldown() > 0)
 		{	
-			this.player.displayError(ErrorMessages.SPELL_IN_COOLDOWN);
+			this.players.get(currentPlayerIndex).displayError(ErrorMessages.SPELL_IN_COOLDOWN);
 			return;
 		}
 		//If the pawn has not enought action points (cost too much)
 		if(this.turnOrder.get(currentPawnIndex).getSpellPage().getSpell(pSpellIndex).getShape().getSpellCost() > this.turnOrder.get(currentPawnIndex).getActionPoints())
 		{
-			this.player.displayError(ErrorMessages.NOT_ENOUGH_ACTION_POINT);
+			this.players.get(currentPlayerIndex).displayError(ErrorMessages.NOT_ENOUGH_ACTION_POINT);
 			return;
 		}
 		//If the spell target is too far (range too short)
 		if(pMovement.getDistance() > this.turnOrder.get(currentPawnIndex).getSpellPage().getSpell(pSpellIndex).getShape().getRange())
 		{
-			this.player.displayError(ErrorMessages.SPELL_TARGET_OUT_OF_RANGE);
+			this.players.get(currentPlayerIndex).displayError(ErrorMessages.SPELL_TARGET_OUT_OF_RANGE);
 			return;
 		}
 		
@@ -178,7 +178,7 @@ public class Board implements Serializable{
 					}
 				}
 			}
-		this.player.displaySpellLaunched();
+			this.players.get(currentPlayerIndex).displaySpellLaunched();
 	}
 	
 	
@@ -284,7 +284,7 @@ public class Board implements Serializable{
 				X = rand.nextInt(this.boardSize);
 				Y = rand.nextInt(this.boardSize);
 				}while(this.exist(X,Y));
-				this.getTurnOrder().add(new Pawn(new TeamId(k),new Coordinate(X,Y),"J"+k +"."+i));
+				this.getTurnOrder().add(new Pawn(k,new Coordinate(X,Y),"J"+k +"."+i));
 			}
 		}
 	}

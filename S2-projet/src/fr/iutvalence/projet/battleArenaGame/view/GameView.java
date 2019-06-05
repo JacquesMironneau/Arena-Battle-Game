@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import fr.iutvalence.projet.battleArenaGame.Board;
 import fr.iutvalence.projet.battleArenaGame.move.Coordinate;
+import fr.iutvalence.projet.battleArenaGame.pawn.Pawn;
 import fr.iutvalence.projet.battleArenaGame.pawn.TeamId;
 import fr.iutvalence.projet.battleArenaGame.shape.Shape;
 import fr.iutvalence.projet.battleArenaGame.spell.SpellEffect;
@@ -15,21 +16,15 @@ import fr.iutvalence.projet.battleArenaGame.spell.SpellPage;
  * @author pashmi
  *
  */
-public interface Player {
+public interface GameView {
 
-	
+	//ASK
 	/**
-	 * Ask to the system to move a pawn to a wanted destination.
-	 * @return the movement chosen 
-	 * 
+	 * Ask the player to pick an index 
+	 * @return
 	 */
-	public Coordinate askMove();
+	public int askIndexSelection();
 	
-	/**
-	 * Ask to the player which spell he want's to cast
-	 * @return the index of the spell chosen
-	 */
-	public int askSpell();
 	
 	/**
 	 * Ask the player to pick between every possible actions choice
@@ -43,11 +38,6 @@ public interface Player {
 	 */
 	public Choices askChoiceMenu();
 
-	/**
-	 * Ask the player to choose between his pages
-	 * @return the chosen page
-	 */
-	public int askSpellPageSelection(ArrayList<SpellPage> listPages);
 	
 	/**
 	 * Ask the user to pick a name for his page
@@ -60,27 +50,19 @@ public interface Player {
 	 * @return
 	 */
 	public SpellEffect askSpellElement();
-
-	/**
-	 * Ask the user to TODO
-	 * @param eff
-	 * @return
-	 */
-	public Shape askSpellShape(SpellEffect eff);
-	
-	/**
-	 * @return if player validate his choices
-	 */
-	public boolean askValidation();
 	
 	/**
 	 * Displays the board 
 	 * @param myBoard
 	 */
+	
+	public Coordinate askMove();
+	
+	//DISPLAY
 	public void displayBoard(Board myBoard, int nbPlayer);
 
 	/**
-	 * Display the launch menu with the differents choices(Create Spells/Host/Join/localGame)
+	 * Display the launch menu with the different choices(Create Spells/Host/Join/localGame)
 	 */
 	public void displayMenu();
 	
@@ -90,7 +72,7 @@ public interface Player {
 	public void displayError(ErrorMessages error);
 	
 	/**
-	 * Display the owned spellpages
+	 * Display the owned spell pages
 	 */
 	public void displaySpellPage(ArrayList<SpellPage> listPages);
 	
@@ -104,7 +86,7 @@ public interface Player {
 	 * @param Pstat status of the Game (victory,defeat,draw)
 	 * @param teamId display the team linked to the status
 	 */
-	public void displayEnd(TeamId winTeam);
+	public void displayEnd(String winTeam);
 	
 	/**
 	 * Displays every possible choices for element
@@ -124,7 +106,7 @@ public interface Player {
 	/**
 	 * Display that the turn has changed
 	 */
-	public void displayNextTurn();
+	public void displayNextTurn(int numPlayer);
 	
 	/**
 	 * Ensure the player that his pawn has been moved
@@ -137,26 +119,9 @@ public interface Player {
 	 */
 	public void displaySpellPageDetail(SpellPage pPage);
 	
-	/**
-	 * asker the number of player in the game
-	 * @return the number of player
-	 */
-	public int askNbPlayer();
 	
 	/**
-	 * ask the number of pawn for each player
-	 * @return the number of pawn
-	 */
-	public int askNbPawn();
-
-	/**
-	 * ask the size of the side of the board
-	 * @return the size
-	 */
-	public int askBoardSize();
-	
-	/**
-	 * say Size is tp small foe the amount of pawns
+	 * say Size is to small for the amount of pawns
 	 */
 	public void diplaySizeError();
 	
@@ -164,5 +129,7 @@ public interface Player {
 	 * show for which pawn you have to select a page
 	 * @param Pawn
 	 */
-	public void displaySelectForThisPawn(String Pawn);
+	public void displaySelectForThisPawn(Pawn thePawn);
+	
+	public void displayMoveSelection();
 }

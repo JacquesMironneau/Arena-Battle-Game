@@ -13,158 +13,94 @@ import fr.iutvalence.projet.battleArenaGame.spell.SpellEffect;
 import fr.iutvalence.projet.battleArenaGame.spell.SpellPage;
 
 
-public class PlayerConsole implements Player{
+public class PlayerConsole implements GameView{
 
-	
+	//TODO remove all prints and checks (move it in game algorithm)
 	public PlayerConsole()
 	{
 	}
 	
 	
-	//TODO catch errors
+	//ASK
+	
+	/**
+	 * Ask an int to the player
+	 */
+	@Override
+	public int askIndexSelection()
+	{
+		int index = -1;
+		CheapScanner scan = new CheapScanner();	 
+		try {
+			index = (Integer)scan.getInt();
+		} catch (NumberFormatException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return index;
+	}
+	
+	/**
+	 * Create a new Coordinate with 2 int given by the player
+	 * Does not check is the position is valid
+	 * @return Coordinate
+	 */
 	public Coordinate askMove() {
 		CheapScanner scan = new CheapScanner();
 		
-		
-		System.out.println("entrez la coordon� X de la destination");
 		int xCoord = -1;
-		try
-		{
-			xCoord = (Integer)scan.getInt();
-		} catch (NumberFormatException | IOException e)
-		{}
-		
-		if(xCoord == -1) askMove();
-		System.out.println("entre la coordonn� Y de la destination");
 		int yCoord = -1;
-		try
-		{
+		try {
+			xCoord = (Integer)scan.getInt();
 			yCoord = (Integer)scan.getInt();
-		} catch (NumberFormatException | IOException e)
-		{}
-		
-		if(yCoord == -1) askMove();
+		} catch (NumberFormatException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+			
 		return new Coordinate(xCoord,yCoord);
 	}
-
-	@Override
-	/**
-	 * Ask to the player which spell he want's to cast
-	 * @return the index of the spell chosen (chose -1)
-	 */
-	public int askSpell() 
-	{
-		CheapScanner scan = new CheapScanner();
-		int index = -1;
-		do {
-			System.out.println("entrez l'index du sort a lancer (1 ou 2 ou 3");
-			try
-			{
-				index = (Integer)scan.getInt();
-			} catch (NumberFormatException | IOException e)
-			{
-				e.printStackTrace();
-			}
-		}while(index < 1 || index > 3);
-		
-		return index-1;
-			
-	}
 	
-	
-	/**
-	 * Start the selection of the spell pages for the pawns of local player
-	 */
-	@Override
-	public int askSpellPageSelection(ArrayList<SpellPage> listPages)
-	{
-		CheapScanner scan = new CheapScanner();
-		int index = -1;
-		do {
-			System.out.println("choisissez votre page");
-			try
-			{
-				index=(Integer)scan.getInt()-1;
-			} catch (NumberFormatException | IOException e)
-			{
-				e.printStackTrace();
-			}
-		}while (index<0 || index>listPages.size());
-	return index;
-	}
-
-
-	@Override
-	public void displaySpellPage(ArrayList<SpellPage> listPages) {
-		int count=1;
-		for(SpellPage myPage: listPages)
-		{  
-			System.out.println(count+")"+myPage.getPageName());
-			count++;
-		}
-	}
-
-
-
-	@Override
-	public void displayMenu() {
-		System.out.println("----------------Menu-----------------");
-		System.out.println("1) Créer une page de sort");
-		System.out.println("2) Créer une partie");
-		System.out.println("3) Rejoindre une partie");
-		System.out.println("4) cr�� partie local");
-		
-	}
-
-
-	@Override
-	public void displayEnd(TeamId winTeam) 
-	{
-		System.out.println("Victoire de l'équipe " + winTeam.getId());
-	}
-
-
 	@Override
 	public Choices askChoiceMenu() 
 	{	
-		this.displayMenu();
 		CheapScanner scan = new CheapScanner();
 		int mychoice = -1;
 		
-		do {
-		
-		System.out.println("faite votre choix");
-		try
-		{
+		try {
 			mychoice = (Integer)scan.getInt();
-		} catch (NumberFormatException | IOException e)
-		{
+		} catch (NumberFormatException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		switch (mychoice) {
 		
+		switch (mychoice) 
+		{
 		case 1:
-			return Choices.CREATE_SPELL_PAGE;
-		case 2:
 			return Choices.HOST_GAME;
-		case 3:
+		case 2:
 			return Choices.JOIN_GAME;
-		case 4:
+		case 3:
 			return Choices.LOCAL_GAME;
 		default:
 			mychoice=0;
 		}
-		}while(mychoice==0);
 	return null;
 	}
 
 	public Choices askActionChoice() 
 	{
-		this.displayChoiceAction();
 		CheapScanner scan = new CheapScanner();
 		int mychoice = -1;
-		do {
-		System.out.println("faite votre choix");
 		try
 		{
 			mychoice= (Integer)scan.getInt();
@@ -184,35 +120,22 @@ public class PlayerConsole implements Player{
 		default:
 			mychoice=0;
 		}
-		}while(mychoice==0);
 	return null;
 	}
-
-
-	@Override
-	public void displayChoiceAction() {
-		System.out.println("1) bouger mon pion\n2) lancer un sort\n3)Fin du tour");
-		
-	}
-
-
+	
+	
 	@Override
 	public String askPageName() {
 		CheapScanner scan = new CheapScanner();
-		System.out.println("entrez le nom de votre page");
 		String myName = scan.getStr();
 		return myName;
 	}
+	
 	@Override
 	public SpellEffect askSpellElement() 
 	{	
-		this.displayElementChoice();
 		CheapScanner scan = new CheapScanner();
-		
 		String elementName;
-
-		do {		
-		System.out.println("Choisiser l'element du sort a creer");
 		elementName = scan.getStr();
 		switch(elementName)
 		{
@@ -231,76 +154,54 @@ public class PlayerConsole implements Player{
 		default:
 			elementName = null;
 		} 				
-	}while(elementName ==null);
 	return null;
 	}
 
 
+	//DISPLAY
+	
+	/**
+	 * Display a list of spell pages with their name and an index
+	 */
 	@Override
-	public Shape askSpellShape(SpellEffect eff) {
-		CheapScanner scan = new CheapScanner();
-		this.displayShapeChoice();
-		
-		String choose;
-		do
-		{
-		System.out.println("Choisiser la forme du sort a creer");
-		choose = scan.getStr();
-		switch(choose)
-		{
-		case "Fist":
-			return Shape.Fist;
-		case "Ball":
-			return Shape.Ball;
-		case "Sword":
-			return Shape.Sword;
-		case "Special":
-			switch(eff.getElementName())
-			{
-			case "Fire": 
-			case "Wind":
-				return Shape.Cross;
-			case "Ice":
-			case "Electricity":
-				return Shape.Beam;
-			case "Stone":
-			case "Darkness":
-				return Shape.Square;		
-			default:
-				
-			}
-			default:
-				choose=null;
+	public void displaySpellPage(ArrayList<SpellPage> listPages) {
+		int count=0;
+		for(SpellPage myPage: listPages)
+		{  
+			System.out.println(count+")"+myPage.getPageName());
+			count++;
 		}
-	}while(choose==null);
-	return null;}
+	}
+
+
+/**
+ * Display the main menu
+ */
+	@Override
+	public void displayMenu() {
+		System.out.println("----------------Menu-----------------");
+		System.out.println("1) Créer une partie");
+		System.out.println("2) Rejoindre une partie");
+		System.out.println("3) cr�� partie local");
+		
+	}
 
 
 	@Override
-	public boolean askValidation() {
-		CheapScanner scan = new CheapScanner();
-		System.out.println("validez votre saisie?");
-		System.out.println("1) oui       2)non");
-		int myChoice = -1;
-		do
-		{
-			try
-			{
-				myChoice = (Integer)scan.getInt();
-			} catch (NumberFormatException | IOException e)
-			{
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-			switch (myChoice)
-			{
-			case 1:return true;
-			case 2: return false;
-			default: myChoice = 0;
-			}
-		}while(myChoice==0);
-	return false;
+	public void displayEnd(String winTeam) 
+	{
+		System.out.println(winTeam);
 	}
+
+
+	
+
+	@Override
+	public void displayChoiceAction() {
+		System.out.println("1) bouger mon pion\n2) lancer un sort\n3)Fin du tour");
+		
+	}
+
 
 
 	@Override
@@ -312,10 +213,9 @@ public class PlayerConsole implements Player{
 		
 	}
 
-
 	@Override
 	public void displayShapeChoice() {
-		System.out.println("Ball - Fist - Sword - Special");
+		System.out.println("Ball - Fist - Sword - Square - Cross - Beam");
 	}
 
 		
@@ -327,9 +227,9 @@ public class PlayerConsole implements Player{
 
 
 	@Override
-	public void displayNextTurn() {
-		System.out.println("on passe au tour suivant");
-		
+	public void displayNextTurn(int numPlayer)
+	{
+		System.out.println("Tour du joueur" + numPlayer);	
 	}
 
 	@Override
@@ -347,6 +247,7 @@ public class PlayerConsole implements Player{
 			else
 				System.out.println(spellIndex+1 +")\n");
 		}
+		System.out.println("Choissisez l'index du sort a lancer");
 	}
 
 
@@ -436,7 +337,7 @@ public class PlayerConsole implements Player{
 					{
 						str += "Team" + teamIndex +":\n";
 						for(Pawn p1 : myBoard.getTurnOrder())
-							if(p1.getTeamId().getId()==teamIndex)
+							if(p1.getTeamId()==teamIndex)
 								str += p1.getName()+": HP:"+p1.getHealthPoints()+"/"+Pawn.DEFAULT_HEALTH_POINTS+"   Effects :"+p1.getEffect().toString()+"\n";
 					}
 				
@@ -452,63 +353,25 @@ public class PlayerConsole implements Player{
 		}
 
 
-		@Override
-		public int askNbPlayer() {
-			int res = -1;
-			CheapScanner scan = new CheapScanner();
-			do {
-				System.out.println("entrez le nombre de joueur");
-				try
-				{
-					res = scan.getInt();
-				} catch (NumberFormatException | IOException e)
-				{
-					e.printStackTrace();
-				}
-			}while (res<1);
-			return res;
-		}
-		
-		public int askNbPawn() {
-			int res = -1;
-			CheapScanner scan = new CheapScanner();
-			do {
-				System.out.println("entrez le nombre de pion par joueur");
-				try
-				{
-					res = scan.getInt();
-				} catch (NumberFormatException | IOException e)
-				{
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-			}while (res < 0);
-		return res;
-		}
-		
-		
-	public int askBoardSize()
-	{
-		int res = -1;
-		CheapScanner scan = new CheapScanner();
-		System.out.println("entrez la taille du tableau");
-		try {
-			res = scan.getInt();
-		} catch (NumberFormatException e) {
-			e.printStackTrace();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		return res;
-	}
 	
 	public void diplaySizeError(){
 		System.out.println("entrez une taille plus grande");
 	}
-	public void displaySelectForThisPawn(String pawn)
-	{
-		System.out.println("choisissez une page pour le pion "+ pawn);
+	
+
+	@Override
+	public void displaySelectForThisPawn(Pawn thePawn) {
+		System.out.println("choisissez une page pour le pion "+ thePawn.getName());
+		
 	}
+	
+	public void displayMoveSelection()
+	{
+		System.out.println("Entrer la coordonée X puis la coordonée Y (ligne puis colonne)");
+	}
+
+
+	
 }
 
 	
