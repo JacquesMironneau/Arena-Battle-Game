@@ -1,46 +1,40 @@
 package fr.iutvalence.projet.battleArenaGame.view;
 
 
-import java.io.IOException;
 import java.util.ArrayList;
 
 import fr.iutvalence.projet.battleArenaGame.Board;
+import fr.iutvalence.projet.battleArenaGame.GameController;
 import fr.iutvalence.projet.battleArenaGame.move.Coordinate;
 import fr.iutvalence.projet.battleArenaGame.pawn.Pawn;
-import fr.iutvalence.projet.battleArenaGame.pawn.TeamId;
-import fr.iutvalence.projet.battleArenaGame.shape.Shape;
 import fr.iutvalence.projet.battleArenaGame.spell.SpellEffect;
 import fr.iutvalence.projet.battleArenaGame.spell.SpellPage;
 
-
+//TODO remove all prints and checks (move it in game algorithm)
 public class PlayerConsole implements GameView{
 
-	//TODO remove all prints and checks (move it in game algorithm)
-	public PlayerConsole()
+	
+	private GameController myController;
+	
+	public PlayerConsole(GameController controller)
 	{
+		this.myController = controller;
 	}
 	
 	
 	//ASK
 	
-	/**
-	 * Ask an int to the player
-	 */
-	@Override
-	public int askIndexSelection()
+	
+	public void askSpell(int currentPlayerIndex)
 	{
-		int index = -1;
-		CheapScanner scan = new CheapScanner();	 
-		try {
-			index = (Integer)scan.getInt();
-		} catch (NumberFormatException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		return index;
+		CheapScanner scan = new CheapScanner();
+		int spellIndex = scan.getInt();
+		int xCoord = -1;
+		int yCoord = -1;
+		xCoord = (Integer)scan.getInt();
+		yCoord = (Integer)scan.getInt();
+		this.myController.spellRequest(currentPlayerIndex, spellIndex,new Coordinate(xCoord,yCoord));
+		
 	}
 	
 	/**
@@ -48,23 +42,15 @@ public class PlayerConsole implements GameView{
 	 * Does not check is the position is valid
 	 * @return Coordinate
 	 */
-	public Coordinate askMove() {
+	public void askMove(int currentPlayerIndex) {
 		CheapScanner scan = new CheapScanner();
 		
 		int xCoord = -1;
 		int yCoord = -1;
-		try {
-			xCoord = (Integer)scan.getInt();
-			yCoord = (Integer)scan.getInt();
-		} catch (NumberFormatException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-			
-		return new Coordinate(xCoord,yCoord);
+		xCoord = (Integer)scan.getInt();
+		yCoord = (Integer)scan.getInt();
+		this.myController.moveRequest(currentPlayerIndex,new Coordinate(xCoord,yCoord));
+		
 	}
 	
 	@Override
@@ -72,17 +58,7 @@ public class PlayerConsole implements GameView{
 	{	
 		CheapScanner scan = new CheapScanner();
 		int mychoice = -1;
-		
-		try {
-			mychoice = (Integer)scan.getInt();
-		} catch (NumberFormatException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		
+		mychoice = (Integer)scan.getInt();
 		switch (mychoice) 
 		{
 		case 1:
@@ -101,13 +77,7 @@ public class PlayerConsole implements GameView{
 	{
 		CheapScanner scan = new CheapScanner();
 		int mychoice = -1;
-		try
-		{
-			mychoice= (Integer)scan.getInt();
-		} catch (NumberFormatException | IOException e)
-		{
-			e.printStackTrace();
-		}
+		mychoice= (Integer)scan.getInt();
 		
 		switch(mychoice)
 		{
@@ -121,6 +91,13 @@ public class PlayerConsole implements GameView{
 			mychoice=0;
 		}
 	return null;
+	}
+	
+	public void askPageSelection(int currentPlayerIndex)
+	{
+		CheapScanner scan = new CheapScanner();
+		int pageIndex = scan.getInt();
+		this.myController.setPageRequest(currentPlayerIndex,pageIndex);
 	}
 	
 	
@@ -159,6 +136,13 @@ public class PlayerConsole implements GameView{
 
 
 	//DISPLAY
+	
+	public void displaySpellSelection()
+	{
+		System.out.println("Entrer l'index du sort à lancer,\n puis la ligne de la cible, puis la colonne de la cible");
+		
+	}
+	
 	
 	/**
 	 * Display a list of spell pages with their name and an index
@@ -218,12 +202,6 @@ public class PlayerConsole implements GameView{
 		System.out.println("Ball - Fist - Sword - Square - Cross - Beam");
 	}
 
-		
-	@Override
-	public void displaySpellLaunched() {
-		System.out.println("Spell cast !");
-		
-	}
 
 
 	@Override
@@ -347,9 +325,9 @@ public class PlayerConsole implements GameView{
 
 
 		@Override
-		public void displayError(ErrorMessages error)
+		public void displayStatus(StatusMessages msg)
 		{
-			System.out.println(error.getErrorMessage());
+			System.out.println(msg.getStatusMessage());
 		}
 
 

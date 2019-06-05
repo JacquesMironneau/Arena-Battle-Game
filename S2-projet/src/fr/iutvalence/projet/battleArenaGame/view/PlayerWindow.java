@@ -454,8 +454,8 @@ public class PlayerWindow extends JFrame implements GameView{
 	}
 
 	@Override
-	public void displayError(ErrorMessages error) {
-		JOptionPane.showMessageDialog(mainContainer, error.getErrorMessage());
+	public void displayStatus(StatusMessages error) {
+		JOptionPane.showMessageDialog(mainContainer, error.getStatusMessage());
 		
 	}
 

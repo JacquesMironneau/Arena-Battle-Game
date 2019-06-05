@@ -19,11 +19,6 @@ import fr.iutvalence.projet.battleArenaGame.spell.SpellPage;
 public interface GameView {
 
 	//ASK
-	/**
-	 * Ask the player to pick an index 
-	 * @return
-	 */
-	public int askIndexSelection();
 	
 	
 	/**
@@ -31,6 +26,10 @@ public interface GameView {
 	 * @return
 	 */
 	public Choices askActionChoice();
+	
+	public void askSpell(int currentPlayerIndex);
+	
+	public void askPageSelection(int currentPlayerIndex);
 	
 	/**
 	 * Ask the player to choose a option in the menu
@@ -56,9 +55,14 @@ public interface GameView {
 	 * @param myBoard
 	 */
 	
-	public Coordinate askMove();
+	public void askMove(int currentPlayerIndex);
+	
 	
 	//DISPLAY
+	
+	public void displaySpellSelection();
+	
+	
 	public void displayBoard(Board myBoard, int nbPlayer);
 
 	/**
@@ -67,9 +71,9 @@ public interface GameView {
 	public void displayMenu();
 	
 	/**
-	 * Display an error message based on the ErrorMessages enumeration 
+	 * Display a status messages based on StatusMessages enumeration 
 	 */
-	public void displayError(ErrorMessages error);
+	public void displayStatus(StatusMessages msg);
 	
 	/**
 	 * Display the owned spell pages
@@ -98,10 +102,6 @@ public interface GameView {
 	 */
 	public void displayShapeChoice();
 	
-	/**
-	 * Ensure the player that his spell has been cast
-	 */
-	public void displaySpellLaunched();
 	
 	/**
 	 * Display that the turn has changed

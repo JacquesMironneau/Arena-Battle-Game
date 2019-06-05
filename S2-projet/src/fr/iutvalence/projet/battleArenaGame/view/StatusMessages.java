@@ -5,30 +5,31 @@ package fr.iutvalence.projet.battleArenaGame.view;
  * @author pashmi
  *
  */
-public enum ErrorMessages
+public enum StatusMessages
 {
 	MOVE_OUT_OF_RANGE("You don't have enough point to move"),
 	MOVE_OUT_OF_BOARD("Your target location is outside the board..."),
-	NOT_ENOUGH_MOVE_POINT("You need more MP in order to move to this location !"),
 	CASE_OCCUPATED("This location is unavailable"),
+	MOVE_DONE("Destination reached"),
 	
+	WRONG_INDEX("You chose a wrong index"),
 	NOT_ENOUGH_ACTION_POINT("You need more AP in order to cast this spell !"),
 	SPELL_IN_COOLDOWN("This spell is still in cooldown !"),
 	SPELL_TARGET_OUT_OF_RANGE("Your aiming too far !"),
+	SPELL_SENT("Spell successfully sent"),
 	
-	PAWN_NO_TEAM("This pawn is not remote or local..."),
 	SYSTEM_ERROR("Error system");
 	
-	private String errMessage;
+	private String statusMessage;
 	
-	ErrorMessages(String s)
+	StatusMessages(String s)
 	{
-		this.errMessage = s;
+		this.statusMessage = s;
 	}
 	
-	public String getErrorMessage()
+	public String getStatusMessage()
 	{
-		return this.errMessage;
+		return this.statusMessage;
 	}
 	
 }

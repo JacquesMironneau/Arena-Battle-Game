@@ -1,23 +1,17 @@
 package fr.iutvalence.projet.battleArenaGame;
 
 import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.Set;
 
 import fr.iutvalence.projet.battleArenaGame.exceptions.SpellIndexException;
-import fr.iutvalence.projet.battleArenaGame.network.Client;
-import fr.iutvalence.projet.battleArenaGame.network.Communication;
-import fr.iutvalence.projet.battleArenaGame.network.Local;
-import fr.iutvalence.projet.battleArenaGame.network.Network;
-import fr.iutvalence.projet.battleArenaGame.network.Server;
+import fr.iutvalence.projet.battleArenaGame.move.Coordinate;
 import fr.iutvalence.projet.battleArenaGame.pawn.Pawn;
-import fr.iutvalence.projet.battleArenaGame.pawn.TeamId;
 import fr.iutvalence.projet.battleArenaGame.shape.Shape;
 import fr.iutvalence.projet.battleArenaGame.spell.Spell;
 import fr.iutvalence.projet.battleArenaGame.spell.SpellEffect;
 import fr.iutvalence.projet.battleArenaGame.spell.SpellPage;
-import fr.iutvalence.projet.battleArenaGame.view.ErrorMessages;
+import fr.iutvalence.projet.battleArenaGame.view.StatusMessages;
 import fr.iutvalence.projet.battleArenaGame.view.GameView;
+import fr.iutvalence.projet.battleArenaGame.view.PlayerConsole;
 
 /**
  * Game class stands for the system of the BattleArena Game:
@@ -86,12 +80,14 @@ public class Game implements GameController
 	 * Constructor for Game
 	 * create the game, and call init to initialize the board.
 	 */
-	public Game(ArrayList<GameView> gameViews,int nbPlayer,int nbPawn,int boardSize)
+	public Game(int nbPlayer,int nbPawn,int boardSize)
 	{
 		this.mySpellPages = new ArrayList<SpellPage>(); //TODO remove (do not create it every time we launch (will evolve to file read /DB) in V8
 		this.maxPlayer = nbPlayer;
-		this.players = gameViews;
-		this.board = new Board(gameViews,nbPlayer,nbPawn,boardSize);
+		this.players = new ArrayList<GameView>();
+		for(int i=0;i<this.maxPlayer;i++)
+			this.players.add(new PlayerConsole(this));
+		this.board = new Board(nbPlayer,nbPawn,boardSize);
 		try {
 			this.createSpellPageForTest();
 		} catch (SpellIndexException e) {
@@ -116,7 +112,25 @@ public class Game implements GameController
 	
 	public void play()
 	{	
+		//Selection of pages for all pawns
 		int currentPlayerIndex = 0;
+		while(true)
+		{	
+			for(GameView gv : players)
+					if(this.board.getTurnOrder().get(this.board.getCurrentPawnIndex()).getTeamId()==players.indexOf(gv))
+						currentPlayerIndex = players.indexOf(gv);
+			this.players.get(currentPlayerIndex).displaySpellPage(this.mySpellPages);
+			this.players.get(currentPlayerIndex).displaySelectForThisPawn(this.board.getTurnOrder().get(this.board.getCurrentPawnIndex()));
+			this.players.get(currentPlayerIndex).askPageSelection(currentPlayerIndex);
+			this.board.nextPawn();
+			if(!(this.board.getTurnOrder().get(this.board.getTurnOrder().size()-1).getSpellPage()==null))
+				break;
+	//TODO fix this, because it never break the loop : the page is not set when it's the last to set		
+		}
+		
+		
+		//Turn algorithm
+		currentPlayerIndex = 0;
 		while(true) 
 		{
 			for(GameView gv : players)
@@ -142,12 +156,9 @@ public class Game implements GameController
 					switch(this.players.get(currentPlayerIndex).askActionChoice())
 					{
 					case MOVE:
-						for(GameView gv : players)
-						{
-							gv.displayBoard(board,this.maxPlayer);
-						}
+						this.players.get(currentPlayerIndex).displayBoard(board,this.maxPlayer);
 						this.players.get(currentPlayerIndex).displayMoveSelection();
-						this.board.checkMove(currentPlayerIndex,this.players.get(currentPlayerIndex).askMove());
+						this.players.get(currentPlayerIndex).askMove(currentPlayerIndex);
 						for(GameView gv : players)
 						{
 							gv.displayBoard(board,this.maxPlayer);
@@ -156,9 +167,8 @@ public class Game implements GameController
 					case LAUNCH_SPELL:
 						this.players.get(currentPlayerIndex).displayBoard(board,this.maxPlayer);
 						this.players.get(currentPlayerIndex).displaySpellPageDetail(this.board.getTurnOrder().get(this.board.getCurrentPawnIndex()).getSpellPage());
-						int spellIndex = this.players.get(currentPlayerIndex).askIndexSelection()-1;
-						this.players.get(currentPlayerIndex).displayMoveSelection();
-						this.board.checkSpell(currentPlayerIndex,spellIndex, this.players.get(currentPlayerIndex).askMove());
+						this.players.get(currentPlayerIndex).displaySpellSelection();
+						this.players.get(currentPlayerIndex).askSpell(currentPlayerIndex);
 						if(this.board.getTurnOrder().get(this.board.getCurrentPawnIndex()).getHealthPoints()<=0)
 						{
 							this.board.nextPawn();
@@ -174,11 +184,6 @@ public class Game implements GameController
 					case END_TURN:
 						this.board.nextPawn();
 						break;
-					default:
-						for(GameView gv : players)
-						{
-							gv.displayError(ErrorMessages.SYSTEM_ERROR);
-						}
 					}
 					if(endGame())
 					{
@@ -204,29 +209,6 @@ public class Game implements GameController
 		//closeGame();
 	}
 	
-	/**
-	 * Called in play() before the game loop
-	 * It wait until both side have selected their pages for their pawn in order to start the game loop
-	 * Make the page selection for the client
-	 */
-	public void pawnSelection()
-	{
-		System.out.println("Syncrhonize");
-
-		while(!this.board.areAllPageSet())
-		{	
-			int currentPlayerIndex = 0;
-			for(GameView gv : players)
-			{
-				if(this.board.getTurnOrder().get(this.board.getCurrentPawnIndex()).getTeamId()==players.indexOf(gv))
-					currentPlayerIndex = players.indexOf(gv);
-			}	
-			this.players.get(currentPlayerIndex).displaySpellPage(this.mySpellPages);
-			this.players.get(currentPlayerIndex).displaySelectForThisPawn(this.board.getTurnOrder().get(this.board.getCurrentPawnIndex()));
-			this.board.getTurnOrder().get(this.board.getCurrentPawnIndex()).setSpellPage(new SpellPage(this.mySpellPages.get(this.players.get(currentPlayerIndex).askIndexSelection())));
-			this.board.nextPawn();
-		}
-	}
 	
 	/**
 	 * TODO Add theses changes in the Network class
@@ -363,20 +345,63 @@ public  void setNbPlayer(int nbPlayers)
 }
 
 
-@Override
-public void editTurnOrder(ArrayList<Pawn> newTurnOrder)
+public void moveRequest(int currentPlayerIndex,Coordinate destination)
 {
-	this.board.setTurnOrder(newTurnOrder);
+	switch(this.board.checkMove(destination))
+	{
+	case MOVE_OUT_OF_RANGE:
+		this.players.get(currentPlayerIndex).displayStatus(StatusMessages.MOVE_OUT_OF_RANGE);
+		break;
+		
+	case MOVE_OUT_OF_BOARD:
+		this.players.get(currentPlayerIndex).displayStatus(StatusMessages.MOVE_OUT_OF_BOARD);
+		break;
+		
+	case CASE_OCCUPATED:
+		this.players.get(currentPlayerIndex).displayStatus(StatusMessages.CASE_OCCUPATED);
+		break;
+		
+	case MOVE_DONE:
+		this.players.get(currentPlayerIndex).displayStatus(StatusMessages.MOVE_DONE);
+		break;
+	}
 }
 
-
-@Override
-public void editCurrentPawnIndex(int newCurrentPawnIndex)
+public void spellRequest(int currentPlayerIndex,int spellIndex,Coordinate destination)
 {
-	this.board.setCurrentPawnIndex(newCurrentPawnIndex);
+	switch(this.board.checkSpell(currentPlayerIndex, spellIndex, destination))
+	{
+	case WRONG_INDEX:
+		this.players.get(currentPlayerIndex).displayStatus(StatusMessages.WRONG_INDEX);
+		break;
+		
+	case SPELL_IN_COOLDOWN:  
+		this.players.get(currentPlayerIndex).displayStatus(StatusMessages.SPELL_IN_COOLDOWN);
+		break;
+		
+	case NOT_ENOUGH_ACTION_POINT:
+		this.players.get(currentPlayerIndex).displayStatus(StatusMessages.NOT_ENOUGH_ACTION_POINT);
+		break;
+		
+	case SPELL_TARGET_OUT_OF_RANGE:
+		this.players.get(currentPlayerIndex).displayStatus(StatusMessages.SPELL_TARGET_OUT_OF_RANGE);
+		break;
+		
+	case SPELL_SENT:
+		this.players.get(currentPlayerIndex).displayStatus(StatusMessages.SPELL_SENT);
+		break;
+	}
+	
 }
 
-
+//TODO add answer messages, will be usefull to check if the bug happens here
+public void setPageRequest(int currentPlayerIndex,int pageToSet)
+{
+	for(Pawn p : this.board.getTurnOrder())
+		if(p.getTeamId()==currentPlayerIndex && p.getSpellPage() == null)
+			p.setSpellPage(new SpellPage(this.getSpellPages().get(pageToSet)));
+	
+}
 
 
 

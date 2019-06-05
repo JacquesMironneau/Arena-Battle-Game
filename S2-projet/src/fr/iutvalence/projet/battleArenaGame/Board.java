@@ -3,14 +3,13 @@ package fr.iutvalence.projet.battleArenaGame;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Random;
+
 import fr.iutvalence.projet.battleArenaGame.move.Coordinate;
 import fr.iutvalence.projet.battleArenaGame.move.Movement;
-import fr.iutvalence.projet.battleArenaGame.network.Communication;
 import fr.iutvalence.projet.battleArenaGame.pawn.Pawn;
 import fr.iutvalence.projet.battleArenaGame.pawn.PawnEffect;
-import fr.iutvalence.projet.battleArenaGame.pawn.TeamId;
-import fr.iutvalence.projet.battleArenaGame.view.ErrorMessages;
 import fr.iutvalence.projet.battleArenaGame.view.GameView;
+import fr.iutvalence.projet.battleArenaGame.view.StatusMessages;
 
 
 public class Board implements Serializable{
@@ -20,7 +19,6 @@ public class Board implements Serializable{
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	private ArrayList<GameView> players;
 	/**
 	 * This list represent Pawns currently living and define the turn order
 	 */
@@ -43,10 +41,9 @@ public class Board implements Serializable{
 	/**
 	 * Create the board including creation of pawns 
 	 */
-	public Board(ArrayList<GameView> gameViews,int pNbPlayer,int pNbPawn,int pBoardSize)
+	public Board(int pNbPlayer,int pNbPawn,int pBoardSize)
 	{
 		this.turnOrder = new ArrayList<Pawn>();
-		this.players = gameViews;
 		this.currentPawnIndex = 0;
 		this.nbPawn = pNbPawn;
 		this.boardSize = pBoardSize;
@@ -60,37 +57,28 @@ public class Board implements Serializable{
 	 * @param Move pMove: A movement chose by the player
 	 * @return true if the chosen move by the player is valid and authorized
 	 */
-	public void checkMove(int currentPlayerIndex,Coordinate pDest)
+	public StatusMessages checkMove(Coordinate pDest)
 	{
 		
 		Movement pMovement = new Movement(this.turnOrder.get(currentPawnIndex).getPos(),pDest);
 		//If the pawn don't have enough move points to move
 		if(this.turnOrder.get(currentPawnIndex).getMovePoints() < pMovement.calculateDistance())
-		{
-			this.players.get(currentPlayerIndex).displayError(ErrorMessages.NOT_ENOUGH_MOVE_POINT); 
-			return;
-		}
+			return StatusMessages.MOVE_OUT_OF_RANGE;
 		
 		//if the destination isn't in board limits
 		if(pMovement.getDestCordinate().getCoordX()<0 || pMovement.getDestCordinate().getCoordX()>=this.boardSize || pMovement.getDestCordinate().getCoordY()<0 || pMovement.getDestCordinate().getCoordY()>=this.boardSize)
-			{
-			this.players.get(currentPlayerIndex).displayError(ErrorMessages.MOVE_OUT_OF_BOARD); 
-				return;
-			}
-			//Check if the coordinates of the pawn are free (in order to move, the case must be free and not occupated by another pawn)
+				return StatusMessages.MOVE_OUT_OF_BOARD;
+
+		//Check if the coordinates of the pawn are free (in order to move, the case must be free and not occupated by another pawn)
 			for(int indexArrayList = 0; indexArrayList < this.turnOrder.size(); indexArrayList++)
-			{
 				if(pMovement.getDestCordinate().equals(this.turnOrder.get(indexArrayList).getPos()))
-				{
-					this.players.get(currentPlayerIndex).displayError(ErrorMessages.CASE_OCCUPATED);
-					return;
-				}
-			}
+					return StatusMessages.CASE_OCCUPATED;
+
 			//If the move is good
 			//Move the current pawn to coordinates
 			this.turnOrder.get(currentPawnIndex).setPos(pMovement.getDestCordinate());
 			this.turnOrder.get(currentPawnIndex).setMovePoints(this.turnOrder.get(currentPawnIndex).getMovePoints()-pMovement.getDistance());				
-			this.players.get(currentPlayerIndex).displayMoveDone();
+			return StatusMessages.MOVE_DONE;
 	}
 	
 	
@@ -134,28 +122,24 @@ public class Board implements Serializable{
 	
 	 * @return  true if the chosen spell by the player is valid and authorized
 	 */
-	public void checkSpell(int currentPlayerIndex,int pSpellIndex, Coordinate pDest)
+	public StatusMessages checkSpell(int currentPlayerIndex,int pSpellIndex, Coordinate pDest)
 	{
+		//If spellIndex is wrong
+		if(pSpellIndex<0 || pSpellIndex>2)
+			return StatusMessages.WRONG_INDEX;
 		
-		Movement pMovement = new Movement(this.turnOrder.get(currentPawnIndex).getPos(),pDest);
 		//If the spell is on cooldown
-		if(this.turnOrder.get(currentPawnIndex).getSpellPage().getSpell(pSpellIndex).getCurrentCooldown() > 0)
-		{	
-			this.players.get(currentPlayerIndex).displayError(ErrorMessages.SPELL_IN_COOLDOWN);
-			return;
-		}
+		if(this.turnOrder.get(currentPawnIndex).getSpellPage().getSpell(pSpellIndex).getCurrentCooldown() > 0)	
+			return StatusMessages.SPELL_IN_COOLDOWN;
+		
 		//If the pawn has not enought action points (cost too much)
 		if(this.turnOrder.get(currentPawnIndex).getSpellPage().getSpell(pSpellIndex).getShape().getSpellCost() > this.turnOrder.get(currentPawnIndex).getActionPoints())
-		{
-			this.players.get(currentPlayerIndex).displayError(ErrorMessages.NOT_ENOUGH_ACTION_POINT);
-			return;
-		}
+			return StatusMessages.NOT_ENOUGH_ACTION_POINT;
+		
 		//If the spell target is too far (range too short)
+		Movement pMovement = new Movement(this.turnOrder.get(currentPawnIndex).getPos(),pDest);
 		if(pMovement.getDistance() > this.turnOrder.get(currentPawnIndex).getSpellPage().getSpell(pSpellIndex).getShape().getRange())
-		{
-			this.players.get(currentPlayerIndex).displayError(ErrorMessages.SPELL_TARGET_OUT_OF_RANGE);
-			return;
-		}
+			return StatusMessages.SPELL_TARGET_OUT_OF_RANGE;
 		
 		//The spell is send
 		//Remove cost in action points
@@ -178,7 +162,7 @@ public class Board implements Serializable{
 					}
 				}
 			}
-			this.players.get(currentPlayerIndex).displaySpellLaunched();
+			return StatusMessages.SPELL_SENT;
 	}
 	
 	
@@ -298,14 +282,7 @@ public class Board implements Serializable{
 		this.boardSize = boardSize;
 	}
 
-	public boolean areAllPageSet()
-	{
-		for(Pawn p : this.getTurnOrder())
-			if(p.getSpellPage()==null)
-				return false;
-		return true;
-	}
-
+	
 	public void setNbPawns(int nbPawns)
 	{
 		this.nbPawn = nbPawns;
