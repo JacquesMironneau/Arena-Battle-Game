@@ -4,7 +4,6 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
-import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.Toolkit;
 import java.util.ArrayList;
@@ -14,7 +13,6 @@ import javax.swing.JPanel;
 
 import fr.iutvalence.projet.battleArenaGame.move.Coordinate;
 import fr.iutvalence.projet.battleArenaGame.pawn.Pawn;
-import fr.iutvalence.projet.battleArenaGame.pawn.TeamId;
 
 enum Tile{
 	FREE,PAWN
@@ -35,8 +33,8 @@ public class BoardIHM extends JPanel{
 
 	protected void createBoard(){
 	ArrayList<Pawn> listPawn = new ArrayList<Pawn>();
-	listPawn.add(new Pawn(new TeamId(1),new Coordinate(1,5),"fgrhzfs"));
-	listPawn.add(new Pawn(new TeamId(1),new Coordinate(4,1),"aahahahah"));
+	listPawn.add(new Pawn(1,new Coordinate(1,5),"fgrhzfs"));
+	listPawn.add(new Pawn(1,new Coordinate(4,1),"aahahahah"));
 	for(int i=0;i<boardSize;i++)
 		for(int k=0;k<boardSize;k++) {
 			board[i][k] = Tile.FREE;
