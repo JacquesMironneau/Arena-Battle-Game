@@ -1,40 +1,24 @@
 package fr.iutvalence.projet.battleArenaGame.view;
 
-import java.awt.BorderLayout;
 import java.awt.Choice;
-import java.awt.Color;
-import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.InputMethodEvent;
-import java.awt.event.InputMethodListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
 import java.util.ArrayList;
-import java.util.List;
-
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JLayeredPane;
 import javax.swing.JOptionPane;
-import javax.swing.JPanel;
-import javax.swing.JSplitPane;
-import javax.swing.JTabbedPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.event.CaretEvent;
 import javax.swing.event.CaretListener;
 
 import fr.iutvalence.projet.battleArenaGame.Board;
-import fr.iutvalence.projet.battleArenaGame.EndStatus;
 import fr.iutvalence.projet.battleArenaGame.move.Coordinate;
-import fr.iutvalence.projet.battleArenaGame.move.Movement;
-import fr.iutvalence.projet.battleArenaGame.pawn.TeamId;
-import fr.iutvalence.projet.battleArenaGame.shape.Shape;
-import fr.iutvalence.projet.battleArenaGame.spell.Spell;
+import fr.iutvalence.projet.battleArenaGame.pawn.Pawn;
 import fr.iutvalence.projet.battleArenaGame.spell.SpellEffect;
 import fr.iutvalence.projet.battleArenaGame.spell.SpellPage;
 
@@ -185,12 +169,6 @@ public class PlayerWindow extends JFrame implements GameView{
 	}
 
 	@Override
-	public int askSpell() {
-		// TODO Auto-generated method stub
-		return 0;
-	}
-
-	@Override
 	public Choices askActionChoice() {
 		// TODO Auto-generated method stub
 		return null;
@@ -202,11 +180,6 @@ public class PlayerWindow extends JFrame implements GameView{
 		return null;
 	}
 
-	@Override
-	public int askSpellPageSelection(ArrayList<SpellPage> listPages) {
-		// TODO Auto-generated method stub
-		return 0;
-	}
 
 	@Override
 	public String askPageName() {
@@ -219,13 +192,6 @@ public class PlayerWindow extends JFrame implements GameView{
 		return null;
 	}
 
-	@Override
-	public Shape askSpellShape(SpellEffect eff) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
 	public boolean askValidation() {
 		//create a new confirm dialog to be sure that the player enter the correct values
 		if(JOptionPane.showConfirmDialog(mainContainer,"Are you sure ?","Confirmation",JOptionPane.OK_OPTION) == JOptionPane.OK_OPTION){
@@ -506,8 +472,8 @@ public class PlayerWindow extends JFrame implements GameView{
 	}
 
 	@Override
-	public void displayEnd(TeamId winTeam) {
-		JOptionPane.showMessageDialog(mainContainer, "Victoire de l'équipe "+winTeam.getId());
+	public void displayEnd(String winTeam) {
+		JOptionPane.showMessageDialog(mainContainer, "Victoire de l'équipe "+winTeam.getBytes());
 		
 	}
 
@@ -544,11 +510,6 @@ public class PlayerWindow extends JFrame implements GameView{
 		
 	}
 
-	@Override
-	public void displayNextTurn() {
-		// TODO Auto-generated method stub
-		
-	}
 
 	@Override
 	public void displayMoveDone() {
@@ -588,31 +549,31 @@ public class PlayerWindow extends JFrame implements GameView{
 	}
 
 	@Override
-	public int askNbPlayer() {
-		// TODO Auto-generated method stub
-		return 0;
-	}
-
-	@Override
-	public int askNbPawn() {
-		// TODO Auto-generated method stub
-		return 0;
-	}
-
-	@Override
-	public int askBoardSize() {
-		// TODO Auto-generated method stub
-		return 0;
-	}
-
-	@Override
 	public void diplaySizeError() {
 		JOptionPane.showMessageDialog(mainContainer, "the size you entered isn't valid", "Warning", JOptionPane.WARNING_MESSAGE);
 		
 	}
 
 	@Override
-	public void displaySelectForThisPawn(String Pawn) {
+	public int askIndexSelection() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public void displayNextTurn(int numPlayer) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void displaySelectForThisPawn(Pawn thePawn) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void displayMoveSelection() {
 		// TODO Auto-generated method stub
 		
 	}
