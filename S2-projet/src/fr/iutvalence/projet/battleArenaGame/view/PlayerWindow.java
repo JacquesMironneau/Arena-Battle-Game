@@ -6,6 +6,8 @@ import java.awt.Color;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.InputMethodEvent;
+import java.awt.event.InputMethodListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.awt.event.KeyEvent;
@@ -17,10 +19,13 @@ import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JLayeredPane;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JSplitPane;
 import javax.swing.JTabbedPane;
 import javax.swing.JTextField;
+import javax.swing.event.CaretEvent;
+import javax.swing.event.CaretListener;
 
 import fr.iutvalence.projet.battleArenaGame.Board;
 import fr.iutvalence.projet.battleArenaGame.EndStatus;
@@ -41,12 +46,21 @@ import fr.iutvalence.projet.battleArenaGame.spell.SpellPage;
  */
 public class PlayerWindow extends JFrame implements Player{
 	
-	/**
-	 * This represents the length of the main content pane grid layout
-	 * It is used to set the panel that contains the buttons to the middle
-	 */
-	public final static int MAIN_MENU_GRID_LENGHT = 9;
-	public final static int SPELL_PAGE_CREATION_MENU_GRID_LENGHT = 9;
+	private JLayeredPane mainContainer;
+	private JTextField tfPageName;
+	
+	private Choice chElement;
+	private Choice chShape;
+	
+	private String sp1ElCh = null;
+	private String sp1ShCh = null;
+	
+	private String sp2ElCh = null;
+	private String sp2ShCh = null;
+	
+	private String sp3ElCh = null;
+	private String sp3ShCh = null;
+	
 	
 	/**
 	 * Constructor of a new PlayerWindow
@@ -54,11 +68,7 @@ public class PlayerWindow extends JFrame implements Player{
 	 * a default size,
 	 * the default operation when closing the window,
 	 * 
-	 * This will also set a new layout for the window
 	 */
-	
-	
-	private JLayeredPane mainContainer = new JLayeredPane();
 	public PlayerWindow() {
 		/*
 		 * Super Constructor
@@ -71,10 +81,15 @@ public class PlayerWindow extends JFrame implements Player{
 		 * Set default close operation
 		 * Size by default
 		 */
+		this.setTitle("Projet S2");
 		this.setLocationRelativeTo(null);
 		this.setDefaultCloseOperation(EXIT_ON_CLOSE);
 		this.setSize(1920,1080);
 		
+		this.chElement = new Choice();
+		this.chShape = new Choice();
+		
+		this.mainContainer = new JLayeredPane();
 		this.setContentPane(this.mainContainer);
 				
 		this.displayMenu();
@@ -102,9 +117,15 @@ public class PlayerWindow extends JFrame implements Player{
 		 * default close operation
 		 * custom size
 		 */
+		this.setTitle("Projet S2");
 		this.setLocationRelativeTo(null);
 		this.setDefaultCloseOperation(EXIT_ON_CLOSE);
 		this.setSize(ww,wh);
+		
+		this.chElement = new Choice();
+		this.chShape = new Choice();
+		
+		this.mainContainer = new JLayeredPane();
 		this.setContentPane(this.mainContainer);
 		
 		this.displayMenu();
@@ -147,8 +168,7 @@ public class PlayerWindow extends JFrame implements Player{
 
 	@Override
 	public String askPageName() {
-		// TODO Auto-generated method stub
-		return null;
+		return this.tfPageName.getText();
 	}
 
 	@Override
@@ -178,6 +198,7 @@ public class PlayerWindow extends JFrame implements Player{
 	@Override
 	public void displayMenu() {
 		this.setVisible(false);
+		this.getContentPane().removeAll();
 		
 		JButton btnCreateGame = new JButton("Créer une partie");
 		btnCreateGame.setBounds(this.getWidth()/4, this.getHeight()/8, this.getWidth()/4*2, this.getHeight()/8);
@@ -186,7 +207,7 @@ public class PlayerWindow extends JFrame implements Player{
 				//startgame.method
 			}
 		});
-		this.mainContainer.add(btnCreateGame);
+		this.getContentPane().add(btnCreateGame);
 		
 		JButton btnJoinGame = new JButton("Rejoindre une partie");
 		btnJoinGame.setBounds(this.getWidth()/4, this.getHeight()/8*2, this.getWidth()/4*2, this.getHeight()/8);
@@ -195,7 +216,7 @@ public class PlayerWindow extends JFrame implements Player{
 				//joingame.method
 			}
 		});
-		this.mainContainer.add(btnJoinGame);
+		this.getContentPane().add(btnJoinGame);
 		
 		JButton btnCreateLocalGame = new JButton("Créer une partie locale");
 		btnCreateLocalGame.setBounds(this.getWidth()/4, this.getHeight()/8*3, this.getWidth()/4*2, this.getHeight()/8);
@@ -204,22 +225,201 @@ public class PlayerWindow extends JFrame implements Player{
 				//createlocalgame.method
 			}
 		});
-		this.mainContainer.add(btnCreateLocalGame);
+		this.getContentPane().add(btnCreateLocalGame);
 		
-		JButton btnCreateSpellPage = new JButton();
+		JButton btnCreateSpellPage = new JButton("Créer une page de sorts");
 		btnCreateSpellPage.setBounds(this.getWidth()/4,this.getHeight()/8*4, this.getWidth()/4*2, this.getHeight()/8);
 		btnCreateSpellPage.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				displaySpellPageCreation();
 			}
 		});
+		this.getContentPane().add(btnCreateSpellPage);
 		
 		this.setVisible(true);
-		
 	}
 	
-	public void displaySpellPageCreation() {
+	protected void displaySpellPageCreation() {
+		this.setVisible(false);
+		this.getContentPane().removeAll();
 		
+		JButton btnSpell1 = new JButton("Spell1");
+		btnSpell1.setBounds(0,10,(this.getWidth()/3),(this.getHeight()/3)-10);
+		btnSpell1.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				displayCreateSpell(1);
+			}
+		});
+		this.getContentPane().add(btnSpell1);
+		
+		JButton btnSpell2 = new JButton("Spell2");
+		btnSpell2.setBounds((this.getWidth()/3),10,(this.getWidth()/3),(this.getHeight()/3)-10);
+		btnSpell2.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				displayCreateSpell(2);
+			}
+		});
+		this.getContentPane().add(btnSpell2);
+		
+		JButton btnSpell3 = new JButton("Spell3");
+		btnSpell3.setBounds((this.getWidth()/3*2),10,(this.getWidth()/3),(this.getHeight()/3)-10);
+		btnSpell3.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				displayCreateSpell(3);
+			}
+		});
+		this.getContentPane().add(btnSpell3);
+		
+		JLabel lblPageName = new JLabel("Enter the name of the page");
+		lblPageName.setBounds(0,(this.getHeight()/2)-this.getHeight()/20,this.getWidth()/5,this.getHeight()/20);
+		this.getContentPane().add(lblPageName);
+		
+		JButton btnValiderPageCreation = new JButton("Valider");
+		btnValiderPageCreation.setBounds(this.getWidth()/3, this.getHeight()/3*2, this.getWidth()/3, this.getHeight()/20);
+		btnValiderPageCreation.setEnabled(false);
+		btnValiderPageCreation.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				askPageName();
+				displayMenu();
+			}
+		});
+		this.getContentPane().add(btnValiderPageCreation);
+		
+		this.tfPageName = new JTextField();
+		this.tfPageName.setBounds(0,this.getHeight()/2,this.getWidth()/2,this.getHeight()/20);
+		this.tfPageName.addCaretListener(new CaretListener() {
+			public void caretUpdate(CaretEvent arg0) {
+				if(tfPageName.getCaretPosition() == 0) 
+					btnValiderPageCreation.setEnabled(false);
+				else
+					btnValiderPageCreation.setEnabled(true);
+			}
+		});
+		this.getContentPane().add(this.tfPageName);
+		
+		this.setVisible(true);
+	}
+
+	protected void displayCreateSpell(int spellIndex) {
+		
+		this.setVisible(false);
+		this.getContentPane().removeAll();
+		
+		JButton btnValiderSpellCreation = new JButton("Valider");
+		btnValiderSpellCreation.setBounds(this.getWidth()/3, this.getHeight()/3*2, this.getWidth()/3, this.getHeight()/20);
+		btnValiderSpellCreation.setEnabled(false);
+		btnValiderSpellCreation.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				askSpellElement();
+				//askSpellShape();
+				displaySpellPageCreation();
+			}
+		});
+		this.getContentPane().add(btnValiderSpellCreation);
+		
+		this.chElement.removeAll();
+		this.chElement.add("Choose an element");
+		this.chElement.add("Fire");
+		this.chElement.add("Ice");
+		this.chElement.add("Wind");
+		this.chElement.add("Stone");
+		this.chElement.add("Electricity");
+		this.chElement.add("Darkness");
+		
+		if(this.sp1ElCh != null && spellIndex == 1)
+			this.chElement.select(this.sp1ElCh);
+		
+		if(this.sp2ElCh != null && spellIndex == 2)
+			this.chElement.select(this.sp2ElCh);
+		
+		if(this.sp3ElCh != null && spellIndex == 3)
+			this.chElement.select(this.sp3ElCh);
+		
+		
+		this.chElement.setBounds(this.getWidth()/3, 10, this.getWidth()/3, this.getHeight()/10);
+		
+		this.chElement.addItemListener(new ItemListener() {
+			public void itemStateChanged(ItemEvent arg0) {
+				if(chElement.getSelectedItem() == "Choose an element")
+					chShape.setEnabled(false);
+				else {
+					chShape.setEnabled(true);
+					
+					switch(spellIndex) {
+					case 1:
+						sp1ElCh = chElement.getSelectedItem();
+						break;
+					case 2:
+						sp2ElCh = chElement.getSelectedItem();
+						break;
+					case 3:
+						sp3ElCh = chElement.getSelectedItem();
+						break;
+					}
+				}
+					
+			}
+		});
+		
+		this.getContentPane().add(this.chElement);
+		
+		if(this.chElement.getSelectedItem() != "Choose en element")
+			this.chShape.setEnabled(true);
+		else
+			this.chShape.setEnabled(false);
+		
+		this.chShape.removeAll();
+		this.chShape.add("Choose a shape");
+		this.chShape.add("Fist");
+		this.chShape.add("Ball");
+		this.chShape.add("Sword");
+		this.chShape.add("Square");
+		this.chShape.add("Cross");
+		this.chShape.add("Beam");
+		this.chShape.add("Custom");
+		
+		if(this.sp1ShCh != null && spellIndex == 1)
+			this.chShape.select(sp1ShCh);
+		if(this.sp2ShCh != null && spellIndex == 2)
+			this.chShape.select(sp2ShCh);
+		if(this.sp3ShCh != null && spellIndex == 3)
+			this.chShape.select(sp3ShCh);
+		
+		this.chShape.setBounds(this.getWidth()/3, this.getHeight()/10+10,this.getWidth()/3,this.getHeight()/10);
+		
+		this.chShape.addItemListener(new ItemListener() {
+			public void itemStateChanged(ItemEvent arg0) {
+				if(chShape.getSelectedItem()=="Choose a shape")
+					btnValiderSpellCreation.setEnabled(false);
+				else if(chShape.getSelectedItem()=="Custom") {
+					new JOptionPane();
+					JOptionPane.showMessageDialog(mainContainer, "This functionnality is under devel");	
+				}
+				else
+					btnValiderSpellCreation.setEnabled(true);
+				
+				switch(spellIndex) {
+				case 1:
+					sp1ShCh = chShape.getSelectedItem();
+					break;
+				case 2:
+					sp2ShCh = chShape.getSelectedItem();
+					break;
+				case 3:
+					sp3ShCh = chShape.getSelectedItem();
+					break;
+					
+				}
+			}	
+		});
+		this.getContentPane().add(this.chShape);
+		
+		if (this.chShape.getSelectedItem() != "Choose a shape")
+			btnValiderSpellCreation.setEnabled(true);
+		else
+			btnValiderSpellCreation.setEnabled(false);
+		
+		this.setVisible(true);
 	}
 
 	@Override
