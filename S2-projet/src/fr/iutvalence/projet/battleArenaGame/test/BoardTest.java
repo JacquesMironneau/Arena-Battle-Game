@@ -18,6 +18,7 @@ import fr.iutvalence.projet.battleArenaGame.shape.Shape;
 import fr.iutvalence.projet.battleArenaGame.spell.Spell;
 import fr.iutvalence.projet.battleArenaGame.spell.SpellEffect;
 import fr.iutvalence.projet.battleArenaGame.spell.SpellPage;
+import fr.iutvalence.projet.battleArenaGame.view.GameView;
 import fr.iutvalence.projet.battleArenaGame.view.PlayerConsole;
 
 class BoardTest
@@ -27,105 +28,100 @@ class BoardTest
 	@Test
 	void testCheckMove()
 	{
-		Game.maxPlayer=2;
 		PlayerConsole P1 = new PlayerConsole();
-		Game G1 = new Game(P1);
-		Board b = new Board(new Local(G1), P1);
-		int oldX=b.getTurnOrder().get(b.getCurrentPawnIndex()).getPos().getCoordX();
-		int oldY = b.getTurnOrder().get(b.getCurrentPawnIndex()).getPos().getCoordY();
+		ArrayList<GameView> views = new ArrayList<GameView>();
+		Game G = new Game(views,2,3,15);
+		int oldX= G.getBoard().getTurnOrder().get(G.getBoard().getCurrentPawnIndex()).getPos().getCoordX();
+		int oldY = G.getBoard().getTurnOrder().get(G.getBoard().getCurrentPawnIndex()).getPos().getCoordY();
 		Coordinate coord = new Coordinate(oldX+1,oldY);
-		b.checkMove(coord);
-		assertTrue("mauvais mouvement X",b.getTurnOrder().get(b.getCurrentPawnIndex()).getPos().getCoordX()==oldX+1);
-		assertTrue("mauvais mouvement y",b.getTurnOrder().get(b.getCurrentPawnIndex()).getPos().getCoordY()==oldY);
+		G.getBoard().checkMove(coord);
+		assertTrue("mauvais mouvement X",G.getBoard().getTurnOrder().get(G.getBoard().getCurrentPawnIndex()).getPos().getCoordX()==oldX+1);
+		assertTrue("mauvais mouvement y",G.getBoard().getTurnOrder().get(G.getBoard().getCurrentPawnIndex()).getPos().getCoordY()==oldY);
 		coord = new Coordinate(100,100);
-		b.checkMove(coord);
-		assertFalse("gestion de distance",b.getTurnOrder().get(b.getCurrentPawnIndex()).getPos().getCoordX()==100);
-		assertFalse("gestion de distance",b.getTurnOrder().get(b.getCurrentPawnIndex()).getPos().getCoordY()==100);
+		G.getBoard().checkMove(coord);
+		assertFalse("gestion de distance",G.getBoard().getTurnOrder().get(G.getBoard().getCurrentPawnIndex()).getPos().getCoordX()==100);
+		assertFalse("gestion de distance",G.getBoard().getTurnOrder().get(G.getBoard().getCurrentPawnIndex()).getPos().getCoordY()==100);
 		coord = new Coordinate(-1,-1);
-		b.checkMove(coord);
-		assertFalse("pas dans le plateau",b.getTurnOrder().get(b.getCurrentPawnIndex()).getPos().getCoordX()==-1);
-		assertFalse("pas dans le plateau",b.getTurnOrder().get(b.getCurrentPawnIndex()).getPos().getCoordY()==-1);
+		G.getBoard().checkMove(coord);
+		assertFalse("pas dans le plateau",G.getBoard().getTurnOrder().get(G.getBoard().getCurrentPawnIndex()).getPos().getCoordX()==-1);
+		assertFalse("pas dans le plateau",G.getBoard().getTurnOrder().get(G.getBoard().getCurrentPawnIndex()).getPos().getCoordY()==-1);
 	}
 	
 	@Test
 	void testApplyEffet() //Tested entirely
 	{
-		Game.maxPlayer=2;
-		PlayerConsole P1 = new PlayerConsole();
-		Game G1 = new Game(P1);
-		Board b = new Board(new Local(G1), P1);
-		System.out.println(b.getTurnOrder().get(b.getCurrentPawnIndex()));
+		ArrayList<GameView> views = new ArrayList<GameView>();
+		Game G = new Game(views,2,3,15);
+		System.out.println(G.getBoard().getTurnOrder().get(G.getBoard().getCurrentPawnIndex()));
 		//primary tests
 		
-		assertTrue("effets Non vide",b.getTurnOrder().get(b.getCurrentPawnIndex()).getEffect().isEmpty());
-		b.getTurnOrder().get(b.getCurrentPawnIndex()).addEffect(new PawnEffect(SpellEffect.Fire));
-		b.getTurnOrder().get(b.getCurrentPawnIndex()).addEffect(new PawnEffect(SpellEffect.Electricity));
-		assertTrue("Full life",b.getTurnOrder().get(b.getCurrentPawnIndex()).getHealthPoints()==Pawn.DEFAULT_HEALTH_POINTS);
-		assertTrue("Full Actions points",b.getTurnOrder().get(b.getCurrentPawnIndex()).getActionPoints()==Pawn.DEFAULT_ACTION_POINTS);
-		b.applyEffect();
-		assertTrue("??", b.getTurnOrder().get(b.getCurrentPawnIndex()).getEffect().size()==2);
-		assertFalse("Effet vide", b.getTurnOrder().get(b.getCurrentPawnIndex()).getEffect().isEmpty());
+		assertTrue("effets Non vide",G.getBoard().getTurnOrder().get(G.getBoard().getCurrentPawnIndex()).getEffect().isEmpty());
+		G.getBoard().getTurnOrder().get(G.getBoard().getCurrentPawnIndex()).addEffect(new PawnEffect(SpellEffect.Fire));
+		G.getBoard().getTurnOrder().get(G.getBoard().getCurrentPawnIndex()).addEffect(new PawnEffect(SpellEffect.Electricity));
+		assertTrue("Full life",G.getBoard().getTurnOrder().get(G.getBoard().getCurrentPawnIndex()).getHealthPoints()==Pawn.DEFAULT_HEALTH_POINTS);
+		assertTrue("Full Actions points",G.getBoard().getTurnOrder().get(G.getBoard().getCurrentPawnIndex()).getActionPoints()==Pawn.DEFAULT_ACTION_POINTS);
+		G.getBoard().applyEffect();
+		assertTrue("??", G.getBoard().getTurnOrder().get(G.getBoard().getCurrentPawnIndex()).getEffect().size()==2);
+		assertFalse("Effet vide", G.getBoard().getTurnOrder().get(G.getBoard().getCurrentPawnIndex()).getEffect().isEmpty());
 		//insert two test
-		assertFalse("Full Actions points", b.getTurnOrder().get(b.getCurrentPawnIndex()).getActionPoints()==Pawn.DEFAULT_ACTION_POINTS);
-		assertTrue("Actions points not decreased", b.getTurnOrder().get(b.getCurrentPawnIndex()).getActionPoints()==Pawn.DEFAULT_ACTION_POINTS-2);
-		b.applyEffect();
-		assertTrue("Nb points Ã©gaux", b.getTurnOrder().get(b.getCurrentPawnIndex()).getHealthPoints()==Pawn.DEFAULT_HEALTH_POINTS-10);
-		b.applyEffect();
-		assertTrue("HP != 85", b.getTurnOrder().get(b.getCurrentPawnIndex()).getHealthPoints()==Pawn.DEFAULT_HEALTH_POINTS-15);
+		assertFalse("Full Actions points", G.getBoard().getTurnOrder().get(G.getBoard().getCurrentPawnIndex()).getActionPoints()==Pawn.DEFAULT_ACTION_POINTS);
+		assertTrue("Actions points not decreased", G.getBoard().getTurnOrder().get(G.getBoard().getCurrentPawnIndex()).getActionPoints()==Pawn.DEFAULT_ACTION_POINTS-2);
+		G.getBoard().applyEffect();
+		assertTrue("Nb points Ã©gaux", G.getBoard().getTurnOrder().get(G.getBoard().getCurrentPawnIndex()).getHealthPoints()==Pawn.DEFAULT_HEALTH_POINTS-10);
+		G.getBoard().applyEffect();
+		assertTrue("HP != 85", G.getBoard().getTurnOrder().get(G.getBoard().getCurrentPawnIndex()).getHealthPoints()==Pawn.DEFAULT_HEALTH_POINTS-15);
 		
-		b.applyEffect();
-		assertTrue("HP nÃ©gatifs", b.getTurnOrder().get(b.getCurrentPawnIndex()).getHealthPoints()==Pawn.DEFAULT_HEALTH_POINTS-15);
+		G.getBoard().applyEffect();
+		assertTrue("HP nÃ©gatifs", G.getBoard().getTurnOrder().get(G.getBoard().getCurrentPawnIndex()).getHealthPoints()==Pawn.DEFAULT_HEALTH_POINTS-15);
 
 		
 		//Update element test
-		 P1 = new PlayerConsole();
-		G1 = new Game(P1);
-		b = new Board(new Local(G1), P1);
-		b.getTurnOrder().get(b.getCurrentPawnIndex()).addEffect(new PawnEffect(SpellEffect.Fire));
-		b.applyEffect();
-		assertFalse("Effect disapears", b.getTurnOrder().get(b.getCurrentPawnIndex()).getEffect().size()==0);
-		b.applyEffect();
-		assertFalse("Effect disapears", b.getTurnOrder().get(b.getCurrentPawnIndex()).getEffect().size()==0);
-		b.applyEffect();
+		 views = new ArrayList<GameView>();
+		G = new Game(views,2,3,15);
+		G.getBoard().getTurnOrder().get(G.getBoard().getCurrentPawnIndex()).addEffect(new PawnEffect(SpellEffect.Fire));
+		G.getBoard().applyEffect();
+		assertFalse("Effect disapears", G.getBoard().getTurnOrder().get(G.getBoard().getCurrentPawnIndex()).getEffect().size()==0);
+		G.getBoard().applyEffect();
+		assertFalse("Effect disapears", G.getBoard().getTurnOrder().get(G.getBoard().getCurrentPawnIndex()).getEffect().size()==0);
+		G.getBoard().applyEffect();
 
-		assertTrue("Effect do dis", b.getTurnOrder().get(b.getCurrentPawnIndex()).getEffect().size()==0);
+		assertTrue("Effect do dis", G.getBoard().getTurnOrder().get(G.getBoard().getCurrentPawnIndex()).getEffect().size()==0);
 
 		//ICE TEST
-		b.getTurnOrder().get(b.getCurrentPawnIndex()).addEffect(new PawnEffect(SpellEffect.Ice));
-		assertTrue("Base de point de vie mauvaise", b.getTurnOrder().get(b.getCurrentPawnIndex()).getMovePoints()==Pawn.DEFAULT_MOVE_POINTS);
+		G.getBoard().getTurnOrder().get(G.getBoard().getCurrentPawnIndex()).addEffect(new PawnEffect(SpellEffect.Ice));
+		assertTrue("Base de point de vie mauvaise", G.getBoard().getTurnOrder().get(G.getBoard().getCurrentPawnIndex()).getMovePoints()==Pawn.DEFAULT_MOVE_POINTS);
 		
-		b.applyEffect();
-		assertTrue("Base de point de vie mauvaise", b.getTurnOrder().get(b.getCurrentPawnIndex()).getMovePoints()==Pawn.DEFAULT_MOVE_POINTS-2);
-		b.applyEffect();
-		b.applyEffect();
-		b.applyEffect();
-		assertTrue("Base de point de vie mauvaise", b.getTurnOrder().get(b.getCurrentPawnIndex()).getMovePoints()==Pawn.DEFAULT_MOVE_POINTS-6);
+		G.getBoard().applyEffect();
+		assertTrue("Base de point de vie mauvaise", G.getBoard().getTurnOrder().get(G.getBoard().getCurrentPawnIndex()).getMovePoints()==Pawn.DEFAULT_MOVE_POINTS-2);
+		G.getBoard().applyEffect();
+		G.getBoard().applyEffect();
+		G.getBoard().applyEffect();
+		assertTrue("Base de point de vie mauvaise", G.getBoard().getTurnOrder().get(G.getBoard().getCurrentPawnIndex()).getMovePoints()==Pawn.DEFAULT_MOVE_POINTS-6);
 
-		assertTrue("Effets non vide", b.getTurnOrder().get(b.getCurrentPawnIndex()).getEffect().isEmpty());
-		b.getTurnOrder().get(b.getCurrentPawnIndex()).getEffect().clear();
-		b.getTurnOrder().get(b.getCurrentPawnIndex()).setActionPoints(Pawn.DEFAULT_ACTION_POINTS);;
-		b.getTurnOrder().get(b.getCurrentPawnIndex()).setMovePoints(Pawn.DEFAULT_MOVE_POINTS);
-		b.getTurnOrder().get(b.getCurrentPawnIndex()).addEffect(new PawnEffect(SpellEffect.Stone));
-		b.applyEffect();
+		assertTrue("Effets non vide", G.getBoard().getTurnOrder().get(G.getBoard().getCurrentPawnIndex()).getEffect().isEmpty());
+		G.getBoard().getTurnOrder().get(G.getBoard().getCurrentPawnIndex()).getEffect().clear();
+		G.getBoard().getTurnOrder().get(G.getBoard().getCurrentPawnIndex()).setActionPoints(Pawn.DEFAULT_ACTION_POINTS);;
+		G.getBoard().getTurnOrder().get(G.getBoard().getCurrentPawnIndex()).setMovePoints(Pawn.DEFAULT_MOVE_POINTS);
+		G.getBoard().getTurnOrder().get(G.getBoard().getCurrentPawnIndex()).addEffect(new PawnEffect(SpellEffect.Stone));
+		G.getBoard().applyEffect();
 
-		assertTrue("Echec stone action", b.getTurnOrder().get(b.getCurrentPawnIndex()).getActionPoints()==Pawn.DEFAULT_ACTION_POINTS-1);
-		assertTrue("Echec stone move", b.getTurnOrder().get(b.getCurrentPawnIndex()).getMovePoints()==Pawn.DEFAULT_MOVE_POINTS-1);
-		b.applyEffect();
-		b.applyEffect();
-		b.applyEffect();
-		assertTrue("Echec stone action", b.getTurnOrder().get(b.getCurrentPawnIndex()).getActionPoints()==Pawn.DEFAULT_ACTION_POINTS-3);
-		assertTrue("Echec stone move", b.getTurnOrder().get(b.getCurrentPawnIndex()).getMovePoints()==Pawn.DEFAULT_MOVE_POINTS-3);
-		assertTrue("Non vide", b.getTurnOrder().get(b.getCurrentPawnIndex()).getEffect().isEmpty());
+		assertTrue("Echec stone action", G.getBoard().getTurnOrder().get(G.getBoard().getCurrentPawnIndex()).getActionPoints()==Pawn.DEFAULT_ACTION_POINTS-1);
+		assertTrue("Echec stone move", G.getBoard().getTurnOrder().get(G.getBoard().getCurrentPawnIndex()).getMovePoints()==Pawn.DEFAULT_MOVE_POINTS-1);
+		G.getBoard().applyEffect();
+		G.getBoard().applyEffect();
+		G.getBoard().applyEffect();
+		assertTrue("Echec stone action", G.getBoard().getTurnOrder().get(G.getBoard().getCurrentPawnIndex()).getActionPoints()==Pawn.DEFAULT_ACTION_POINTS-3);
+		assertTrue("Echec stone move", G.getBoard().getTurnOrder().get(G.getBoard().getCurrentPawnIndex()).getMovePoints()==Pawn.DEFAULT_MOVE_POINTS-3);
+		assertTrue("Non vide", G.getBoard().getTurnOrder().get(G.getBoard().getCurrentPawnIndex()).getEffect().isEmpty());
 		
 	}
 	
 	@Test
 	void testCheckSpell()
 	{
-		Game.maxPlayer=2;
 		PlayerConsole P1 = new PlayerConsole();
-		Game G1 = new Game(P1);
-		Board b = new Board(new Local(G1), P1);
+		ArrayList<GameView> views = new ArrayList<GameView>();
+		Game G = new Game(views,2,3,15);
 		Coordinate coord = new Coordinate(1,1);
 		SpellPage page1 = new SpellPage("Namepage1");
 		
@@ -140,20 +136,20 @@ class BoardTest
 		SpellEffect anEffect = SpellEffect.Fire;
 		page1.getSpell(0).setSpellEffect(anEffect);
 		coord = new Coordinate(1,2);
-		b.getTurnOrder().get(b.getCurrentPawnIndex()).setSpellPage(page1);
-		b.checkSpell(1, coord);
-		assertFalse("getion de portée",b.getTurnOrder().get(b.getCurrentPawnIndex()).getSpellPage().getSpell(1).getCurrentCooldown()==b.getTurnOrder().get(b.getCurrentPawnIndex()).getSpellPage().getSpell(1).getDefaultCooldown());
+		G.getBoard().getTurnOrder().get(G.getBoard().getCurrentPawnIndex()).setSpellPage(page1);
+		G.getBoard().checkSpell(coord);
+		assertFalse("getion de portée",G.getBoard().getTurnOrder().get(G.getBoard().getCurrentPawnIndex()).getSpellPage().getSpell(1).getCurrentCooldown()==G.getBoard().getTurnOrder().get(G.getBoard().getCurrentPawnIndex()).getSpellPage().getSpell(1).getDefaultCooldown());
 		
-		Coordinate c1 = new Coordinate(b.getTurnOrder().get(b.getCurrentPawnIndex()).getPos().getCoordX()+1,b.getTurnOrder().get(b.getCurrentPawnIndex()).getPos().getCoordY());
-		b.checkSpell(0, c1);
-		assertTrue("gestion range",b.getTurnOrder().get(b.getCurrentPawnIndex()).getSpellPage().getSpell(0).getCurrentCooldown()==b.getTurnOrder().get(b.getCurrentPawnIndex()).getSpellPage().getSpell(0).getDefaultCooldown());
+		Coordinate c1 = new Coordinate(G.getBoard().getTurnOrder().get(G.getBoard().getCurrentPawnIndex()).getPos().getCoordX()+1,G.getBoard().getTurnOrder().get(G.getBoard().getCurrentPawnIndex()).getPos().getCoordY());
+		G.getBoard().checkSpell(c1);
+		assertTrue("gestion range",G.getBoard().getTurnOrder().get(G.getBoard().getCurrentPawnIndex()).getSpellPage().getSpell(0).getCurrentCooldown()==G.getBoard().getTurnOrder().get(G.getBoard().getCurrentPawnIndex()).getSpellPage().getSpell(0).getDefaultCooldown());
 		
-		b.checkSpell(0, c1);
-		assertTrue("gestion range",b.getTurnOrder().get(b.getCurrentPawnIndex()).getSpellPage().getSpell(0).getCurrentCooldown()==b.getTurnOrder().get(b.getCurrentPawnIndex()).getSpellPage().getSpell(0).getDefaultCooldown());
-		b.getTurnOrder().get(b.getCurrentPawnIndex()).setActionPoints(0);
-		b.checkSpell(1, c1);
-		assertTrue("gestion points action",b.getTurnOrder().get(b.getCurrentPawnIndex()).getActionPoints()==0);
-		assertTrue("gestion action-cooldown",b.getTurnOrder().get(b.getCurrentPawnIndex()).getSpellPage().getSpell(1).getCurrentCooldown()==0);
+		G.getBoard().checkSpell(c1);
+		assertTrue("gestion range",G.getBoard().getTurnOrder().get(G.getBoard().getCurrentPawnIndex()).getSpellPage().getSpell(0).getCurrentCooldown()==G.getBoard().getTurnOrder().get(G.getBoard().getCurrentPawnIndex()).getSpellPage().getSpell(0).getDefaultCooldown());
+		G.getBoard().getTurnOrder().get(G.getBoard().getCurrentPawnIndex()).setActionPoints(0);
+		G.getBoard().checkSpell(c1);
+		assertTrue("gestion points action",G.getBoard().getTurnOrder().get(G.getBoard().getCurrentPawnIndex()).getActionPoints()==0);
+		assertTrue("gestion action-cooldown",G.getBoard().getTurnOrder().get(G.getBoard().getCurrentPawnIndex()).getSpellPage().getSpell(1).getCurrentCooldown()==0);
 		
 	
 	}
@@ -164,54 +160,49 @@ class BoardTest
 	@Test
 	void testNextPawn()
 	{
-		Game.maxPlayer=2;
-		PlayerConsole P1 = new PlayerConsole();
-		Game G1 = new Game(P1);
-		Board b = new Board(new Local(G1), P1);
-		Pawn previousPawn = b.getTurnOrder().get(b.getCurrentPawnIndex());
-		b.nextPawn();
-		assertFalse("Suivant de P1 = p1", previousPawn == b.getTurnOrder().get(b.getCurrentPawnIndex()));
+		ArrayList<GameView> views = new ArrayList<GameView>();
+		Game G = new Game(views,2,3,15);
+		Pawn previousPawn = G.getBoard().getTurnOrder().get(G.getBoard().getCurrentPawnIndex());
+		G.getBoard().nextPawn();
+		assertFalse("Suivant de P1 = p1", previousPawn == G.getBoard().getTurnOrder().get(G.getBoard().getCurrentPawnIndex()));
 		//assertFalse("P1 != P1",  );
 		
-		assertTrue("Allo", 1==b.getTurnOrder().indexOf(b.getTurnOrder().get(b.getCurrentPawnIndex())));
-		b.nextPawn();
-		b.nextPawn();
-		b.nextPawn();
-		b.nextPawn();
-		b.nextPawn();
+		assertTrue("Allo", 1==G.getBoard().getTurnOrder().indexOf(G.getBoard().getTurnOrder().get(G.getBoard().getCurrentPawnIndex())));
+		G.getBoard().nextPawn();
+		G.getBoard().nextPawn();
+		G.getBoard().nextPawn();
+		G.getBoard().nextPawn();
+		G.getBoard().nextPawn();
 		
 		
-		assertTrue("Allo", 0==b.getTurnOrder().indexOf(b.getTurnOrder().get(b.getCurrentPawnIndex())));
-		//Pawn pLast = b.getTurnOrder().get(b.getTurnOrder().size()-1);
+		assertTrue("Allo", 0==G.getBoard().getTurnOrder().indexOf(G.getBoard().getTurnOrder().get(G.getBoard().getCurrentPawnIndex())));
+		//Pawn pLast = G.getBoard().getTurnOrder().get(G.getBoard().getTurnOrder().size()-1);
 	}
 	
 	@Test
 	void testRemoveDead()
 	{
-		Game.maxPlayer=2;
-		PlayerConsole P1 = new PlayerConsole();
-		Game G1 = new Game(P1);
-		Board b = new Board(new Local(G1), P1);
-		//(b.getTurnOrder().get(b.getCurrentPawnIndex()).setHealthPoints(10);
-		System.out.println(b.getTurnOrder().size());
-		assertTrue("Turn order correct", b.getTurnOrder().size()==6);
-		b.getTurnOrder().get(0).setHealthPoints(0);
-		b.getTurnOrder().get(1).setHealthPoints(0);
-		b.getTurnOrder().get(2).setHealthPoints(0);
-		b.getTurnOrder().get(3).setHealthPoints(0);
-		b.getTurnOrder().get(4).setHealthPoints(0);
-		b.getTurnOrder().get(5).setHealthPoints(0);
-		b.removeDeads();
+		ArrayList<GameView> views = new ArrayList<GameView>();
+		Game G = new Game(views,2,3,15);
+		//(G.getBoard().getTurnOrder().get(G.getBoard().getCurrentPawnIndex()).setHealthPoints(10);
+		System.out.println(G.getBoard().getTurnOrder().size());
+		assertTrue("Turn order correct", G.getBoard().getTurnOrder().size()==6);
+		G.getBoard().getTurnOrder().get(0).setHealthPoints(0);
+		G.getBoard().getTurnOrder().get(1).setHealthPoints(0);
+		G.getBoard().getTurnOrder().get(2).setHealthPoints(0);
+		G.getBoard().getTurnOrder().get(3).setHealthPoints(0);
+		G.getBoard().getTurnOrder().get(4).setHealthPoints(0);
+		G.getBoard().getTurnOrder().get(5).setHealthPoints(0);
+		G.getBoard().removeDeads();
 		
 		
-		//System.out.println(b.getTurnOrder().size());
-		assertTrue("Turn order non vide", b.getTurnOrder().isEmpty());
+		//System.out.println(G.getBoard().getTurnOrder().size());
+		assertTrue("Turn order non vide", G.getBoard().getTurnOrder().isEmpty());
 		
-		P1 = new PlayerConsole();
-		G1 = new Game(P1);
-		b = new Board(new Local(G1), P1);
-		b.getTurnOrder().get(b.getCurrentPawnIndex()).setHealthPoints(10);
-		assertFalse("Turn order non vide", b.getTurnOrder().isEmpty());
+		views = new ArrayList<GameView>();
+		G = new Game(views,2,3,15);
+		G.getBoard().getTurnOrder().get(G.getBoard().getCurrentPawnIndex()).setHealthPoints(10);
+		assertFalse("Turn order non vide", G.getBoard().getTurnOrder().isEmpty());
 
 
 
@@ -219,11 +210,9 @@ class BoardTest
 	
 	@Test
 	void testAreAllPageSet() throws SpellIndexException {
-		Game.maxPlayer=2;
-		PlayerConsole P1 = new PlayerConsole();
-		Game G1 = new Game(P1);
-		Board b = new Board(new Local(G1), P1);
-		assertFalse("pas de page de sort inisialisé",b.areAllPageSet());
+		ArrayList<GameView> views = new ArrayList<GameView>();
+		Game G = new Game(views,2,3,15);
+		assertFalse("pas de page de sort inisialisé",G.getBoard().areAllPageSet());
 		SpellPage p1 = new SpellPage("page1");
 		Spell s1 = new Spell();
 		Spell s2 = new Spell();
@@ -239,25 +228,23 @@ class BoardTest
 		p1.setSpell(1,s2);
 		p1.setSpell(2,s3);
 		
-		b.getTurnOrder().get(0).setSpellPage(p1);
-		b.getTurnOrder().get(1).setSpellPage(p1);
-		b.getTurnOrder().get(2).setSpellPage(p1);
-		assertFalse("pas toutes les pages de sort inisialisé",b.areAllPageSet());
-		b.getTurnOrder().get(3).setSpellPage(p1);
-		b.getTurnOrder().get(4).setSpellPage(p1);
-		b.getTurnOrder().get(5).setSpellPage(p1);
-		assertTrue("toutes les pages de sort inisialisé",b.areAllPageSet());
+		G.getBoard().getTurnOrder().get(0).setSpellPage(p1);
+		G.getBoard().getTurnOrder().get(1).setSpellPage(p1);
+		G.getBoard().getTurnOrder().get(2).setSpellPage(p1);
+		assertFalse("pas toutes les pages de sort inisialisé",G.getBoard().areAllPageSet());
+		G.getBoard().getTurnOrder().get(3).setSpellPage(p1);
+		G.getBoard().getTurnOrder().get(4).setSpellPage(p1);
+		G.getBoard().getTurnOrder().get(5).setSpellPage(p1);
+		assertTrue("toutes les pages de sort inisialisé",G.getBoard().areAllPageSet());
 	}
 	
 	@Test
 	void testBoard() {
-		Game.maxPlayer=2;
-		PlayerConsole P1 = new PlayerConsole();
-		Game G1 = new Game(P1);
-		Board b = new Board(new Local(G1), P1);
-		assertTrue("page de sort non vide",b.getTurnOrder().get(0).getSpellPage()==null);
-		assertTrue("nombre de pion",b.getTurnOrder().size()==6);
-		assertTrue("valeur nbPawn",b.getNbPawn()==3);
+		ArrayList<GameView> views = new ArrayList<GameView>();
+		Game G = new Game(views,2,3,15);
+		assertTrue("page de sort non vide",G.getBoard().getTurnOrder().get(0).getSpellPage()==null);
+		assertTrue("nombre de pion",G.getBoard().getTurnOrder().size()==6);
+		assertTrue("valeur nbPawn",G.getBoard().getNbPawn()==3);
 	}
 	
 }

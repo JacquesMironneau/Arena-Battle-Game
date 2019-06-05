@@ -43,10 +43,16 @@ public class CheapScanner {
 	 * @throws NumberFormatException
 	 * @throws IOException
 	 */
-	public int getInt() throws NumberFormatException, IOException{
+	public int getInt() throws IOException{
 		int result = 0;
-			result = Integer.valueOf(this.in.readLine());
-		return result;
+		try {
+			result = Integer.parseInt(this.in.readLine());
+			return result;
+		}
+		catch(NumberFormatException e)
+		{
+			return -1;
+		}
 	}
 	
 	/**

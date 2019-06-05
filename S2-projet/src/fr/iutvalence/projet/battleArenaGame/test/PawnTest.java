@@ -31,8 +31,8 @@ class PawnTest
 		SpellEffect anEffect = SpellEffect.Fire;
 		page1.getSpell(0).setSpellEffect(anEffect);
 		Coordinate coord = new Coordinate(1,2);
-		Pawn pawn1 = new Pawn(new TeamId(0),coord,"lol");
-		assertEquals(true,pawn1.getTeamId().getId() == 0);
+		Pawn pawn1 = new Pawn(0,coord,"lol");
+		assertEquals(true,pawn1.getTeamId() == 0);
 	}
 	
 
@@ -55,7 +55,7 @@ class PawnTest
 		page1.getSpell(0).setSpellEffect(anEffect);
 		
 		Coordinate coord = new Coordinate(1,2);
-		Pawn pawn1 = new Pawn(new TeamId(0),coord,"lol");
+		Pawn pawn1 = new Pawn(0,coord,"lol");
 		
 		PawnEffect eff = new PawnEffect(anEffect);
 		ArrayList<PawnEffect> theEffects = new ArrayList<PawnEffect>();
@@ -87,7 +87,7 @@ class PawnTest
 		page1.getSpell(0).setSpellEffect(anEffect);
 		Coordinate coord = new Coordinate(1,2);
 		
-		Pawn pawn1 = new Pawn(new TeamId(0),coord,"lol");
+		Pawn pawn1 = new Pawn(0,coord,"lol");
 		
 		PawnEffect eff = new PawnEffect(anEffect);
 		
@@ -119,7 +119,7 @@ class PawnTest
 		
 		page1.getSpell(0).setSpellEffect(anEffect);
 		Coordinate coord = new Coordinate(1,2);
-		Pawn pawn1 = new Pawn(new TeamId(0),coord,"lol");
+		Pawn pawn1 = new Pawn(0,coord,"lol");
 		PawnEffect eff = new PawnEffect(anEffect);
 		pawn1.addEffect(eff);
 		pawn1.updateEffect();
