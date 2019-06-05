@@ -4,6 +4,7 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.Toolkit;
 import java.util.ArrayList;
@@ -37,19 +38,21 @@ public class BoardIHM extends JPanel{
 	listPawn.add(new Pawn(new TeamId(1),new Coordinate(1,5),"fgrhzfs"));
 	listPawn.add(new Pawn(new TeamId(1),new Coordinate(4,1),"aahahahah"));
 	for(int i=0;i<boardSize;i++)
-		for(int k=0;k<boardSize;k++)
+		for(int k=0;k<boardSize;k++) {
+			board[i][k] = Tile.FREE;
 			//TODO init listPawn
-			for(Pawn p : listPawn)
+			for(Pawn p : listPawn) {
 				if (p.getPos().getCoordX()==i && p.getPos().getCoordY()==k)
-					board[i][k] = Tile.PAWN;
-				else
-					board[i][k] = Tile.FREE;
-	}
+					board[i][k] = Tile.PAWN;							
+			}
+		}
+	}		
 
 	public void drawTile(Graphics g,Tile t, int x,int y) {
-		 int mx = t.ordinal()%10;
-	     int my = t.ordinal()/10;
-	     g.drawImage(tileset, x, y, x+ts, y+ts,mx*ts, my*ts,  mx*ts+ts, my*ts+ts, this);
+		int mx = t.ordinal()%10;
+        int my = t.ordinal()/10;
+		g.drawImage(tileset, x, y, x+ts, y+ts,mx*ts, my*ts,  mx*ts+ts, my*ts+ts, this);
+//		g.drawImage(tileset, x, y, this);
 	}
 	
 	 protected void paintComponent(Graphics g) {
@@ -57,20 +60,20 @@ public class BoardIHM extends JPanel{
 	        g.fillRect(0, 0, getWidth(), getHeight());
 	        for(int i=0;i<boardSize;i++)
 	    		for(int k=0;k<boardSize;k++)
-	                drawTile(g, board[i][k],i*ts ,k*ts);
+	                drawTile(g, board[k][i],i*ts ,k*ts);
 	    }
 
+				
+	 
 	 public static void main(String[] args) {
 		JFrame jp1 = new JFrame();
 		BoardIHM b = new BoardIHM();
 		jp1.getContentPane().add(b, BorderLayout.CENTER);
         jp1.setSize(new Dimension(500,500));
-        b.createBoard();
-		b.paintComponent(b.getGraphics());
         jp1.setVisible(true);
-
-	 }
-	 
+		b.paintComponent(b.getGraphics());
+		jp1.repaint();
+	 }	 
 }
 
 
