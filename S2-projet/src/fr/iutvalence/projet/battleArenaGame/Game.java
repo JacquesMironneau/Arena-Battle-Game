@@ -29,7 +29,7 @@ import fr.iutvalence.projet.battleArenaGame.view.Player;
  *
  */
 
-public class Game
+public class Game implements GameController
 {
 	
 	
@@ -70,6 +70,9 @@ public class Game
 	 * Represents how the Game is sending and receiving data (With others computers or with itself)
 	 */
 	private Communication communication;
+	
+	
+	private GameView myView; 
 	/**
 	 * Represents if a user the local player is playing now.
 	 * It is used to manage when a player can play.
@@ -439,6 +442,22 @@ public  synchronized void setNbPlayer(int nbPlayers)
 {
 	this.maxPlayer = nbPlayers;
 }
+
+
+@Override
+public void editTurnOrder(ArrayList<Pawn> newTurnOrder)
+{
+	this.board.setTurnOrder(newTurnOrder);
+}
+
+
+@Override
+public void editCurrentPawnIndex(int newCurrentPawnIndex)
+{
+	this.board.setCurrentPawnIndex(newCurrentPawnIndex);
+}
+
+
 
 
 
