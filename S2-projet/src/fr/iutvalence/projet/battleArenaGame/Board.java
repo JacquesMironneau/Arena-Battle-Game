@@ -67,7 +67,7 @@ public class Board
 	{
 		Movement pMovement = new Movement(this.turnOrder.get(currentPawnIndex).getPos(),pDest);
 		//If the pawn don't have enough move points to move
-		if(this.turnOrder.get(currentPawnIndex).getMovePoints() < pMovement.calculateDistance())
+		if(this.turnOrder.get(currentPawnIndex).getMovePoints() < pMovement.getDistance())
 			return StatusMessages.MOVE_OUT_OF_RANGE;
 		
 		//if the destination isn't in board limits
