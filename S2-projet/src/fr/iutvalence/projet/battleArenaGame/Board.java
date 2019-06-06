@@ -261,7 +261,7 @@ public class Board implements Serializable{
 		Random rand = new Random();
 		for (int i=1;i<= this.nbPawn;i++)
 			{
-			for(int k=1;k<=maxPlayer;k++)
+			for(int k=0;k<maxPlayer;k++)
 			{
 				do
 				{

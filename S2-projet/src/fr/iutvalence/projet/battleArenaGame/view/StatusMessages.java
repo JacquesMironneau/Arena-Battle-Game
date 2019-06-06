@@ -18,6 +18,8 @@ public enum StatusMessages
 	SPELL_TARGET_OUT_OF_RANGE("Your aiming too far !"),
 	SPELL_SENT("Spell successfully sent"),
 	
+	PAGE_SET("The spell page has been set"),
+	
 	SYSTEM_ERROR("Error system");
 	
 	private String statusMessage;

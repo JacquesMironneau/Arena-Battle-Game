@@ -399,8 +399,12 @@ public void setPageRequest(int currentPlayerIndex,int pageToSet)
 {
 	for(Pawn p : this.board.getTurnOrder())
 		if(p.getTeamId()==currentPlayerIndex && p.getSpellPage() == null)
+			{
 			p.setSpellPage(new SpellPage(this.getSpellPages().get(pageToSet)));
-	
+			this.players.get(currentPlayerIndex).displayStatus(StatusMessages.PAGE_SET);
+			break;
+			}
+
 }
 
 

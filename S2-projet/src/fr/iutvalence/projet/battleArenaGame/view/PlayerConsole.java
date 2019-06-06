@@ -311,7 +311,7 @@ public class PlayerConsole implements GameView{
 				str+= "\nCurrent effects :" + myBoard.getTurnOrder().get(myBoard.getCurrentPawnIndex()).getEffect().toString()+"\n";
 				
 				
-					for(int teamIndex = 1; teamIndex <= nbPlayer; teamIndex++)
+					for(int teamIndex = 0; teamIndex < nbPlayer; teamIndex++)
 					{
 						str += "Team" + teamIndex +":\n";
 						for(Pawn p1 : myBoard.getTurnOrder())
