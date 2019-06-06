@@ -1,6 +1,9 @@
 package fr.iutvalence.projet.battleArenaGame;
 /**
- * Possibles end at the end of a turn
+ * All possible states for a game
+ * Running if the game is not ended
+ * Draw if the result of the party is an equality
+ * Victory if a player as won
  * @author charvevi
  *
  */

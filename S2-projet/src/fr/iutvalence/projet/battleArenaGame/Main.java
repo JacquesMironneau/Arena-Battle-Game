@@ -6,6 +6,9 @@ import fr.iutvalence.projet.battleArenaGame.view.StatusMessages;
 import fr.iutvalence.projet.battleArenaGame.view.GameView;
 import fr.iutvalence.projet.battleArenaGame.view.PlayerConsole;
 
+/**
+ * Launcher of the game
+ */
 public class Main
 {
 	public static void main (String[] args)
@@ -13,13 +16,14 @@ public class Main
 		launch2();
 	}
 	
-
+	/**
+	 * Launch the selection menu to choose between the type of game
+	 */
 	public static void launch()
 	{	
 		//TODO The IHM which choose between those choices won't be a GameView but an other thing which set parameters for the game
 		//Because of that, we directly launch a local game.
-		//TODO fix that 
-		GameView playerIhm = new PlayerConsole()
+		GameView playerIhm = new PlayerConsole();
 		playerIhm.displayMenu();
 		switch(playerIhm.askChoiceMenu())
 		{		
