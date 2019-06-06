@@ -1,22 +1,21 @@
 package fr.iutvalence.projet.battleArenaGame.spell;
 
-import java.io.Serializable;
 
 /**
  * 
- * @author jules chapelle
- * Defines an effect for a spell.
- * An effect change the stats of a pawn at the start of the turn
- * An effect is initalized with :
+ * Defines every possibles effects for a spell.
+ * An effect change the statistics of a pawn at the start of the turn
+ * An effect is initialized with :
  * 		Name("Element/Name","effect",duration [in turns]);
  */
-public enum SpellEffect implements Effect, Serializable{
+public enum SpellEffect implements Effect {
 		
 	/**
 	 * first part is element 
 	 * second is effect
 	 * in third duration of the effect (in number of turn).
 	 */
+	
 	Fire("Fire","Ignite",3),
 	Ice("Ice","Slow",3),
 	Stone("Stone","Stun",3),
@@ -25,12 +24,12 @@ public enum SpellEffect implements Effect, Serializable{
 	Darkness("Darkness","Weakness",3);
 	
 	/**
-	 * Name of the element
+	 * Name of the element (an element can be Fire, Ice ...)
 	 */
 	private String elementName;
 	
 	/**
-	 * Name of the effect
+	 * Name of the effect (might be Ignite ,Stun...)
 	 */
 	private String effectName;
 	
@@ -47,33 +46,25 @@ public enum SpellEffect implements Effect, Serializable{
 	 */
 	SpellEffect(String pElementName,String pEffectName, int pEffectDuration)
 	{
-		this.elementName=pElementName;
-		this.effectName=pEffectName;
-		this.effectDuration=pEffectDuration;
+		this.elementName = pElementName;
+		this.effectName = pEffectName;
+		this.effectDuration = pEffectDuration;
 	}
 	
-	/**
-	 * Getter for the element name
-	 * @return elementName the element name
+	/*
+	 * Getters for spellEffect
 	 */
 	public String getElementName()
 	{
 		return this.elementName;
 	}
 	
-	/**
-	 * Getter for the effect name
-	 * @return effectName the effect name
-	 */
+
 	public String getEffectName()
 	{
 		return this.effectName;
 	}
 	
-	/**
-	 * Getter for the effect duration
-	 * @return effectDuration the effect duration
-	 */
 	public int getEffectDuration()
 	{
 		return this.effectDuration;

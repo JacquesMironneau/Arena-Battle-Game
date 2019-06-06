@@ -1,32 +1,24 @@
-  package fr.iutvalence.projet.battleArenaGame.move;
-import java.io.Serializable;
-import java.lang.Math;
+ package fr.iutvalence.projet.battleArenaGame.move;
 
 /**
- * Represents one move of a pawn, with a distance, origin coordinates and destination coordinates.
- * Might also be a movement of a spell (the ground traveled )
- * @author durantho
+ * Represents the cells traveled between two coordinates
+ * Used for move of pawn and move of spells
  */
 
-public class Movement implements Serializable{
+public class Movement {
 	
-	/**
-	 * serialVersionUID is an hash code, which allow the JVM to check if attributes, names and type are the same for the object
-	 */
-	private static final long serialVersionUID = 1458443588635931997L;
-
 	/**
 	 * distance between origin and destination
 	 */
 	private int distance;
 	
 	/**
-	 * coordinate of pawns
+	 * first and origin coordinate
 	 */
 	private Coordinate originCoordinate;
 	
 	/**
-	 * destination of pawns
+	 * destination and second coordinate
 	 */
 	private Coordinate destCoordinate;
 	
@@ -46,36 +38,30 @@ public class Movement implements Serializable{
 	
 
 	/**
-	 * @return the distance of the move in number of cells.
+	 * Calculates the distance of the move in number of cells
+	 * @return the distance between origin and destination
+	 */
+	private int calculateDistance() 
+	{
+		return Math.abs(this.originCoordinate.getCoordX() - this.destCoordinate.getCoordX())+ Math.abs(this.originCoordinate.getCoordY()-this.destCoordinate.getCoordY());
+	}
+	
+	/*
+	 * Getters for Movement
 	 */
 	public int getDistance()
 	{
 		return this.distance;
 	}
 	
-	/**
-	 * getter for originDestination
-	 */
 	public Coordinate getOriginCoordinate()
 	{
 		return this.originCoordinate;
 	}
 	
-	/**
-	 * getter for DestCoordinate
-	 */
 	public Coordinate getDestCordinate()
 	{
 		return this.destCoordinate;
-	}
-	
-	/**
-	 * Calculates the distance of the move in number of cells
-	 * @return the distance between origin and destination
-	 */
-	public int calculateDistance() 
-	{
-		return Math.abs(this.originCoordinate.getCoordX() - this.destCoordinate.getCoordX())+ Math.abs(this.originCoordinate.getCoordY()-this.destCoordinate.getCoordY());
 	}
 	
 	/**

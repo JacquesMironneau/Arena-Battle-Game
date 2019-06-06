@@ -5,8 +5,6 @@ package fr.iutvalence.projet.battleArenaGame.spell;
  * Interface that represents available effects
  * Has an element name, an effect name and a default duration
  * Used to define PawnEffect and SpellEffect
- * @author durantho
- *
  */
 public interface Effect {
 	/**

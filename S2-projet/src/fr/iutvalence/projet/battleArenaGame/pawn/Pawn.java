@@ -1,6 +1,5 @@
 package fr.iutvalence.projet.battleArenaGame.pawn;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 
 import fr.iutvalence.projet.battleArenaGame.move.Coordinate;
@@ -18,16 +17,11 @@ import fr.iutvalence.projet.battleArenaGame.spell.SpellPage;
  * A pawn and belong to a team (each player).
  * each player have 3 pawns.
  *
- * @author charvevi
  */
-public class Pawn implements Serializable
-{
-	/**
-	 * serialVersionUID is an hash code, which allow the JVM to check if attributes, names and type are the same for the object
-	 */
-	private static final long serialVersionUID = -3994360615192173337L;
 
-	//TODO Complete the default values for HP, PM and PA
+public class Pawn
+{
+
 	/**
 	 * Default amount of health for a Pawn
 	 */
@@ -85,8 +79,9 @@ public class Pawn implements Serializable
 	private ArrayList<PawnEffect> activeEffects;
 	
 	/**
-	 * Constructor of Pawn
-	 * @param pteam : The Pawn's Team
+	 * Constructor of Pawn, set his points to defaults values
+	 * 
+	 * @param pteam : The Pawn's Team id
 	 * @param pBaseCoordinate : The Pawn's coordinate when he is created
 	 * @param pSpellPage : The Pawn's spell page, selected by the player
 	 */
@@ -95,106 +90,13 @@ public class Pawn implements Serializable
 		this.healthPoints = Pawn.DEFAULT_HEALTH_POINTS;
 		this.actionPoints = Pawn.DEFAULT_ACTION_POINTS;
 		this.movePoints = Pawn.DEFAULT_MOVE_POINTS;
+		
 		this.currentCoordinate = pBaseCoordinate;
 		this.activeEffects= new ArrayList<PawnEffect>();
 		this.teamId = pTeamId;
 		this.name = pName;
 	}
 	
-	/**
-	 * Setter for currentCoordinate
-	 * @param pDestination : the destination of the Pawn
-	 */
-	public void setPos(Coordinate pDestination)
-	{
-		this.currentCoordinate = pDestination;
-	}
-	
-	/**
-	 * Getter for currentCoordinate
-	 * @return the currentCoordinate of the Pawn
-	 */
-	public Coordinate getPos()
-	{
-		return this.currentCoordinate;
-	}
-	
-	/**
-	 * Setter for actionPoints
-	 * @param pAP : amount of actionPoints to set
-	 */
-	public void setActionPoints(int pAP)
-	{
-		this.actionPoints=pAP;
-	}
-	
-	/**
-	 * Getter for actionPoints
-	 * @return the current amount of actionPoints
-	 */
-	public int getActionPoints()
-	{
-		return this.actionPoints;
-	}
-	
-	/**
-	 * Setter for movePoints
-	 * @param pMP the amount of movePoints to set
-	 */
-	public void setMovePoints(int pMP)
-	{
-		this.movePoints=pMP;
-	}
-	
-	
-	/**
-	 * Getter for movePoints
-	 * @return the amount of movePoints
-	 */
-	public int getMovePoints()
-	{
-		return this.movePoints;
-	}
-	
-	/**
-	 * Setter for HealthPoints
-	 * @param pHP the amount of healthPoints to set
-	 */
-	public void setHealthPoints(int pHP)
-	{	
-		this.healthPoints = pHP;
-		if(this.healthPoints < 0) 
-			this.healthPoints = 0;
-		
-	}
-	
-	/**
-	 * Getter for healthPoints
-	 * @return the amount of healthPoints
-	 */
-	public int getHealthPoints()
-	{
-		return this.healthPoints;
-	}
-	
-	
-	/**
-	 * Add an effect to the current list of Effect of this pawn
-	 * @param pEffect the effect to add
-	 */
-	public void addEffect(PawnEffect pEffect)
-	{
-		this.activeEffects.add(pEffect);
-	}
-	
-	/**
-	 * Getter for the list of the pawn's effect
-	 * @return an HashSet of PawnEffect
-	 */
-	public ArrayList<PawnEffect> getEffect()
-	{
-		return this.activeEffects;
-	}
 	
 	/**
 	 * Reduce the counter of all effect on this pawn by 1
@@ -226,9 +128,99 @@ public class Pawn implements Serializable
 		this.actionPoints = DEFAULT_ACTION_POINTS;
 	}
 	
+	 /**
+	 *  Add an effect to the current list of Effect of this pawn
+	 * @param pEffect the effect to add
+	 */
+	public void addEffect(PawnEffect pEffect)
+	{
+		this.activeEffects.add(pEffect);
+	}
+	
+	/**
+	 * @return if the pawn own a page Spell
+	 */
+	public boolean haveSpellPage()
+	{
+		return this.mySpellPage != null;
+	}
 	
 	
+	
+	/*
+	 * Getters
+	 */
 
+	public Coordinate getPos()
+	{
+		return this.currentCoordinate;
+	}
+
+	public int getHealthPoints()
+	{
+		return this.healthPoints;
+	}
+	
+	public int getMovePoints()
+	{
+		return this.movePoints;
+	}
+	
+	public ArrayList<PawnEffect> getEffect()
+	{
+		return this.activeEffects;
+	}
+
+	public SpellPage getSpellPage()
+	{
+		return this.mySpellPage;
+	}
+
+	public String getName()
+	{
+		return this.name;
+	}
+
+	public int getTeamId()
+	{
+		return this.teamId;
+	}
+	
+	
+	
+	/*
+	 * Setters
+	 */
+
+	public void setPos(Coordinate pDestination)
+	{
+		this.currentCoordinate = pDestination;
+	}
+	
+	public void setActionPoints(int pAP)
+	{
+		this.actionPoints=pAP;
+	}
+
+	public void setMovePoints(int pMP)
+	{
+		this.movePoints=pMP;
+	}
+	
+	public void setHealthPoints(int pHP)
+	{	
+		this.healthPoints = pHP;
+		if(this.healthPoints < 0) 
+			this.healthPoints = 0;
+		
+	}
+	
+	public void setSpellPage(SpellPage pPage)
+	{
+		this.mySpellPage=pPage;
+	}
+	
+	
 
 	@Override
 	public int hashCode() {
@@ -285,48 +277,5 @@ public class Pawn implements Serializable
 		return true;
 	}
 
-	/**
-	 * Setter for mySpellPage
-	 * @param pPage the page to set
-	 */
-	public void setSpellPage(SpellPage pPage)
-	{
-		this.mySpellPage=pPage;
-	}
-	
-	/**
-	 * Getter for the pawn spellPage
-	 * @return the pawn SpellPage
-	 */
-	public SpellPage getSpellPage()
-	{
-		return this.mySpellPage;
-	}
-	
-	/**
-	 * getter for Name
-	 * @return
-	 */
-	public String getName()
-	{
-		return this.name;
-	}
-	
-	/**
-	 * getter for TeamId
-	 */
-	public int getTeamId()
-	{
-		return this.teamId;
-	}
-	
-	/**
-	 * Return true if the pawn have a spellPage
-	 * @return
-	 */
-	public boolean haveSpellPage()
-	{
-		return this.mySpellPage != null;
-	}
 }
 

@@ -3,45 +3,51 @@ package fr.iutvalence.projet.battleArenaGame.view;
 import java.util.ArrayList;
 
 import fr.iutvalence.projet.battleArenaGame.Board;
-import fr.iutvalence.projet.battleArenaGame.move.Coordinate;
 import fr.iutvalence.projet.battleArenaGame.pawn.Pawn;
-import fr.iutvalence.projet.battleArenaGame.pawn.TeamId;
-import fr.iutvalence.projet.battleArenaGame.shape.Shape;
 import fr.iutvalence.projet.battleArenaGame.spell.SpellEffect;
 import fr.iutvalence.projet.battleArenaGame.spell.SpellPage;
+
 /**
- * Class for asks and display for the HMI
+ * Class to ask for choice and display for the HMI
  * ask stands for everything we ask the User to do
  * and display is what he currently see on the HMI.
- * @author pashmi
- *
  */
+
 public interface GameView {
 
-	//ASK
+	/*
+	 * Ask part
+	 */
 	
 	
 	/**
 	 * Ask the player to pick between every possible actions choice
-	 * @return
 	 */
 	public Choices askActionChoice();
 	
+	
+	/**
+	 * ask the player to pick a spell
+	 * @param currentPlayerIndex the index of the user chosen by the controller
+	 */
 	public void askSpell(int currentPlayerIndex);
 	
+
+	/**
+	 * Ask the player to pick a page for his pawn
+	 * @param currentPlayerIndex the index of the user chosen by the controller
+	 */
 	public void askPageSelection(int currentPlayerIndex);
 	
 	/**
 	 * Ask the player to choose a option in the menu
-	 * @return
 	 */
 	public Choices askChoiceMenu();
 
 	
 	/**
 	 * Ask the user to pick a name for his page
-	 * @return the picked name
-	 */
+s	 */
 	public String askPageName();
 	
 	/**
@@ -60,9 +66,17 @@ public interface GameView {
 	
 	//DISPLAY
 	
+	/**
+	 * Display to the player what he have to do in order to select a spell
+	 */
 	public void displaySpellSelection();
 	
 	
+	/**
+	 * Display the board to user
+	 * @param myBoard
+	 * @param nbPlayer
+	 */
 	public void displayBoard(Board myBoard, int nbPlayer);
 
 	/**

@@ -1,20 +1,13 @@
 package fr.iutvalence.projet.battleArenaGame.move;
 
-import java.io.Serializable;
-
 /**
  * Represent coordinate with a X-axis value and Y-axis value
  * A pawn moves from originCoordinate to destCoordinate
- * @author charvevi
  *
  */
-public class Coordinate implements Serializable {
+public class Coordinate{
 
-	
-	/**
-	 * serialVersionUID is an hash code, which allow the JVM to check if attributes, names and type are the same for the object
-	 */
-	private static final long serialVersionUID = -6617054550036231222L;
+
 	/**
 	 * X value of the coordinate (abscissa)
 	 */
@@ -37,18 +30,25 @@ public class Coordinate implements Serializable {
 	}
 	
 	/**
-	 * Getter for coordX
-	 * @return
+	 * Add Coordinate value (x and y) to an other coordinate
+	 * @param firstCoordinate Coordinate to add
+	 * @param secondCoordinate the second one to add
+	 * @return a new Coordinate which is the sum of the 2 Coordinate
+	 */	
+	public static Coordinate addCoordinate(Coordinate firstCoordinate, Coordinate secondCoordinate)
+	{
+		return new Coordinate(firstCoordinate.coordX+secondCoordinate.coordX, firstCoordinate.coordY + secondCoordinate.coordY);
+	}
+	
+	/*
+	 * Getters
 	 */
+
 	public int getCoordX()
 	{
 		return this.coordX;
 	}
 	
-	/**
-	 * Getter for coordY
-	 * @return
-	 */
 	public int getCoordY()
 	{
 		return this.coordY;
@@ -57,18 +57,6 @@ public class Coordinate implements Serializable {
 	@Override
 	public String toString() {
 		return "Coordinate [coordX=" + coordX + ", coordY=" + coordY + "]";
-	}
-	
-	/**
-	 * Add Coordinate value (x and y) to an other coordinate
-	 * @param firstCoordinate Coordinate to add
-	 * @param secondCoordinate the second one to add
-	 * @return a new Coordinate which is the sum of the 2 Coordinate
-	 */	
-	public static Coordinate addCoordinate(Coordinate firstCoordinate, Coordinate secondCoordinate)
-	{
-		
-		return new Coordinate(firstCoordinate.coordX+secondCoordinate.coordX, firstCoordinate.coordY + secondCoordinate.coordY);
 	}
 	
 	@Override
@@ -97,7 +85,4 @@ public class Coordinate implements Serializable {
 			return false;
 		return true;
 	}
-
-	
-
 }

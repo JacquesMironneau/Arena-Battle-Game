@@ -1,22 +1,15 @@
 package fr.iutvalence.projet.battleArenaGame.spell;
 
-import java.io.Serializable;
-
 import fr.iutvalence.projet.battleArenaGame.exceptions.SpellIndexException;
 
 /**
  * This class represents a Spell page it is composed of 3 spells.
+ * It's basically a container for some spells
  * A spell page has a name.
  * each pawn have one spell page.
- * @author durantho
  */
 
-public class SpellPage implements Serializable{
-	
-	/**
-	 * serialVersionUID is an hash code, which allow the JVM to check if attributes, names and type are the same for the object
-	 */
-	private static final long serialVersionUID = 474283235313170067L;
+public class SpellPage{
 
 	/**
 	 * name of the page.
@@ -24,7 +17,7 @@ public class SpellPage implements Serializable{
 	private String pageName;
 	
 	/**
-	 * Table of spells in this page
+	 * Array of spells in this page
 	 */
 	private Spell[] spells;
 
@@ -44,7 +37,7 @@ public class SpellPage implements Serializable{
 	}
 
 	/**
-	 * copy an other spell Page
+	 * Create a spellPage based on another one
 	 * @param pCopiedPage the SpellPage Copied
 	 */
 	public SpellPage(SpellPage pCopiedPage)
@@ -58,28 +51,20 @@ public class SpellPage implements Serializable{
 		
 	}
 	
-	/**
-	 * Getter for the page name
-	 * @return pageName the name off the page.
+
+	/*
+	 *  Getters for the spellPage
 	 */
 	public String getPageName()
 	{
 		return this.pageName;
 	}
-	/**
-	 * return the table of spells.
-	 * @return spells the array of spells
-	 */
+
 	public Spell[] getSpell()
 	{
 		return this.spells;
 	}
 	
-	/**
-	 * return the spell in the table of all spells
-	 * @param spellIndex index of the spell to return
-	 * @return spells[spellIndex] the spell at the specified index
-	 */
 	public Spell getSpell(int spellIndex)
 	{
 		return this.spells[spellIndex];
@@ -87,9 +72,8 @@ public class SpellPage implements Serializable{
 	
 	/**
 	 * setter for Spell
-	 * @param pageIndex the index in Spell[] 
-	 * @param pSpell the Spell set
 	 */
+	
 	public void setSpell(int pageIndex,Spell pSpell) throws SpellIndexException
 	{
 		if(pageIndex>2 || pageIndex<0) throw new SpellIndexException(pageIndex);
@@ -98,8 +82,7 @@ public class SpellPage implements Serializable{
 	
 	/**
 	 * Return the current state of the page,
-	 * name
-	 * spells
+	 * name and spells
 	 */
 	public String toString() {
 		return "SpellPage [pageName=" + pageName + ", spell1=" + this.spells[0] + ", spell2=" + this.spells[1] + ", spell3=" + this.spells[2] + "]";
