@@ -161,6 +161,11 @@ public class Pawn
 		return this.healthPoints;
 	}
 	
+	public int getActionPoints()
+	{
+		return this.actionPoints;
+	}
+	
 	public int getMovePoints()
 	{
 		return this.movePoints;
