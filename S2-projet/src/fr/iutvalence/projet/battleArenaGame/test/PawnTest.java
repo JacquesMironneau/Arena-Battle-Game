@@ -4,15 +4,20 @@ import fr.iutvalence.projet.battleArenaGame.spell.*;
 import fr.iutvalence.projet.battleArenaGame.shape.*;
 import fr.iutvalence.projet.battleArenaGame.move.*;
 
+import static org.junit.Assert.assertTrue;
 import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.ArrayList;
 
 import org.junit.jupiter.api.Test;
-
+/**
+ * test class for pawn
+ */
 class PawnTest
 {	
-	
+	/**
+	 * test for constructor of Pawn
+	 */
 	@Test
 	public final void testPawn()
 	{
@@ -32,10 +37,13 @@ class PawnTest
 		page1.getSpell(0).setSpellEffect(anEffect);
 		Coordinate coord = new Coordinate(1,2);
 		Pawn pawn1 = new Pawn(0,coord,"lol");
-		assertEquals(true,pawn1.getTeamId() == 0);
+		assertTrue("wrong id",pawn1.getTeamId() == 0);
 	}
 	
-
+/**
+ * test and addEffect
+ * check if effect are Correctly add to a pawn
+ */
 	@Test
 	public final void testAddEffect()
 	{
@@ -58,15 +66,15 @@ class PawnTest
 		Pawn pawn1 = new Pawn(0,coord,"lol");
 		
 		PawnEffect eff = new PawnEffect(anEffect);
-		ArrayList<PawnEffect> theEffects = new ArrayList<PawnEffect>();
-		theEffects.add(eff);
 		
 		pawn1.addEffect(eff);
+		assertTrue("wrong effect",pawn1.getEffect().get(0) == eff);
 		
-		assertEquals(true,pawn1.getEffect().get(0) == eff);
 		
 	}
-
+/**
+ * check if getEffect return the right effect
+ */
 	@Test
 	public final void testGetEffect()
 	{
@@ -87,19 +95,19 @@ class PawnTest
 		page1.getSpell(0).setSpellEffect(anEffect);
 		Coordinate coord = new Coordinate(1,2);
 		
-		Pawn pawn1 = new Pawn(0,coord,"lol");
+		Pawn pawn1 = new Pawn(0,coord,"mypawn");
 		
 		PawnEffect eff = new PawnEffect(anEffect);
 		
-		assertEquals(true,pawn1.getEffect().isEmpty());
+		assertTrue("init",pawn1.getEffect().isEmpty());
 		
 		pawn1.addEffect(eff);
-		assertEquals(true,pawn1.getEffect().get(0) == eff);
-		
-		
-		
-	}
+		assertTrue("wrong effect",pawn1.getEffect().get(0) == eff);
+		}
 
+	/**
+	 * check if update effect reduce the lifetime of effect and remove them if they reach 0
+	 */
 	@Test
 	public final void testUpdateEffect()
 	{
@@ -123,10 +131,10 @@ class PawnTest
 		PawnEffect eff = new PawnEffect(anEffect);
 		pawn1.addEffect(eff);
 		pawn1.updateEffect();
-		assertEquals(true,pawn1.getEffect().get(0).getCurrentDuration()==2);
+		assertTrue("lifetime",pawn1.getEffect().get(0).getCurrentDuration()==2);
 		pawn1.updateEffect();
 		pawn1.updateEffect();
-		assertEquals(true,pawn1.getEffect().isEmpty());
+		assertTrue("is empty",pawn1.getEffect().isEmpty());
 		
 	}
 	

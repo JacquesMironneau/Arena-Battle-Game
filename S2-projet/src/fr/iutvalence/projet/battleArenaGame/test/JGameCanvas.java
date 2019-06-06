@@ -1,8 +1,6 @@
 package fr.iutvalence.projet.battleArenaGame.test;
  
-import java.awt.Color;
 import java.awt.Graphics;
-import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.Rectangle;
 import java.awt.event.MouseEvent;
@@ -17,31 +15,44 @@ import javax.swing.JPanel;
 
 import fr.iutvalence.projet.battleArenaGame.move.Coordinate;
 import fr.iutvalence.projet.battleArenaGame.pawn.Pawn;
+
  
  //Action, Mouvement,
 //Tour
 //Ou deplacer
 //Quel sort et ou deplacer
 //maj board
+/**
+ *class who display the board using jpanel with event listener for the ihm Player
+ */
 public class JGameCanvas extends JPanel implements MouseListener{
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 1L;
-	int sizeWidth=32;
-	int sizeHeight;
-	ArrayList<Pawn> List;
-	int boardSize;
-	int width;
-	int height;
+	/**
+	 * default width of the image
+	 */
+	private int sizeWidth=32;
+	/**
+	 * default height of the image
+	 */
+	private int sizeHeight;
+	
+	private ArrayList<Pawn> List;
+	
+	private int boardSize;
+	
+	private int width;
+	
+	private int height;
+	
 	private LocatedImage[][] arrayImage;
-	ArrayList<Rectangle> rec;
+	
+	private ArrayList<Rectangle> rec;
 	
 	public JGameCanvas(ArrayList<Pawn> pList,int pboardSize,int pwidth,int pheight){
-		List = pList;
-		boardSize=pboardSize;
-		width=pwidth;
-		height=pheight;
+		this.List = pList;
+		this.boardSize=pboardSize;
+		this.width=pwidth;
+		this.height=pheight;
 		this.rec = new ArrayList<Rectangle>();
 
 		this.arrayImage = new LocatedImage[this.boardSize][this.boardSize];
@@ -58,11 +69,18 @@ public class JGameCanvas extends JPanel implements MouseListener{
 		return this.List;
 	}
 
+	/**
+	 * refresh the panel 
+	 */
 	public void refresh(ArrayList<Pawn> list)
 	{
 		this.setList(list);
 		this.getParent().repaint();
 	}
+	
+	/**
+	 * repaint the board with the image and mouse listener
+	 */
 	public void paintComponent(Graphics g) {
 		super.paintComponent(g);
 //		g.setColor(Color.MAGENTA);
@@ -143,33 +161,16 @@ public class JGameCanvas extends JPanel implements MouseListener{
 					}
 			}
 	}
-//	Graphics2D g2 = (Graphics2D) g;
 
 		System.out.println(this.arrayImage[0][0].getCoordX()+ " EN 0 0 QUOI "+this.arrayImage[0][0].getCoordY());
 	
 	for(int indexRow = 0; indexRow < this.boardSize; indexRow++)
 		for(int indexCol = 0; indexCol < this.boardSize; indexCol++)
 		{
-//			System.out.println(" aaa "+ this.arrayImage[indexRow][indexCol] +" "+  this.arrayImage[indexRow][indexCol]);
+
 			this.rec.add(new Rectangle(this.arrayImage[indexRow][indexCol].getCoordX(), this.arrayImage[indexRow][indexCol].getCoordY(), this.sizeWidth, this.sizeHeight));
 		}
-//	System.out.println(" AAA" +this.rec.get(0).getX());
-	//	
-//	for(Image[] i: this.arrayImage)
-//	{
-//		for(Image i1 : i)
-//		{
-////			System.out.println("ALLO"+i1.getWidth(this)+"HE"+i1.getHeight(this)+" "+index+" "+this.sizeHeigth);
-//			Rectangle r = new Rectangle(i1, i1.getHeight(this), this.sizeWidth, this.sizeHeight);
-//			i1.getWidth(this);
-////			g2.setColor(Color.BLACK);
-////			g2.draw(r);
-//			this.rec.add(r);
-//			
-//			index++;
-//			
-//		}
-//	}
+
 	
 	for(Rectangle r1:  rec)
 	{
@@ -180,14 +181,9 @@ public class JGameCanvas extends JPanel implements MouseListener{
 
 		@Override
 		public void mouseClicked(MouseEvent e) {
-//System.out.println("EVENTAAA"+e.getXOnScreen()+ " " +e.getYOnScreen());
 			
 			for(Rectangle r: rec)
 			{
-//				System.out.println(e.getX());
-//				System.out.println(r.getX()+ " "+r.getY()+ r.x);
-//				if(r.getX()==e.getX())
-//					System.out.println(r.getX()==e.getX());
 				if(r.contains(e.getX(),e.getY()))
 				{
 					
@@ -195,13 +191,11 @@ public class JGameCanvas extends JPanel implements MouseListener{
 					int yindex = (int)r.getY()/sizeHeight;
 					
 					System.out.println("GETX : "+r.getX() + " "+ r.getY());
-					//int index = rec.indexOf(r);
 					System.out.println(arrayImage[xindex][yindex].getCoordX()+" aaa"+arrayImage[xindex][yindex].getCoordY());
 					System.out.println("VRAI X: "+xindex + " vrai y"+yindex);
 				
 				}
 					
-//					System.out.println("TOUCHE TOUCHE TOUCHE");
 			}		
 		}
 
@@ -244,11 +238,11 @@ public static void main(String[] args) {
 //	Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
 	
 	JFrame f = new JFrame();
-//	f.setSize(screenSize.getWidth(),screenSize.getHeight());
+
 	f.setExtendedState(JFrame.MAXIMIZED_BOTH);
 	JGameCanvas CC = new JGameCanvas(List,15,f.getWidth(),f.getHeight());
 	f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-//	f.setResizable(false);
+
 	f.setTitle("JULES");
 	f.setVisible(true);
 	f.setContentPane(CC);
@@ -278,14 +272,13 @@ public static void main(String[] args) {
 	
 	
 	CC.refresh(t);
-	//	f.repaint();
+
 	
 }
 
 
 @Override
 public void mouseClicked(MouseEvent e) {
-	// TODO Auto-generated method stub
 	System.out.println("EVENT");
 	for(Rectangle r: rec)
 	{
