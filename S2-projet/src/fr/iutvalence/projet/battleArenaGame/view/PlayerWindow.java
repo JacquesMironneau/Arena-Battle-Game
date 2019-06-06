@@ -163,12 +163,6 @@ public class PlayerWindow extends JFrame implements GameView{
 }
 
 	@Override
-	public Coordinate askMove() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
 	public Choices askActionChoice() {
 		// TODO Auto-generated method stub
 		return null;
@@ -504,12 +498,6 @@ public class PlayerWindow extends JFrame implements GameView{
 		
 	}
 
-	@Override
-	public void displaySpellLaunched() {
-		// TODO Auto-generated method stub
-		
-	}
-
 
 	@Override
 	public void displayMoveDone() {
@@ -555,12 +543,6 @@ public class PlayerWindow extends JFrame implements GameView{
 	}
 
 	@Override
-	public int askIndexSelection() {
-		// TODO Auto-generated method stub
-		return 0;
-	}
-
-	@Override
 	public void displayNextTurn(int numPlayer) {
 		// TODO Auto-generated method stub
 		
@@ -574,6 +556,30 @@ public class PlayerWindow extends JFrame implements GameView{
 
 	@Override
 	public void displayMoveSelection() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void askSpell(int currentPlayerIndex) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void askPageSelection(int currentPlayerIndex) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void askMove(int currentPlayerIndex) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void displaySpellSelection() {
 		// TODO Auto-generated method stub
 		
 	}
