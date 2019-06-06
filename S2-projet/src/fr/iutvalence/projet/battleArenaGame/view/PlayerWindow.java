@@ -19,10 +19,12 @@ import javax.swing.event.CaretEvent;
 import javax.swing.event.CaretListener;
 
 import fr.iutvalence.projet.battleArenaGame.Board;
+import fr.iutvalence.projet.battleArenaGame.GameController;
 import fr.iutvalence.projet.battleArenaGame.move.Coordinate;
 import fr.iutvalence.projet.battleArenaGame.pawn.Pawn;
 import fr.iutvalence.projet.battleArenaGame.spell.SpellEffect;
 import fr.iutvalence.projet.battleArenaGame.spell.SpellPage;
+import fr.iutvalence.projet.battleArenaGame.test.JGameCanvas;
 
 /**
  * PlayerWindow class
@@ -95,6 +97,10 @@ public class PlayerWindow extends JFrame implements GameView{
 	 */
 	private String sp3ShCh = null;
 	
+	private GameController gc;
+	
+	private JGameCanvas gameBoard;
+	
 	
 	/**
 	 * Constructor of a new PlayerWindow
@@ -103,7 +109,7 @@ public class PlayerWindow extends JFrame implements GameView{
 	 * the default operation when closing the window,
 	 * 
 	 */
-	public PlayerWindow() {
+	public PlayerWindow(GameController cg) {
 		/*
 		 * Super Constructor
 		 */
@@ -120,54 +126,17 @@ public class PlayerWindow extends JFrame implements GameView{
 		this.setLocation(0, 0);
 		this.setDefaultCloseOperation(EXIT_ON_CLOSE);
 		this.setSize(1920,1080);
+		this.setResizable(false);
 		
 		this.chElement = new Choice();
 		this.chShape = new Choice();
+		this.gc = cg;
 		
 		this.mainContainer = new JLayeredPane();
 		this.setContentPane(this.mainContainer);
-				
-		this.displayMenu();
 		
 	}
-	
-	/**
-	 * Create a new window with a custom size
-	 * @param ww the window's width
-	 * @param wh the window's height
-	 */
-	public PlayerWindow(int ww, int wh) {
-		
-		/*
-		 * Super constructor
-		 */
-		super();
-		
-		/*
-		 * WINDOW PROPERTIES
-		 * TITLE
-		 * no relative location
-		 * default close operation
-		 * custom size
-		 */
-		this.setTitle("Projet S2");
-		this.setLocationRelativeTo(null);
-		this.setDefaultCloseOperation(EXIT_ON_CLOSE);
-		this.setSize(ww,wh);
-		
-		this.chElement = new Choice();
-		this.chShape = new Choice();
-		
-		this.mainContainer = new JLayeredPane();
-		this.setContentPane(this.mainContainer);
-		
-		this.displayMenu();
-		
-		/*
-		 * Enable window visibility
-		 */
-		this.setVisible(true);
-}
+
 
 	@Override
 	public Choices askActionChoice() {
@@ -216,7 +185,7 @@ public class PlayerWindow extends JFrame implements GameView{
 		btnCreateGame.setBounds(this.getWidth()/4, this.getHeight()/8, this.getWidth()/4*2, this.getHeight()/8);
 		btnCreateGame.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				//creategame.method
+				//TODO method from gc that calls displayGameConfig()
 			}
 		});
 		this.getContentPane().add(btnCreateGame);
@@ -226,7 +195,7 @@ public class PlayerWindow extends JFrame implements GameView{
 		btnJoinGame.setBounds(this.getWidth()/4, this.getHeight()/8*2, this.getWidth()/4*2, this.getHeight()/8);
 		btnJoinGame.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				displayJoinGame();
+				//TODO method from gc that calls displayJoinGame();
 			}
 		});
 		this.getContentPane().add(btnJoinGame);
@@ -263,6 +232,44 @@ public class PlayerWindow extends JFrame implements GameView{
 		this.setVisible(true);
 	}
 	
+	public void displayGameConfig() {
+		//size of the board
+		//number of players
+		//number of pawns
+		this.setVisible(false);
+		
+		JLabel size = new JLabel("Entrez la taille du plateau de jeu");
+		size.setBounds(0,0,this.getWidth()/3,this.getHeight()/20);
+		this.getContentPane().add(size);
+		
+		JTextField sizeField = new JTextField();
+		sizeField.setBounds(0,this.getHeight()/20,this.getWidth()/3,this.getHeight()/20);
+		this.getContentPane().add(sizeField);
+		
+		JLabel numberOfPlayer = new JLabel("Entrez le nombre de joueurs");
+		numberOfPlayer.setBounds(0,this.getHeight()/20*2,this.getWidth()/3,this.getHeight()/20);
+		this.getContentPane().add(numberOfPlayer);
+		
+		JTextField numberOfPlayerField = new JTextField();
+		numberOfPlayerField.setBounds(0,this.getHeight()/20*3,this.getWidth()/3,this.getHeight()/20);
+		this.getContentPane().add(numberOfPlayerField);
+		
+		JLabel numberOfPawns = new JLabel("Veuillez saisir le nombre de pions");
+		numberOfPawns.setBounds(0,this.getHeight()/20*4,this.getWidth()/3,this.getHeight()/20);
+		this.getContentPane().add(numberOfPawns);
+		
+		JTextField numberOfPawnsField = new JTextField();
+		numberOfPawnsField.setBounds(0, this.getHeight()/20*5, this.getWidth()/3, this.getHeight()/20);
+		this.getContentPane().add(numberOfPawnsField);
+		
+		JButton btnValider = new JButton("valider");
+		btnValider.setBounds(this.getWidth()/5*2,this.getHeight()/20*7,this.getWidth()/5,this.getHeight()/20);
+		this.getContentPane().add(btnValider);
+		
+		this.setVisible(true);
+	}
+
+
 	protected void displayJoinGame() {
 		this.setVisible(false);
 		this.getContentPane().removeAll();
@@ -273,7 +280,7 @@ public class PlayerWindow extends JFrame implements GameView{
 		btnValider.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				//displayBoard(new Board(0, 0, 0), 0); //change this
-				//ip of the server
+				//ip of the server*
 			}
 		});
 		this.getContentPane().add(btnValider);
@@ -305,7 +312,7 @@ public class PlayerWindow extends JFrame implements GameView{
 		btnRetour.setBounds(this.getWidth()/5*2,this.getHeight()/20*4+20,this.getWidth()/5,this.getHeight()/20);
 		btnRetour.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				displayMenu();
+				//TODO method from gc that calls displayMenu();
 			}
 		});
 		this.getContentPane().add(btnRetour);
@@ -316,7 +323,7 @@ public class PlayerWindow extends JFrame implements GameView{
 	/**
 	 * protected method that displays the spellpage creation menu
 	 */
-	protected void displaySpellPageCreation() {
+	public void displaySpellPageCreation() {
 		//disable the visibility of the window to avoid visual bugs (ex: no content)
 		this.setVisible(false);
 		this.setLocation(0, 0);
@@ -327,7 +334,7 @@ public class PlayerWindow extends JFrame implements GameView{
 		btnSpell1.setBounds(0,10,(this.getWidth()/3),(this.getHeight()/3)-10);
 		btnSpell1.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				displayCreateSpell(1);
+				//method from gc that calls displayCreateSpell(1);
 			}
 		});
 		this.getContentPane().add(btnSpell1);
@@ -337,7 +344,7 @@ public class PlayerWindow extends JFrame implements GameView{
 		btnSpell2.setBounds((this.getWidth()/3),10,(this.getWidth()/3),(this.getHeight()/3)-10);
 		btnSpell2.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				displayCreateSpell(2);
+				//TODO method from gc hat calls displayCreateSpell(2);
 			}
 		});
 		this.getContentPane().add(btnSpell2);
@@ -347,7 +354,7 @@ public class PlayerWindow extends JFrame implements GameView{
 		btnSpell3.setBounds((this.getWidth()/3*2),10,(this.getWidth()/3),(this.getHeight()/3)-10);
 		btnSpell3.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				displayCreateSpell(3);
+				//TODO method from gc that calls displayCreateSpell(3);
 			}
 		});
 		this.getContentPane().add(btnSpell3);
@@ -375,8 +382,8 @@ public class PlayerWindow extends JFrame implements GameView{
 				if (sp1ElCh == null || sp1ShCh == null || sp2ElCh == null || sp2ShCh == null || sp3ElCh == null || sp3ShCh == null)
 					JOptionPane.showMessageDialog(mainContainer, "You have not set all the spells", "Warning", JOptionPane.WARNING_MESSAGE);
 				else {
-					askValidation();
-					askPageName();
+					//TODO method from gc that callsaskValidation();
+					//TODO method from gc that calls askPageName();
 				}
 			}
 		});
@@ -401,7 +408,7 @@ public class PlayerWindow extends JFrame implements GameView{
 		btnRetour.setBounds(this.getWidth()/3,this.getHeight()/3*2+this.getHeight()/20,this.getWidth()/3,this.getHeight()/20);
 		btnRetour.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				displayMenu();
+				//method from gc that calls displayMenu();
 			}
 		});
 		this.getContentPane().add(btnRetour);
@@ -413,7 +420,7 @@ public class PlayerWindow extends JFrame implements GameView{
 	 * This method displays a menu that allows the player to create a spell
 	 * @param spellIndex the spell you want to create/modify
 	 */
-	protected void displayCreateSpell(int spellIndex) {
+	public void displayCreateSpell(int spellIndex) {
 		//disable the visibility to avoid bugs
 		this.setVisible(false);
 		this.setLocation(0, 0);
@@ -439,7 +446,7 @@ public class PlayerWindow extends JFrame implements GameView{
 				}
 				//askSpellElement();
 				//askSpellShape();
-				displaySpellPageCreation();
+				//method from gc that calls displaySpellPageCreation();
 				
 				
 			}
@@ -516,7 +523,46 @@ public class PlayerWindow extends JFrame implements GameView{
 
 	@Override
 	public void displaySpellPage(ArrayList<SpellPage> listPages) {
-		// TODO Auto-generated method stub
+		//version 1
+		this.setVisible(false);
+		
+		int n = 5;
+		
+		SpellPage spfp1 = null;
+		SpellPage spfp2 = null;
+		SpellPage spfp3 = null;
+		
+		JButton btnValider = new JButton("Valider");
+		btnValider.setBounds(this.getWidth()/5*2,this.getHeight()-this.getHeight()/20,this.getWidth()/5,this.getHeight()/20);
+		btnValider.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent arg0) {
+				//TODO change when fixed
+				displayBoard(null,0);
+				
+			}
+			
+		});
+		
+		ArrayList<Choice> choices = new ArrayList<Choice>();
+		ArrayList<JLabel> labels = new ArrayList<JLabel>();
+		
+		for(int i = 1 ; i < n; i++) {
+			choices.add(new Choice());
+			choices.get(i-1).setBounds(this.getWidth()/3,this.getHeight()/20*i,this.getWidth()/3,this.getHeight()/20);
+			for (SpellPage sp : listPages) {
+				choices.get(i-1).add(sp.getPageName());
+			}
+			labels.add(new JLabel("Selectionnez une page de sorts pour le pion n°"+i));
+			labels.get(i-1).setBounds(0,this.getHeight()/20 - 10,this.getWidth()/3,this.getHeight()-10);
+		}
+		
+		Choice chSpellPages3 = new Choice();
+		chSpellPages3.add("Choose a spell page");
+		for (SpellPage sp : listPages) {
+			chSpellPages3.add(sp.getPageName());
+		}
+		
 		
 	}
 
@@ -648,7 +694,16 @@ public class PlayerWindow extends JFrame implements GameView{
 
 	@Override
 	public void displayBoard(Board myBoard, int nbPlayer) {
-		// TODO Auto-generated method stub
+		//TODO update when fixed
+		this.setVisible(false);
+		if(this.getContentPane() == mainContainer) {
+			this.gameBoard = new JGameCanvas(myBoard.getTurnOrder(),myBoard.getBoardSize(),this.getWidth(),this.getHeight());
+			this.setContentPane(gameBoard);
+			this.setVisible(true);
+		}
+		else {
+			this.gameBoard.refresh(myBoard.getTurnOrder());
+		}
 		
 	}
 
