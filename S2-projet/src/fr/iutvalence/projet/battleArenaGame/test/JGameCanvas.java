@@ -126,7 +126,7 @@ public class JGameCanvas extends JPanel implements MouseListener{
 							if(p.getTeamId()==1)
 							{
 								g.drawImage(p1, i*sizeWidth,  k*sizeHeight,this);
-								this.arrayImage[i][k].setImg(voidImg);
+								this.arrayImage[i][k].setImg(p1);
 								this.arrayImage[i][k].setCoordX(i*sizeWidth);
 								this.arrayImage[i][k].setCoordY(k*sizeHeight);
 							}
@@ -134,7 +134,7 @@ public class JGameCanvas extends JPanel implements MouseListener{
 							{
 								g.drawImage(p2, i*sizeWidth,  k*sizeHeight,this);
 //								System.out.println(i*sizeWidth);
-								this.arrayImage[i][k].setImg(voidImg);
+								this.arrayImage[i][k].setImg(p2);
 								this.arrayImage[i][k].setCoordX(i*sizeWidth);
 								this.arrayImage[i][k].setCoordY(k*sizeHeight);
 							}

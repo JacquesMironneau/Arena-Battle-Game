@@ -5,6 +5,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.util.ArrayList;
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -46,6 +48,11 @@ public class PlayerWindow extends JFrame implements GameView{
 	 * This text field is used to get the pageName
 	 */
 	private JTextField tfPageName;
+	
+	/**
+	 * This text field will contain the IP address of the server
+	 */
+	private JTextField tfServerIP;
 	
 	
 	/**
@@ -197,16 +204,10 @@ public class PlayerWindow extends JFrame implements GameView{
 	}
 
 	@Override
-	public void displayBoard(Board myBoard, int nbPlayer) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
 	public void displayMenu() {
 		//disable the visibility of the window to avoid graphical bugs
 		this.setVisible(false);
-		
+		this.setLocation(0, 0);
 		//remove all the content from the content pane
 		this.getContentPane().removeAll();
 		
@@ -225,7 +226,7 @@ public class PlayerWindow extends JFrame implements GameView{
 		btnJoinGame.setBounds(this.getWidth()/4, this.getHeight()/8*2, this.getWidth()/4*2, this.getHeight()/8);
 		btnJoinGame.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				//joingame.method
+				displayJoinGame();
 			}
 		});
 		this.getContentPane().add(btnJoinGame);
@@ -262,13 +263,63 @@ public class PlayerWindow extends JFrame implements GameView{
 		this.setVisible(true);
 	}
 	
+	protected void displayJoinGame() {
+		this.setVisible(false);
+		this.getContentPane().removeAll();
+		
+		
+		JButton btnValider = new JButton("Valider");
+		btnValider.setBounds(this.getWidth()/5*2,this.getHeight()/20*3+20,this.getWidth()/5,this.getHeight()/20);
+		btnValider.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				//displayBoard(new Board(0, 0, 0), 0); //change this
+				//ip of the server
+			}
+		});
+		this.getContentPane().add(btnValider);
+		btnValider.setEnabled(false);
+		
+		JLabel lblTitle = new JLabel("Rejoindre une partie");
+		lblTitle.setBounds(this.getWidth()/3,0,this.getWidth()/3,this.getHeight()/20);
+		this.getContentPane().add(lblTitle);
+		
+		JLabel lblIndications = new JLabel("Veuillez saisir l'adresse IP du serveur :");
+		lblIndications.setBounds(this.getWidth()/3,this.getHeight()/20,this.getWidth()/3,this.getHeight()/20);
+		this.getContentPane().add(lblIndications);
+		
+		this.tfServerIP = new JTextField();
+		this.tfServerIP.setBounds(this.getWidth()/3,this.getHeight()/20*2+10,this.getWidth()/3,this.getHeight()/20);
+		this.tfServerIP.addCaretListener(new CaretListener() {
+
+			@Override
+			public void caretUpdate(CaretEvent e) {
+				if(tfServerIP.getCaretPosition() == 0)
+					btnValider.setEnabled(false);
+				else
+					btnValider.setEnabled(true);
+			}
+		});
+		this.getContentPane().add(this.tfServerIP);
+		
+		JButton btnRetour = new JButton("Retour");
+		btnRetour.setBounds(this.getWidth()/5*2,this.getHeight()/20*4+20,this.getWidth()/5,this.getHeight()/20);
+		btnRetour.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				displayMenu();
+			}
+		});
+		this.getContentPane().add(btnRetour);
+		
+		this.setVisible(true);
+	}
+
 	/**
 	 * protected method that displays the spellpage creation menu
 	 */
 	protected void displaySpellPageCreation() {
 		//disable the visibility of the window to avoid visual bugs (ex: no content)
 		this.setVisible(false);
-		
+		this.setLocation(0, 0);
 		this.getContentPane().removeAll();
 		
 		// creates a new button for the creation of the first spell
@@ -346,6 +397,15 @@ public class PlayerWindow extends JFrame implements GameView{
 		});
 		this.getContentPane().add(this.tfPageName);
 		
+		JButton btnRetour = new JButton("Retour");
+		btnRetour.setBounds(this.getWidth()/3,this.getHeight()/3*2+this.getHeight()/20,this.getWidth()/3,this.getHeight()/20);
+		btnRetour.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				displayMenu();
+			}
+		});
+		this.getContentPane().add(btnRetour);
+		
 		this.setVisible(true);
 	}
 
@@ -356,6 +416,7 @@ public class PlayerWindow extends JFrame implements GameView{
 	protected void displayCreateSpell(int spellIndex) {
 		//disable the visibility to avoid bugs
 		this.setVisible(false);
+		this.setLocation(0, 0);
 		this.getContentPane().removeAll();
 		//create a new button to allow the player to validate the creation of his spell and refresh the string that contains the spell informations
 		JButton btnValiderSpellCreation = new JButton("Valider");
@@ -508,6 +569,7 @@ public class PlayerWindow extends JFrame implements GameView{
 	@Override
 	public void displaySpellPageDetail(SpellPage pPage) {
 		this.setVisible(false);
+		this.setLocation(0, 0);
 		this.getContentPane().removeAll();
 		
 		JLabel lblTitle = new JLabel("Spell page details");
@@ -580,6 +642,12 @@ public class PlayerWindow extends JFrame implements GameView{
 
 	@Override
 	public void displaySpellSelection() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void displayBoard(Board myBoard, int nbPlayer) {
 		// TODO Auto-generated method stub
 		
 	}
