@@ -1,7 +1,5 @@
 package fr.iutvalence.projet.battleArenaGame.spell;
 
-import fr.iutvalence.projet.battleArenaGame.exceptions.SpellIndexException;
-
 /**
  * This class represents a Spell page it is composed of 3 spells.
  * It's basically a container for some spells
@@ -74,9 +72,8 @@ public class SpellPage{
 	 * setter for Spell
 	 */
 	
-	public void setSpell(int pageIndex,Spell pSpell) throws SpellIndexException
+	public void setSpell(int pageIndex,Spell pSpell)
 	{
-		if(pageIndex>2 || pageIndex<0) throw new SpellIndexException(pageIndex);
 		this.spells[pageIndex] = pSpell;
 	}
 	

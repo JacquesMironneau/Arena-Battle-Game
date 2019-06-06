@@ -17,7 +17,6 @@ import javax.swing.JPanel;
 
 import fr.iutvalence.projet.battleArenaGame.move.Coordinate;
 import fr.iutvalence.projet.battleArenaGame.pawn.Pawn;
-import fr.iutvalence.projet.battleArenaGame.pawn.TeamId;
  
  //Action, Mouvement,
 //Tour

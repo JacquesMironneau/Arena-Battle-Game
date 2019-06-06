@@ -2,16 +2,15 @@ package fr.iutvalence.projet.battleArenaGame;
 
 import java.util.ArrayList;
 
-import fr.iutvalence.projet.battleArenaGame.exceptions.SpellIndexException;
 import fr.iutvalence.projet.battleArenaGame.move.Coordinate;
 import fr.iutvalence.projet.battleArenaGame.pawn.Pawn;
 import fr.iutvalence.projet.battleArenaGame.shape.Shape;
 import fr.iutvalence.projet.battleArenaGame.spell.Spell;
 import fr.iutvalence.projet.battleArenaGame.spell.SpellEffect;
 import fr.iutvalence.projet.battleArenaGame.spell.SpellPage;
-import fr.iutvalence.projet.battleArenaGame.view.StatusMessages;
 import fr.iutvalence.projet.battleArenaGame.view.GameView;
 import fr.iutvalence.projet.battleArenaGame.view.PlayerConsole;
+import fr.iutvalence.projet.battleArenaGame.view.StatusMessages;
 
 /**
  * Game class stands for the system of the BattleArena Game:
@@ -63,12 +62,8 @@ public class Game implements GameController
 		for(int i=0;i<this.maxPlayer;i++)
 			this.players.add(new PlayerConsole(this));
 		this.board = new Board(nbPlayer,nbPawn,boardSize);
-		try {
-			this.createSpellPageForTest();
-		} catch (SpellIndexException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+
+		this.createSpellPageForTest();
 		this.gameStatus = EndStatus.RUNNING;		
 	}
 	
@@ -267,7 +262,7 @@ public class Game implements GameController
 	 * @throws SpellIndexException
 	 */
 	//TODO Remove this method, used for test
-	public void createSpellPageForTest() throws SpellIndexException
+	public void createSpellPageForTest()
 	{
 		SpellPage p1 = new SpellPage("page1");
 		Spell s1 = new Spell();
