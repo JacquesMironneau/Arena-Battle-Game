@@ -107,55 +107,34 @@ public class Game implements GameController
 		currentPlayerIndex = 0;
 		while(true) 
 		{
-			for(GameView gv : players)
-				{
-					gv.displayBoard(board,this.maxPlayer);
-					if(this.board.getTurnOrder().get(this.board.getCurrentPawnIndex()).getTeamId()==players.indexOf(gv))
-						currentPlayerIndex = players.indexOf(gv);
-				}
-		
-					this.board.getTurnOrder().get(this.board.getCurrentPawnIndex()).resetPoints();
-					this.board.applyEffect();
-					if(this.board.getTurnOrder().get(this.board.getCurrentPawnIndex()).getHealthPoints()<=0)
-					{
-						this.board.removeDeads();
-						this.board.nextPawn();
-						break;
-					}
-					if(endGame()!=EndStatus.RUNNING)
-						break;
-					this.players.get(currentPlayerIndex).displayChoiceAction();
-					switch(this.players.get(currentPlayerIndex).askActionChoice())
-					{
-					case MOVE:
-						this.players.get(currentPlayerIndex).displayBoard(board,this.maxPlayer);
-						this.players.get(currentPlayerIndex).displayMoveSelection();
-						this.players.get(currentPlayerIndex).askMove(currentPlayerIndex);
-						for(GameView gv : players)
-							gv.displayBoard(board,this.maxPlayer);
-						break;
-					case LAUNCH_SPELL:
-						this.players.get(currentPlayerIndex).displayBoard(board,this.maxPlayer);
-						this.players.get(currentPlayerIndex).displaySpellPageDetail(this.board.getTurnOrder().get(this.board.getCurrentPawnIndex()).getSpellPage());
-						this.players.get(currentPlayerIndex).displaySpellSelection();
-						this.players.get(currentPlayerIndex).askSpell(currentPlayerIndex);
-						if(this.board.getTurnOrder().get(this.board.getCurrentPawnIndex()).getHealthPoints()<=0)
-							this.board.nextPawn();
-						this.board.removeDeads();
-						if(endGame() != EndStatus.RUNNING)
-							break;
-						for(GameView gv : players)
-							gv.displayBoard(board,this.maxPlayer);
-						break;
-					case END_TURN:
-						this.board.nextPawn();
-						break;
-					}
-					if(endGame() != EndStatus.RUNNING)
-						break;
-					for(GameView gv : players)
-						gv.displayNextTurn(currentPlayerIndex+1);
+			this.board.getTurnOrder().get(this.board.getCurrentPawnIndex()).resetPoints();
+			this.board.applyEffect();
+			if(this.board.getTurnOrder().get(this.board.getCurrentPawnIndex()).getHealthPoints()<=0)
+			{
+				this.board.removeDeads();
+				this.board.nextPawn();
+				break;
 			}
+			for(GameView gv : players)
+			{
+				gv.displayBoard(board,this.maxPlayer);
+				if(this.board.getTurnOrder().get(this.board.getCurrentPawnIndex()).getTeamId()==players.indexOf(gv))
+					currentPlayerIndex = players.indexOf(gv);
+			}
+			//	if(endGame()!=EndStatus.RUNNING)
+			//	break;
+			while(true)
+			{
+			this.players.get(currentPlayerIndex).displayChoiceAction();
+			this.players.get(currentPlayerIndex).askActionChoice(currentPlayerIndex);
+			if(this.board.getTurnOrder().get(this.board.getCurrentPawnIndex()).getTeamId()!=currentPlayerIndex)
+				break;
+			}
+			if(endGame() != EndStatus.RUNNING)
+				break;
+			for(GameView gv : players)
+				gv.displayNextTurn(currentPlayerIndex+1);
+		}
 		if(gameStatus == EndStatus.DRAW)
 			for(GameView gv : players)
 				gv.displayEnd("Tout le monde est mort ! Egalité !");
@@ -251,6 +230,36 @@ public class Game implements GameController
 				this.players.get(currentPlayerIndex).displayStatus(StatusMessages.PAGE_SET);
 				break;
 				}
+	}
+	
+	public void actionRequest(int currentPlayerIndex,StatusMessages choice)
+	{
+		switch(choice)
+		{
+		case MOVE:
+			this.players.get(currentPlayerIndex).displayBoard(board,this.maxPlayer);
+			this.players.get(currentPlayerIndex).displayMoveSelection();
+			this.players.get(currentPlayerIndex).askMove(currentPlayerIndex);
+			for(GameView gv : players)
+				gv.displayBoard(board,this.maxPlayer);
+			break;
+		case LAUNCH_SPELL:
+			this.players.get(currentPlayerIndex).displayBoard(board,this.maxPlayer);
+			this.players.get(currentPlayerIndex).displaySpellPageDetail(this.board.getTurnOrder().get(this.board.getCurrentPawnIndex()).getSpellPage());
+			this.players.get(currentPlayerIndex).displaySpellSelection();
+			this.players.get(currentPlayerIndex).askSpell(currentPlayerIndex);
+			if(this.board.getTurnOrder().get(this.board.getCurrentPawnIndex()).getHealthPoints()<=0)
+				this.board.nextPawn();
+			this.board.removeDeads();
+			for(GameView gv : players)
+				gv.displayBoard(board,this.maxPlayer);
+			break;
+		case END_TURN:
+			this.board.nextPawn();
+			break;
+			
+		}
+		
 	}
 	
 	/**

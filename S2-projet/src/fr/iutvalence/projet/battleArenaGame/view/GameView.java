@@ -22,8 +22,9 @@ public interface GameView {
 	
 	/**
 	 * Ask the player to pick between every possible actions choice
+	 * @param currentPlayerIndex 
 	 */
-	public Choices askActionChoice();
+	public void askActionChoice(int currentPlayerIndex);
 	
 	
 	/**
@@ -42,7 +43,9 @@ public interface GameView {
 	/**
 	 * Ask the player to choose a option in the menu
 	 */
-	public Choices askChoiceMenu();
+	//TODO delete this method, because the choice in the main menu will be done before the creation of the game
+	//we don't know yet how to do this
+	public void askChoiceMenu(int currentPlayerIndex);
 
 	
 	/**

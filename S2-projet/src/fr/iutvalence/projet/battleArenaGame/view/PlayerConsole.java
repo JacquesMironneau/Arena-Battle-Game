@@ -1,12 +1,14 @@
 package fr.iutvalence.projet.battleArenaGame.view;
 
 
+import java.awt.Choice;
 import java.util.ArrayList;
 
 import fr.iutvalence.projet.battleArenaGame.Board;
 import fr.iutvalence.projet.battleArenaGame.GameController;
 import fr.iutvalence.projet.battleArenaGame.move.Coordinate;
 import fr.iutvalence.projet.battleArenaGame.pawn.Pawn;
+import fr.iutvalence.projet.battleArenaGame.pawn.PawnEffect;
 import fr.iutvalence.projet.battleArenaGame.spell.SpellEffect;
 import fr.iutvalence.projet.battleArenaGame.spell.SpellPage;
 
@@ -52,45 +54,34 @@ public class PlayerConsole implements GameView{
 		this.myController.moveRequest(currentPlayerIndex,new Coordinate(xCoord,yCoord));
 		
 	}
-	
+	//TODO see GameView
 	@Override
-	public Choices askChoiceMenu() 
+	public void askChoiceMenu() 
 	{	
-		CheapScanner scan = new CheapScanner();
-		int mychoice = -1;
-		mychoice = (Integer)scan.getInt();
-		switch (mychoice) 
-		{
-		case 1:
-			return Choices.HOST_GAME;
-		case 2:
-			return Choices.JOIN_GAME;
-		case 3:
-			return Choices.LOCAL_GAME;
-		default:
-			mychoice=0;
-		}
-	return null;
+		
 	}
 
-	public Choices askActionChoice() 
+	public void askActionChoice(int currentPlayerIndex) 
 	{
 		CheapScanner scan = new CheapScanner();
-		int mychoice = -1;
-		mychoice= (Integer)scan.getInt();
-		
-		switch(mychoice)
+		int numChoice = -1;
+		numChoice= (Integer)scan.getInt();	 
+		StatusMessages myChoice = StatusMessages.SYSTEM_ERROR;
+		switch(numChoice)
 		{
 		case 1:
-			return Choices.MOVE;
+			myChoice = StatusMessages.MOVE;
+			break;
 		case 2:
-			return Choices.LAUNCH_SPELL;
+			myChoice = StatusMessages.LAUNCH_SPELL;
+			break;
 		case 3:
-			return Choices.END_TURN;
+			myChoice = StatusMessages.END_TURN;
+			break;
 		default:
-			mychoice=0;
+			myChoice=StatusMessages.WRONG_INDEX;
 		}
-	return null;
+	this.myController.actionRequest(currentPlayerIndex,myChoice);
 	}
 	
 	public void askPageSelection(int currentPlayerIndex)
@@ -308,7 +299,10 @@ public class PlayerConsole implements GameView{
 						+ "Spell 1 :" + myBoard.getTurnOrder().get(myBoard.getCurrentPawnIndex()).getSpellPage().getSpell(0).getCurrentCooldown() + "/" + myBoard.getTurnOrder().get(myBoard.getCurrentPawnIndex()).getSpellPage().getSpell(0).getDefaultCooldown()
 						+ "\nSpell 2 :" + myBoard.getTurnOrder().get(myBoard.getCurrentPawnIndex()).getSpellPage().getSpell(1).getCurrentCooldown() + "/" + myBoard.getTurnOrder().get(myBoard.getCurrentPawnIndex()).getSpellPage().getSpell(1).getDefaultCooldown()
 						+ "\nSpell 3 :" + myBoard.getTurnOrder().get(myBoard.getCurrentPawnIndex()).getSpellPage().getSpell(2).getCurrentCooldown() + "/" + myBoard.getTurnOrder().get(myBoard.getCurrentPawnIndex()).getSpellPage().getSpell(2).getDefaultCooldown();
-				str+= "\nCurrent effects :" + myBoard.getTurnOrder().get(myBoard.getCurrentPawnIndex()).getEffect().toString()+"\n";
+				str+= "\nCurrent effects :";
+						for(PawnEffect effect :myBoard.getTurnOrder().get(myBoard.getCurrentPawnIndex()).getEffect())
+							str+= effect.getEffectName();
+						str+="\n";
 				
 				
 					for(int teamIndex = 0; teamIndex < nbPlayer; teamIndex++)
@@ -316,7 +310,13 @@ public class PlayerConsole implements GameView{
 						str += "Team" + teamIndex +":\n";
 						for(Pawn p1 : myBoard.getTurnOrder())
 							if(p1.getTeamId()==teamIndex)
-								str += p1.getName()+": HP:"+p1.getHealthPoints()+"/"+Pawn.DEFAULT_HEALTH_POINTS+"   Effects :"+p1.getEffect().toString()+"\n";
+								{
+									str += p1.getName()+": HP:"+p1.getHealthPoints()+"/"+Pawn.DEFAULT_HEALTH_POINTS+"   Effects : ";
+									for(PawnEffect effect :p1.getEffect())
+										str+= effect.getEffectName() +"  ";
+									str+="\n";
+								}
+								
 					}
 				
 				
@@ -346,6 +346,13 @@ public class PlayerConsole implements GameView{
 	public void displayMoveSelection()
 	{
 		System.out.println("Entrer la coordonée X puis la coordonée Y (ligne puis colonne)");
+	}
+
+
+	@Override
+	public void askChoiceMenu(int currentPlayerIndex) {
+		// TODO Auto-generated method stub
+		
 	}
 
 

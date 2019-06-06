@@ -10,13 +10,13 @@ import fr.iutvalence.projet.battleArenaGame.move.Coordinate;
  *
  */
 public enum Shape {
-	
-	Ball("Ball",100,2,5,3,new Coordinate[] {new Coordinate(0,0)}),
-	Fist("Fist",100,1,1,2,new Coordinate[] {new Coordinate(0,0)}),
-	Cross("Cross",100,3,5,4,new Coordinate[] {new Coordinate(0,0),new Coordinate(-2,0),new Coordinate(-1,0),new Coordinate(1,0),new Coordinate(2,0),new Coordinate(0,-2),new Coordinate(0,-1),new Coordinate(0,1),new Coordinate(0,2)}),
-	Square("Square",100,3,4,4,new Coordinate[] {new Coordinate(0,0),new Coordinate(0,-1),new Coordinate(0,1),new Coordinate(-1,0),new Coordinate(-1,-1),new Coordinate(-1,1),new Coordinate(1,0),new Coordinate(1,-1),new Coordinate(1,1)}),
-	Sword("Sword",100,2,1,3, new Coordinate[] {new Coordinate(-1,-1),new Coordinate(-1,0),new Coordinate(-1,1),new Coordinate(0,-1),new Coordinate(0,1),new Coordinate(1,-1),new Coordinate(1,0),new Coordinate(1,1)}),
-	Beam("Beam",100,3,1,4, new Coordinate[] {new Coordinate(0,1),new Coordinate(0,2),new Coordinate(0,3),new Coordinate(0,4),new Coordinate(0,5)});
+	//TODO Balance damages, cooldowns and cost
+	Ball("Ball",10,2,5,3,new Coordinate[] {new Coordinate(0,0)}),
+	Fist("Fist",15,1,1,2,new Coordinate[] {new Coordinate(0,0)}),
+	Cross("Cross",10,3,5,4,new Coordinate[] {new Coordinate(0,0),new Coordinate(-2,0),new Coordinate(-1,0),new Coordinate(1,0),new Coordinate(2,0),new Coordinate(0,-2),new Coordinate(0,-1),new Coordinate(0,1),new Coordinate(0,2)}),
+	Square("Square",10,3,4,4,new Coordinate[] {new Coordinate(0,0),new Coordinate(0,-1),new Coordinate(0,1),new Coordinate(-1,0),new Coordinate(-1,-1),new Coordinate(-1,1),new Coordinate(1,0),new Coordinate(1,-1),new Coordinate(1,1)}),
+	Sword("Sword",8,2,1,3, new Coordinate[] {new Coordinate(-1,-1),new Coordinate(-1,0),new Coordinate(-1,1),new Coordinate(0,-1),new Coordinate(0,1),new Coordinate(1,-1),new Coordinate(1,0),new Coordinate(1,1)}),
+	Beam("Beam",10,3,1,4, new Coordinate[] {new Coordinate(0,1),new Coordinate(0,2),new Coordinate(0,3),new Coordinate(0,4),new Coordinate(0,5)});
 	
 	/**
 	 * Represents the type (Ball,Sword...) of the shape

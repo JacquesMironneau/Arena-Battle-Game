@@ -130,6 +130,7 @@ public class Board
 	 */
 	public StatusMessages checkSpell(int pSpellIndex, Coordinate pDest)
 	{
+		pSpellIndex-=1;
 		//If spellIndex is wrong
 		if(pSpellIndex<0 || pSpellIndex>2)
 			return StatusMessages.WRONG_INDEX;
