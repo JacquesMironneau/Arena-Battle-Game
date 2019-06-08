@@ -167,51 +167,13 @@ public class Game implements GameController
 	@Override
 	public void moveRequest(int currentPlayerIndex,Coordinate destination)
 	{
-		switch(this.board.checkMove(destination))
-		{
-		case MOVE_OUT_OF_RANGE:
-			this.players.get(currentPlayerIndex).displayStatus(StatusMessages.MOVE_OUT_OF_RANGE);
-			break;
-			
-		case MOVE_OUT_OF_BOARD:
-			this.players.get(currentPlayerIndex).displayStatus(StatusMessages.MOVE_OUT_OF_BOARD);
-			break;
-			
-		case CASE_OCCUPATED:
-			this.players.get(currentPlayerIndex).displayStatus(StatusMessages.CASE_OCCUPATED);
-			break;
-			
-		case MOVE_DONE:
-			this.players.get(currentPlayerIndex).displayStatus(StatusMessages.MOVE_DONE);
-			break;
-		}
+		this.players.get(currentPlayerIndex).displayStatus(this.board.checkMove(destination));
 	}
 
 	@Override
 	public void spellRequest(int currentPlayerIndex,int spellIndex,Coordinate destination)
 	{
-		switch(this.board.checkSpell(spellIndex, destination))
-		{
-		case WRONG_INDEX:
-			this.players.get(currentPlayerIndex).displayStatus(StatusMessages.WRONG_INDEX);
-			break;
-			
-		case SPELL_IN_COOLDOWN:  
-			this.players.get(currentPlayerIndex).displayStatus(StatusMessages.SPELL_IN_COOLDOWN);
-			break;
-			
-		case NOT_ENOUGH_ACTION_POINT:
-			this.players.get(currentPlayerIndex).displayStatus(StatusMessages.NOT_ENOUGH_ACTION_POINT);
-			break;
-			
-		case SPELL_TARGET_OUT_OF_RANGE:
-			this.players.get(currentPlayerIndex).displayStatus(StatusMessages.SPELL_TARGET_OUT_OF_RANGE);
-			break;
-			
-		case SPELL_SENT:
-			this.players.get(currentPlayerIndex).displayStatus(StatusMessages.SPELL_SENT);
-			break;
-		}
+		this.players.get(currentPlayerIndex).displayStatus(this.board.checkSpell(spellIndex, destination));
 	}
 	
 	@Override
@@ -220,11 +182,11 @@ public class Game implements GameController
 	{
 		for(Pawn p : this.board.getTurnOrder())
 			if(p.getTeamId()==currentPlayerIndex && p.getSpellPage() == null)
-				{
+			{
 				p.setSpellPage(new SpellPage(this.getSpellPages().get(pageToSet)));
 				this.players.get(currentPlayerIndex).displayStatus(StatusMessages.PAGE_SET);
 				break;
-				}
+			}
 	}
 	
 	public void actionRequest(int currentPlayerIndex,StatusMessages choice)
@@ -238,6 +200,7 @@ public class Game implements GameController
 			for(GameView gv : players)
 				gv.displayBoard(board,this.maxPlayer);
 			break;
+			
 		case LAUNCH_SPELL:
 			this.players.get(currentPlayerIndex).displayBoard(board,this.maxPlayer);
 			this.players.get(currentPlayerIndex).displaySpellPageDetail(this.board.getTurnOrder().get(this.board.getCurrentPawnIndex()).getSpellPage());
@@ -249,6 +212,7 @@ public class Game implements GameController
 			for(GameView gv : players)
 				gv.displayBoard(board,this.maxPlayer);
 			break;
+			
 		case END_TURN:
 			this.board.nextPawn();
 			break;
@@ -264,6 +228,7 @@ public class Game implements GameController
 	//TODO Remove this method, used for test
 	public void createSpellPageForTest()
 	{
+		
 		SpellPage p1 = new SpellPage("page1");
 		Spell s1 = new Spell();
 		Spell s2 = new Spell();

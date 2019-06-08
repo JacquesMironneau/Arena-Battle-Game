@@ -50,7 +50,7 @@ public class Shape {
 	private HashSet<Coordinate> effectedCoordinates;
 	
 	
-	
+	//TODO super mathematical formula to deal with every parameters
 	/**
 	 * initialize a new shape with a given type,damage,cooldown range spellCost and an array of coordinate
 	 * @param theType the type of the Shape
