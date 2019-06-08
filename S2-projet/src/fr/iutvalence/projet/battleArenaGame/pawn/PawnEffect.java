@@ -31,6 +31,9 @@ public class PawnEffect
 		return myEffect;
 	}
 	
-	
+	public String getEffectName()
+	{
+		return myEffect.getEffectName();
+	}
 	
 }
