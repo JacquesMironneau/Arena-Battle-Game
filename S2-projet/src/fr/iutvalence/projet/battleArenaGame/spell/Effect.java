@@ -23,6 +23,8 @@ public enum Effect{
 	Wind("Wind","Unknow",3),
 	Darkness("Darkness","Weakness",3);
 	
+	
+	
 	/**
 	 * Name of the element (an element can be Fire, Ice ...)
 	 */
@@ -37,7 +39,7 @@ public enum Effect{
 	 * Default duration of the effect (number of Turn)
 	 */
 	private int effectDuration;
-	
+
 	/**
 	 * Constructor of SpellEffect
 	 * @param pElementName name of the element to set
@@ -69,4 +71,7 @@ public enum Effect{
 	{
 		return this.effectDuration;
 	}
+
+	
+	
 }
