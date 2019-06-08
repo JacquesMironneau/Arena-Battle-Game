@@ -1,12 +1,13 @@
 package fr.iutvalence.projet.battleArenaGame;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 
 import fr.iutvalence.projet.battleArenaGame.move.Coordinate;
 import fr.iutvalence.projet.battleArenaGame.pawn.Pawn;
-import fr.iutvalence.projet.battleArenaGame.shape.Shape;
-import fr.iutvalence.projet.battleArenaGame.spell.Spell;
 import fr.iutvalence.projet.battleArenaGame.spell.Effect;
+import fr.iutvalence.projet.battleArenaGame.spell.Shape;
+import fr.iutvalence.projet.battleArenaGame.spell.Spell;
 import fr.iutvalence.projet.battleArenaGame.spell.SpellPage;
 import fr.iutvalence.projet.battleArenaGame.view.GameView;
 import fr.iutvalence.projet.battleArenaGame.view.PlayerConsole;
@@ -228,14 +229,31 @@ public class Game implements GameController
 	//TODO Remove this method, used for test
 	public void createSpellPageForTest()
 	{
+		/*
+		 * Predefined shapes
+		 */
+		HashSet<Coordinate> cBall = new HashSet<Coordinate>();
+		cBall.add(new Coordinate(0,0));
+		HashSet<Coordinate> cFist = new HashSet<Coordinate>();
+		cFist.add(new Coordinate(0,0));
+		HashSet<Coordinate> cSquare = new HashSet<Coordinate>();
+		cSquare.add(new Coordinate(0,0));
+		cSquare.add(new Coordinate(0,-1));
+		cSquare.add(new Coordinate(0,1));
+		cSquare.add(new Coordinate(-1,0));
+		cSquare.add(new Coordinate(-1,-1));
+		cSquare.add(new Coordinate(-1,1));
+		cSquare.add(new Coordinate(1,0));
+		cSquare.add(new Coordinate(1,-1));
+		cSquare.add(new Coordinate(1,1));
 		
 		SpellPage p1 = new SpellPage("page1");
 		Spell s1 = new Spell();
 		Spell s2 = new Spell();
 		Spell s3 = new Spell();
-		s1.setShape(Shape.Ball);
-		s2.setShape(Shape.Fist);
-		s3.setShape(Shape.Square);
+		s1.setShape(new Shape("Ball",10,2,5,3,cBall));
+		s2.setShape(new Shape("Fist",15,1,1,2,cFist));
+		s3.setShape(new Shape("Square",10,3,4,4,cSquare));
 		s1.setSpellEffect(Effect.Fire);
 		s2.setSpellEffect(Effect.Ice);
 		s3.setSpellEffect(Effect.Fire);

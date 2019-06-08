@@ -60,7 +60,7 @@ public class Shape {
 	 * @param theSpellCost the cost of the shape in action points
 	 * @param theEffectedCoords the coordinate that will be effect by the shape
 	 */
-	Shape(String pName,int pDamage,int pCooldown,int pRange,int pSpellCost, HashSet<Coordinate> pEffectedCoords)
+	public Shape(String pName,int pDamage,int pCooldown,int pRange,int pSpellCost, HashSet<Coordinate> pEffectedCoords)
 	{
 		this.name = pName;
 		this.damage = pDamage;
