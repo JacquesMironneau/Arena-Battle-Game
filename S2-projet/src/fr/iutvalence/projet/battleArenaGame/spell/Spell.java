@@ -1,7 +1,5 @@
 package fr.iutvalence.projet.battleArenaGame.spell;
 
-import fr.iutvalence.projet.battleArenaGame.shape.Shape;
-
 /**
  * 
  * Represent a Spell which have a shape, a cooldown(so a delay (in turns) between two uses) and an Effect.
