@@ -105,18 +105,11 @@ public class Pawn
 	 */
 	public void updateEffect()
 	{
-		
-		for(int arrayIndex=0;arrayIndex<this.getEffect().size();arrayIndex++)
+		for(PawnEffect eff : this.getEffect())
 		{
-		  PawnEffect effectToUpdate = this.getEffect().get(arrayIndex);
-		  effectToUpdate.setCurrentDuration(effectToUpdate.getCurrentDuration() -1);
-		  PawnEffect updatedEffect = effectToUpdate;
-		  
-		  if(updatedEffect.getCurrentDuration() == 0)
-			  this.getEffect().remove(arrayIndex);
-		  
-		  else
-			  this.getEffect().set(arrayIndex, updatedEffect);
+			eff.setCurrentDuration(eff.getCurrentDuration()-1);
+			if(eff.getCurrentDuration()==0)
+				this.getEffect().remove(this.getEffect().indexOf(eff));
 		}
 	}
 	
@@ -145,8 +138,7 @@ public class Pawn
 	{
 		return this.mySpellPage != null;
 	}
-	
-	
+		
 	
 	/*
 	 * Getters
