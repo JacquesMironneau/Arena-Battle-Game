@@ -9,7 +9,7 @@ import fr.iutvalence.projet.battleArenaGame.GameController;
 import fr.iutvalence.projet.battleArenaGame.move.Coordinate;
 import fr.iutvalence.projet.battleArenaGame.pawn.Pawn;
 import fr.iutvalence.projet.battleArenaGame.pawn.PawnEffect;
-import fr.iutvalence.projet.battleArenaGame.spell.SpellEffect;
+import fr.iutvalence.projet.battleArenaGame.spell.Effect;
 import fr.iutvalence.projet.battleArenaGame.spell.SpellPage;
 
 //TODO remove all prints and checks (move it in game algorithm)
@@ -100,7 +100,7 @@ public class PlayerConsole implements GameView{
 	}
 	
 	@Override
-	public SpellEffect askSpellElement() 
+	public Effect askSpellElement() 
 	{	
 		CheapScanner scan = new CheapScanner();
 		String elementName;
@@ -108,17 +108,17 @@ public class PlayerConsole implements GameView{
 		switch(elementName)
 		{
 		case "Fire":
-			return SpellEffect.Fire;
+			return Effect.Fire;
 		case "Ice":
-			return SpellEffect.Ice;
+			return Effect.Ice;
 		case "Stone":
-			return SpellEffect.Stone;
+			return Effect.Stone;
 		case "Electricity" :
-			return SpellEffect.Electricity;
+			return Effect.Electricity;
 		case "Wind":
-			return SpellEffect.Wind;
+			return Effect.Wind;
 		case "Darkness":
-			return SpellEffect.Darkness;
+			return Effect.Darkness;
 		default:
 			elementName = null;
 		} 				
@@ -181,7 +181,7 @@ public class PlayerConsole implements GameView{
 
 	@Override
 	public void displayElementChoice() {
-		for (SpellEffect i : SpellEffect.values())
+		for (Effect i : Effect.values())
 		{
 			System.out.println(i.getElementName());
 		}

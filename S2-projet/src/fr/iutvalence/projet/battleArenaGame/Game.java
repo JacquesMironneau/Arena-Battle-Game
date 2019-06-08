@@ -6,7 +6,7 @@ import fr.iutvalence.projet.battleArenaGame.move.Coordinate;
 import fr.iutvalence.projet.battleArenaGame.pawn.Pawn;
 import fr.iutvalence.projet.battleArenaGame.shape.Shape;
 import fr.iutvalence.projet.battleArenaGame.spell.Spell;
-import fr.iutvalence.projet.battleArenaGame.spell.SpellEffect;
+import fr.iutvalence.projet.battleArenaGame.spell.Effect;
 import fr.iutvalence.projet.battleArenaGame.spell.SpellPage;
 import fr.iutvalence.projet.battleArenaGame.view.GameView;
 import fr.iutvalence.projet.battleArenaGame.view.PlayerConsole;
@@ -271,9 +271,9 @@ public class Game implements GameController
 		s1.setShape(Shape.Ball);
 		s2.setShape(Shape.Fist);
 		s3.setShape(Shape.Square);
-		s1.setSpellEffect(SpellEffect.Fire);
-		s2.setSpellEffect(SpellEffect.Ice);
-		s3.setSpellEffect(SpellEffect.Fire);
+		s1.setSpellEffect(Effect.Fire);
+		s2.setSpellEffect(Effect.Ice);
+		s3.setSpellEffect(Effect.Fire);
 		
 		p1.setSpell(0,s1);
 		p1.setSpell(1,s2);

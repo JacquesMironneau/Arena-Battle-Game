@@ -22,7 +22,7 @@ import fr.iutvalence.projet.battleArenaGame.Board;
 import fr.iutvalence.projet.battleArenaGame.GameController;
 import fr.iutvalence.projet.battleArenaGame.move.Coordinate;
 import fr.iutvalence.projet.battleArenaGame.pawn.Pawn;
-import fr.iutvalence.projet.battleArenaGame.spell.SpellEffect;
+import fr.iutvalence.projet.battleArenaGame.spell.Effect;
 import fr.iutvalence.projet.battleArenaGame.spell.SpellPage;
 import fr.iutvalence.projet.battleArenaGame.test.JGameCanvas;
 
@@ -157,7 +157,7 @@ public class PlayerWindow extends JFrame implements GameView{
 	}
 
 	@Override
-	public SpellEffect askSpellElement() {
+	public Effect askSpellElement() {
 		// TODO Auto-generated method stub
 		return null;
 	}

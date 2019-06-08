@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 import fr.iutvalence.projet.battleArenaGame.Board;
 import fr.iutvalence.projet.battleArenaGame.pawn.Pawn;
-import fr.iutvalence.projet.battleArenaGame.spell.SpellEffect;
+import fr.iutvalence.projet.battleArenaGame.spell.Effect;
 import fr.iutvalence.projet.battleArenaGame.spell.SpellPage;
 
 /**
@@ -57,7 +57,7 @@ s	 */
 	 * Ask the user to pick between every spell element for his spell
 	 * @return
 	 */
-	public SpellEffect askSpellElement();
+	public Effect askSpellElement();
 	
 	/**
 	 * Displays the board 

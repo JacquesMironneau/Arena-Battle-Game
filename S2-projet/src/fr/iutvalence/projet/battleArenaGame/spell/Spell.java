@@ -26,7 +26,7 @@ public class Spell {
 	/**
 	 * An effect of a spell
 	 */
-	private SpellEffect myEffect;
+	private Effect myEffect;
 	
 	/**
 	 * Create a new empty Spell with a cooldown ready
@@ -71,7 +71,7 @@ public class Spell {
 		return this.currentCooldown;
 	}
 	
-	public SpellEffect getSpellEffect()
+	public Effect getSpellEffect()
 	{
 		return this.myEffect;
 	}
@@ -88,7 +88,7 @@ public class Spell {
 		this.currentCooldown = pcurrentCD;
 	}
 	
-	public void setSpellEffect(SpellEffect pEffectSpellEffect)
+	public void setSpellEffect(Effect pEffectSpellEffect)
 	{
 		this.myEffect = pEffectSpellEffect ;
 	}

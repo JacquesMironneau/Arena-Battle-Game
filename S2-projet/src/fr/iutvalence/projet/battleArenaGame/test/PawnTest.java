@@ -33,7 +33,7 @@ class PawnTest
 		
 		
 		page1.getSpell(0).setCurrentCooldown(page1.getSpell(0).getDefaultCooldown());
-		SpellEffect anEffect = SpellEffect.Fire;
+		Effect anEffect = Effect.Fire;
 		page1.getSpell(0).setSpellEffect(anEffect);
 		Coordinate coord = new Coordinate(1,2);
 		Pawn pawn1 = new Pawn(0,coord,"lol");
@@ -59,7 +59,7 @@ class PawnTest
 		
 		page1.getSpell(0).setCurrentCooldown(page1.getSpell(0).getDefaultCooldown());
 		
-		SpellEffect anEffect = SpellEffect.Fire;
+		Effect anEffect = Effect.Fire;
 		page1.getSpell(0).setSpellEffect(anEffect);
 		
 		Coordinate coord = new Coordinate(1,2);
@@ -90,7 +90,7 @@ class PawnTest
 		
 		page1.getSpell(0).setCurrentCooldown(page1.getSpell(0).getDefaultCooldown());
 		
-		SpellEffect anEffect = SpellEffect.Fire;
+		Effect anEffect = Effect.Fire;
 		
 		page1.getSpell(0).setSpellEffect(anEffect);
 		Coordinate coord = new Coordinate(1,2);
@@ -123,7 +123,7 @@ class PawnTest
 		
 		page1.getSpell(0).setCurrentCooldown(page1.getSpell(0).getDefaultCooldown());
 		
-		SpellEffect anEffect = SpellEffect.Fire;
+		Effect anEffect = Effect.Fire;
 		
 		page1.getSpell(0).setSpellEffect(anEffect);
 		Coordinate coord = new Coordinate(1,2);

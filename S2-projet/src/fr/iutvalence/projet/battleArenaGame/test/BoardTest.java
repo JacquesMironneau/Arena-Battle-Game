@@ -10,7 +10,7 @@ import fr.iutvalence.projet.battleArenaGame.move.Coordinate;
 import fr.iutvalence.projet.battleArenaGame.pawn.Pawn;
 import fr.iutvalence.projet.battleArenaGame.pawn.PawnEffect;
 import fr.iutvalence.projet.battleArenaGame.shape.Shape;
-import fr.iutvalence.projet.battleArenaGame.spell.SpellEffect;
+import fr.iutvalence.projet.battleArenaGame.spell.Effect;
 import fr.iutvalence.projet.battleArenaGame.spell.SpellPage;
 import fr.iutvalence.projet.battleArenaGame.view.StatusMessages;
 /**
@@ -64,8 +64,8 @@ class BoardTest
 		//primary tests
 		
 		assertTrue("effets Non vide",G.getBoard().getTurnOrder().get(0).getEffect().isEmpty());
-		G.getBoard().getTurnOrder().get(0).addEffect(new PawnEffect(SpellEffect.Fire));
-		G.getBoard().getTurnOrder().get(0).addEffect(new PawnEffect(SpellEffect.Electricity));
+		G.getBoard().getTurnOrder().get(0).addEffect(new PawnEffect(Effect.Fire));
+		G.getBoard().getTurnOrder().get(0).addEffect(new PawnEffect(Effect.Electricity));
 		assertTrue("Full life",G.getBoard().getTurnOrder().get(0).getHealthPoints()==Pawn.DEFAULT_HEALTH_POINTS);
 		assertTrue("Full Actions points",G.getBoard().getTurnOrder().get(0).getActionPoints()==Pawn.DEFAULT_ACTION_POINTS);
 		G.getBoard().applyEffect();
@@ -85,7 +85,7 @@ class BoardTest
 		
 		//Update element test
 		G = new Game(2,3,15);
-		G.getBoard().getTurnOrder().get(0).addEffect(new PawnEffect(SpellEffect.Fire));
+		G.getBoard().getTurnOrder().get(0).addEffect(new PawnEffect(Effect.Fire));
 		G.getBoard().applyEffect();
 		assertFalse("Effect disapears", G.getBoard().getTurnOrder().get(0).getEffect().size()==0);
 		G.getBoard().applyEffect();
@@ -95,7 +95,7 @@ class BoardTest
 		assertTrue("Effect do dis", G.getBoard().getTurnOrder().get(0).getEffect().size()==0);
 
 		//ICE TEST
-		G.getBoard().getTurnOrder().get(0).addEffect(new PawnEffect(SpellEffect.Ice));
+		G.getBoard().getTurnOrder().get(0).addEffect(new PawnEffect(Effect.Ice));
 		assertTrue("Base de point de vie mauvaise", G.getBoard().getTurnOrder().get(0).getMovePoints()==Pawn.DEFAULT_MOVE_POINTS);
 		
 		G.getBoard().applyEffect();
@@ -109,7 +109,7 @@ class BoardTest
 		G.getBoard().getTurnOrder().get(0).getEffect().clear();
 		G.getBoard().getTurnOrder().get(0).setActionPoints(Pawn.DEFAULT_ACTION_POINTS);;
 		G.getBoard().getTurnOrder().get(0).setMovePoints(Pawn.DEFAULT_MOVE_POINTS);
-		G.getBoard().getTurnOrder().get(0).addEffect(new PawnEffect(SpellEffect.Stone));
+		G.getBoard().getTurnOrder().get(0).addEffect(new PawnEffect(Effect.Stone));
 		G.getBoard().applyEffect();
 
 		assertTrue("Echec stone action", G.getBoard().getTurnOrder().get(0).getActionPoints()==Pawn.DEFAULT_ACTION_POINTS-1);
@@ -142,7 +142,7 @@ class BoardTest
 		page1.getSpell(1).setShape(ball);
 		page1.getSpell(2).setShape(fist);
 		
-		SpellEffect anEffect = SpellEffect.Fire;
+		Effect anEffect = Effect.Fire;
 		page1.getSpell(0).setSpellEffect(anEffect);
 		coord = new Coordinate(1,2);
 		G.getBoard().getTurnOrder().get(0).setSpellPage(page1);
