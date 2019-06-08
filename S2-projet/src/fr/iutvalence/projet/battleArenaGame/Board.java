@@ -2,6 +2,7 @@ package fr.iutvalence.projet.battleArenaGame;
 
 import java.util.ArrayList;
 import java.util.Random;
+
 import fr.iutvalence.projet.battleArenaGame.move.Coordinate;
 import fr.iutvalence.projet.battleArenaGame.move.Movement;
 import fr.iutvalence.projet.battleArenaGame.pawn.Pawn;
@@ -90,34 +91,14 @@ public class Board
 	/**
 	 * Apply the effects on the currentPawn 
 	 */
-	//TODO review that to fit with the system of spell which will be reviewed too
 	public void applyEffect() 
 	{
 		if(this.turnOrder.get(currentPawnIndex).getEffect().isEmpty()) return;
-		for(PawnEffect eff : this.turnOrder.get(currentPawnIndex).getEffect() )
+		for(PawnEffect eff : this.turnOrder.get(currentPawnIndex).getEffect())
 		{
-			switch(eff.getEffectName())
-			{
-			case "Ignite":
-				this.turnOrder.get(currentPawnIndex).setHealthPoints(this.turnOrder.get(currentPawnIndex).getHealthPoints()-5);
-				break;
-			case "Slow":
-				this.turnOrder.get(currentPawnIndex).setMovePoints(this.turnOrder.get(currentPawnIndex).getMovePoints()-2);
-				break;
-			case "Silence":
-				this.turnOrder.get(currentPawnIndex).setActionPoints(this.turnOrder.get(currentPawnIndex).getActionPoints()-2);
-				break;
-			case "Stun":
-				this.turnOrder.get(currentPawnIndex).setMovePoints(this.turnOrder.get(currentPawnIndex).getMovePoints()-1);
-				this.turnOrder.get(currentPawnIndex).setActionPoints(this.turnOrder.get(currentPawnIndex).getActionPoints()-1);
-				break;
-			case "Crit":
-				//TODO set effect
-				break;
-			case "Weakness":
-				//TODO set effect
-				break;
-			}
+			this.turnOrder.get(currentPawnIndex).setHealthPoints(this.turnOrder.get(currentPawnIndex).getHealthPoints()+eff.getMyEffect().getHealthModifier());
+			this.turnOrder.get(currentPawnIndex).setActionPoints(this.turnOrder.get(currentPawnIndex).getActionPoints()+eff.getMyEffect().getActionPointModifier());
+			this.turnOrder.get(currentPawnIndex).setMovePoints(this.turnOrder.get(currentPawnIndex).getMovePoints()+eff.getMyEffect().getMovePointModifier());
 		}
 		this.turnOrder.get(currentPawnIndex).updateEffect();
 	}
