@@ -105,12 +105,14 @@ public class Pawn
 	 */
 	public void updateEffect()
 	{
+		ArrayList<PawnEffect> effectToRemove = new ArrayList<PawnEffect>();
 		for(PawnEffect eff : this.getEffect())
 		{
 			eff.setCurrentDuration(eff.getCurrentDuration()-1);
 			if(eff.getCurrentDuration()==0)
-				this.getEffect().remove(this.getEffect().indexOf(eff));
+				effectToRemove.add(eff);
 		}
+		this.getEffect().removeAll(effectToRemove);
 	}
 	
 	/**
