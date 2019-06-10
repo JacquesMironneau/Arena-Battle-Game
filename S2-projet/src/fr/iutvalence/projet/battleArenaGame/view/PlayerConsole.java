@@ -1,7 +1,6 @@
 package fr.iutvalence.projet.battleArenaGame.view;
 
 
-import java.awt.Choice;
 import java.util.ArrayList;
 
 import fr.iutvalence.projet.battleArenaGame.Board;
@@ -9,7 +8,6 @@ import fr.iutvalence.projet.battleArenaGame.GameController;
 import fr.iutvalence.projet.battleArenaGame.move.Coordinate;
 import fr.iutvalence.projet.battleArenaGame.pawn.Pawn;
 import fr.iutvalence.projet.battleArenaGame.pawn.PawnEffect;
-import fr.iutvalence.projet.battleArenaGame.spell.Effect;
 import fr.iutvalence.projet.battleArenaGame.spell.SpellPage;
 
 //TODO remove all prints and checks (move it in game algorithm)
@@ -18,14 +16,11 @@ public class PlayerConsole implements GameView{
 	
 	private GameController myController;
 	
-	public PlayerConsole(GameController controller)
+	public PlayerConsole()
 	{
-		this.myController = controller;
 	}
 	
-	
 	//ASK
-	
 	
 	public void askSpell(int currentPlayerIndex)
 	{
@@ -54,13 +49,7 @@ public class PlayerConsole implements GameView{
 		this.myController.moveRequest(currentPlayerIndex,new Coordinate(xCoord,yCoord));
 		
 	}
-	//TODO see GameView
-	@Override
-	public void askChoiceMenu() 
-	{	
-		
-	}
-
+	
 	public void askActionChoice(int currentPlayerIndex) 
 	{
 		CheapScanner scan = new CheapScanner();
@@ -91,40 +80,6 @@ public class PlayerConsole implements GameView{
 		this.myController.setPageRequest(currentPlayerIndex,pageIndex);
 	}
 	
-	
-	@Override
-	public String askPageName() {
-		CheapScanner scan = new CheapScanner();
-		String myName = scan.getStr();
-		return myName;
-	}
-	
-	@Override
-	public Effect askSpellElement() 
-	{	
-		CheapScanner scan = new CheapScanner();
-		String elementName;
-		elementName = scan.getStr();
-		switch(elementName)
-		{
-		case "Fire":
-			return Effect.Fire;
-		case "Ice":
-			return Effect.Ice;
-		case "Stone":
-			return Effect.Stone;
-		case "Electricity" :
-			return Effect.Electricity;
-		case "Wind":
-			return Effect.Wind;
-		case "Darkness":
-			return Effect.Darkness;
-		default:
-			elementName = null;
-		} 				
-	return null;
-	}
-
 
 	//DISPLAY
 	
@@ -133,7 +88,6 @@ public class PlayerConsole implements GameView{
 		System.out.println("Entrer l'index du sort à lancer,\n puis la ligne de la cible, puis la colonne de la cible");
 		
 	}
-	
 	
 	/**
 	 * Display a list of spell pages with their name and an index
@@ -148,52 +102,17 @@ public class PlayerConsole implements GameView{
 		}
 	}
 
-
-/**
- * Display the main menu
- */
-	@Override
-	public void displayMenu() {
-		System.out.println("----------------Menu-----------------");
-		System.out.println("1) Créer une partie");
-		System.out.println("2) Rejoindre une partie");
-		System.out.println("3) cr�� partie local");
-		
-	}
-
-
 	@Override
 	public void displayEnd(String winTeam) 
 	{
 		System.out.println(winTeam);
 	}
 
-
-	
-
 	@Override
 	public void displayChoiceAction() {
 		System.out.println("1) bouger mon pion\n2) lancer un sort\n3)Fin du tour");
 		
 	}
-
-
-
-	@Override
-	public void displayElementChoice() {
-		for (Effect i : Effect.values())
-		{
-			System.out.println(i.getElementName());
-		}
-		
-	}
-
-	@Override
-	public void displayShapeChoice() {
-		System.out.println("Ball - Fist - Sword - Square - Cross - Beam");
-	}
-
-
 
 	@Override
 	public void displayNextTurn(int numPlayer)
@@ -218,7 +137,6 @@ public class PlayerConsole implements GameView{
 		}
 		System.out.println("Choissisez l'index du sort a lancer");
 	}
-
 
 	@Override
 	public void displayBoard(Board myBoard,int nbPlayer)
@@ -336,7 +254,6 @@ public class PlayerConsole implements GameView{
 		System.out.println("entrez une taille plus grande");
 	}
 	
-
 	@Override
 	public void displaySelectForThisPawn(Pawn thePawn) {
 		System.out.println("choisissez une page pour le pion "+ thePawn.getName());
@@ -348,14 +265,10 @@ public class PlayerConsole implements GameView{
 		System.out.println("Entrer la coordonée X puis la coordonée Y (ligne puis colonne)");
 	}
 
-
-	@Override
-	public void askChoiceMenu(int currentPlayerIndex) {
-		// TODO Auto-generated method stub
-		
+	public void setGameController(GameController GC)
+	{
+		this.myController = GC;
 	}
-
-
 	
 }
 

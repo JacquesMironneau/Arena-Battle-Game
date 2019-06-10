@@ -68,6 +68,8 @@ public class Game implements GameController
 		this.gameStatus = EndStatus.RUNNING;		
 	}
 	
+	
+	
 	//Methods
 	
 	/**

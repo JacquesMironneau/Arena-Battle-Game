@@ -76,7 +76,7 @@ public class Shape {
 	 * Getters for the shape
 	 */
 	
-	public String getType() 
+	public String getName() 
 	{
 		return this.name;
 	}

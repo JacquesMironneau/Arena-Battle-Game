@@ -4,7 +4,6 @@ import java.util.ArrayList;
 
 import fr.iutvalence.projet.battleArenaGame.Board;
 import fr.iutvalence.projet.battleArenaGame.pawn.Pawn;
-import fr.iutvalence.projet.battleArenaGame.spell.Effect;
 import fr.iutvalence.projet.battleArenaGame.spell.SpellPage;
 
 /**
@@ -14,11 +13,6 @@ import fr.iutvalence.projet.battleArenaGame.spell.SpellPage;
  */
 
 public interface GameView {
-
-	/*
-	 * Ask part
-	 */
-	
 	
 	/**
 	 * Ask the player to pick between every possible actions choice
@@ -26,38 +20,17 @@ public interface GameView {
 	 */
 	public void askActionChoice(int currentPlayerIndex);
 	
-	
 	/**
 	 * ask the player to pick a spell
 	 * @param currentPlayerIndex the index of the user chosen by the controller
 	 */
 	public void askSpell(int currentPlayerIndex);
 	
-
 	/**
 	 * Ask the player to pick a page for his pawn
 	 * @param currentPlayerIndex the index of the user chosen by the controller
 	 */
 	public void askPageSelection(int currentPlayerIndex);
-	
-	/**
-	 * Ask the player to choose a option in the menu
-	 */
-	//TODO delete this method, because the choice in the main menu will be done before the creation of the game
-	//we don't know yet how to do this
-	public void askChoiceMenu(int currentPlayerIndex);
-
-	
-	/**
-	 * Ask the user to pick a name for his page
-s	 */
-	public String askPageName();
-	
-	/**
-	 * Ask the user to pick between every spell element for his spell
-	 * @return
-	 */
-	public Effect askSpellElement();
 	
 	/**
 	 * Displays the board 
@@ -73,8 +46,7 @@ s	 */
 	 * Display to the player what he have to do in order to select a spell
 	 */
 	public void displaySpellSelection();
-	
-	
+		
 	/**
 	 * Display the board to user
 	 * @param myBoard
@@ -82,11 +54,6 @@ s	 */
 	 */
 	public void displayBoard(Board myBoard, int nbPlayer);
 
-	/**
-	 * Display the launch menu with the different choices(Create Spells/Host/Join/localGame)
-	 */
-	public void displayMenu();
-	
 	/**
 	 * Display a status messages based on StatusMessages enumeration 
 	 */
@@ -110,17 +77,6 @@ s	 */
 	public void displayEnd(String winTeam);
 	
 	/**
-	 * Displays every possible choices for element
-	 */
-	public void displayElementChoice();
-	
-	/**
-	 * Display every possible choices for a spell shape
-	 */
-	public void displayShapeChoice();
-	
-	
-	/**
 	 * Display that the turn has changed
 	 */
 	public void displayNextTurn(int numPlayer);
@@ -135,7 +91,6 @@ s	 */
 	 * @param pPage the described page
 	 */
 	public void displaySpellPageDetail(SpellPage pPage);
-	
 	
 	/**
 	 * say Size is to small for the amount of pawns
