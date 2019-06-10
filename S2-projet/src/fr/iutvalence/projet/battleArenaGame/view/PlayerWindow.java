@@ -44,6 +44,9 @@ public class PlayerWindow extends JFrame implements GameView{
 	private static final long serialVersionUID = -553229968959527773L;
 	
 	
+	private int spellIndex;
+	
+	
 	/**
 	 * This pane contains all the container and the visible informations on the screen.
 	 */
@@ -69,6 +72,11 @@ public class PlayerWindow extends JFrame implements GameView{
 	 * This is a choice that contains all the shapes that are available in the game
 	 */
 	private Choice chShape;
+	
+	/**
+	 * This represents all the spellPages that is possible to set to a pawn
+	 */
+	private Choice chSpellPages;
 	
 	/**
 	 * This String is used to store the Element of the first spell of a spell page
@@ -536,38 +544,32 @@ public class PlayerWindow extends JFrame implements GameView{
 	@Override
 	public void displaySpellPage(ArrayList<SpellPage> listPages) {
 		//version 1
-		//might have a
 		this.setVisible(false);
 		
 		/*
-		 * TODO need turn order
+		 * TODO need turn order in order to get the correct amount of iterations
 		 * Number of iterations / number of pawns need turn order
 		 */
-		int n = 5;
+		this.displaySelectForThisPawn(null);
+		this.chSpellPages.removeAll();
+		this.chSpellPages.add("Choose a spell page");
+		for(SpellPage sp : listPages) {
+			this.chSpellPages.add(sp.getPageName());
+		}
 		
 		JButton btnValider = new JButton("Valider");
 		btnValider.setBounds(this.getWidth()/5*2,this.getHeight()-this.getHeight()/20,this.getWidth()/5,this.getHeight()/20);
 		btnValider.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-//TODO				gameController.setPageRequest(currentPlayerIndex, pageToSet);
-				
+				//TODO method from gameController that calls askPageSelection
 			}
-			
 		});
 		
-		ArrayList<Choice> choices = new ArrayList<Choice>();
 		
-		for(int i = 1 ; i < n; i++) {
-			choices.add(new Choice());
-			choices.get(i-1).setBounds(this.getWidth()/3,this.getHeight()/20*i,this.getWidth()/3,this.getHeight()/20);
-			choices.get(i-1).add("Choose a spell page");
-			for (SpellPage sp : listPages) {
-				choices.get(i-1).add(sp.getPageName());
-//				displaySelectForThisPawn(null);
-			}
-			
-		}
+		
+		
+		
 		
 		
 	}
@@ -575,12 +577,14 @@ public class PlayerWindow extends JFrame implements GameView{
 	@Override
 	public void displayChoiceAction() {
 		// TODO Auto-generated method stub
+		//unused
 		
 	}
 
 	@Override
 	public void displayEnd(String winTeam) {
 		JOptionPane.showMessageDialog(mainContainer, "Victoire de l'équipe "+winTeam.getBytes());
+		//displayMenu
 		
 	}
 
@@ -674,22 +678,20 @@ public class PlayerWindow extends JFrame implements GameView{
 
 	@Override
 	public void askSpell(int currentPlayerIndex) {
-		//make a JButton for each spell to cast
-		int xCoord = 0;
-		int yCoord = 0;
-		this.gameController.spellRequest(currentPlayerIndex, spellIndex,new Coordinate(xCoord,yCoord));
+		this.gameController.spellRequest(currentPlayerIndex, this.spellIndex,new Coordinate(this.gameBoard.getXIndex(),this.gameBoard.getYIndex()));
 		
 	}
 
 	@Override
 	public void askPageSelection(int currentPlayerIndex) {
-		// TODO Auto-generated method stub
+		if(!(chSpellPages.getSelectedIndex()==0))
+			this.gameController.setPageRequest(currentPlayerIndex, chSpellPages.getSelectedIndex()-1);
 		
 	}
 
 	@Override
 	public void askMove(int currentPlayerIndex) {
-		// TODO Auto-generated method stub
+		this.gameController.moveRequest(currentPlayerIndex,new Coordinate(this.gameBoard.getXIndex(),this.gameBoard.getYIndex()));
 		
 	}
 
@@ -701,7 +703,7 @@ public class PlayerWindow extends JFrame implements GameView{
 		spell1.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 //TODO				gameController.actionRequest(currentPlayerIndex, StatusMessages.LAUNCH_SPELL);
-				int spellIndex = 0;
+				spellIndex = 0;
 			}
 		});
 		this.getContentPane().add(spell1);
@@ -711,7 +713,7 @@ public class PlayerWindow extends JFrame implements GameView{
 		spell2.addActionListener(new ActionListener () {
 			public void actionPerformed(ActionEvent arg0) {
 //TODO				gameController.actionRequest(currentPlayerIndex, StatusMessages.LAUNCH_SPELL);
-				int spellIndex = 1;
+				spellIndex = 1;
 			}
 		});
 		this.getContentPane().add(spell2);
@@ -721,7 +723,7 @@ public class PlayerWindow extends JFrame implements GameView{
 		spell3.addActionListener(new ActionListener () {
 			public void actionPerformed(ActionEvent arg0) {
 //TODO				gameController.actionRequest(currentPlayerIndex, StatusMessages.LAUNCH_SPELL);
-				int spellIndex = 2;
+				spellIndex = 2;
 			}
 		});
 		this.getContentPane().add(spell3);
