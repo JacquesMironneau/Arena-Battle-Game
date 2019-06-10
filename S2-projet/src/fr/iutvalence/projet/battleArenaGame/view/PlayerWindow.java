@@ -1,6 +1,7 @@
 package fr.iutvalence.projet.battleArenaGame.view;
 
 import java.awt.Choice;
+import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
@@ -21,6 +22,7 @@ import javax.swing.event.CaretListener;
 import fr.iutvalence.projet.battleArenaGame.Board;
 import fr.iutvalence.projet.battleArenaGame.Game;
 import fr.iutvalence.projet.battleArenaGame.GameController;
+import fr.iutvalence.projet.battleArenaGame.move.Coordinate;
 import fr.iutvalence.projet.battleArenaGame.pawn.Pawn;
 import fr.iutvalence.projet.battleArenaGame.spell.Effect;
 import fr.iutvalence.projet.battleArenaGame.spell.Spell;
@@ -149,8 +151,12 @@ public class PlayerWindow extends JFrame implements GameView{
 
 	@Override
 	public Effect askSpellElement() {
-		// TODO Auto-generated method stub
-		return null;
+		Effect spellEffect = null;
+		for (Effect effect : Effect.values()) {
+			if (this.chElement.getSelectedItem() == effect.getEffectName())
+				spellEffect = effect;
+		}
+		return spellEffect;
 	}
 
 	public boolean askValidation() {
@@ -177,6 +183,7 @@ public class PlayerWindow extends JFrame implements GameView{
 		btnCreateGame.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				//TODO method from gc that calls displayGameConfig()
+				displayGameConfig();
 			}
 		});
 		this.getContentPane().add(btnCreateGame);
@@ -529,8 +536,13 @@ public class PlayerWindow extends JFrame implements GameView{
 	@Override
 	public void displaySpellPage(ArrayList<SpellPage> listPages) {
 		//version 1
+		//might have a
 		this.setVisible(false);
 		
+		/*
+		 * TODO need turn order
+		 * Number of iterations / number of pawns need turn order
+		 */
 		int n = 5;
 		
 		JButton btnValider = new JButton("Valider");
@@ -538,29 +550,23 @@ public class PlayerWindow extends JFrame implements GameView{
 		btnValider.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
-				//TODO change when fixed
+//TODO				gameController.setPageRequest(currentPlayerIndex, pageToSet);
 				
 			}
 			
 		});
 		
 		ArrayList<Choice> choices = new ArrayList<Choice>();
-		ArrayList<JLabel> labels = new ArrayList<JLabel>();
 		
 		for(int i = 1 ; i < n; i++) {
 			choices.add(new Choice());
 			choices.get(i-1).setBounds(this.getWidth()/3,this.getHeight()/20*i,this.getWidth()/3,this.getHeight()/20);
+			choices.get(i-1).add("Choose a spell page");
 			for (SpellPage sp : listPages) {
 				choices.get(i-1).add(sp.getPageName());
+//				displaySelectForThisPawn(null);
 			}
-			labels.add(new JLabel("Selectionnez une page de sorts pour le pion n°"+i));
-			labels.get(i-1).setBounds(0,this.getHeight()/20 - 10,this.getWidth()/3,this.getHeight()-10);
-		}
-		
-		Choice chSpellPages3 = new Choice();
-		chSpellPages3.add("Choose a spell page");
-		for (SpellPage sp : listPages) {
-			chSpellPages3.add(sp.getPageName());
+			
 		}
 		
 		
@@ -582,12 +588,9 @@ public class PlayerWindow extends JFrame implements GameView{
 	public void displayElementChoice() {
 		this.chElement.removeAll();
 		this.chElement.add("Choose an element");
-		this.chElement.add("Fire");
-		this.chElement.add("Ice");
-		this.chElement.add("Wind");
-		this.chElement.add("Stone");
-		this.chElement.add("Electricity");
-		this.chElement.add("Darkness");
+		for (Effect element : Effect.values()) {
+			this.chElement.add(element.getElementName());
+		}
 		
 	}
 
@@ -653,25 +656,28 @@ public class PlayerWindow extends JFrame implements GameView{
 
 	@Override
 	public void displayNextTurn(int numPlayer) {
-		// TODO Auto-generated method stub
+		JOptionPane.showMessageDialog(mainContainer, "It's now the turn of the player "+numPlayer, "Tour suivant", JOptionPane.INFORMATION_MESSAGE);
 		
 	}
 
 	@Override
 	public void displaySelectForThisPawn(Pawn thePawn) {
-		// TODO Auto-generated method stub
+		new JLabel("Veuillez selectionner une page pour le pion n° "+thePawn.getName());
 		
 	}
 
 	@Override
 	public void displayMoveSelection() {
-		// TODO Auto-generated method stub
+		this.gameBoard.highlight(this.gameBoard.getYIndex(), this.gameBoard.getXIndex());
 		
 	}
 
 	@Override
 	public void askSpell(int currentPlayerIndex) {
-		// TODO Auto-generated method stub
+		//make a JButton for each spell to cast
+		int xCoord = 0;
+		int yCoord = 0;
+		this.gameController.spellRequest(currentPlayerIndex, spellIndex,new Coordinate(xCoord,yCoord));
 		
 	}
 
@@ -689,17 +695,60 @@ public class PlayerWindow extends JFrame implements GameView{
 
 	@Override
 	public void displaySpellSelection() {
-		// TODO game.getBoard()Auto-generated method stub
+		this.setVisible(false);
+		JButton spell1 = new JButton("Spell 1");
+		spell1.setBounds(0, this.getHeight()/3*2, this.getWidth()/6, this.getHeight()/3);
+		spell1.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+//TODO				gameController.actionRequest(currentPlayerIndex, StatusMessages.LAUNCH_SPELL);
+				int spellIndex = 0;
+			}
+		});
+		this.getContentPane().add(spell1);
 		
+		JButton spell2 = new JButton("Spell 2");
+		spell2.setBounds(this.getWidth()/6,this.getHeight()/3*2,this.getWidth()/6,this.getHeight()/3);
+		spell2.addActionListener(new ActionListener () {
+			public void actionPerformed(ActionEvent arg0) {
+//TODO				gameController.actionRequest(currentPlayerIndex, StatusMessages.LAUNCH_SPELL);
+				int spellIndex = 1;
+			}
+		});
+		this.getContentPane().add(spell2);
+		
+		JButton spell3 = new JButton("Spell 3");
+		spell3.setBounds(this.getWidth()/6*2,this.getHeight()/3*2,this.getWidth()/6,this.getHeight()/3);
+		spell3.addActionListener(new ActionListener () {
+			public void actionPerformed(ActionEvent arg0) {
+//TODO				gameController.actionRequest(currentPlayerIndex, StatusMessages.LAUNCH_SPELL);
+				int spellIndex = 2;
+			}
+		});
+		this.getContentPane().add(spell3);
+		
+		this.setVisible(true);
 	}
 
 	@Override
 	public void displayBoard(Board myBoard, int nbPlayer) {
 		this.setVisible(false);
 		this.getContentPane().removeAll();
-		this.gameBoard = new JGameCanvas(myBoard.getTurnOrder(),myBoard.getBoardSize(),this.getWidth(),this.getHeight());
-		this.gameBoard.setBounds(0, 0, this.getWidth(), this.getHeight());
+		this.gameBoard = new JGameCanvas(myBoard.getTurnOrder(),myBoard.getBoardSize(),this.getWidth()/3,this.getHeight()/3);
+		this.gameBoard.setBounds(0, 0, this.getWidth()/3*2, this.getHeight()/3*2);
 		this.getContentPane().add(this.gameBoard);
+		this.mainContainer.setLayer(this.gameBoard, this.mainContainer.lowestLayer());
+		
+		JTextArea infos = new JTextArea();
+		infos.setBounds(this.getWidth()/3*2, this.getHeight()/6, this.getWidth()/3, this.getHeight());
+		infos.setEditable(false);
+		for (Pawn p : myBoard.getTurnOrder()) {
+			infos.setText(p.getName()+"\nHP: "+p.getHealthPoints()+" / "+Pawn.DEFAULT_HEALTH_POINTS+"\nPA: "+p.getActionPoints()+" / "+Pawn.DEFAULT_ACTION_POINTS+"\nPM:"+p.getMovePoints()+" / "+Pawn.DEFAULT_MOVE_POINTS+"\n\n"/*+"\n\n"+paramString()+p.getSpellPage().toString()+"\n\n\n"*/);
+		}
+		
+		
+		
+		this.getContentPane().add(infos);
+		this.askActionChoice(0);
 		this.setVisible(true);
 		
 	}
@@ -707,9 +756,25 @@ public class PlayerWindow extends JFrame implements GameView{
 
 	@Override
 	public void askActionChoice(int currentPlayerIndex) {
+		this.setVisible(false);
+		for(Component comp : this.getContentPane().getComponents()) {
+			comp.setEnabled(true);
+		}
 		JButton endTurn = new JButton("Terminer le tour");
-		endTurn.setBounds(this.getWidth()-this.getWidth()/5,this.getHeight()/20*4,this.getWidth()/5,this.getHeight()/20);
+		endTurn.setBounds(this.getWidth()/6*3,this.getHeight()/3*2,this.getWidth()/6,this.getHeight()/3);
+		endTurn.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				for(Component comp : mainContainer.getComponents()) {
+					comp.setEnabled(false);
+				}
+				gameController.actionRequest(currentPlayerIndex, StatusMessages.END_TURN);
+			}
+		});
 		
+		this.displaySpellSelection();
+		this.getContentPane().add(endTurn);
+
+		this.setVisible(true);
 	}
 
 
@@ -721,8 +786,14 @@ public class PlayerWindow extends JFrame implements GameView{
 	
 	public static void main(String[] args) {
 		Game game = new Game(2,3,9);
-		PlayerWindow pw = new PlayerWindow(game);
+		PlayerWindow pw = new PlayerWindow();
+		pw.setGameController(game);
 		pw.displayBoard(game.getBoard(), 2);
+//		pw.askActionChoice(0);
+//		pw.displayCreateSpell(1);
+//		pw.displaySpellSelection();
+//		pw.displaySpellPage(null);
+		
 	}
 
 }

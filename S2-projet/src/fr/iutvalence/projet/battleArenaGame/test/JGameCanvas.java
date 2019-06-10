@@ -34,7 +34,7 @@ public class JGameCanvas extends JPanel implements MouseListener{
 	/**
 	 * default height of the image
 	 */
-	private int sizeHeight;
+	private int sizeHeight=32;
 	
 	private ArrayList<Pawn> List;
 	
@@ -43,6 +43,9 @@ public class JGameCanvas extends JPanel implements MouseListener{
 	private int width;
 	
 	private int height;
+	
+	private int xIndex;
+	private int yIndex;
 	
 	private LocatedImage[][] arrayImage;
 	
@@ -91,12 +94,14 @@ public class JGameCanvas extends JPanel implements MouseListener{
 		File img = new File("ressources/p1.png");
 		File img2 = new File("ressources/p2.png");
 		File img3 = new File("ressources/vide.png");
-		Image p1 = null, p2 = null, voidImg = null;
+//		File img4 = new File("ressources/highlight.png");
+		Image p1 = null, p2 = null, voidImg = null, highlight = null;
 		System.out.println(getHeight()+ " "+ this.getWidth());
 		try {
 			p1 = ImageIO.read(img);
 			p2 = ImageIO.read(img2);
 			voidImg = ImageIO.read(img3);
+//			highlight = ImageIO.read(img4);
 
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
@@ -104,11 +109,11 @@ public class JGameCanvas extends JPanel implements MouseListener{
 		}
 //		System.out.println(((this.getHeight()*2)/3)/this.boardSize);
 //		System.out.println("WIDTH" + this.getWidth()+"HEIGHT"+this.getHeight());
-		voidImg=voidImg.getScaledInstance(((this.getWidth()*2)/3)/this.boardSize,((this.getHeight()*2)/3)/this.boardSize, Image.SCALE_DEFAULT);
-		p1=p1.getScaledInstance(((this.getWidth()*2)/3)/this.boardSize, ((this.getHeight()*2)/3)/this.boardSize, Image.SCALE_DEFAULT);
-		p2=p2.getScaledInstance(((this.getWidth()*2)/3)/this.boardSize, ((this.getHeight()*2)/3)/this.boardSize, Image.SCALE_DEFAULT);
-		this.sizeWidth=((this.getWidth()*2)/3)/this.boardSize;
-		this.sizeHeight=((this.getHeight()*2)/3)/this.boardSize;
+		voidImg=voidImg.getScaledInstance(((this.getWidth()))/this.boardSize,((this.getHeight()))/this.boardSize, Image.SCALE_DEFAULT);
+		p1=p1.getScaledInstance(((this.getWidth()))/this.boardSize, ((this.getHeight()))/this.boardSize, Image.SCALE_DEFAULT);
+		p2=p2.getScaledInstance(((this.getWidth()))/this.boardSize, ((this.getHeight()))/this.boardSize, Image.SCALE_DEFAULT);
+		this.sizeWidth=((this.getWidth()))/this.boardSize;
+		this.sizeHeight=((this.getHeight()))/this.boardSize;
 //		System.out.println(sizeWidth);
 		
 		
@@ -187,12 +192,12 @@ public class JGameCanvas extends JPanel implements MouseListener{
 				if(r.contains(e.getX(),e.getY()))
 				{
 					
-					int xindex = (int)r.getX()/sizeWidth;
-					int yindex = (int)r.getY()/sizeHeight;
+					xIndex = (int)r.getX()/sizeWidth;
+					yIndex= (int)r.getY()/sizeHeight;
 					
 					System.out.println("GETX : "+r.getX() + " "+ r.getY());
-					System.out.println(arrayImage[xindex][yindex].getCoordX()+" aaa"+arrayImage[xindex][yindex].getCoordY());
-					System.out.println("VRAI X: "+xindex + " vrai y"+yindex);
+					System.out.println(arrayImage[xIndex][yIndex].getCoordX()+" aaa"+arrayImage[xIndex][yIndex].getCoordY());
+					System.out.println("VRAI X: "+xIndex + " vrai y"+yIndex);
 				
 				}
 					
@@ -229,94 +234,112 @@ public class JGameCanvas extends JPanel implements MouseListener{
 
 
 
-public static void main(String[] args) {
-	System.out.println();
-	ArrayList<Pawn> List = new ArrayList<Pawn>();
-	List.add(new Pawn(1,new Coordinate(0,2),"lol"));
-	List.add(new Pawn(2,new Coordinate(0,6),"lol"));
+	public static void main(String[] args) {
+		System.out.println();
+		ArrayList<Pawn> List = new ArrayList<Pawn>();
+		List.add(new Pawn(1,new Coordinate(0,2),"lol"));
+		List.add(new Pawn(2,new Coordinate(0,6),"lol"));
+		
+	//	Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+		
+		JFrame f = new JFrame();
 	
-//	Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+		f.setExtendedState(JFrame.MAXIMIZED_BOTH);
+		JGameCanvas CC = new JGameCanvas(List,15,f.getWidth(),f.getHeight());
+		f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	
-	JFrame f = new JFrame();
-
-	f.setExtendedState(JFrame.MAXIMIZED_BOTH);
-	JGameCanvas CC = new JGameCanvas(List,15,f.getWidth(),f.getHeight());
-	f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-
-	f.setTitle("JULES");
-	f.setVisible(true);
-	f.setContentPane(CC);
-	f.repaint();
-	try
-	{
-		Thread.sleep(4000);
-	} catch (InterruptedException e)
-	{
-		// TODO Auto-generated catch block
-		e.printStackTrace();
+		f.setTitle("JULES");
+		f.setVisible(true);
+		f.setContentPane(CC);
+		f.repaint();
+		try
+		{
+			Thread.sleep(4000);
+		} catch (InterruptedException e)
+		{
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	
+		List.remove(1);
+	
+		List.add(new Pawn(2,new Coordinate(6,6),"lol"));
+		
+		ArrayList<Pawn> t = new ArrayList();
+		t.add(new Pawn(3,new Coordinate(1,6),"lol"));
+	
+		t.add(new Pawn(2,new Coordinate(4,6),"lol"));
+	
+		t.add(new Pawn(4,new Coordinate(9,6),"lol"));
+	
+		t.add(new Pawn(2,new Coordinate(12,6),"lol"));
+	
+		
+		
+		CC.refresh(t);
+	
+		
 	}
 
-	List.remove(1);
 
-	List.add(new Pawn(2,new Coordinate(6,6),"lol"));
-	
-	ArrayList<Pawn> t = new ArrayList();
-	t.add(new Pawn(3,new Coordinate(1,6),"lol"));
-
-	t.add(new Pawn(2,new Coordinate(4,6),"lol"));
-
-	t.add(new Pawn(4,new Coordinate(9,6),"lol"));
-
-	t.add(new Pawn(2,new Coordinate(12,6),"lol"));
-
-	
-	
-	CC.refresh(t);
-
-	
-}
-
-
-@Override
-public void mouseClicked(MouseEvent e) {
-	System.out.println("EVENT");
-	for(Rectangle r: rec)
-	{
-		if(r.contains(e.getX(),e.getY()))
-			System.out.println("TOUCHE TOUCHE TOUCHE");
+	@Override
+	public void mouseClicked(MouseEvent e) {
+		System.out.println("EVENT");
+		for(Rectangle r: rec)
+		{
+			if(r.contains(e.getX(),e.getY()))
+				System.out.println("TOUCHE TOUCHE TOUCHE");
+		}
 	}
-}
 
 
-@Override
-public void mousePressed(MouseEvent e) {
-
-	System.out.println("EVENT");
-	for(Rectangle r: rec)
-	{
-		if(r.contains(e.getX(),e.getY()))
-			System.out.println("TOUCHE TOUCHE TOUCHE");
+	@Override
+	public void mousePressed(MouseEvent e) {
+	
+		System.out.println("EVENT");
+		for(Rectangle r: rec)
+		{
+			if(r.contains(e.getX(),e.getY()))
+				System.out.println("TOUCHE TOUCHE TOUCHE");
+		}
 	}
-}
-
-
-@Override
-public void mouseReleased(MouseEvent e) {
-	// TODO Auto-generated method stub
 	
-}
-
-
-@Override
-public void mouseEntered(MouseEvent e) {
-	// TODO Auto-generated method stub
 	
-}
-
-
-@Override
-public void mouseExited(MouseEvent e) {
-	// TODO Auto-generated method stub
+	@Override
+	public void mouseReleased(MouseEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
 	
-}
+	
+	@Override
+	public void mouseEntered(MouseEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+	
+	
+	@Override
+	public void mouseExited(MouseEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
+	
+	public int getXIndex() {
+		return this.xIndex;
+	}
+	
+	public int getYIndex() {
+		return this.yIndex;
+	}
+
+	public ArrayList<Rectangle> getRec(){
+		return this.rec;
+	}
+	
+	public void highlight(int col, int row) {
+//		this.arrayImage[row][col].setImg(highlight);
+	}
+	
+	
 }
