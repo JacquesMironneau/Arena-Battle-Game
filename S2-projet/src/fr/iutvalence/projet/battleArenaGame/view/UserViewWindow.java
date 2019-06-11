@@ -1,16 +1,12 @@
 package fr.iutvalence.projet.battleArenaGame.view;
 
 import java.awt.Choice;
-import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.ComponentListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseListener;
 import java.util.ArrayList;
 import java.util.HashSet;
 
@@ -19,12 +15,10 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JLayeredPane;
 import javax.swing.JOptionPane;
-import javax.swing.JTextArea;
 import javax.swing.JTextField;
 import javax.swing.event.CaretEvent;
 import javax.swing.event.CaretListener;
 
-import fr.iutvalence.projet.battleArenaGame.GameController;
 import fr.iutvalence.projet.battleArenaGame.UserController;
 import fr.iutvalence.projet.battleArenaGame.pawn.Pawn;
 import fr.iutvalence.projet.battleArenaGame.spell.Effect;
@@ -152,7 +146,6 @@ public class UserViewWindow extends JFrame implements UserView {
 		if (msg == DisplayMessage.MENU) {
 			//disable the visibility of the window to avoid graphical bugs
 			this.setVisible(false);
-			this.setLocation(0, 0);
 			//remove all the content from the content pane
 			this.getContentPane().removeAll();
 			
@@ -175,6 +168,7 @@ public class UserViewWindow extends JFrame implements UserView {
 			JButton btnCreateSpellPage = new JButton("Créer une page de sorts");
 			btnCreateSpellPage.setBounds(this.getWidth()/4,this.getHeight()/8*4, this.getWidth()/4*2, this.getHeight()/8);
 			this.getContentPane().add(btnCreateSpellPage);
+			this.getContentPane().repaint();
 			
 			//enable the visibility of the window
 			this.setVisible(true);
@@ -182,37 +176,21 @@ public class UserViewWindow extends JFrame implements UserView {
 		if(msg == DisplayMessage.PAGE_CREATION) {
 			//disable the visibility of the window to avoid visual bugs (ex: no content)
 			this.setVisible(false);
-			this.setLocation(0, 0);
 			this.getContentPane().removeAll();
 			
 			// creates a new button for the creation of the first spell
 			JButton btnSpell1 = new JButton("Spell1");
 			btnSpell1.setBounds(0,10,(this.getWidth()/3),(this.getHeight()/3)-10);
-			btnSpell1.addActionListener(new ActionListener() {
-				public void actionPerformed(ActionEvent arg0) {
-					//TODO method from gameController that calls displayCreateSpell(1);
-				}
-			});
 			this.getContentPane().add(btnSpell1);
 			
 			// creates a new button for the creation of the second spell
 			JButton btnSpell2 = new JButton("Spell2");
 			btnSpell2.setBounds((this.getWidth()/3),10,(this.getWidth()/3),(this.getHeight()/3)-10);
-			btnSpell2.addActionListener(new ActionListener() {
-				public void actionPerformed(ActionEvent arg0) {
-					//TODO method from gameController hat calls displayCreateSpell(2);
-				}
-			});
 			this.getContentPane().add(btnSpell2);
 			
 			// creates a new button for the creation of the third spell
 			JButton btnSpell3 = new JButton("Spell3");
 			btnSpell3.setBounds((this.getWidth()/3*2),10,(this.getWidth()/3),(this.getHeight()/3)-10);
-			btnSpell3.addActionListener(new ActionListener() {
-				public void actionPerformed(ActionEvent arg0) {
-					//TODO method from gameController that calls displayCreateSpell(3);
-				}
-			});
 			this.getContentPane().add(btnSpell3);
 			
 			//creates a new JLabel to indicate what the following JTextField is use for
@@ -267,6 +245,7 @@ public class UserViewWindow extends JFrame implements UserView {
 				}
 			});
 			this.getContentPane().add(btnRetour);
+			this.getContentPane().repaint();
 			
 			this.setVisible(true);
 		}
@@ -311,6 +290,7 @@ public class UserViewWindow extends JFrame implements UserView {
 			JButton btnValider = new JButton("valider");
 			btnValider.setBounds(0,this.getHeight()/20*8,this.getWidth()/5,this.getHeight()/20);
 			this.getContentPane().add(btnValider);
+			this.getContentPane().repaint();
 			
 			this.setVisible(true);
 		}
@@ -357,6 +337,7 @@ public class UserViewWindow extends JFrame implements UserView {
 				}
 			});
 			this.getContentPane().add(btnValider);
+			this.getContentPane().repaint();
 			
 			this.setVisible(true);
 		}
