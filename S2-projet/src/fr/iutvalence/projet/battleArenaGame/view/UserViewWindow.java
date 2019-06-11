@@ -30,7 +30,7 @@ import fr.iutvalence.projet.battleArenaGame.spell.SpellPage;
 import fr.iutvalence.projet.battleArenaGame.test.JGameCanvas;
 
 public class UserViewWindow extends JFrame implements UserView {
-	
+	//TODO removes attributes, complete auto implemented methods
 	/**
 	 * This pane contains all the container and the visible informations on the screen.
 	 */
@@ -577,6 +577,53 @@ public class UserViewWindow extends JFrame implements UserView {
 		this.chShape.add("Custom");
 		
 	}
-	
+
+	@Override
+	public void displayListServer() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void displayServerLaunched(int ip, int port) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void askPageCreation() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public Spell askSpellCreation() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public void askServerConnection() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void askServerConfig() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void askLocalConfig() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void setController(UserController pController)
+	{
+		this.controller = pController;
+	}
 
 }
