@@ -91,9 +91,9 @@ public class JGameCanvas extends JPanel implements MouseListener{
 //		g.drawString(", 1000, 1000);
 		System.out.println(" AAAAAAAAAAA" +this.getWidth());
 		System.out.println("AAAAAAAAAAA");
-		File img = new File("ressources/p1.png");
-		File img2 = new File("ressources/p2.png");
-		File img3 = new File("ressources/vide.png");
+		File img = new File("ressources/newp1.png");
+		File img2 = new File("ressources/newp2.png");
+		File img3 = new File("ressources/newvide.png");
 //		File img4 = new File("ressources/highlight.png");
 		Image p1 = null, p2 = null, voidImg = null, highlight = null;
 		System.out.println(getHeight()+ " "+ this.getWidth());
