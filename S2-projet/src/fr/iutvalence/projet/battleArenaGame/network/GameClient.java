@@ -47,7 +47,7 @@ public class GameClient implements GameController
 		}).start();
 	}
 
-	private void send(String msg,int currentPlayerIndex)
+	private void send(String msg)
 	{
 		try {
 			writer.append(msg);
@@ -63,14 +63,14 @@ public class GameClient implements GameController
 	public void moveRequest(int currentPlayerIndex, Coordinate destination)
 	{
 		String request = "Request move " + currentPlayerIndex + GameClient.WORD_SEPARATOR + destination.getCoordX() + GameClient.WORD_SEPARATOR +destination.getCoordY();
-		send(request,currentPlayerIndex);
+		send(request);
 	}
 
 	@Override
 	public void spellRequest(int currentPlayerIndex, int spellIndex, Coordinate destination)
 	{
 		String request = "Request spell "+currentPlayerIndex+GameClient.WORD_SEPARATOR+spellIndex+GameClient.WORD_SEPARATOR+destination.getCoordX() + GameClient.WORD_SEPARATOR +destination.getCoordY();
-		send(request,currentPlayerIndex);
+		send(request);
 	}
 
 	@Override
@@ -84,7 +84,7 @@ public class GameClient implements GameController
 				request += c.getCoordX()+ GameClient.WORD_SEPARATOR + c.getCoordY()+ GameClient.WORD_SEPARATOR;
 			request += s.getSpellEffect().getEffectName() + GameClient.WORD_SEPARATOR;
 		}
-		send(request,currentPlayerIndex);
+		send(request);
 
 	}
 
@@ -106,20 +106,9 @@ public class GameClient implements GameController
 		}
 		
 		String request = "Request action "+currentPlayerIndex+GameClient.WORD_SEPARATOR+str;
-		send(request,currentPlayerIndex);
+		send(request);
 	}
 	
-	public void send(String msg)
-	{
-		try
-		{
-			writer.append(msg);
-			writer.flush();
-		} catch (IOException e)
-		{
-			e.printStackTrace();
-		}
-	}
 	
 	public void receive()
 	{
@@ -217,7 +206,7 @@ public class GameClient implements GameController
 							}
 					break;
 				case "end":
-					this.gameView.displayEnd(parts[2]);
+					this.gameView.displayEnd(parts[2],);
 					break;
 				case "nextTurn":
 					this.gameView.displayNextTurn(Integer.parseInt(parts[2]));
