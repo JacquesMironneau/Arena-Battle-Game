@@ -1,7 +1,5 @@
 package fr.iutvalence.projet.battleArenaGame.view;
 
-import fr.iutvalence.projet.battleArenaGame.spell.Effect;
-
 public interface UserView {
 
 	/**
