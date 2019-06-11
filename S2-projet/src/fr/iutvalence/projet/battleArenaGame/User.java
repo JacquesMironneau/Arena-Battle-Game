@@ -96,14 +96,16 @@ public class User implements UserController
 		for(int consoleCount = 0; consoleCount < nbConsoleView; consoleCount ++)
 			listPlayer.add(new PlayerConsole(this));
 		for(int windowCount = 0;windowCount < nbPlayers-nbConsoleView;windowCount++)
-			listPlayer.add(new PlayerWindow());
+			listPlayer.add(new PlayerWindow(this));
 		
 		new Game(listPlayer,nbPlayers,nbPawns,boardSize).play();		
 	}
 	
-	@Override
+/*	@Override
 	public void serverConfigRequest(int nbPlayers, int nbPawns, int boardSize)
 	{
+		
+		
 		ClientConnectionInfo[] clients = new GameLauncherServerClientHandler(int 12000,int nbPlayers).getClients;
 		new Thread(() ->  {
 			GameView gch = new GameClientHandler(clients);
@@ -113,7 +115,7 @@ public class User implements UserController
 			new Game(gchList,nbPlayers,nbPawns,boardSize).play();
 		}).start();
 		
-	}
+	}*/
 	
 	
 	@Override
@@ -163,6 +165,8 @@ public class User implements UserController
 		this.myPages.add(new SpellPage(name,spell1,spell2,spell3));
 		this.userView.display(DisplayMessage.PAGE_CREATED);
 	}
+	
+
 	
 	
 	

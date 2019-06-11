@@ -4,15 +4,17 @@ import java.awt.Dimension;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.ArrayList;
+
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JLayeredPane;
 import javax.swing.JOptionPane;
 import javax.swing.JTextArea;
+
 import fr.iutvalence.projet.battleArenaGame.Board;
 import fr.iutvalence.projet.battleArenaGame.GameController;
+import fr.iutvalence.projet.battleArenaGame.UserController;
 import fr.iutvalence.projet.battleArenaGame.move.Coordinate;
 import fr.iutvalence.projet.battleArenaGame.pawn.Pawn;
 import fr.iutvalence.projet.battleArenaGame.spell.SpellPage;
@@ -41,6 +43,7 @@ public class PlayerWindow extends JFrame implements GameView{
 	
 	private GameController gameController;
 	
+	private UserController myUser;
 	private JGameCanvas gameBoard;
 	
 	
@@ -51,12 +54,12 @@ public class PlayerWindow extends JFrame implements GameView{
 	 * the default operation when closing the window,
 	 * 
 	 */
-	public PlayerWindow() {
+	public PlayerWindow(UserController pUserController) {
 		/*
 		 * Super Constructor
 		 */
 		super();
-		
+		this.myUser = pUserController;		
 		/*
 		 * Window properties
 		 * no relative location
@@ -332,6 +335,24 @@ public class PlayerWindow extends JFrame implements GameView{
 //		pw.displayCreateSpell(1);
 //		pw.displaySpellSelection();
 //		pw.displaySpellPage(null);
+		
+	}
+
+	@Override
+	public void askPageSelection(int currentPlayerIndex) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void displaySpellPage() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void displaySelectForThisPawn(String pawnName) {
+		// TODO Auto-generated method stub
 		
 	}
 
