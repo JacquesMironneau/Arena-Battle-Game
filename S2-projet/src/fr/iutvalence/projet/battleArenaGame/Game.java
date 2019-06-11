@@ -1,16 +1,11 @@
 package fr.iutvalence.projet.battleArenaGame;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 
 import fr.iutvalence.projet.battleArenaGame.move.Coordinate;
 import fr.iutvalence.projet.battleArenaGame.pawn.Pawn;
-import fr.iutvalence.projet.battleArenaGame.spell.Effect;
-import fr.iutvalence.projet.battleArenaGame.spell.Shape;
-import fr.iutvalence.projet.battleArenaGame.spell.Spell;
 import fr.iutvalence.projet.battleArenaGame.spell.SpellPage;
 import fr.iutvalence.projet.battleArenaGame.view.GameView;
-import fr.iutvalence.projet.battleArenaGame.view.PlayerConsole;
 import fr.iutvalence.projet.battleArenaGame.view.StatusMessages;
 
 /**
@@ -35,11 +30,6 @@ public class Game implements GameController
 	 */
 	private Board board;
 	
-	/**
-	 * List of all spellPages in the game
-	 */
-	//TODO Will be changed to allow players to join a game with their own spell pages list and only use those
-	private ArrayList<SpellPage> mySpellPages;
 	
 	/**
 	 * Status of the Game
@@ -55,17 +45,17 @@ public class Game implements GameController
 	 * @param nbPawn is the number of pawn for each player wanted for this game
 	 * @param boardSize is the size of the board
 	 */
-	public Game(int nbPlayer,int nbPawn,int boardSize)
+	public Game(ArrayList<GameView> listPlayers,int nbPlayer,int nbPawn,int boardSize)
 	{
-		this.mySpellPages = new ArrayList<SpellPage>(); //TODO remove (do not create it every time we launch (will evolve to file read /DB) in V8
 		this.maxPlayer = nbPlayer;
 		this.players = new ArrayList<GameView>();
-		for(int i=0;i<this.maxPlayer;i++)
-			this.players.add(new PlayerConsole(this));
+		this.players = listPlayers;
+		for(GameView gv : this.players)
+			gv.setGameController(this);
 		this.board = new Board(nbPlayer,nbPawn,boardSize);
-
-		this.createSpellPageForTest();
-		this.gameStatus = EndStatus.RUNNING;		
+		//this.createSpellPageForTest();
+		this.gameStatus = EndStatus.RUNNING;	
+		
 	}
 	
 	
@@ -92,8 +82,8 @@ public class Game implements GameController
 			for(GameView gv : players)
 					if(this.board.getTurnOrder().get(this.board.getCurrentPawnIndex()).getTeamId()==players.indexOf(gv))
 						currentPlayerIndex = players.indexOf(gv);
-			this.players.get(currentPlayerIndex).displaySpellPage(this.mySpellPages);
-			this.players.get(currentPlayerIndex).displaySelectForThisPawn(this.board.getTurnOrder().get(this.board.getCurrentPawnIndex()));
+			this.players.get(currentPlayerIndex).displaySpellPage();
+			this.players.get(currentPlayerIndex).displaySelectForThisPawn(this.board.getTurnOrder().get(this.board.getCurrentPawnIndex()).getName());
 			this.players.get(currentPlayerIndex).askPageSelection(currentPlayerIndex);
 			this.board.nextPawn();
 			//If the last pawn of the list has a page, which means that all pawns have pages
@@ -119,8 +109,6 @@ public class Game implements GameController
 				if(this.board.getTurnOrder().get(this.board.getCurrentPawnIndex()).getTeamId()==players.indexOf(gv))
 					currentPlayerIndex = players.indexOf(gv);
 			}
-			//	if(endGame()!=EndStatus.RUNNING)
-			//	break;
 			while(true)
 			{
 			this.players.get(currentPlayerIndex).displayChoiceAction();
@@ -180,13 +168,12 @@ public class Game implements GameController
 	}
 	
 	@Override
-	//TODO add answer messages
-	public void setPageRequest(int currentPlayerIndex,int pageToSet)
+	public void setPageRequest(int currentPlayerIndex,SpellPage pageToSet)
 	{
 		for(Pawn p : this.board.getTurnOrder())
 			if(p.getTeamId()==currentPlayerIndex && p.getSpellPage() == null)
 			{
-				p.setSpellPage(new SpellPage(this.getSpellPages().get(pageToSet)));
+				p.setSpellPage(new SpellPage(pageToSet));
 				this.players.get(currentPlayerIndex).displayStatus(StatusMessages.PAGE_SET);
 				break;
 			}
@@ -219,60 +206,10 @@ public class Game implements GameController
 		case END_TURN:
 			this.board.nextPawn();
 			break;
-			
 		}
-		
 	}
 	
-	/**
-	 * Create a filled SpellPage
-	 * @throws SpellIndexException
-	 */
-	//TODO Remove this method, used for test
-	public void createSpellPageForTest()
-	{
-		/*
-		 * Predefined shapes
-		 */
-		HashSet<Coordinate> cBall = new HashSet<Coordinate>();
-		cBall.add(new Coordinate(0,0));
-		HashSet<Coordinate> cFist = new HashSet<Coordinate>();
-		cFist.add(new Coordinate(0,0));
-		HashSet<Coordinate> cSquare = new HashSet<Coordinate>();
-		cSquare.add(new Coordinate(0,0));
-		cSquare.add(new Coordinate(0,-1));
-		cSquare.add(new Coordinate(0,1));
-		cSquare.add(new Coordinate(-1,0));
-		cSquare.add(new Coordinate(-1,-1));
-		cSquare.add(new Coordinate(-1,1));
-		cSquare.add(new Coordinate(1,0));
-		cSquare.add(new Coordinate(1,-1));
-		cSquare.add(new Coordinate(1,1));
-		
-		SpellPage p1 = new SpellPage("page1");
-		Spell s1 = new Spell();
-		Spell s2 = new Spell();
-		Spell s3 = new Spell();
-		s1.setShape(new Shape("Ball",10,2,5,3,cBall));
-		s2.setShape(new Shape("Fist",15,1,1,2,cFist));
-		s3.setShape(new Shape("Square",10,3,4,4,cSquare));
-		s1.setSpellEffect(Effect.Fire);
-		s2.setSpellEffect(Effect.Ice);
-		s3.setSpellEffect(Effect.Fire);
-		
-		p1.setSpell(0,s1);
-		p1.setSpell(1,s2);
-		p1.setSpell(2,s3);
-		
-		this.mySpellPages.add(p1);
-	}
-
 	//Getters
-	public ArrayList<SpellPage> getSpellPages()
-	{
-		return this.mySpellPages;
-	}
-	
 	public Board getBoard()
 	{
 		return this.board;

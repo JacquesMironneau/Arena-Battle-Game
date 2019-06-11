@@ -29,6 +29,7 @@ public class Spell {
 	/**
 	 * Create a new empty Spell with a cooldown ready
 	 */
+	//TODO remove this constructor
 	public Spell() 
 	{
 		this.currentCooldown = 0;
@@ -36,6 +37,12 @@ public class Spell {
 		this.myEffect = null;
 	}
 	
+	public Spell(Effect pEffect,Shape pShape)
+	{
+		this.currentCooldown = 0;
+		this.myEffect = pEffect;
+		this.myShape = pShape;
+	}
 	/**
 	 * Create a Spell from an already existing one
 	 * @param pSpell the paste Spell 

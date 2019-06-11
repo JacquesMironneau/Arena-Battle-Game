@@ -1,23 +1,26 @@
 package fr.iutvalence.projet.battleArenaGame.view;
 
 
-import java.util.ArrayList;
-
 import fr.iutvalence.projet.battleArenaGame.Board;
 import fr.iutvalence.projet.battleArenaGame.GameController;
+import fr.iutvalence.projet.battleArenaGame.UserController;
 import fr.iutvalence.projet.battleArenaGame.move.Coordinate;
 import fr.iutvalence.projet.battleArenaGame.pawn.Pawn;
 import fr.iutvalence.projet.battleArenaGame.pawn.PawnEffect;
 import fr.iutvalence.projet.battleArenaGame.spell.SpellPage;
 
-//TODO remove all prints and checks (move it in game algorithm)
+/**
+ * Handle the game interaction while the game is running for a user playing on a console
+ */
 public class PlayerConsole implements GameView{
 
 	
 	private GameController myController;
+	private UserController myUser;
 	
-	public PlayerConsole()
+	public PlayerConsole(UserController pUserController)
 	{
+		this.myUser = pUserController;
 	}
 	
 	//ASK
@@ -77,7 +80,9 @@ public class PlayerConsole implements GameView{
 	{
 		CheapScanner scan = new CheapScanner();
 		int pageIndex = scan.getInt();
-		this.myController.setPageRequest(currentPlayerIndex,pageIndex);
+		if(pageIndex<0 || pageIndex>this.myUser.getSpellPages().size()-1)
+			pageIndex = 0;
+		this.myController.setPageRequest(currentPlayerIndex,this.myUser.getSpellPages().get(pageIndex));
 	}
 	
 
@@ -93,13 +98,14 @@ public class PlayerConsole implements GameView{
 	 * Display a list of spell pages with their name and an index
 	 */
 	@Override
-	public void displaySpellPage(ArrayList<SpellPage> listPages) {
-		int count=0;
-		for(SpellPage myPage: listPages)
-		{  
-			System.out.println(count+")"+myPage.getPageName());
-			count++;
-		}
+	public void displaySpellPage()
+	{
+		int index = 0;
+		for(SpellPage page :this.myUser.getSpellPages())
+			{
+			System.out.println(index+")"+page.getPageName());
+			index++;
+			}
 	}
 
 	@Override
@@ -255,16 +261,21 @@ public class PlayerConsole implements GameView{
 	}
 	
 	@Override
-	public void displaySelectForThisPawn(Pawn thePawn) {
-		System.out.println("choisissez une page pour le pion "+ thePawn.getName());
+	public void displaySelectForThisPawn(String thePawn) {
+		System.out.println("choisissez une page pour le pion "+ thePawn);
 		
 	}
 	
+	@Override
 	public void displayMoveSelection()
 	{
 		System.out.println("Entrer la coordonée X puis la coordonée Y (ligne puis colonne)");
 	}
 
+	
+	
+	//Setter
+	@Override
 	public void setGameController(GameController GC)
 	{
 		this.myController = GC;

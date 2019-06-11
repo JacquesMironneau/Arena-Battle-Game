@@ -2,8 +2,6 @@ package fr.iutvalence.projet.battleArenaGame.view;
 /**
  * This stands for every error the player can face
  * used to display in the view (HMI)
- * @author pashmi
- *
  */
 public enum StatusMessages
 {

@@ -1,18 +1,17 @@
 package fr.iutvalence.projet.battleArenaGame.view;
 
-import java.util.ArrayList;
-
 import fr.iutvalence.projet.battleArenaGame.Board;
+import fr.iutvalence.projet.battleArenaGame.GameController;
 import fr.iutvalence.projet.battleArenaGame.pawn.Pawn;
 import fr.iutvalence.projet.battleArenaGame.spell.SpellPage;
 
 /**
- * Class to ask for choice and display for the HMI
- * ask stands for everything we ask the User to do
- * and display is what he currently see on the HMI.
+ * Handle the interaction with the user when the game is running
  */
 
 public interface GameView {
+	
+	//Ask 
 	
 	/**
 	 * Ask the player to pick between every possible actions choice
@@ -40,7 +39,7 @@ public interface GameView {
 	public void askMove(int currentPlayerIndex);
 	
 	
-	//DISPLAY
+	//Display
 	
 	/**
 	 * Display to the player what he have to do in order to select a spell
@@ -62,7 +61,7 @@ public interface GameView {
 	/**
 	 * Display the owned spell pages
 	 */
-	public void displaySpellPage(ArrayList<SpellPage> listPages);
+	public void displaySpellPage();
 	
 	/**
 	 * Display the actions that the player can move
@@ -98,10 +97,17 @@ public interface GameView {
 	public void diplaySizeError();
 	
 	/**
-	 * show for which pawn you have to select a page
+	 * Show for which pawn you have to select a page
 	 * @param Pawn
 	 */
-	public void displaySelectForThisPawn(Pawn thePawn);
+	public void displaySelectForThisPawn(String pawnName);
 	
+	/**
+	 * Show to the player what he need to do to move
+	 */
 	public void displayMoveSelection();
+	
+	
+	//Setter
+	public void setGameController(GameController GC);
 }

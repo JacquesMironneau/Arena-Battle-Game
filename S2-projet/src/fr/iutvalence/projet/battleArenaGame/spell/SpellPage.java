@@ -24,14 +24,13 @@ public class SpellPage{
 	 * create a SpellPage with 3 empty spell
 	 * @param pName The name you give to this SpellPage.
 	 */
-	public SpellPage(String pName)
+	public SpellPage(String pName,Spell spell1,Spell spell2,Spell spell3)
 	{
 		this.spells = new Spell[3];
 		this.pageName = pName;
-		this.spells = new Spell[3];
-		this.spells[0] = new Spell();
-		this.spells[1] = new Spell();
-		this.spells[2] = new Spell();
+		this.spells[0] = spell1;
+		this.spells[1] = spell2;
+		this.spells[2] = spell3;
 	}
 
 	/**

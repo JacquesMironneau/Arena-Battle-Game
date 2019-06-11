@@ -1,6 +1,7 @@
 package fr.iutvalence.projet.battleArenaGame;
 
 import fr.iutvalence.projet.battleArenaGame.move.Coordinate;
+import fr.iutvalence.projet.battleArenaGame.spell.SpellPage;
 import fr.iutvalence.projet.battleArenaGame.view.StatusMessages;
 /**
  * Contains all methods that the player can call to affect the game
@@ -27,9 +28,7 @@ public interface GameController
 	 * @param currentPlayerIndex is the index in the players list of the player which is currently playing
 	 * @param pageToSet the spell page to set to the pawnDO
 	 */
-	//TODO replace (int)pageToSet by a SpellPage. The problem is that we need to access to the player's page in the GameView actually.
-	//The solution may be to send spellPages with the configurable part of the application which will be worked later.
-	public void setPageRequest(int currentPlayerIndex,int pageToSet);
+	public void setPageRequest(int currentPlayerIndex,SpellPage pageToSet);
 
 	/**
 	 * Request for an action by the player
@@ -37,4 +36,5 @@ public interface GameController
 	 * @param choice is the action that the player has chose
 	 */
 	public void actionRequest(int currenPlayerIndex,StatusMessages choice);
+	
 }

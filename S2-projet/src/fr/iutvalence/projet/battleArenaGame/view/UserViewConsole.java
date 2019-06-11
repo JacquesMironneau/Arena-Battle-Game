@@ -1,65 +1,91 @@
 package fr.iutvalence.projet.battleArenaGame.view;
 
-import java.util.Arrays;
-import java.util.HashSet;
-
 import fr.iutvalence.projet.battleArenaGame.UserController;
-import fr.iutvalence.projet.battleArenaGame.move.Coordinate;
 import fr.iutvalence.projet.battleArenaGame.spell.Effect;
 import fr.iutvalence.projet.battleArenaGame.spell.Shape;
-import fr.iutvalence.projet.battleArenaGame.spell.SpellPage;
+import fr.iutvalence.projet.battleArenaGame.spell.Spell;
 
 public class UserViewConsole implements UserView{
 	
-	private UserController control; 
-	private HashSet<Shape> gameShapes;
-	private HashSet<SpellPage> mySpellPages;
+	private UserController controller; 
 	
-	public UserViewConsole(UserController pUC)
+	public UserViewConsole()
 	{
-		this.control = pUC;
-		createDefaultShapes();
 	}
 	
-	/**
-	 * Display the main menu
-	 */
-		@Override
-		public void display(DisplayMessage msg) 
+	public void setController(UserController pController)
+	{
+		this.controller = pController;
+	}
+	
+	//Display
+	
+	@Override
+	public void display(DisplayMessage msg) 
+	{
+		System.out.println(msg.getMsg());
+	}
+	
+	
+	@Override
+	public void displayElementChoice()
+	{
+		int index = 0;
+		System.out.println("Elements :");
+		for(Effect eff : Effect.values())
 		{
-			System.out.println(msg.getMsg());
+			System.out.println(index + ")" + eff.getElementName());
+			index++;
 		}
+		System.out.println('\n');
+	}
 		
-		@Override
-		public void displayElementChoice()
-		{
-			for(Effect eff : Effect.values())
-				System.out.println(eff.getElementName());
-		}
-		
-		public void displatShapeChoice()
-		{
-			for(Shape shp : this.gameShapes)
-				System.out.println(shp.getName());
-		}
+	@Override
+	public void displayShapeChoice()
+	{
+		int index = 0;
+		System.out.println("Shapes :");
+		for(Shape shp : this.controller.getGameShapes())
+			{
+				System.out.println(index+")"+shp.getName());
+				index++;
+			}
+		System.out.println('\n');
+	}
 
-		public void askLocalConfig()
-		{
-			int nbPlayer,nbPlayerCons,nbPawn,size;
-			CheapScanner scan = new CheapScanner();
-			nbPlayer = scan.getInt();
-			nbPawn = scan.getInt();
-			size = scan.getInt();
-			nbPlayerCons = scan.getInt();
-			this.control.localConfigRequest(nbPlayer,nbPawn,size,nbPlayerCons);
-		}
+	@Override
+	public void displayListServer()
+	{
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void displayServerLaunched(int ip, int port)
+	{
+		System.out.println("Le server a bien été lancé.\n Server info :\n ip : "+ ip +"\n Port : "+port);
+	}
+	
+	//Ask
+	
+	@Override
+	public void askLocalConfig()
+	{
+		int nbPlayer,nbPlayerCons,nbPawn,size;
+		CheapScanner scan = new CheapScanner();
+		nbPlayer = scan.getInt();
+		nbPawn = scan.getInt();
+		size = scan.getInt();
+		nbPlayerCons = scan.getInt();
+		this.controller.localConfigRequest(nbPlayer,nbPawn,size,nbPlayerCons);
+	}
 		
 	@Override
 	public void askChoiceMenu() 
 	{
 		CheapScanner scan = new CheapScanner();
 		int index = scan.getInt();
-		MenuChoices myChoice = MenuChoices.INVALIDE_CHOICE;
+		MenuChoices myChoice = MenuChoices.INVALID_CHOICE;
 		switch(index)
 		{
 		case 1:
@@ -75,38 +101,56 @@ public class UserViewConsole implements UserView{
 			myChoice = MenuChoices.LOCAL_GAME;
 			break;
 		}
-		this.control.choiceMenuRequest(myChoice);
+		this.controller.choiceMenuRequest(myChoice);
 	}
 
-	//TODO move this to User class
 	@Override
-	public void createDefaultShapes()
+	public void askPageCreation()
 	{
-		//Ball
-		HashSet<Coordinate> ballShape = new HashSet<Coordinate>();
-		ballShape.addAll(Arrays.asList(new Coordinate(0,0)));
-		this.gameShapes.add(new Shape("Ball",10,2,5,3,ballShape));
-		//Fist
-		HashSet<Coordinate> fistShape = new HashSet<Coordinate>();
-		fistShape.addAll(Arrays.asList(new Coordinate(0,0)));
-		this.gameShapes.add(new Shape("Fist",15,1,1,2,fistShape));
-		//Cross
-		HashSet<Coordinate> crossShape = new HashSet<Coordinate>();
-		crossShape.addAll(Arrays.asList(new Coordinate(0,0),new Coordinate(-2,0),new Coordinate(-1,0),new Coordinate(1,0),new Coordinate(2,0),new Coordinate(0,-2),new Coordinate(0,-1),new Coordinate(0,1),new Coordinate(0,2)));
-		this.gameShapes.add(new Shape("Cross",10,3,5,4,crossShape));
-		//Square
-		HashSet<Coordinate> squareShape = new HashSet<Coordinate>();
-		squareShape.addAll(Arrays.asList(new Coordinate(0,0),new Coordinate(0,-1),new Coordinate(0,1),new Coordinate(-1,0),new Coordinate(-1,-1),new Coordinate(-1,1),new Coordinate(1,0),new Coordinate(1,-1),new Coordinate(1,1)));
-		this.gameShapes.add(new Shape("Square",10,3,4,4,squareShape));
-		//Sword
-		HashSet<Coordinate> swordShape = new HashSet<Coordinate>();
-		swordShape.addAll(Arrays.asList(new Coordinate(-1,-1),new Coordinate(-1,0),new Coordinate(-1,1),new Coordinate(0,-1),new Coordinate(0,1),new Coordinate(1,-1),new Coordinate(1,0),new Coordinate(1,1)));
-		this.gameShapes.add(new Shape("Sword",8,2,1,3,swordShape));
-		//Beam
-		HashSet<Coordinate> beamShape = new HashSet<Coordinate>();
-		beamShape.addAll(Arrays.asList(new Coordinate(0,1),new Coordinate(0,2),new Coordinate(0,3),new Coordinate(0,4),new Coordinate(0,5)));
-		this.gameShapes.add(new Shape("Beam",10,3,1,4,beamShape));
-	
+		Spell spell1 = askSpellCreation();
+		Spell spell2 = askSpellCreation();
+		Spell spell3 = askSpellCreation();
+		CheapScanner scan = new CheapScanner();
+		String name = scan.getStr();
+		if(name.equals(""))
+			name = "DefaultName";
+		this.controller.createSpellPageRequest(name,spell1,spell2,spell3);
+		
 	}
+	
+	public Spell askSpellCreation()
+	{
+		CheapScanner scan = new CheapScanner();
+		int effectIndex = scan.getInt();
+		if(effectIndex<0 || effectIndex > Effect.values().length-1)
+				effectIndex = 0;
+		Effect pEffect = Effect.values()[effectIndex];
+		int shapeIndex = scan.getInt();
+		if(shapeIndex<0 || shapeIndex > this.controller.getGameShapes().size()-1)
+			shapeIndex = 0;
+		Shape pShape = this.controller.getGameShapes().get(shapeIndex);
+		return new Spell(pEffect,pShape);
+	}
+
+	@Override
+	public void askServerConnection()
+	{
+		CheapScanner scan = new CheapScanner();
+		String ip = scan.getStr();
+	}
+
+	@Override
+	public void askServerConfig()
+	{
+		int nbPlayer,nbPawn,size;
+		CheapScanner scan = new CheapScanner();
+		nbPlayer = scan.getInt();
+		nbPawn = scan.getInt();
+		size = scan.getInt();
+		this.controller.serverConfigRequest(nbPlayer,nbPawn,size);		
+	}
+
+	
+	
 }
 
