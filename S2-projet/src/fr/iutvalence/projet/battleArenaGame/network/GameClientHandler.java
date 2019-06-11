@@ -1,20 +1,19 @@
 package fr.iutvalence.projet.battleArenaGame.network;
 
 import java.io.IOException;
-import java.util.ArrayList;
 
 import fr.iutvalence.projet.battleArenaGame.Board;
 import fr.iutvalence.projet.battleArenaGame.GameController;
 import fr.iutvalence.projet.battleArenaGame.move.Coordinate;
 import fr.iutvalence.projet.battleArenaGame.pawn.Pawn;
-import fr.iutvalence.projet.battleArenaGame.spell.Effect;
+import fr.iutvalence.projet.battleArenaGame.pawn.PawnEffect;
+import fr.iutvalence.projet.battleArenaGame.spell.Spell;
 import fr.iutvalence.projet.battleArenaGame.spell.SpellPage;
 import fr.iutvalence.projet.battleArenaGame.view.GameView;
 import fr.iutvalence.projet.battleArenaGame.view.StatusMessages;
 
 public class GameClientHandler implements GameView
 {
-	public static final String SEPARATOR = "~~~~";
 	
 	private GameController gameController;
 	
@@ -49,7 +48,7 @@ public class GameClientHandler implements GameView
 					e.printStackTrace();
 				}
 			
-			String[] parts = received.split(SEPARATOR);
+			String[] parts = received.split(GameClient.WORD_SEPARATOR);
 			if(parts[0].equals("Request"))
 				switch(parts[1])
 				{
@@ -71,7 +70,7 @@ public class GameClientHandler implements GameView
 		}
 	}
 	
-	public void send(String msg, int index)
+	public void send(String msg)
 	{
 		try
 		{
@@ -85,104 +84,129 @@ public class GameClientHandler implements GameView
 	@Override
 	public void askActionChoice(int currentPlayerIndex)
 	{
-		this.send("Ask" +GameClient.WORD_SEPARATOR +"actionChoice" + GameClient.WORD_SEPARATOR+currentPlayerIndex, currentPlayerIndex);
+		this.send("Ask" +GameClient.WORD_SEPARATOR +"actionChoice" + GameClient.WORD_SEPARATOR+currentPlayerIndex);
 	}
 
 	public void askSpell(int currentPlayerIndex)
 	{
-		this.send("Ask"+GameClient.WORD_SEPARATOR+"spell"+GameClient.WORD_SEPARATOR+currentPlayerIndex, currentPlayerIndex);
+		this.send("Ask"+GameClient.WORD_SEPARATOR+"spell"+GameClient.WORD_SEPARATOR+currentPlayerIndex);
 	}
 
 	@Override
 	public void askPageSelection(int currentPlayerIndex)
 	{
-		this.send("Ask"+GameClient.WORD_SEPARATOR+"pageSelection"+GameClient.WORD_SEPARATOR+currentPlayerIndex, index);
+		this.send("Ask"+GameClient.WORD_SEPARATOR+"pageSelection"+GameClient.WORD_SEPARATOR+currentPlayerIndex);
 	}
 
 
 	@Override
 	public void askMove(int currentPlayerIndex)
 	{
-		this.send("Ask"+GameClient.WORD_SEPARATOR+"move"+currentPlayerIndex,currentPlayerIndex);
+		this.send("Ask"+GameClient.WORD_SEPARATOR+"move"+currentPlayerIndex);
 	}
 
 	@Override
 	public void displaySpellSelection()
 	{
-		this.send("Display"+GameClient.WORD_SEPARATOR+"spellSelection", 1);
+		this.send("Display"+GameClient.WORD_SEPARATOR+"spellSelection");
 	}
 
 	@Override
 	public void displayBoard(Board myBoard, int nbPlayer)
 	{
-		
+		String msg="Display"+GameClient.WORD_SEPARATOR+"board"+GameClient.WORD_SEPARATOR+nbPlayer+GameClient.WORD_SEPARATOR+myBoard.boardSize+GameClient.WORD_SEPARATOR+myBoard.getNbPawn()+GameClient.WORD_SEPARATOR+myBoard.getCurrentPawnIndex()+GameClient.WORD_SEPARATOR+myBoard.getTurnOrder().size()+GameClient.WORD_SEPARATOR+GameClient.SENTENCE_SEPARATOR;		
+		for(Pawn p :myBoard.getTurnOrder())
+		{
+			msg+=p.getTeamId()+GameClient.WORD_SEPARATOR+p.getPos().getCoordX()+GameClient.WORD_SEPARATOR+p.getPos().getCoordY()+GameClient.WORD_SEPARATOR+p.getName()+GameClient.WORD_SEPARATOR+p.getHealthPoints()+GameClient.WORD_SEPARATOR+p.getMovePoints()+GameClient.WORD_SEPARATOR+p.getActionPoints()+GameClient.WORD_SEPARATOR+p.getSpellPage().getPageName()+GameClient.WORD_SEPARATOR+GameClient.GROUP_SEPARATOR;
+			for(Spell s :p.getSpellPage().getSpell())
+			{
+				msg+=s.getShape().getName()+GameClient.WORD_SEPARATOR+s.getShape().getDamage()+GameClient.WORD_SEPARATOR+s.getShape().getCooldown()+GameClient.WORD_SEPARATOR+s.getShape().getRange()+GameClient.WORD_SEPARATOR+s.getShape().getSpellCost()+GameClient.WORD_SEPARATOR+s.getSpellEffect().getEffectName()+GameClient.WORD_SEPARATOR+s.getShape().getEffectedCoordinates().size()+GameClient.WORD_SEPARATOR;
+				for(Coordinate coord :s.getShape().getEffectedCoordinates())
+				{
+					msg+=coord.getCoordX()+GameClient.WORD_SEPARATOR+coord.getCoordY()+GameClient.WORD_SEPARATOR;
+				}
+				msg+=GameClient.GROUP_SEPARATOR;
+			}
+			msg+=p.getEffect().size()+GameClient.WORD_SEPARATOR;
+			for(PawnEffect effp :p.getEffect())
+			{
+				msg+=effp.getCurrentDuration()+GameClient.WORD_SEPARATOR+effp.getEffectName()+GameClient.WORD_SEPARATOR;
+			}
+			msg+=GameClient.SENTENCE_SEPARATOR;
+		}
+		this.send(msg);
 	}
 
 
 	@Override
 	public void displayStatus(StatusMessages msg)
 	{
-		
+		this.send("Display"+GameClient.WORD_SEPARATOR+"status"+GameClient.WORD_SEPARATOR+msg.name());
 	}
 
 
 	@Override
 	public void displayChoiceAction()
 	{
-		
+		this.send("Display"+GameClient.WORD_SEPARATOR+"choiceAction");
 	}
 
 	@Override
 	public void displayEnd(String winTeam)
 	{
-		
+		this.send("Display"+GameClient.WORD_SEPARATOR+"end"+GameClient.WORD_SEPARATOR+winTeam);
 	}
 
 
 	@Override
 	public void displayNextTurn(int numPlayer)
 	{
-		
+		this.send("Display"+GameClient.WORD_SEPARATOR+"nextTurn"+GameClient.WORD_SEPARATOR+numPlayer);
 	}
 
 	@Override
 	public void displayMoveDone()
 	{
-		
+		this.send("Display"+GameClient.WORD_SEPARATOR+"moveDone");
 	}
 
 	@Override
 	public void displaySpellPageDetail(SpellPage pPage)
 	{
-//		this.send("Display"+GameClient.WORD_SEPARATOR+"pageDetail"+GameClient.WORD_SEPARATOR+pPage.getPageName()+GameClient.GROUP_SEPARATOR+pPage.getSpell(0).getShape().getName()+GameClient.WORD_SEPARATOR+pPage.getSpell(0).getShape().getDamage()+GameClient.WORD_SEPARATOR+pPage.getSpell(0).getShape().getCooldown()+GameClient.WORD_SEPARATOR+pPage.getSpell(0).getShape().getRange()+GameClient.WORD_SEPARATOR+pPage.getSpell(0).getShape().get, 0);
+		String msg="Display"+GameClient.WORD_SEPARATOR+"spellPageDetail"+GameClient.WORD_SEPARATOR+pPage.getPageName()+GameClient.WORD_SEPARATOR+GameClient.GROUP_SEPARATOR;
+		for(Spell s :pPage.getSpell())
+		{
+			msg+=s.getShape().getName()+GameClient.WORD_SEPARATOR+s.getShape().getDamage()+GameClient.WORD_SEPARATOR+s.getShape().getCooldown()+GameClient.WORD_SEPARATOR+s.getShape().getRange()+GameClient.WORD_SEPARATOR+s.getShape().getSpellCost()+GameClient.WORD_SEPARATOR+s.getSpellEffect().getEffectName()+GameClient.WORD_SEPARATOR+s.getShape().getEffectedCoordinates().size()+GameClient.WORD_SEPARATOR;
+			for(Coordinate coord :s.getShape().getEffectedCoordinates())
+			{
+				msg+=coord.getCoordX()+GameClient.WORD_SEPARATOR+coord.getCoordY()+GameClient.WORD_SEPARATOR;
+			}
+		msg+=GameClient.GROUP_SEPARATOR;
+		}
+		send(msg);
 	}
-
-	@Override
-	public void diplaySizeError()
-	{
-		
-	}
-
 
 	@Override
 	public void displayMoveSelection()
 	{
-		
-	}
-
-
-	@Override
-	public void displaySpellPage(ArrayList<SpellPage> listPages)
-	{
-		// TODO Auto-generated method stub
-		
+		this.send("Display"+GameClient.WORD_SEPARATOR+"moveSelection");
 	}
 
 	@Override
-	public void displaySelectForThisPawn(Pawn thePawn)
-	{
-		// TODO Auto-generated method stub
+	public void displaySpellPage() {
+		this.send("Display"+GameClient.WORD_SEPARATOR+"spellPage");
+	}
+
+	@Override
+	public void displaySelectForThisPawn(String thePawn) {
+		this.send("Display"+GameClient.WORD_SEPARATOR+"selectForThisPawn"+GameClient.WORD_SEPARATOR+thePawn);
+	}
+
+	@Override
+	public void diplaySizeError() {
+		this.send("Display"+GameClient.WORD_SEPARATOR+"sizeErrors");
 		
 	}
+
 
 }

@@ -187,7 +187,7 @@ public class GameClient implements GameController
 							for(int k=0;k<Integer.parseInt(parts2[0]);k++)
 							{
 								for(Effect eff : Effect.values())
-									if(eff.getElementName().equals(Integer.parseInt(parts2[3+k*2])))
+									if(eff.getElementName()==parts2[3+k*2])
 										ef.add(new PawnEffect(eff));
 										ef.get(k).setCurrentDuration(Integer.parseInt(pawnPart[2+k*2]));
 							}
@@ -206,7 +206,7 @@ public class GameClient implements GameController
 							}
 					break;
 				case "end":
-					this.gameView.displayEnd(parts[2],);
+					this.gameView.displayEnd(parts[2]);
 					break;
 				case "nextTurn":
 					this.gameView.displayNextTurn(Integer.parseInt(parts[2]));
@@ -244,6 +244,11 @@ public class GameClient implements GameController
 				case "choiceAction":
 					this.gameView.displayChoiceAction();
 					break;
+				case "MoveDone":
+					this.gameView.displayMoveDone();
+					break;
+				case "moveSlection":
+					this.gameView.displayMoveSelection();
 				}
 				break;
 			}
