@@ -1,5 +1,12 @@
 package fr.iutvalence.projet.battleArenaGame.view;
-
+//TODO
+/*
+ * Enlever tous les attrributs qui ne sont pas directement liés à la création de fenetre en JFrame
+ * -> spellIndex + tous les strings
+ * 
+ * Déplacer les méthodes lié au Menu + la création de sort dans userViewWindow
+ * + ne pas appeler des méthodes ask/display de puis d'autres méthodes ask ou display
+ */
 import java.awt.Choice;
 import java.awt.Component;
 import java.awt.Dimension;
@@ -37,11 +44,6 @@ import fr.iutvalence.projet.battleArenaGame.test.JGameCanvas;
  *
  */
 public class PlayerWindow extends JFrame implements GameView{
-	
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = -553229968959527773L;
 	
 	
 	private int spellIndex;
@@ -152,12 +154,10 @@ public class PlayerWindow extends JFrame implements GameView{
 	public void setGameController(GameController controller) {
 		this.gameController = controller;
 	}
-	@Override
 	public String askPageName() {
 		return this.tfPageName.getText();
 	}
 
-	@Override
 	public Effect askSpellElement() {
 		Effect spellEffect = null;
 		for (Effect effect : Effect.values()) {
@@ -177,7 +177,6 @@ public class PlayerWindow extends JFrame implements GameView{
 
 	}
 
-	@Override
 	public void displayMenu() {
 		//disable the visibility of the window to avoid graphical bugs
 		this.setVisible(false);
@@ -588,29 +587,7 @@ public class PlayerWindow extends JFrame implements GameView{
 		
 	}
 
-	@Override
-	public void displayElementChoice() {
-		this.chElement.removeAll();
-		this.chElement.add("Choose an element");
-		for (Effect element : Effect.values()) {
-			this.chElement.add(element.getElementName());
-		}
-		
-	}
 
-	@Override
-	public void displayShapeChoice() {
-		this.chShape.removeAll();
-		this.chShape.add("Choose a shape");
-		this.chShape.add("Fist");
-		this.chShape.add("Ball");
-		this.chShape.add("Sword");
-		this.chShape.add("Square");
-		this.chShape.add("Cross");
-		this.chShape.add("Beam");
-		this.chShape.add("Custom");
-		
-	}
 
 
 	@Override
@@ -676,24 +653,8 @@ public class PlayerWindow extends JFrame implements GameView{
 		
 	}
 
-	@Override
-	public void askSpell(int currentPlayerIndex) {
-		this.gameController.spellRequest(currentPlayerIndex, this.spellIndex,new Coordinate(this.gameBoard.getXIndex(),this.gameBoard.getYIndex()));
-		
-	}
 
-	@Override
-	public void askPageSelection(int currentPlayerIndex) {
-		if(!(chSpellPages.getSelectedIndex()==0))
-			this.gameController.setPageRequest(currentPlayerIndex, chSpellPages.getSelectedIndex()-1);
-		
-	}
 
-	@Override
-	public void askMove(int currentPlayerIndex) {
-		this.gameController.moveRequest(currentPlayerIndex,new Coordinate(this.gameBoard.getXIndex(),this.gameBoard.getYIndex()));
-		
-	}
 
 	@Override
 	public void displaySpellSelection() {
@@ -778,19 +739,42 @@ public class PlayerWindow extends JFrame implements GameView{
 
 		this.setVisible(true);
 	}
-
-
+	
 	@Override
-	public void askChoiceMenu(int currentPlayerIndex) {
-		// TODO Auto-generated method stub
+	public void askMove(int currentPlayerIndex) {
+		this.gameController.moveRequest(currentPlayerIndex,new Coordinate(this.gameBoard.getXIndex(),this.gameBoard.getYIndex()));
 		
 	}
+
+	@Override
+	public void askSpell(int currentPlayerIndex) {
+		this.gameController.spellRequest(currentPlayerIndex, this.spellIndex,new Coordinate(this.gameBoard.getXIndex(),this.gameBoard.getYIndex()));
+		
+	}
+
+	@Override
+	public void askPageSelection(int currentPlayerIndex) {
+		if(!(chSpellPages.getSelectedIndex()==0))
+			this.gameController.setPageRequest(currentPlayerIndex, chSpellPages.getSelectedIndex()-1);
+		
+	}
+
 	
 	public static void main(String[] args) {
-		Game game = new Game(2,3,9);
-		PlayerWindow pw = new PlayerWindow();
-		pw.setGameController(game);
-		pw.displayBoard(game.getBoard(), 2);
+//		Game game = new Game(2,3,9);
+		PlayerWindow p = new PlayerWindow();
+		p.displayMenu();
+		try {
+			Thread.sleep(2000);
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		p.displayMenu();
+
+//		PlayerWindow pw = new PlayerWindow();
+//		pw.setGameController(game);
+//		pw.displayBoard(game.getBoard(), 2);
 //		pw.askActionChoice(0);
 //		pw.displayCreateSpell(1);
 //		pw.displaySpellSelection();
