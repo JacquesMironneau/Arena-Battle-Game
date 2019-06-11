@@ -1,16 +1,18 @@
 package fr.iutvalence.projet.battleArenaGame.view;
 
+import java.util.ArrayList;
+
 import fr.iutvalence.projet.battleArenaGame.Board;
-import fr.iutvalence.projet.battleArenaGame.GameController;
+import fr.iutvalence.projet.battleArenaGame.pawn.Pawn;
 import fr.iutvalence.projet.battleArenaGame.spell.SpellPage;
 
 /**
- * Handle the interaction with the user when the game is running
+ * Class to ask for choice and display for the HMI
+ * ask stands for everything we ask the User to do
+ * and display is what he currently see on the HMI.
  */
 
 public interface GameView {
-	
-	//Ask 
 	
 	/**
 	 * Ask the player to pick between every possible actions choice
@@ -38,75 +40,68 @@ public interface GameView {
 	public void askMove(int currentPlayerIndex);
 	
 	
-	//Display
+	//DISPLAY
 	
 	/**
 	 * Display to the player what he have to do in order to select a spell
 	 */
-	public void displaySpellSelection(int currentPlayerIndex);
+	public void displaySpellSelection();
 		
 	/**
 	 * Display the board to user
 	 * @param myBoard
 	 * @param nbPlayer
 	 */
-	public void displayBoard(int currentPlayerIndex,Board myBoard, int nbPlayer);
+	public void displayBoard(Board myBoard, int nbPlayer);
 
 	/**
 	 * Display a status messages based on StatusMessages enumeration 
 	 */
-	public void displayStatus(int currentPlayerIndex, StatusMessages msg);
+	public void displayStatus(StatusMessages msg);
 	
 	/**
 	 * Display the owned spell pages
 	 */
-	public void displaySpellPage(int currentPlayerIndex);
+	public void displaySpellPage(ArrayList<SpellPage> listPages);
 	
 	/**
 	 * Display the actions that the player can move
 	 */
-	public void displayChoiceAction(int currentPlayerIndex);
+	public void displayChoiceAction();
 	
 	/**
 	 * Display a ending message for the game
 	 * @param Pstat status of the Game (victory,defeat,draw)
 	 * @param teamId display the team linked to the status
 	 */
-	public void displayEnd(int currentPlayerIndex, String winTeam);
+	public void displayEnd(String winTeam);
 	
 	/**
 	 * Display that the turn has changed
 	 */
-	public void displayNextTurn(int currentPlayerIndex, int numPlayer);
+	public void displayNextTurn(int numPlayer);
 	
 	/**
 	 * Ensure the player that his pawn has been moved
 	 */
-	public void displayMoveDone(int currentPlayerIndex);
+	public void displayMoveDone();
 
 	/**
 	 * Display every attributes of every spell in a page
 	 * @param pPage the described page
 	 */
-	public void displaySpellPageDetail(int currentPlayerIndex, SpellPage pPage);
+	public void displaySpellPageDetail(SpellPage pPage);
 	
 	/**
 	 * say Size is to small for the amount of pawns
 	 */
-	public void diplaySizeError(int currentPlayerIndex);
+	public void diplaySizeError();
 	
 	/**
-	 * Show for which pawn you have to select a page
+	 * show for which pawn you have to select a page
 	 * @param Pawn
 	 */
-	public void displaySelectForThisPawn(int currentPlayerIndex, String pawnName);
+	public void displaySelectForThisPawn(Pawn thePawn);
 	
-	/**
-	 * Show to the player what he need to do to move
-	 */
-	public void displayMoveSelection(int currentPlayerIndex);
-	
-	
-	//Setter
-	public void setGameController(int currentPlayerIndex, GameController GC);
+	public void displayMoveSelection();
 }
