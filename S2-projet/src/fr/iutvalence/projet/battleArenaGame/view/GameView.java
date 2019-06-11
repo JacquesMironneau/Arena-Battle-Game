@@ -1,9 +1,7 @@
 package fr.iutvalence.projet.battleArenaGame.view;
 
-import java.util.ArrayList;
-
 import fr.iutvalence.projet.battleArenaGame.Board;
-import fr.iutvalence.projet.battleArenaGame.pawn.Pawn;
+import fr.iutvalence.projet.battleArenaGame.GameController;
 import fr.iutvalence.projet.battleArenaGame.spell.SpellPage;
 
 /**
@@ -62,7 +60,7 @@ public interface GameView {
 	/**
 	 * Display the owned spell pages
 	 */
-	public void displaySpellPage(ArrayList<SpellPage> listPages);
+	public void displaySpellPage();
 	
 	/**
 	 * Display the actions that the player can move
@@ -101,7 +99,11 @@ public interface GameView {
 	 * show for which pawn you have to select a page
 	 * @param Pawn
 	 */
-	public void displaySelectForThisPawn(Pawn thePawn);
+	public void displaySelectForThisPawn(String thePawn);
 	
 	public void displayMoveSelection();
+	
+	//Setter
+	
+	public void setGameController(GameController pController);
 }
