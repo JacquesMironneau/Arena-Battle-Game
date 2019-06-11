@@ -98,6 +98,10 @@ public class UserViewWindow extends JFrame implements UserView {
 	
 	private boolean pause;
 	
+	private Spell sp1;
+	private Spell sp2;
+	private Spell sp3;
+	
 	private UserController controller;
 	
 	private JGameCanvas gameBoard;
@@ -290,11 +294,11 @@ public class UserViewWindow extends JFrame implements UserView {
 			
 			JLabel numberOfPlayerCons = new JLabel("Entrez le nombre de joueurs console");
 			numberOfPlayer.setBounds(0,this.getHeight()/20*4,this.getWidth()/3,this.getHeight()/20);
-			this.getContentPane().add(numberOfPlayer);
+			this.getContentPane().add(numberOfPlayerCons);
 			
 			JTextField numberOfPlayerConsField = new JTextField();
 			numberOfPlayerField.setBounds(0,this.getHeight()/20*5,this.getWidth()/3,this.getHeight()/20);
-			this.getContentPane().add(numberOfPlayerField);
+			this.getContentPane().add(numberOfPlayerConsField);
 			
 			JLabel numberOfPawns = new JLabel("Veuillez saisir le nombre de pions");
 			numberOfPawns.setBounds(0,this.getHeight()/20*6,this.getWidth()/3,this.getHeight()/20);
@@ -305,7 +309,7 @@ public class UserViewWindow extends JFrame implements UserView {
 			this.getContentPane().add(numberOfPawnsField);
 			
 			JButton btnValider = new JButton("valider");
-			btnValider.setBounds(this.getWidth()/5*2,this.getHeight()/20*8,this.getWidth()/5,this.getHeight()/20);
+			btnValider.setBounds(0,this.getHeight()/20*8,this.getWidth()/5,this.getHeight()/20);
 			this.getContentPane().add(btnValider);
 			
 			this.setVisible(true);
@@ -397,9 +401,7 @@ public class UserViewWindow extends JFrame implements UserView {
 			}
 		});
 		
-		while(pause) {
-			System.out.println("pausing");
-		}
+		while(pause);
 	}
 	
 	public void displayJoinGame() {
@@ -497,9 +499,11 @@ public class UserViewWindow extends JFrame implements UserView {
 			public void itemStateChanged(ItemEvent arg0) {
 				if(chElement.getSelectedItem() == "Choose an element") {
 					chShape.setEnabled(false);
+					pause = true;
 				}
 				else {
 					chShape.setEnabled(true);
+					pause = false;
 				}
 					
 			}
@@ -521,13 +525,17 @@ public class UserViewWindow extends JFrame implements UserView {
 		
 		this.chShape.addItemListener(new ItemListener() {
 			public void itemStateChanged(ItemEvent arg0) {
-				if(chShape.getSelectedItem()=="Choose a shape")
+				if(chShape.getSelectedItem()=="Choose a shape") {
 					btnValiderSpellCreation.setEnabled(false);
+					pause = true;
+				}
 				else if(chShape.getSelectedItem()=="Custom") {
 					JOptionPane.showMessageDialog(mainContainer, "This functionnality is under devel");	
+					pause = true;
 				}
 				else {
 					btnValiderSpellCreation.setEnabled(true);
+					pause = false;
 				}
 			}
 		});
@@ -608,13 +616,46 @@ public class UserViewWindow extends JFrame implements UserView {
 
 	@Override
 	public void askPageCreation() {
-		//TODO aled
-		this.controller.createSpellPageRequest(name, spell1, spell2, spell3);
+		JButton spell1 = (JButton) this.getContentPane().getComponent(0);
+		spell1.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				displayCreateSpell(1);
+				while (pause);
+				sp1 = askSpellCreation();
+				controller.choiceMenuRequest(MenuChoices.CREATE_SPELL_PAGE);
+			}
+		});
+		JButton spell2 = (JButton) this.getContentPane().getComponent(1);
+		spell2.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				displayCreateSpell(2);
+				while(pause);
+				sp2 = askSpellCreation();
+				controller.choiceMenuRequest(MenuChoices.CREATE_SPELL_PAGE);
+			}
+		});
+		JButton spell3 = (JButton) this.getContentPane().getComponent(2);
+		spell3.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				displayCreateSpell(3);
+				while(pause);
+				sp3 = askSpellCreation();
+				controller.choiceMenuRequest(MenuChoices.CREATE_SPELL_PAGE);
+			}
+		});
+		JTextField pageNameField = (JTextField) this.getContentPane().getComponent(5);
 		
+		JButton btnValider = (JButton) this.getContentPane().getComponent(6);
+		btnValider.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				controller.createSpellPageRequest(pageNameField.getText(),sp1,sp2,sp3);
+			}
+		});
 	}
 
 	@Override
 	public Spell askSpellCreation() {
+		//TODO might review
 		int effectIndex = -1;
 		for (Effect effect : Effect.values()) {
 			if (effect.ordinal() == this.chElement.getSelectedIndex()-1)
