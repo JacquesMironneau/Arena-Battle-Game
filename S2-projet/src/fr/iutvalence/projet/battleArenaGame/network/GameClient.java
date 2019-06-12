@@ -131,7 +131,7 @@ public class GameClient implements GameController
 				e.printStackTrace();
 			}
 
-			String[] parts = receivedFrame.split("GameClient.WORD_SEPARATOR");
+			String[] parts = receivedFrame.split(GameClient.WORD_SEPARATOR);
 			switch(parts[0])
 			{
 			case "Ask":
