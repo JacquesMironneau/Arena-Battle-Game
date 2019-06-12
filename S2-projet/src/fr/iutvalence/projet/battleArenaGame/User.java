@@ -115,28 +115,32 @@ public class User implements UserController
 		//Ball
 		HashSet<Coordinate> ballShape = new HashSet<Coordinate>();
 		ballShape.addAll(Arrays.asList(new Coordinate(0,0)));
-		this.gameShapes.add(new Shape("Ball",10,2,5,3,ballShape));
+		this.gameShapes.add(new Shape("Ball",Shape.DEFAULT_BALL_DAMAGE,Shape.DEFAULT_BALL_COOLDOWN,Shape.DEFAULT_BALL_RANGE,Shape.DEFAULT_BALL_COST,ballShape));
+		
 		//Fist
 		HashSet<Coordinate> fistShape = new HashSet<Coordinate>();
 		fistShape.addAll(Arrays.asList(new Coordinate(0,0)));
-		this.gameShapes.add(new Shape("Fist",15,1,1,2,fistShape));
+		this.gameShapes.add(new Shape("Fist",Shape.DEFAULT_FIST_DAMAGE, Shape.DEFAULT_FIST_COOLDOWN,Shape.DEFAULT_FIST_RANGE,Shape.DEFAULT_FIST_COST,fistShape));
+		
 		//Cross
 		HashSet<Coordinate> crossShape = new HashSet<Coordinate>();
 		crossShape.addAll(Arrays.asList(new Coordinate(0,0),new Coordinate(-2,0),new Coordinate(-1,0),new Coordinate(1,0),new Coordinate(2,0),new Coordinate(0,-2),new Coordinate(0,-1),new Coordinate(0,1),new Coordinate(0,2)));
-		this.gameShapes.add(new Shape("Cross",10,3,5,4,crossShape));
+		this.gameShapes.add(new Shape("Cross",Shape.DEFAULT_CROSS_DAMAGE,Shape.DEFAULT_CROSS_COOLDOWN,Shape.DEFAULT_CROSS_RANGE,Shape.DEFAULT_CROSS_COST,crossShape));
+		
 		//Square
 		HashSet<Coordinate> squareShape = new HashSet<Coordinate>();
 		squareShape.addAll(Arrays.asList(new Coordinate(0,0),new Coordinate(0,-1),new Coordinate(0,1),new Coordinate(-1,0),new Coordinate(-1,-1),new Coordinate(-1,1),new Coordinate(1,0),new Coordinate(1,-1),new Coordinate(1,1)));
-		this.gameShapes.add(new Shape("Square",10,3,4,4,squareShape));
+		this.gameShapes.add(new Shape("Square",Shape.DEFAULT_SQUARE_DAMAGE,Shape.DEFAULT_SQUARE_COOLDOWN,Shape.DEFAULT_SQUARE_RANGE,Shape.DEFAULT_SQUARE_COST,squareShape));
+		
 		//Sword
 		HashSet<Coordinate> swordShape = new HashSet<Coordinate>();
 		swordShape.addAll(Arrays.asList(new Coordinate(-1,-1),new Coordinate(-1,0),new Coordinate(-1,1),new Coordinate(0,-1),new Coordinate(0,1),new Coordinate(1,-1),new Coordinate(1,0),new Coordinate(1,1)));
-		this.gameShapes.add(new Shape("Sword",8,2,1,3,swordShape));
+		this.gameShapes.add(new Shape("Sword",Shape.DEFAULT_SWORD_DAMAGE,Shape.DEFAULT_SWORD_COOLDOWN,Shape.DEFAULT_SWORD_RANGE,Shape.DEFAULT_SWORD_COST,swordShape));
+		
 		//Beam
 		HashSet<Coordinate> beamShape = new HashSet<Coordinate>();
 		beamShape.addAll(Arrays.asList(new Coordinate(0,1),new Coordinate(0,2),new Coordinate(0,3),new Coordinate(0,4),new Coordinate(0,5)));
-		this.gameShapes.add(new Shape("Beam",10,3,1,4,beamShape));
-	
+		this.gameShapes.add(new Shape("Beam",Shape.DEFAULT_BEAM_DAMAGE,Shape.DEFAULT_BEAM_COOLDOWN,Shape.DEFAULT_BEAM_RANGE,Shape.DEFAULT_BEAM_COST,beamShape));
 	}
 	@Override
 	public ArrayList<Shape> getGameShapes()
