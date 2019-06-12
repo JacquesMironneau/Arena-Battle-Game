@@ -212,7 +212,7 @@ public class Board
 		int X;
 		int Y;
 		Random rand = new Random();
-		for (int i=1;i<= this.nbPawn;i++)
+		for (int indexNb=1;indexNb<= this.nbPawn;indexNb++)
 			{
 			for(int k=0;k<maxPlayer;k++)
 			{
@@ -221,7 +221,7 @@ public class Board
 				X = rand.nextInt(this.boardSize);
 				Y = rand.nextInt(this.boardSize);
 				}while(this.exist(X,Y));
-				this.getTurnOrder().add(new Pawn(k,new Coordinate(X,Y),"J"+k +"."+i));
+				this.getTurnOrder().add(new Pawn(k,new Coordinate(X,Y),"J"+k +"."+indexNb));
 			}
 		}
 	}
