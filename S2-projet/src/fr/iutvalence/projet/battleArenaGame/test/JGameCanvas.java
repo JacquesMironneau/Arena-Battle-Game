@@ -1,8 +1,10 @@
 package fr.iutvalence.projet.battleArenaGame.test;
  
+import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Image;
 import java.awt.Rectangle;
+import java.awt.Toolkit;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.io.File;
@@ -40,9 +42,9 @@ public class JGameCanvas extends JPanel implements MouseListener{
 	
 	private int boardSize;
 	
-	private int width;
+	private int width=1;
 	
-	private int height;
+	private int height=1;
 	
 	private int xIndex;
 	private int yIndex;
@@ -54,8 +56,8 @@ public class JGameCanvas extends JPanel implements MouseListener{
 	public JGameCanvas(ArrayList<Pawn> pList,int pboardSize,int pwidth,int pheight){
 		this.List = pList;
 		this.boardSize=pboardSize;
-		this.width=pwidth;
-		this.height=pheight;
+		this.width=(pwidth*2)/3;
+		this.height=(pheight*2)/3;
 		this.rec = new ArrayList<Rectangle>();
 
 		this.arrayImage = new LocatedImage[this.boardSize][this.boardSize];
@@ -86,36 +88,30 @@ public class JGameCanvas extends JPanel implements MouseListener{
 	 */
 	public void paintComponent(Graphics g) {
 		super.paintComponent(g);
-//		g.setColor(Color.MAGENTA);
-//		g.fillRect(0, this.getWidth(), this.getWidth(), this.getHeight());
-//		g.drawString(", 1000, 1000);
-		System.out.println(" AAAAAAAAAAA" +this.getWidth());
-		System.out.println("AAAAAAAAAAA");
 		File img = new File("ressources/newp1.png");
 		File img2 = new File("ressources/newp2.png");
 		File img3 = new File("ressources/newvide.png");
-//		File img4 = new File("ressources/highlight.png");
 		Image p1 = null, p2 = null, voidImg = null, highlight = null;
-		System.out.println(getHeight()+ " "+ this.getWidth());
 		try {
 			p1 = ImageIO.read(img);
 			p2 = ImageIO.read(img2);
 			voidImg = ImageIO.read(img3);
-//			highlight = ImageIO.read(img4);
 
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-//		System.out.println(((this.getHeight()*2)/3)/this.boardSize);
-//		System.out.println("WIDTH" + this.getWidth()+"HEIGHT"+this.getHeight());
-		voidImg=voidImg.getScaledInstance(((this.getWidth()))/this.boardSize,((this.getHeight()))/this.boardSize, Image.SCALE_DEFAULT);
-		p1=p1.getScaledInstance(((this.getWidth()))/this.boardSize, ((this.getHeight()))/this.boardSize, Image.SCALE_DEFAULT);
-		p2=p2.getScaledInstance(((this.getWidth()))/this.boardSize, ((this.getHeight()))/this.boardSize, Image.SCALE_DEFAULT);
-		this.sizeWidth=((this.getWidth()))/this.boardSize;
-		this.sizeHeight=((this.getHeight()))/this.boardSize;
-//		System.out.println(sizeWidth);
-		
+		try {
+		voidImg=voidImg.getScaledInstance(((this.width))/this.boardSize,((this.height))/this.boardSize, Image.SCALE_DEFAULT);
+		p1=p1.getScaledInstance(((this.width))/this.boardSize, ((this.height))/this.boardSize, Image.SCALE_DEFAULT);
+		p2=p2.getScaledInstance(((this.width))/this.boardSize, ((this.height))/this.boardSize, Image.SCALE_DEFAULT);
+		this.sizeWidth=((this.width))/this.boardSize;
+		this.sizeHeight=((this.height))/this.boardSize;
+		}
+		catch(IllegalArgumentException e)
+		{
+			e.printStackTrace();
+		}
 		
 		for(int i=0 ;i<boardSize;i++)
 			for(int k=0;k<boardSize;k++)
@@ -127,7 +123,6 @@ public class JGameCanvas extends JPanel implements MouseListener{
 			for(int k=0;k<boardSize;k++)
 			{		
 					g.drawImage(voidImg, i*sizeWidth, k*sizeHeight,this);
-//					System.out.println(this.arrayImage[i][k]);
 					this.arrayImage[i][k].setImg(voidImg);
 					this.arrayImage[i][k].setCoordX(i*sizeWidth);
 					this.arrayImage[i][k].setCoordY(k*sizeHeight);
@@ -155,7 +150,6 @@ public class JGameCanvas extends JPanel implements MouseListener{
 							else
 							{
 								g.drawImage(p2, i*sizeWidth,  k*sizeHeight,this);
-//								System.out.println(i*sizeWidth);
 								this.arrayImage[i][k].setImg(p2);
 								this.arrayImage[i][k].setCoordX(i*sizeWidth);
 								this.arrayImage[i][k].setCoordY(k*sizeHeight);
@@ -167,7 +161,6 @@ public class JGameCanvas extends JPanel implements MouseListener{
 			}
 	}
 
-		System.out.println(this.arrayImage[0][0].getCoordX()+ " EN 0 0 QUOI "+this.arrayImage[0][0].getCoordY());
 	
 	for(int indexRow = 0; indexRow < this.boardSize; indexRow++)
 		for(int indexCol = 0; indexCol < this.boardSize; indexCol++)
@@ -176,11 +169,6 @@ public class JGameCanvas extends JPanel implements MouseListener{
 			this.rec.add(new Rectangle(this.arrayImage[indexRow][indexCol].getCoordX(), this.arrayImage[indexRow][indexCol].getCoordY(), this.sizeWidth, this.sizeHeight));
 		}
 
-	
-	for(Rectangle r1:  rec)
-	{
-		System.out.println(r1.getX()+" et " + r1.getY());
-	}
 	this.addMouseListener(new MouseListener()
 	{
 
@@ -194,11 +182,7 @@ public class JGameCanvas extends JPanel implements MouseListener{
 					
 					xIndex = (int)r.getX()/sizeWidth;
 					yIndex= (int)r.getY()/sizeHeight;
-					
-					System.out.println("GETX : "+r.getX() + " "+ r.getY());
-					System.out.println(arrayImage[xIndex][yIndex].getCoordX()+" aaa"+arrayImage[xIndex][yIndex].getCoordY());
-					System.out.println("VRAI X: "+xIndex + " vrai y"+yIndex);
-				
+					System.out.println("go");
 				}
 					
 			}		
@@ -235,16 +219,16 @@ public class JGameCanvas extends JPanel implements MouseListener{
 
 
 	public static void main(String[] args) {
-		System.out.println();
 		ArrayList<Pawn> List = new ArrayList<Pawn>();
 		List.add(new Pawn(1,new Coordinate(0,2),"lol"));
 		List.add(new Pawn(2,new Coordinate(0,6),"lol"));
 		
-	//	Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-		
+		Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
 		JFrame f = new JFrame();
-	
+		f.setSize(screenSize);
+		
 		f.setExtendedState(JFrame.MAXIMIZED_BOTH);
+		System.out.println(f.getWidth());
 		JGameCanvas CC = new JGameCanvas(List,15,f.getWidth(),f.getHeight());
 		f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	
