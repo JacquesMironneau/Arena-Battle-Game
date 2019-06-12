@@ -65,30 +65,33 @@ public class GameClient implements GameController
 			e.printStackTrace();
 		}
 	}
-	
+	/*
+	 * Protocol : coding part
+	 */
 	@Override
 	public void moveRequest(int currentPlayerIndex, Coordinate destination)
 	{
-		String request = "Request move " + currentPlayerIndex + GameClient.WORD_SEPARATOR + destination.getCoordX() + GameClient.WORD_SEPARATOR +destination.getCoordY();
+		String request = "Request"+GameClient.WORD_SEPARATOR+ "move"+GameClient.WORD_SEPARATOR+currentPlayerIndex + GameClient.WORD_SEPARATOR + destination.getCoordX() + GameClient.WORD_SEPARATOR +destination.getCoordY();
 		send(request);
 	}
 
 	@Override
 	public void spellRequest(int currentPlayerIndex, int spellIndex, Coordinate destination)
 	{
-		String request = "Request spell "+currentPlayerIndex+GameClient.WORD_SEPARATOR+spellIndex+GameClient.WORD_SEPARATOR+destination.getCoordX() + GameClient.WORD_SEPARATOR +destination.getCoordY();
+		String request = "Request"+GameClient.WORD_SEPARATOR+ "spell"+GameClient.WORD_SEPARATOR+currentPlayerIndex+GameClient.WORD_SEPARATOR+spellIndex+GameClient.WORD_SEPARATOR+destination.getCoordX() + GameClient.WORD_SEPARATOR +destination.getCoordY();
 		send(request);
 	}
 
 	@Override
 	public void setPageRequest(int currentPlayerIndex, SpellPage pageToSet)
 	{
-		String request = "Request page "+currentPlayerIndex+ GameClient.WORD_SEPARATOR+ pageToSet.getPageName()+ GameClient.WORD_SEPARATOR;
+		String request = "Request" +GameClient.WORD_SEPARATOR+"page"+GameClient.WORD_SEPARATOR+currentPlayerIndex+ GameClient.WORD_SEPARATOR+ pageToSet.getPageName()+ GameClient.WORD_SEPARATOR;
 		for(Spell s: pageToSet.getSpell())
 		{
 			request += s.getShape().getName()+ GameClient.WORD_SEPARATOR + s.getShape().getDamage()+ GameClient.WORD_SEPARATOR+s.getShape().getCooldown()+GameClient.WORD_SEPARATOR+s.getShape().getRange()+ GameClient.WORD_SEPARATOR + s.getShape().getSpellCost()+ GameClient.WORD_SEPARATOR+ s.getShape().getEffectedCoordinates().size()+ GameClient.WORD_SEPARATOR;
-			for(Coordinate c: s.getShape().getEffectedCoordinates())
-				request += c.getCoordX()+ GameClient.WORD_SEPARATOR + c.getCoordY()+ GameClient.WORD_SEPARATOR;
+			
+			for(Coordinate coord: s.getShape().getEffectedCoordinates())
+				request += coord.getCoordX()+ GameClient.WORD_SEPARATOR + coord.getCoordY()+ GameClient.WORD_SEPARATOR;
 			request += s.getSpellEffect().getEffectName() + GameClient.WORD_SEPARATOR;
 		}
 		send(request);
@@ -116,12 +119,13 @@ public class GameClient implements GameController
 		send(request);
 	}
 	
-	
+	/*
+	 * Decode the receive message (network protocol)
+	 */
 	public void receive()
 	{
 		while(true)
 		{
-			//Receive the string from buffered
 			String receivedFrame = null;
 			
 			try {
@@ -152,6 +156,7 @@ public class GameClient implements GameController
 					
 				}
 				break;
+				
 			case "Display":
 				switch(parts[1])
 				{

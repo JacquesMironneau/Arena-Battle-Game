@@ -1,4 +1,4 @@
-package fr.iutvalence.projet.battleArenaGame.test;
+package fr.iutvalence.projet.battleArenaGame.view;
 
 import java.awt.Image;
 

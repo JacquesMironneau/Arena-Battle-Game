@@ -12,6 +12,11 @@ public class ServerTCP
 {
 	public final static int PORT = 19999;
 	
+	/**
+	 * How many host are connected (players playing on the same node as the server)
+	 */
+	public final static int NUMBER_PLAYER_BASIS = 1;
+	
 	private int nbPlayers;
 	
 	private int currentNbPlayers;
@@ -22,7 +27,7 @@ public class ServerTCP
 	{
 		this.socketList = new ArrayList<Socket>();
 		this.nbPlayers = nbPlayers;
-		this.currentNbPlayers = 1;
+		this.currentNbPlayers = NUMBER_PLAYER_BASIS;
 		ServerSocket ss;
 		try
 		{

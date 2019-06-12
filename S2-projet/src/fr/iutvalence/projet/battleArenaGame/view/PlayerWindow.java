@@ -18,7 +18,6 @@ import fr.iutvalence.projet.battleArenaGame.UserController;
 import fr.iutvalence.projet.battleArenaGame.move.Coordinate;
 import fr.iutvalence.projet.battleArenaGame.pawn.Pawn;
 import fr.iutvalence.projet.battleArenaGame.spell.SpellPage;
-import fr.iutvalence.projet.battleArenaGame.test.JGameCanvas;
 
 /**
  * PlayerWindow class

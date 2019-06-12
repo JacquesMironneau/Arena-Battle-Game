@@ -25,7 +25,6 @@ import fr.iutvalence.projet.battleArenaGame.spell.Effect;
 import fr.iutvalence.projet.battleArenaGame.spell.Shape;
 import fr.iutvalence.projet.battleArenaGame.spell.Spell;
 import fr.iutvalence.projet.battleArenaGame.spell.SpellPage;
-import fr.iutvalence.projet.battleArenaGame.test.JGameCanvas;
 
 public class UserViewWindow extends JFrame implements UserView {
 	//TODO removes attributes, complete auto implemented methods

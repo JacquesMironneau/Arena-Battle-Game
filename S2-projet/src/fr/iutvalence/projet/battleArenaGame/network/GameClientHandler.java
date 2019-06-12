@@ -77,12 +77,14 @@ public class GameClientHandler implements GameView
 							this.gameController.actionRequest(Integer.parseInt(parts[2]), Smsg);
 					break;
 				case "page":
-				//use the one from GameClient	
-					break;
+					//TODO
 				}
 		}
 	}
 	
+	/*
+	 * Send to a GameClient a coded message
+	 */
 	public void send(String msg)
 	{
 		try
@@ -99,7 +101,8 @@ public class GameClientHandler implements GameView
 	{
 		this.send("Ask" +GameClient.WORD_SEPARATOR +"actionChoice" + GameClient.WORD_SEPARATOR+currentPlayerIndex);
 	}
-
+	
+	@Override
 	public void askSpell(int currentPlayerIndex)
 	{
 		this.send("Ask"+GameClient.WORD_SEPARATOR+"spell"+GameClient.WORD_SEPARATOR+currentPlayerIndex);

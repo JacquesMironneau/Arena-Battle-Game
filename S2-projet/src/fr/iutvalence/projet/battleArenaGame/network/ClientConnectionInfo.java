@@ -3,7 +3,12 @@ package fr.iutvalence.projet.battleArenaGame.network;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.net.Socket;
-
+/**
+ * Information of clients
+ * including his socket and his differents streams (to send and receive)
+ * @author pashmi
+ *
+ */
 public class ClientConnectionInfo
 {
 	private BufferedReader reader;
@@ -21,6 +26,9 @@ public class ClientConnectionInfo
 	}
 
 
+	/*
+	 * Getters
+	 */
 	public BufferedReader getReader()
 	{
 		return reader;

@@ -4,26 +4,24 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.Socket;
-import java.util.ArrayList;
 
 public class ClientTCP
 {
 	
-	private Socket s;
+	private Socket socket;
 	
 	public ClientTCP(String ip)
 	{
 		try
 		{
-			s = new Socket(ip, ServerTCP.PORT);
+			socket = new Socket(ip, ServerTCP.PORT);
 			
-			BufferedReader bufr = new BufferedReader(new InputStreamReader(s.getInputStream()));
+			BufferedReader bufr = new BufferedReader(new InputStreamReader(socket.getInputStream()));
 			new Thread(() -> {
 			while(true)
 				try
 				{
-					//TODO view ! and not syso 
-					System.out.println(bufr.readLine());
+					System.out.println(bufr.readLine()); //TODO move to view 
 				} catch (IOException e)
 				{
 					e.printStackTrace();
@@ -36,32 +34,12 @@ public class ClientTCP
 		}
 	}
 	
+	/*
+	 *Getter
+	 */
 	public Socket getSocket()
 	{
-		return this.s;
+		return this.socket;
 	}
 	
-	public static void main(String[] args)
-	{
-		new Thread(() -> {
-			ArrayList<GameClientHandler> sl = new ArrayList<GameClientHandler>();
-			for(Socket s :new ServerTCP(4).getSockets())
-				sl.add(new GameClientHandler(s));
-			
-			for(GameClientHandler c :sl)
-			{
-				System.out.println(c);
-			}
-		}).start();
-		
-		new ClientTCP("127.0.0.1");
-		new Thread(() ->
-		{
-			new ClientTCP("127.0.0.1");	
-		}).start();
-		
-		new ClientTCP("127.0.0.1");
-
-		
-	}
 }
