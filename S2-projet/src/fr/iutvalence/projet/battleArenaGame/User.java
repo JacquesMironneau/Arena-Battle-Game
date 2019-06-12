@@ -7,6 +7,8 @@ import java.util.HashSet;
 
 import fr.iutvalence.projet.battleArenaGame.move.Coordinate;
 import fr.iutvalence.projet.battleArenaGame.network.ClientTCP;
+import fr.iutvalence.projet.battleArenaGame.network.GameClient;
+import fr.iutvalence.projet.battleArenaGame.network.GameClientHandler;
 import fr.iutvalence.projet.battleArenaGame.network.ServerTCP;
 import fr.iutvalence.projet.battleArenaGame.spell.Effect;
 import fr.iutvalence.projet.battleArenaGame.spell.Shape;
@@ -42,6 +44,7 @@ public class User implements UserController
 		this.myPages = new ArrayList<SpellPage>();
 		this.myPages.add(new SpellPage("DefaultPage",new Spell(Effect.Fire,this.gameShapes.get(0)),new Spell(Effect.Ice,this.gameShapes.get(1)),new Spell(Effect.Electricity,this.gameShapes.get(2))));
 	}
+	
 	public void launch()
 	{
 		while(true)
@@ -49,7 +52,6 @@ public class User implements UserController
 			userView.display(DisplayMessage.MENU);
 			userView.askChoiceMenu();	
 		}
-		
 	}
 
 	@Override
@@ -105,22 +107,6 @@ public class User implements UserController
 		new Game(listPlayer,nbPlayers,nbPawns,boardSize).play();		
 	}
 	
-/*	@Override
-	public void serverConfigRequest(int nbPlayers, int nbPawns, int boardSize)
-	{
-		
-		
-		ClientConnectionInfo[] clients = new GameLauncherServerClientHandler(int 12000,int nbPlayers).getClients;
-		new Thread(() ->  {
-			GameView gch = new GameClientHandler(clients);
-			ArrayList<GameView> gchList = new ArrayList<GameView>();
-			gchList.add(gch);
-			this.userView.displayServerLaunched(gch.getServerIp(),gch.getPort()); 
-			new Game(gchList,nbPlayers,nbPawns,boardSize).play();
-		}).start();
-		
-	}*/
-	
 	
 	@Override
 	public void createDefaultShapes()
@@ -129,28 +115,32 @@ public class User implements UserController
 		//Ball
 		HashSet<Coordinate> ballShape = new HashSet<Coordinate>();
 		ballShape.addAll(Arrays.asList(new Coordinate(0,0)));
-		this.gameShapes.add(new Shape("Ball",10,2,5,3,ballShape));
+		this.gameShapes.add(new Shape("Ball",Shape.DEFAULT_BALL_DAMAGE,Shape.DEFAULT_BALL_COOLDOWN,Shape.DEFAULT_BALL_RANGE,Shape.DEFAULT_BALL_COST,ballShape));
+		
 		//Fist
 		HashSet<Coordinate> fistShape = new HashSet<Coordinate>();
 		fistShape.addAll(Arrays.asList(new Coordinate(0,0)));
-		this.gameShapes.add(new Shape("Fist",15,1,1,2,fistShape));
+		this.gameShapes.add(new Shape("Fist",Shape.DEFAULT_FIST_DAMAGE, Shape.DEFAULT_FIST_COOLDOWN,Shape.DEFAULT_FIST_RANGE,Shape.DEFAULT_FIST_COST,fistShape));
+		
 		//Cross
 		HashSet<Coordinate> crossShape = new HashSet<Coordinate>();
 		crossShape.addAll(Arrays.asList(new Coordinate(0,0),new Coordinate(-2,0),new Coordinate(-1,0),new Coordinate(1,0),new Coordinate(2,0),new Coordinate(0,-2),new Coordinate(0,-1),new Coordinate(0,1),new Coordinate(0,2)));
-		this.gameShapes.add(new Shape("Cross",10,3,5,4,crossShape));
+		this.gameShapes.add(new Shape("Cross",Shape.DEFAULT_CROSS_DAMAGE,Shape.DEFAULT_CROSS_COOLDOWN,Shape.DEFAULT_CROSS_RANGE,Shape.DEFAULT_CROSS_COST,crossShape));
+		
 		//Square
 		HashSet<Coordinate> squareShape = new HashSet<Coordinate>();
 		squareShape.addAll(Arrays.asList(new Coordinate(0,0),new Coordinate(0,-1),new Coordinate(0,1),new Coordinate(-1,0),new Coordinate(-1,-1),new Coordinate(-1,1),new Coordinate(1,0),new Coordinate(1,-1),new Coordinate(1,1)));
-		this.gameShapes.add(new Shape("Square",10,3,4,4,squareShape));
+		this.gameShapes.add(new Shape("Square",Shape.DEFAULT_SQUARE_DAMAGE,Shape.DEFAULT_SQUARE_COOLDOWN,Shape.DEFAULT_SQUARE_RANGE,Shape.DEFAULT_SQUARE_COST,squareShape));
+		
 		//Sword
 		HashSet<Coordinate> swordShape = new HashSet<Coordinate>();
 		swordShape.addAll(Arrays.asList(new Coordinate(-1,-1),new Coordinate(-1,0),new Coordinate(-1,1),new Coordinate(0,-1),new Coordinate(0,1),new Coordinate(1,-1),new Coordinate(1,0),new Coordinate(1,1)));
-		this.gameShapes.add(new Shape("Sword",8,2,1,3,swordShape));
+		this.gameShapes.add(new Shape("Sword",Shape.DEFAULT_SWORD_DAMAGE,Shape.DEFAULT_SWORD_COOLDOWN,Shape.DEFAULT_SWORD_RANGE,Shape.DEFAULT_SWORD_COST,swordShape));
+		
 		//Beam
 		HashSet<Coordinate> beamShape = new HashSet<Coordinate>();
 		beamShape.addAll(Arrays.asList(new Coordinate(0,1),new Coordinate(0,2),new Coordinate(0,3),new Coordinate(0,4),new Coordinate(0,5)));
-		this.gameShapes.add(new Shape("Beam",10,3,1,4,beamShape));
-	
+		this.gameShapes.add(new Shape("Beam",Shape.DEFAULT_BEAM_DAMAGE,Shape.DEFAULT_BEAM_COOLDOWN,Shape.DEFAULT_BEAM_RANGE,Shape.DEFAULT_BEAM_COST,beamShape));
 	}
 	@Override
 	public ArrayList<Shape> getGameShapes()
@@ -193,57 +183,22 @@ public class User implements UserController
 			BoardSize = (int)Math.sqrt(nbPlayer*nbPawn)+1;
 		}
 		
-		new ServerTCP(nbPlayer);
-
-//		try
-//		{
-//			ServerSocket s = new ServerSocket(PORT);
-//			GameLauncherServerClientHandler glsch = new GameLauncherServerClientHandler(nbPlayer);
-//			System.out.println("aaaaaa");
-//			int nbPlayersConnected = 1; //L'host est connecté
-//
-//			while(nbPlayersConnected < nbPlayer)
-//			{
-//				Socket clientSocket = s.accept();
-//				glsch.addClient(clientSocket);
-//				listPlayer.add(new GameClientHandler(clientSocket));
-//				System.out.println("co" + nbPlayersConnected);
-//				nbPlayersConnected++;
-//			}
-//		
-//			s.close(); //TODO hum
-//		} catch (IOException e)
-//		{
-//			e.printStackTrace();
-//		}
-//		
-		
+		for(Socket s : new ServerTCP(nbPlayer).getSockets())
+			listPlayer.add(new GameClientHandler(s));
+	
 		new Game(listPlayer,nbPlayer,nbPawn,BoardSize).play();
-		
-
 	}
 	@Override
 	public void clientConfigConnection(String ip)
 	{
+		//launch the view
+		new GameClient(new ClientTCP(ip).getSocket(), new PlayerConsole(this));
 		
-		new ClientTCP(ip);
-			
-//			GameView gv = new PlayerConsole(this);
-//			GameClient gc = new GameClient(gv);
-//			gv.setGameController(gc);
 	}
 	@Override
 	public void clientReceiveConfigInformation(String msg)
 	{
 		this.userView.displayHowManyConnectedPeople(msg);
 	}
-	@Override
-	public void serverEndConfiguration(ArrayList<Socket> socketList)
-	{
-		// TODO Auto-generated method stub
-		
-	}
-
-
 	
 }

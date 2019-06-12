@@ -6,15 +6,35 @@ import fr.iutvalence.projet.battleArenaGame.move.Coordinate;
 
 public class Shape {
 
-	/*
-	 * Default shapes :
-	 * Ball :10,2,5,3,new Coordinate[] {new Coordinate(0,0)}),
-	 * Fist:15,1,1,2,new Coordinate[] {new Coordinate(0,0)}),
-	 *Cross:10,3,5,4,new Coordinate[] {new Coordinate(0,0),new Coordinate(-2,0),new Coordinate(-1,0),new Coordinate(1,0),new Coordinate(2,0),new Coordinate(0,-2),new Coordinate(0,-1),new Coordinate(0,1),new Coordinate(0,2)}),
-	 *Square:10,3,4,4,new Coordinate[] {new Coordinate(0,0),new Coordinate(0,-1),new Coordinate(0,1),new Coordinate(-1,0),new Coordinate(-1,-1),new Coordinate(-1,1),new Coordinate(1,0),new Coordinate(1,-1),new Coordinate(1,1)}),
-	 *Sword:8,2,1,3, new Coordinate[] {new Coordinate(-1,-1),new Coordinate(-1,0),new Coordinate(-1,1),new Coordinate(0,-1),new Coordinate(0,1),new Coordinate(1,-1),new Coordinate(1,0),new Coordinate(1,1)}),
-	 *Beam:10,3,1,4, new Coordinate[] {new Coordinate(0,1),new Coordinate(0,2),new Coordinate(0,3),new Coordinate(0,4),new Coordinate(0,5)});
-	 */
+	public final static int DEFAULT_BALL_DAMAGE = 10;
+	public final static int DEFAULT_BALL_COOLDOWN = 2;
+	public final static int DEFAULT_BALL_RANGE = 5;
+	public final static int DEFAULT_BALL_COST = 3;
+	
+	public final static int DEFAULT_FIST_DAMAGE = 15;
+	public final static int DEFAULT_FIST_COOLDOWN = 1;
+	public final static int DEFAULT_FIST_RANGE = 1;
+	public final static int DEFAULT_FIST_COST = 2;
+	
+	public final static int DEFAULT_CROSS_DAMAGE = 10;
+	public final static int DEFAULT_CROSS_COOLDOWN = 3;
+	public final static int DEFAULT_CROSS_RANGE = 5;
+	public final static int DEFAULT_CROSS_COST = 4;
+	
+	public final static int DEFAULT_SQUARE_DAMAGE = 10;
+	public final static int DEFAULT_SQUARE_COOLDOWN = 3;
+	public final static int DEFAULT_SQUARE_RANGE = 4;
+	public final static int DEFAULT_SQUARE_COST = 4;
+	
+	public final static int DEFAULT_SWORD_DAMAGE = 8;
+	public final static int DEFAULT_SWORD_COOLDOWN = 2;
+	public final static int DEFAULT_SWORD_RANGE = 1;
+	public final static int DEFAULT_SWORD_COST = 3;
+		
+	public final static int DEFAULT_BEAM_DAMAGE = 10;
+	public final static int DEFAULT_BEAM_COOLDOWN = 3;
+	public final static int DEFAULT_BEAM_RANGE = 1;
+	public final static int DEFAULT_BEAM_COST = 4;
 	/**
 	 * Name of the Shape
 	 */
