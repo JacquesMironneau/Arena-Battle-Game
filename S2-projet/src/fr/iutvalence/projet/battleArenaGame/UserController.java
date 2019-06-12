@@ -1,6 +1,7 @@
 package fr.iutvalence.projet.battleArenaGame;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import fr.iutvalence.projet.battleArenaGame.spell.Shape;
 import fr.iutvalence.projet.battleArenaGame.spell.Spell;
@@ -60,5 +61,11 @@ public interface UserController {
 	 * @return the list of available spellPages
 	 */
 	public ArrayList<SpellPage> getSpellPages();
+	
+	
+	public void clientConfigConnection(String ip);
+	
+	public void clientReceiveConfigInformation(String msg);
+	
 }
 

@@ -137,6 +137,7 @@ public class UserViewConsole implements UserView{
 	{
 		CheapScanner scan = new CheapScanner();
 		String ip = scan.getStr();
+		this.controller.clientConfigConnection(ip);
 	}
 
 	@Override

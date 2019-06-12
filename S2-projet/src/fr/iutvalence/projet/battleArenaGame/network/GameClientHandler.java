@@ -1,6 +1,11 @@
 package fr.iutvalence.projet.battleArenaGame.network;
 
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
+import java.net.Socket;
 
 import fr.iutvalence.projet.battleArenaGame.Board;
 import fr.iutvalence.projet.battleArenaGame.GameController;
@@ -19,9 +24,17 @@ public class GameClientHandler implements GameView
 	
 	private ClientConnectionInfo clients;
 	
-	public GameClientHandler(ClientConnectionInfo clientsInfo)
+	public GameClientHandler(Socket socket)
 	{
-		this.clients = clientsInfo;
+		
+		try
+		{
+			this.clients = new ClientConnectionInfo(new BufferedReader(new InputStreamReader(socket.getInputStream())), new BufferedWriter(new OutputStreamWriter(socket.getOutputStream())), socket);
+		} catch (IOException e)
+		{
+			e.printStackTrace();
+		}
+
 
 		new Thread(() ->  {
 			receive();

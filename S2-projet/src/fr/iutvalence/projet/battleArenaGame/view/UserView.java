@@ -76,6 +76,12 @@ public interface UserView {
 	 * @param pController
 	 */
 	public void setController(UserController pController);
+
+	/**
+	 * 
+	 * @param msg
+	 */
+	public void displayHowManyConnectedPeople(String msg);
 	
 	
 }

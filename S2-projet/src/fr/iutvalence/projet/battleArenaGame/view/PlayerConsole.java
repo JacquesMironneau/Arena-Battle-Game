@@ -76,6 +76,7 @@ public class PlayerConsole implements GameView{
 	this.myController.actionRequest(currentPlayerIndex,myChoice);
 	}
 	
+	@Override
 	public void askPageSelection(int currentPlayerIndex)
 	{
 		CheapScanner scan = new CheapScanner();

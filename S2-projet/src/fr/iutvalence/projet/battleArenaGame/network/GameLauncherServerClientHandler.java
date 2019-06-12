@@ -5,60 +5,53 @@ import java.io.BufferedWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
-import java.net.InetAddress;
-import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.ArrayList;
 
 public class GameLauncherServerClientHandler 
 {
 
-	private int port;
 	
-	private BufferedReader serverBufReader;
+	private ArrayList<ClientConnectionInfo> clientList;
 	
-	private BufferedWriter serverBufWriter;
+	private int nbPlayers;
 	
-	private BufferedReader toClientBufReader;
 	
-	private BufferedWriter toClientBufWriter;
-	
-	private ServerSocket serverSocket;
-	
-	private Socket clientSocket;
-	
-	public GameLauncherServerClientHandler(int port)
+	public GameLauncherServerClientHandler(int nbPlayer)
 	{
-		this.port = port;
-		this.serverSocket = null;
-		
-		try {
-			this.serverSocket = new ServerSocket(port);
-			this.clientSocket = this.serverSocket.accept();
-
-			this.toClientBufReader = new BufferedReader(new InputStreamReader(this.clientSocket.getInputStream()));
-			this.toClientBufWriter = new BufferedWriter(new OutputStreamWriter(this.clientSocket.getOutputStream()));
-			
-		}catch(IOException e)
+		this.nbPlayers = nbPlayer;
+		this.clientList = new ArrayList<ClientConnectionInfo>();
+	
+		while(this.clientList.size() < this.nbPlayers)
+		{
+			int connectedPlayers = this.clientList.size()+1; // +1 : pour compter l'host 
+			this.broadcast("Joueurs connectés : "+ connectedPlayers+"/"+nbPlayers);
+		}
+	}
+	
+	private void broadcast(String msg)
+	{
+		for(ClientConnectionInfo c: this.clientList)
+		{
+			try
+			{
+				c.getWriter().append(msg + "\n");
+			} catch (IOException e)
+			{
+				e.printStackTrace();
+			}
+		}
+	}
+	
+	public void addClient(Socket s)
+	{
+		try
+		{
+			this.clientList.add(new ClientConnectionInfo(new BufferedReader(new InputStreamReader(s.getInputStream())), new BufferedWriter(new OutputStreamWriter(s.getOutputStream())),s));
+		} catch (IOException e)
 		{
 			e.printStackTrace();
 		}
 	}
-	
-	public void initClient()
-	{
-		try {
-			Socket socket = new Socket(InetAddress.getLoopbackAddress(), 19999);
-			this.serverBufReader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-			this.serverBufWriter = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
 
-
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-
-		
-	}
-	
-	
-	
 }

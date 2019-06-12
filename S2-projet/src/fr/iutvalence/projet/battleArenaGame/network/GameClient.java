@@ -4,6 +4,8 @@ package fr.iutvalence.projet.battleArenaGame.network;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
 import java.net.Socket;
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -23,7 +25,7 @@ import fr.iutvalence.projet.battleArenaGame.view.StatusMessages;
 public class GameClient implements GameController
 {
 
-	public static final String WORD_SEPARATOR ="§";
+	public static final String WORD_SEPARATOR ="ï¿½";
 	public static final String GROUP_SEPARATOR ="&";
 	public static final String SENTENCE_SEPARATOR ="#";
 	
@@ -35,12 +37,17 @@ public class GameClient implements GameController
 	
 	private BufferedWriter writer;
 	
-	public GameClient(ClientConnectionInfo client, GameView theView)
+	public GameClient(Socket socket, GameView theView)
 	{
 		this.gameView = theView;
-		this.socket = client.getClientSocket();
-		this.reader = client.getReader();
-		this.writer = client.getWriter();
+		this.socket = socket;
+		try {
+			this.reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+			this.writer = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
+		}catch(IOException e)
+		{
+			e.printStackTrace();
+		}
 		
 		new Thread(() -> { 
 			receive();

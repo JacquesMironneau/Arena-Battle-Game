@@ -1,11 +1,17 @@
 package fr.iutvalence.projet.battleArenaGame;
 
+import java.io.IOException;
+import java.net.ServerSocket;
+import java.net.Socket;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
 
 import fr.iutvalence.projet.battleArenaGame.move.Coordinate;
+import fr.iutvalence.projet.battleArenaGame.network.ClientConfigurationCommunicationThread;
+import fr.iutvalence.projet.battleArenaGame.network.GameClient;
 import fr.iutvalence.projet.battleArenaGame.network.GameClientHandler;
+import fr.iutvalence.projet.battleArenaGame.network.GameLauncherServerClientHandler;
 import fr.iutvalence.projet.battleArenaGame.spell.Effect;
 import fr.iutvalence.projet.battleArenaGame.spell.Shape;
 import fr.iutvalence.projet.battleArenaGame.spell.Spell;
@@ -21,6 +27,8 @@ import fr.iutvalence.projet.battleArenaGame.view.UserView;
  */
 public class User implements UserController
 {
+	
+	public final static int PORT = 19999;
 	/**
 	 * IHM used to interact with the user
 	 */
@@ -61,7 +69,8 @@ public class User implements UserController
 			break;
 		case JOIN_GAME:
 			userView.displayListServer();
-			userView.askServerConnection();
+			userView.askServerConnection(); // TODO: will call a method from UserController that creates a Socket with the IP + the port 
+			
 			break;
 		case HOST_GAME:
 			userView.display(DisplayMessage.SERVER_CONFIG);
@@ -166,10 +175,78 @@ public class User implements UserController
 		this.userView.display(DisplayMessage.PAGE_CREATED);
 	}
 	
+	
+	@Override
+	public void serverConfigRequest(int nbPlayer, int nbPawn, int BoardSize)
+	{
+		ArrayList<GameView> listPlayer = new ArrayList<GameView>();
+		listPlayer.add(new PlayerConsole(this));
 
-	
-	
-	
+		if(nbPlayer<1)
+		{
+			this.userView.display(DisplayMessage.WRONG_PLAYER_NUMBER);
+			return;
+		}
+		if(nbPawn<1)
+		{
+			this.userView.display(DisplayMessage.WRONG_PAWN_NUMBER);
+			return;
+		}
+		if(BoardSize*BoardSize<nbPlayer*nbPawn)
+		{
+			this.userView.display(DisplayMessage.WRONG_BOARD_SIZE);
+			BoardSize = (int)Math.sqrt(nbPlayer*nbPawn)+1;
+		}
+		
+		try
+		{
+			ServerSocket s = new ServerSocket(PORT);
+			GameLauncherServerClientHandler glsch = new GameLauncherServerClientHandler(nbPlayer);
+			int nbPlayersConnected = 1; //L'host est connecté
+
+			while(nbPlayersConnected <= nbPlayer)
+			{
+				Socket clientSocket = s.accept();
+				glsch.addClient(clientSocket);
+				listPlayer.add(new GameClientHandler(clientSocket));
+				
+				nbPlayersConnected++;
+			}
+		
+			s.close(); //TODO hum
+		} catch (IOException e)
+		{
+			e.printStackTrace();
+		}
+		
+		
+		new Game(listPlayer,nbPlayer,nbPawn,BoardSize).play();
+		
+
+	}
+	@Override
+	public void clientConfigConnection(String ip)
+	{
+		try
+		{
+			Socket s = new Socket(ip, PORT);
+			ClientConfigurationCommunicationThread t = new ClientConfigurationCommunicationThread(s, this); 
+			t.start();
+			
+			GameView gv = new PlayerConsole(this);
+			GameClient gc = new GameClient(s,gv);
+			gv.setGameController(gc);
+			
+		} catch (IOException e)
+		{
+			e.printStackTrace();
+		}
+	}
+	@Override
+	public void clientReceiveConfigInformation(String msg)
+	{
+		this.userView.displayHowManyConnectedPeople(msg);
+	}
 
 
 	
