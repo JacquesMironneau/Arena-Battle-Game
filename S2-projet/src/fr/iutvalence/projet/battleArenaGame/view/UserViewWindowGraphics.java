@@ -14,8 +14,9 @@ import java.util.HashSet;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
-import javax.swing.JLayeredPane;
+import javax.swing.JPanel;
 import javax.swing.JOptionPane;
+import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.event.CaretEvent;
 import javax.swing.event.CaretListener;
@@ -33,7 +34,7 @@ public class UserViewWindowGraphics extends JFrame implements UserView {
 	/**
 	 * This pane contains all the container and the visible informations on the screen.
 	 */
-	private JLayeredPane mainContainer;
+	private JPanel mainContainer;
 	
 	/**
 	 * This text field is used to get the pageName
@@ -93,6 +94,14 @@ public class UserViewWindowGraphics extends JFrame implements UserView {
 	
 	private boolean pause;
 	
+	private JPanel MainMenu;
+	private JPanel SpellPageCreationMenu;
+	private JPanel LocalConfigMenu;
+	private JPanel ServerConfigMenu;
+	private JPanel JoinGameMenu;
+	private JPanel spellCreationMenu;
+	
+	
 	private Spell sp1;
 	private Spell sp2;
 	private Spell sp3;
@@ -129,7 +138,7 @@ public class UserViewWindowGraphics extends JFrame implements UserView {
 		this.chElement = new Choice();
 		this.chShape = new Choice();
 		
-		this.mainContainer = new JLayeredPane();
+		this.mainContainer = new JPanel();
 		this.mainContainer.setBackground(Color.white);
 		this.setContentPane(this.mainContainer);
 	}
@@ -146,7 +155,8 @@ public class UserViewWindowGraphics extends JFrame implements UserView {
 	@Override
 	public void display(DisplayMessage msg) {
 		
-		JLayeredPane MainMenu = new JLayeredPane();
+		JPanel MainMenu = new JPanel();
+		MainMenu.setLayout(null);
 		JButton btnCreateGame = new JButton("Créer une partie");
 		btnCreateGame.setBackground(Color.white);
 		btnCreateGame.setBounds(this.getWidth()/4, this.getHeight()/8, this.getWidth()/4*2, this.getHeight()/8);
@@ -172,7 +182,8 @@ public class UserViewWindowGraphics extends JFrame implements UserView {
 		
 		
 		
-		JLayeredPane SpellPageCreationMenu = new JLayeredPane();
+		JPanel SpellPageCreationMenu = new JPanel();
+		SpellPageCreationMenu.setLayout(null);
 		JButton btnSpell1 = new JButton("Spell1");
 		btnSpell1.setBackground(Color.white);
 		btnSpell1.setBounds(0,10,(this.getWidth()/3),(this.getHeight()/3)-10);
@@ -247,7 +258,8 @@ public class UserViewWindowGraphics extends JFrame implements UserView {
 		
 		
 		
-		JLayeredPane LocalConfigMenu = new JLayeredPane();
+		JPanel LocalConfigMenu = new JPanel();
+		LocalConfigMenu.setLayout(null);
 		JLabel size = new JLabel("Entrez la taille du plateau de jeu");
 		size.setBounds(this.getWidth()/3,0,this.getWidth()/3,this.getHeight()/20);
 		LocalConfigMenu.add(size);
@@ -287,7 +299,8 @@ public class UserViewWindowGraphics extends JFrame implements UserView {
 		
 		
 		
-		JLayeredPane ServerConfigMenu = new JLayeredPane();
+		JPanel ServerConfigMenu = new JPanel();
+		ServerConfigMenu.setLayout(null);
 		JLabel ssize = new JLabel("Entrez la taille du plateau de jeu");
 		ssize.setBounds(0,0,this.getWidth()/3,this.getHeight()/20);
 		ServerConfigMenu.add(ssize);
@@ -401,7 +414,7 @@ public class UserViewWindowGraphics extends JFrame implements UserView {
 	}
 	
 	public void displayJoinGame() {
-		JLayeredPane JoinGameMenu = new JLayeredPane();
+		JPanel JoinGameMenu = new JPanel();
 		JButton jbtnValider = new JButton("Valider");
 		jbtnValider.setBackground(Color.white);
 		jbtnValider.setBounds(this.getWidth()/5*2,this.getHeight()/20*3+20,this.getWidth()/5,this.getHeight()/20);
@@ -452,7 +465,7 @@ public class UserViewWindowGraphics extends JFrame implements UserView {
 	 */
 	public void displayCreateSpell(int spellIndex) {
 		
-		JLayeredPane spellCreationMenu = new JLayeredPane();
+		JPanel spellCreationMenu = new JPanel();
 		//create a new button to allow the player to validate the creation of his spell and refresh the string that contains the spell informations
 		JButton btnValiderSpellCreation = new JButton("Valider");
 		btnValiderSpellCreation.setBackground(Color.white);
