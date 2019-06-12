@@ -336,8 +336,8 @@ public class PlayerWindow extends JFrame implements GameView{
 	
 	public static void main(String[] args) {
 		ArrayList<GameView> gv = new ArrayList<GameView>();
-		gv.add(new PlayerConsole());
-		PlayerConsole P1 = new PlayerConsole();
+		gv.add(new PlayerConsole(null));
+		PlayerConsole P1 = new PlayerConsole(null);
 		Game G = new Game(gv,2,3,15);
 		P1.setGameController(G);
 		gv.get(0).setGameController(G);
@@ -396,46 +396,27 @@ public class PlayerWindow extends JFrame implements GameView{
 		pw.mainContainer.repaint();
 		pw.mainContainer.setVisible(true);
 	}
-
+	
 	@Override
-	public void askPageSelection(int currentPlayerIndex) {
-		// TODO Auto-generated method stub
-		
-	}
+    public void askPageSelection(int currentPlayerIndex) {
+        Choice spellPages = (Choice) this.mainContainer.getComponent(1);
+        int pageIndex = spellPages.getSelectedIndex();
+        this.gameController.setPageRequest(currentPlayerIndex,this.myUser.getSpellPages().get(pageIndex));
+    }
 
-	@Override
-	public void displaySpellPage() {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void displaySelectForThisPawn(String pawnName) {
-		this.champSelect.setLayout(null);
-        
-        JLabel infos = new JLabel("Veuillez selectionner des pages pour vos pions");
-        infos.setBounds(this.getWidth()/3,0,this.getWidth()/3,this.getHeight()/20);
-        this.champSelect.add(infos);
-        
-        ArrayList<Choice> choicesForSpellPages= new ArrayList<Choice>();
-        for (int i = 1; i < 2; i++) {
-            choicesForSpellPages.add(new Choice());
-            choicesForSpellPages.get(i-1).setBounds(this.getWidth()/3, this.getHeight()/20*i, this.getWidth()/3, this.getHeight()/20/2);
-            this.champSelect.add(choicesForSpellPages.get(i-1));
+    @Override
+    public void displaySpellPage() {
+        Choice spellPages = (Choice) this.mainContainer.getComponent(1);
+        for (SpellPage page : this.myUser.getSpellPages()) {
+            spellPages.add(page.getPageName());
         }
         
-        
-        JButton btnValider = new JButton("Valider");
-        btnValider.setBounds(this.getWidth()/5*2,this.getHeight()-this.getHeight()/20,this.getWidth()/5,this.getHeight()/20);
-        btnValider.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent arg0) {
-                //TODO method from gameController that calls askPageSelection
-            }
-        });    
-        this.champSelect.add(btnValider);
-		
-	}
+    }
 
+    @Override
+    public void displaySelectForThisPawn(String pawnName) {
+        this.mainContainer.add(new JLabel("Selectionnez une page pour le pion "+pawnName));
+        this.mainContainer.add(new Choice());
+        
+    }
 }
-	
