@@ -1,7 +1,7 @@
 package fr.iutvalence.projet.battleArenaGame;
 
+import java.net.Socket;
 import java.util.ArrayList;
-import java.util.List;
 
 import fr.iutvalence.projet.battleArenaGame.spell.Shape;
 import fr.iutvalence.projet.battleArenaGame.spell.Spell;
@@ -66,6 +66,8 @@ public interface UserController {
 	public void clientConfigConnection(String ip);
 	
 	public void clientReceiveConfigInformation(String msg);
+	
+	public void serverEndConfiguration(ArrayList<Socket> socketList);
 	
 }
 
