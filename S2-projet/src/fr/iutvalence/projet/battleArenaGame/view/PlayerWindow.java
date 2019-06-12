@@ -69,12 +69,12 @@ public class PlayerWindow extends JFrame implements GameView{
 	 * the default operation when closing the window,
 	 * 
 	 */
-	public PlayerWindow() {
+	public PlayerWindow(UserController uc) {
 		        /*
 		         * Super Constructor
 		         */
 		        this.mainContainer = new JFrame();
-		        
+		        this.myUser = uc;
 		        
 		        /*
 		         * Window properties
@@ -331,69 +331,6 @@ public class PlayerWindow extends JFrame implements GameView{
 			}
 		});
 			
-	}
-	
-	public static void main(String[] args) {
-		ArrayList<GameView> gv = new ArrayList<GameView>();
-		gv.add(new PlayerConsole(null));
-		PlayerConsole P1 = new PlayerConsole(null);
-		Game G = new Game(gv,2,3,15);
-		P1.setGameController(G);
-		gv.get(0).setGameController(G);
-
-
-		PlayerWindow pw = new PlayerWindow();
-		ArrayList<Shape> gameShapes = new ArrayList<Shape>();
-		//Ball
-		HashSet<Coordinate> ballShape = new HashSet<Coordinate>();
-		ballShape.addAll(Arrays.asList(new Coordinate(0,0)));
-		gameShapes.add(new Shape("Ball",10,2,5,3,ballShape));
-		//Fist
-		HashSet<Coordinate> fistShape = new HashSet<Coordinate>();
-		fistShape.addAll(Arrays.asList(new Coordinate(0,0)));
-		gameShapes.add(new Shape("Fist",15,1,1,2,fistShape));
-		//Cross
-		HashSet<Coordinate> crossShape = new HashSet<Coordinate>();
-		crossShape.addAll(Arrays.asList(new Coordinate(0,0),new Coordinate(-2,0),new Coordinate(-1,0),new Coordinate(1,0),new Coordinate(2,0),new Coordinate(0,-2),new Coordinate(0,-1),new Coordinate(0,1),new Coordinate(0,2)));
-		gameShapes.add(new Shape("Cross",10,3,5,4,crossShape));
-		//Square
-		HashSet<Coordinate> squareShape = new HashSet<Coordinate>();
-		squareShape.addAll(Arrays.asList(new Coordinate(0,0),new Coordinate(0,-1),new Coordinate(0,1),new Coordinate(-1,0),new Coordinate(-1,-1),new Coordinate(-1,1),new Coordinate(1,0),new Coordinate(1,-1),new Coordinate(1,1)));
-		gameShapes.add(new Shape("Square",10,3,4,4,squareShape));
-		//Sword
-		HashSet<Coordinate> swordShape = new HashSet<Coordinate>();
-		swordShape.addAll(Arrays.asList(new Coordinate(-1,-1),new Coordinate(-1,0),new Coordinate(-1,1),new Coordinate(0,-1),new Coordinate(0,1),new Coordinate(1,-1),new Coordinate(1,0),new Coordinate(1,1)));
-		gameShapes.add(new Shape("Sword",8,2,1,3,swordShape));
-		//Beam
-		HashSet<Coordinate> beamShape = new HashSet<Coordinate>();
-		beamShape.addAll(Arrays.asList(new Coordinate(0,1),new Coordinate(0,2),new Coordinate(0,3),new Coordinate(0,4),new Coordinate(0,5)));
-		gameShapes.add(new Shape("Beam",10,3,1,4,beamShape));
-		
-		Spell s1 =new Spell();
-		s1.setShape(gameShapes.get(0));
-		Spell s2 =new Spell();
-		Spell s3 =new Spell();
-		s2.setShape(gameShapes.get(1));
-		s3.setShape(gameShapes.get(2));
-		
-		SpellPage page1 = new SpellPage("Namepage1",s1,s2,s3);
-		Effect anEffect = Effect.Fire;
-		page1.getSpell(0).setSpellEffect(anEffect);
-		page1.getSpell(1).setSpellEffect(anEffect);
-		page1.getSpell(2).setSpellEffect(anEffect);
-		G.getBoard().getTurnOrder().get(0).setSpellPage(page1);
-		G.getBoard().getTurnOrder().get(1).setSpellPage(page1);
-		G.getBoard().getTurnOrder().get(2).setSpellPage(page1);
-		G.getBoard().getTurnOrder().get(3).setSpellPage(page1);
-		G.getBoard().getTurnOrder().get(4).setSpellPage(page1);
-		G.getBoard().getTurnOrder().get(5).setSpellPage(page1);
-		G.getBoard().getTurnOrder().get(0).addEffect(new PawnEffect(anEffect));
-		G.getBoard().getTurnOrder().get(1).addEffect(new PawnEffect(anEffect));
-		G.getBoard().getTurnOrder().get(4).addEffect(new PawnEffect(anEffect));
-		System.out.println(pw.mainContainer.getHeight());
-		pw.displayBoard(G.getBoard(),2);
-		pw.mainContainer.repaint();
-		pw.mainContainer.setVisible(true);
 	}
 	
 	@Override
