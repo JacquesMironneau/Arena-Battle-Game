@@ -1,20 +1,20 @@
 package fr.iutvalence.projet.battleArenaGame.view;
 
-import java.awt.Choice;
+import java.awt.Color;
+import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.ItemEvent;
-import java.awt.event.ItemListener;
 import java.util.ArrayList;
 import java.util.HashSet;
 
 import javax.swing.JButton;
+import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
-import javax.swing.JLayeredPane;
 import javax.swing.JOptionPane;
+import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.event.CaretEvent;
 import javax.swing.event.CaretListener;
@@ -32,69 +32,17 @@ public class UserViewWindow extends JFrame implements UserView {
 	/**
 	 * This pane contains all the container and the visible informations on the screen.
 	 */
-	private JLayeredPane mainContainer;
+	private JFrame mainContainer;
 	
-	/**
-	 * This text field is used to get the pageName
-	 */
-	private JTextField tfPageName;
-	
-	/**
-	 * This text field will contain the IP address of the server
-	 */
-	private JTextField tfServerIP;
-	
-	
-	/**
-	 * This is a Choice that contains all the elements that are available in the game
-	 */
-	private Choice chElement;
-	
-	/**
-	 * This is a choice that contains all the shapes that are available in the game
-	 */
-	private Choice chShape;
-	
-	/**
-	 * This represents all the spellPages that is possible to set to a pawn
-	 */
-	private Choice chSpellPages;
-	
-	/**
-	 * This String is used to store the Element Name of the first spell of a spell page
-	 */
-	private String sp1ElCh = null;
-	
-	/**
-	 * This String is used to store the Shape Name of the first spell of a spell page
-	 */
-	private String sp1ShCh = null;
-	
-	/**
-	 * This String is used to store the Element Name of the second spell of a spell page
-	 */
-	private String sp2ElCh = null;
-	
-	/**
-	 * This is used to store the Shape Name of the second spell of a spell page
-	 */
-	private String sp2ShCh = null;
-	
-	/**
-	 * This is used to store the Element Name of the third spell of a spell page
-	 */
-	private String sp3ElCh = null;
-	
-	/**
-	 * This is used to store the Shape Name of the third spell of a spell page
-	 */
-	private String sp3ShCh = null;
-	
+	private MenuChoices menuChoice;
 	private boolean pause;
 	
-	private Spell sp1;
-	private Spell sp2;
-	private Spell sp3;
+	private Spell[] pageToCreate;
+	private String pageName;
+	
+	private int[] localConfig;
+	private int[] serverConfig;
+	private boolean pageOk;
 	
 	private UserController controller;
 	
@@ -104,11 +52,20 @@ public class UserViewWindow extends JFrame implements UserView {
 	private HashSet<SpellPage> mySpellPages;
 	private int spellIndex;
 	
+	private JPanel mainMenu;
+	private JPanel localConfigMenu;
+	private JPanel serverConfigMenu;
+	private JPanel spellPageCreationMenu;
+	private JPanel spellCreationMenu;
+	
+	
+	
 	public UserViewWindow() {
 		/*
 		 * Super Constructor
 		 */
-		super();
+		this.mainContainer = new JFrame();
+		
 		
 		/*
 		 * Window properties
@@ -116,275 +73,345 @@ public class UserViewWindow extends JFrame implements UserView {
 		 * Set default close operation
 		 * Size by default
 		 */
-		
 		Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-		this.setTitle("Projet S2");
-		this.setLocationRelativeTo(null);
-		this.setLocation(0, 0);
-		this.setDefaultCloseOperation(EXIT_ON_CLOSE);
-		this.setSize((int)screenSize.getWidth(),(int)screenSize.getHeight());
-		this.setResizable(false);
+		this.mainContainer.setTitle("Projet S2");
+		this.mainContainer.setLocationRelativeTo(null);
+		this.mainContainer.setLocation(0, 0);
+		this.mainContainer.setDefaultCloseOperation(EXIT_ON_CLOSE);
+		this.mainContainer.setSize((int)screenSize.getWidth(),(int)screenSize.getHeight());
+		this.mainContainer.setResizable(false);
 		
-		this.chElement = new Choice();
-		this.chShape = new Choice();
 		
-		this.mainContainer = new JLayeredPane();
-		this.setContentPane(this.mainContainer);
+		/*
+		 * Creation of mainMenu Panel
+		 */
+		createMainMenu();
+		createLocalConfigMenu();
+		createServerConfigMenu();
+		createSpellPageCreationMenu();
+       
+        /*
+         * 
+         */
+		this.mainContainer.setVisible(true);
 	}
 	
-	public void setGameController(UserController pController) {
+	
+	private void createMainMenu()
+	{
+		this.mainMenu = new JPanel();
+		this.mainMenu.setLayout(null);
+        JButton btnCreateGame = new JButton("Créer une partie");
+        btnCreateGame.setBackground(Color.white);
+        btnCreateGame.setBounds(this.mainContainer.getWidth()/4, this.mainContainer.getHeight()/8, this.mainContainer.getWidth()/4*2, this.mainContainer.getHeight()/8);
+        btnCreateGame.setEnabled(false);
+        	//Add eventListener
+        	btnCreateGame.addActionListener(new ActionListener() {
+        		public void actionPerformed(ActionEvent arg0) {
+        			menuChoice = MenuChoices.HOST_GAME;
+        		}
+        	});
+        this.mainMenu.add(btnCreateGame);
+        
+        //add a new button that tells to the system to join a game and add it the content pane
+        JButton btnJoinGame = new JButton("Rejoindre une partie");
+        btnJoinGame.setBackground(Color.white);
+        btnJoinGame.setBounds(this.mainContainer.getWidth()/4, this.mainContainer.getHeight()/8*2, this.mainContainer.getWidth()/4*2, this.mainContainer.getHeight()/8);
+        btnJoinGame.setEnabled(false);
+        
+	      	//Add eventListener
+	    	btnJoinGame.addActionListener(new ActionListener() {
+	    		public void actionPerformed(ActionEvent arg0) {
+	    			menuChoice = MenuChoices.JOIN_GAME;
+	    		}
+	    	});
+	    this.mainMenu.add(btnJoinGame);
+	    
+	    
+        //creates a new button that tells to the system to create a new local game and add it to the content pane
+        JButton btnCreateLocalGame = new JButton("Créer une partie locale");
+        btnCreateLocalGame.setBackground(Color.white);
+        btnCreateLocalGame.setBounds(this.mainContainer.getWidth()/4, this.mainContainer.getHeight()/8*3, this.mainContainer.getWidth()/4*2, this.mainContainer.getHeight()/8);
+        btnCreateLocalGame.setEnabled(false);
+	      	//Add eventListener
+	    	btnCreateLocalGame.addActionListener(new ActionListener() {
+	    		public void actionPerformed(ActionEvent arg0) {
+	    			menuChoice = MenuChoices.LOCAL_GAME;
+	    		}
+	    	});
+        
+	    this.mainMenu.add(btnCreateLocalGame);
+	    
+	    
+        //creates a new buttons that will display the spell page creation menu
+        JButton btnCreateSpellPage = new JButton("Créer une page de sorts");
+        btnCreateSpellPage.setBackground(Color.white);
+        btnCreateSpellPage.setBounds(this.mainContainer.getWidth()/4,this.mainContainer.getHeight()/8*4, this.mainContainer.getWidth()/4*2, this.mainContainer.getHeight()/8);
+        btnCreateSpellPage.setEnabled(false);
+        
+	     	//Add eventListener
+	    	btnCreateSpellPage.addActionListener(new ActionListener() {
+	    		public void actionPerformed(ActionEvent arg0) {
+	    			menuChoice = MenuChoices.CREATE_SPELL_PAGE;
+	    		}
+	    	});
+	    
+	    this.mainMenu.add(btnCreateSpellPage);
+	}
+	
+	private void createLocalConfigMenu()
+
+	{
+		this.localConfigMenu = new JPanel();
+		this.localConfigMenu.setLayout(null);
+		
+		JLabel size = new JLabel("Entrez la taille du plateau de jeu");
+		size.setBounds(this.mainContainer.getWidth()/3,0,this.mainContainer.getWidth()/3,this.mainContainer.getHeight()/20);
+		this.localConfigMenu.add(size);
+		
+		JTextField sizeField = new JTextField("0");
+		sizeField.setBounds(this.mainContainer.getWidth()/3,this.mainContainer.getHeight()/20,this.mainContainer.getWidth()/3,this.mainContainer.getHeight()/20);
+		this.localConfigMenu.add(sizeField);
+		
+		JLabel numberOfPlayer = new JLabel("Entrez le nombre de joueurs");
+		numberOfPlayer.setBounds(this.mainContainer.getWidth()/3,this.mainContainer.getHeight()/20*2,this.mainContainer.getWidth()/3,this.mainContainer.getHeight()/20);
+		this.localConfigMenu.add(numberOfPlayer);
+		
+		JTextField numberOfPlayerField = new JTextField("0");
+		numberOfPlayerField.setBounds(this.mainContainer.getWidth()/3,this.mainContainer.getHeight()/20*3,this.mainContainer.getWidth()/3,this.mainContainer.getHeight()/20);
+		this.localConfigMenu.add(numberOfPlayerField);
+		
+		JLabel numberOfPlayerCons = new JLabel("Entrez le nombre de joueurs console");
+		numberOfPlayerCons.setBounds(this.mainContainer.getWidth()/3,this.mainContainer.getHeight()/20*4,this.mainContainer.getWidth()/3,this.mainContainer.getHeight()/20);
+		this.localConfigMenu.add(numberOfPlayerCons);
+		
+		JTextField numberOfPlayerConsField = new JTextField("0");
+		numberOfPlayerConsField.setBounds(this.mainContainer.getWidth()/3,this.mainContainer.getHeight()/20*5,this.mainContainer.getWidth()/3,this.mainContainer.getHeight()/20);
+		this.localConfigMenu.add(numberOfPlayerConsField);
+		
+		JLabel numberOfPawns = new JLabel("Veuillez saisir le nombre de pions");
+		numberOfPawns.setBounds(this.mainContainer.getWidth()/3,this.mainContainer.getHeight()/20*6,this.mainContainer.getWidth()/3,this.mainContainer.getHeight()/20);
+		this.localConfigMenu.add(numberOfPawns);
+		
+		JTextField numberOfPawnsField = new JTextField("0");
+		numberOfPawnsField.setBounds(this.mainContainer.getWidth()/3, this.mainContainer.getHeight()/20*7, this.mainContainer.getWidth()/3, this.mainContainer.getHeight()/20);
+		this.localConfigMenu.add(numberOfPawnsField);
+		
+		localConfig = new int[] {0,0,0,0};
+		JButton btnValider = new JButton("valider");
+		btnValider.setBackground(Color.white);
+		btnValider.setBounds(this.mainContainer.getWidth()/5*2,this.mainContainer.getHeight()/20*9,this.mainContainer.getWidth()/5,this.mainContainer.getHeight()/20);
+		btnValider.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				int nbPlayer = Integer.parseInt(numberOfPlayerField.getText());
+				int nbPawns = Integer.parseInt(numberOfPawnsField.getText());
+				int boardSize = Integer.parseInt(sizeField.getText());
+				int nbPlayerCons = Integer.parseInt(numberOfPlayerConsField.getText());
+				localConfig = new int[]{nbPlayer,nbPawns,boardSize,nbPlayerCons};
+			}
+		});
+		btnValider.setEnabled(false);
+		this.localConfigMenu.add(btnValider);
+		this.localConfigMenu.setVisible(true);
+	}
+	
+	private void createServerConfigMenu()
+	{
+		this.serverConfigMenu = new JPanel();
+		this.serverConfigMenu.setLayout(null);
+		JLabel ssize = new JLabel("Entrez la taille du plateau de jeu");
+		ssize.setBounds(0,0,this.mainContainer.getWidth()/3,this.mainContainer.getHeight()/20);
+		this.serverConfigMenu.add(ssize);
+		
+		JTextField ssizeField = new JTextField("0");
+		ssizeField.setBounds(0,this.mainContainer.getHeight()/20,this.mainContainer.getWidth()/3,this.mainContainer.getHeight()/20);
+		this.serverConfigMenu.add(ssizeField);
+		
+		JLabel snumberOfPlayer = new JLabel("Entrez le nombre de joueurs");
+		snumberOfPlayer.setBounds(0,this.mainContainer.getHeight()/20*2,this.mainContainer.getWidth()/3,this.mainContainer.getHeight()/20);
+		this.serverConfigMenu.add(snumberOfPlayer);
+		
+		JTextField snumberOfPlayerField = new JTextField("0");
+		snumberOfPlayerField.setBounds(0,this.mainContainer.getHeight()/20*3,this.mainContainer.getWidth()/3,this.mainContainer.getHeight()/20);
+		this.serverConfigMenu.add(snumberOfPlayerField);
+		
+		JLabel snumberOfPawns = new JLabel("Veuillez saisir le nombre de pions");
+		snumberOfPawns.setBounds(0,this.mainContainer.getHeight()/20*4,this.mainContainer.getWidth()/3,this.mainContainer.getHeight()/20);
+		this.serverConfigMenu.add(snumberOfPawns);
+		
+		JTextField snumberOfPawnsField = new JTextField("0");
+		snumberOfPawnsField.setBounds(0, this.mainContainer.getHeight()/20*5, this.mainContainer.getWidth()/3, this.mainContainer.getHeight()/20);
+		this.serverConfigMenu.add(snumberOfPawnsField);
+		
+		serverConfig = new int[] {0,0,0};
+		JButton sbtnValider = new JButton("valider");
+		sbtnValider.setEnabled(false);
+		sbtnValider.setBackground(Color.white);
+		sbtnValider.setBounds(0,this.mainContainer.getHeight()/20*7,this.mainContainer.getWidth()/5,this.mainContainer.getHeight()/20);
+		sbtnValider.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				int nbPlayer = Integer.parseInt(snumberOfPlayerField.getText());
+				int nbPawns = Integer.parseInt(snumberOfPawnsField.getText());
+				int boardSize = Integer.parseInt(ssizeField.getText());
+				localConfig = new int[]{nbPlayer,nbPawns,boardSize};
+			}
+		});
+		this.serverConfigMenu.add(sbtnValider);
+	}
+	
+	private void createSpellPageCreationMenu()
+	{
+		this.spellPageCreationMenu = new JPanel();
+		this.spellPageCreationMenu.setLayout(null);
+		JButton btnSpell1 = new JButton("Spell1");
+		btnSpell1.setBackground(Color.white);
+		btnSpell1.setBounds(0,10,(this.mainContainer.getWidth()/3),(this.mainContainer.getHeight()/3)-10);
+		btnSpell1.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				createSpell(0);
+				}
+		});
+		this.spellPageCreationMenu.add(btnSpell1);
+		
+		// creates a new button for the creation of the second spell
+		JButton btnSpell2 = new JButton("Spell2");
+		btnSpell2.setBackground(Color.white);
+		btnSpell2.setBounds((this.mainContainer.getWidth()/3),10,(this.mainContainer.getWidth()/3),(this.mainContainer.getHeight()/3)-10);
+		btnSpell2.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				createSpell(1);
+				}
+		});
+		this.spellPageCreationMenu.add(btnSpell2);
+		
+		// creates a new button for the creation of the third spell
+		JButton btnSpell3 = new JButton("Spell3");
+		btnSpell3.setBackground(Color.white);
+		btnSpell3.setBounds((this.mainContainer.getWidth()/3*2),10,(this.mainContainer.getWidth()/3),(this.mainContainer.getHeight()/3)-10);
+		btnSpell3.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				createSpell(2);
+				}
+		});
+		this.spellPageCreationMenu.add(btnSpell3);
+		
+		//creates a new JLabel to indicate what the following JTextField is use for
+		JLabel lblPageName = new JLabel("Enter the name of the page");
+		lblPageName.setBounds(0,(this.mainContainer.getHeight()/2)-this.mainContainer.getHeight()/20,this.mainContainer.getWidth()/5,this.mainContainer.getHeight()/20);
+		this.spellPageCreationMenu.add(lblPageName);
+		
+		JTextField tfPageName = new JTextField("P");
+		tfPageName.setBounds(0,this.mainContainer.getHeight()/2,this.mainContainer.getWidth()/2,this.mainContainer.getHeight()/20);
+		this.spellPageCreationMenu.add(tfPageName);
+		
+		//add a new button that will send all the information of the spell page and redirect the player to the main menu
+		JButton btnValiderPageCreation = new JButton("Valider");
+		btnValiderPageCreation.setBackground(Color.white);
+		btnValiderPageCreation.setBounds(this.mainContainer.getWidth()/3, this.mainContainer.getHeight()/3*2, this.mainContainer.getWidth()/3, this.mainContainer.getHeight()/20);
+		//disable the button by default because the player cannot validate the creation without the three spells created, and the page name
+		btnValiderPageCreation.setEnabled(false);
+		btnValiderPageCreation.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				pageName = tfPageName.getText();
+				pageOk = true;
+				}
+		});
+		this.spellPageCreationMenu.add(btnValiderPageCreation);
+		this.spellPageCreationMenu.setVisible(true);
+	}
+	
+	private void createSpellCreationMenu(int spellIndex)
+	{
+		this.spellCreationMenu = new JPanel();
+		this.spellCreationMenu.setLayout(null);
+		JComboBox<String> elementChoice = new JComboBox<String>();
+		for (Effect element : Effect.values()) 
+			elementChoice.addItem(element.getElementName());
+		elementChoice.setBounds(this.mainContainer.getWidth()/6*2,this.mainContainer.getHeight()/20*4,this.mainContainer.getWidth()/6,this.mainContainer.getHeight()/20);
+		this.spellCreationMenu.add(elementChoice);
+		
+		JComboBox<String> shapeChoice = new JComboBox<String>();
+		for(Shape shp : this.controller.getGameShapes())
+			shapeChoice.addItem(shp.getName());
+		shapeChoice.setBounds(this.mainContainer.getWidth()/6*4,this.mainContainer.getHeight()/20*4,this.mainContainer.getWidth()/6,this.mainContainer.getHeight()/20);
+		this.spellCreationMenu.add(shapeChoice);
+		this.spellCreationMenu.setVisible(true);
+		
+		JButton btnValiderSpellCreation = new JButton("Valider");
+		btnValiderSpellCreation.setBounds(this.mainContainer.getWidth()/3, this.mainContainer.getHeight()/3*2, this.mainContainer.getWidth()/3, this.mainContainer.getHeight()/20);
+		btnValiderSpellCreation.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				
+			Effect pEffect = Effect.valueOf((String)elementChoice.getSelectedItem());
+			Shape pShape = null;
+			for(Shape shp : controller.getGameShapes())
+				{
+					if(shp.getName().equals(((String)shapeChoice.getSelectedItem())))
+						 pShape = shp;
+				}
+				pageToCreate[spellIndex] = new Spell(pEffect,pShape);
+				switchPanel(spellPageCreationMenu);
+			}
+		});
+		this.spellCreationMenu.add(btnValiderSpellCreation);
+		
+	}
+	
+	@Override
+	public void setController(UserController pController) {
 		this.controller = pController;
 	}
 	
-	public String askPageName() {
-		return this.tfPageName.getText();
+	private void switchPanel(JPanel panel)
+	{
+		this.mainContainer.remove(this.mainContainer.getContentPane());
+		this.mainContainer.setContentPane(panel);
+		this.mainContainer.validate();
+		this.mainContainer.repaint();
 	}
-	
-	
 	@Override
 	public void display(DisplayMessage msg) {
-		if (msg == DisplayMessage.MENU) {
-			//disable the visibility of the window to avoid graphical bugs
-			this.setVisible(false);
-			//remove all the content from the content pane
-			this.getContentPane().removeAll();
-			
-			//create a new button that tells to the system to initialize a new game and add it to the content pane
-			JButton btnCreateGame = new JButton("Créer une partie");
-			btnCreateGame.setBounds(this.getWidth()/4, this.getHeight()/8, this.getWidth()/4*2, this.getHeight()/8);
-			this.getContentPane().add(btnCreateGame);
-			
-			//add a new button that tells to the system to join a game and add it the content pane
-			JButton btnJoinGame = new JButton("Rejoindre une partie");
-			btnJoinGame.setBounds(this.getWidth()/4, this.getHeight()/8*2, this.getWidth()/4*2, this.getHeight()/8);
-			this.getContentPane().add(btnJoinGame);
-			
-			//creates a new button that tells to the system to create a new local game and add it to the content pane
-			JButton btnCreateLocalGame = new JButton("Créer une partie locale");
-			btnCreateLocalGame.setBounds(this.getWidth()/4, this.getHeight()/8*3, this.getWidth()/4*2, this.getHeight()/8);
-			this.getContentPane().add(btnCreateLocalGame);
-			
-			//creates a new buttons that will display the spell page creation menu
-			JButton btnCreateSpellPage = new JButton("Créer une page de sorts");
-			btnCreateSpellPage.setBounds(this.getWidth()/4,this.getHeight()/8*4, this.getWidth()/4*2, this.getHeight()/8);
-			this.getContentPane().add(btnCreateSpellPage);
-			this.getContentPane().repaint();
-			
-			//enable the visibility of the window
-			this.setVisible(true);
+		switch(msg)
+		{
+		case MENU:
+			switchPanel(this.mainMenu);
+			break;
+		case LOCAL_CONFIG:
+			switchPanel(this.localConfigMenu);
+			break;
+		case SERVER_CONFIG:
+			switchPanel(this.serverConfigMenu);
+			break;
+		case PAGE_CREATION:
+			switchPanel(this.spellPageCreationMenu);
+			break;
 		}
-		if(msg == DisplayMessage.PAGE_CREATION) {
-			//disable the visibility of the window to avoid visual bugs (ex: no content)
-			this.setVisible(false);
-			this.getContentPane().removeAll();
-			
-			// creates a new button for the creation of the first spell
-			JButton btnSpell1 = new JButton("Spell1");
-			btnSpell1.setBounds(0,10,(this.getWidth()/3),(this.getHeight()/3)-10);
-			this.getContentPane().add(btnSpell1);
-			
-			// creates a new button for the creation of the second spell
-			JButton btnSpell2 = new JButton("Spell2");
-			btnSpell2.setBounds((this.getWidth()/3),10,(this.getWidth()/3),(this.getHeight()/3)-10);
-			this.getContentPane().add(btnSpell2);
-			
-			// creates a new button for the creation of the third spell
-			JButton btnSpell3 = new JButton("Spell3");
-			btnSpell3.setBounds((this.getWidth()/3*2),10,(this.getWidth()/3),(this.getHeight()/3)-10);
-			this.getContentPane().add(btnSpell3);
-			
-			//creates a new JLabel to indicate what the following JTextField is use for
-			JLabel lblPageName = new JLabel("Enter the name of the page");
-			lblPageName.setBounds(0,(this.getHeight()/2)-this.getHeight()/20,this.getWidth()/5,this.getHeight()/20);
-			this.getContentPane().add(lblPageName);
-			
-			//add a new button that will send all the information of the spell page and redirect the player to the main menu
-			JButton btnValiderPageCreation = new JButton("Valider");
-			btnValiderPageCreation.setBounds(this.getWidth()/3, this.getHeight()/3*2, this.getWidth()/3, this.getHeight()/20);
-			//disable the button by default because the player cannot validate the creation without the three spells created, and the page name
-			btnValiderPageCreation.setEnabled(false);
-			btnValiderPageCreation.addActionListener(new ActionListener() {
-				
-				/*
-				 * if the strings that contains spell details are empty then
-				 * 		show a warning pop-up that says to the player he has not created all the spells
-				 * else
-				 * 		the validation is complete
-				 * 		send the name of the page 
-				 */
-				public void actionPerformed(ActionEvent arg0) {
-					if (sp1ElCh == null || sp1ShCh == null || sp2ElCh == null || sp2ShCh == null || sp3ElCh == null || sp3ShCh == null)
-						JOptionPane.showMessageDialog(mainContainer, "You have not set all the spells", "Warning", JOptionPane.WARNING_MESSAGE);
-					else {
-						askPageName();
-					}
-				}
-			});
-			this.getContentPane().add(btnValiderPageCreation);
-			
-			/* textField with a caretListener that disable the validation button if the carret is placed at index 0 in the text field
-			 * it contains the name of the page
-			 */
-			this.tfPageName = new JTextField();
-			this.tfPageName.setBounds(0,this.getHeight()/2,this.getWidth()/2,this.getHeight()/20);
-			this.tfPageName.addCaretListener(new CaretListener() {
-				public void caretUpdate(CaretEvent arg0) {
-					if(tfPageName.getCaretPosition() == 0) 
-						btnValiderPageCreation.setEnabled(false);
-					else
-						btnValiderPageCreation.setEnabled(true);
-				}
-			});
-			this.getContentPane().add(this.tfPageName);
-			
-			JButton btnRetour = new JButton("Retour");
-			btnRetour.setBounds(this.getWidth()/3,this.getHeight()/3*2+this.getHeight()/20,this.getWidth()/3,this.getHeight()/20);
-			btnRetour.addActionListener(new ActionListener() {
-				public void actionPerformed(ActionEvent arg0) {
-//					display(DisplayMessage.MENU);
-				}
-			});
-			this.getContentPane().add(btnRetour);
-			this.getContentPane().repaint();
-			
-			this.setVisible(true);
-		}
-		if(msg == DisplayMessage.LOCAL_CONFIG) {
-			//size of the board
-			//number of players
-			//number of pawns
-			this.setVisible(false);
-			
-			JLabel size = new JLabel("Entrez la taille du plateau de jeu");
-			size.setBounds(0,0,this.getWidth()/3,this.getHeight()/20);
-			this.getContentPane().add(size);
-			
-			JTextField sizeField = new JTextField();
-			sizeField.setBounds(0,this.getHeight()/20,this.getWidth()/3,this.getHeight()/20);
-			this.getContentPane().add(sizeField);
-			
-			JLabel numberOfPlayer = new JLabel("Entrez le nombre de joueurs");
-			numberOfPlayer.setBounds(0,this.getHeight()/20*2,this.getWidth()/3,this.getHeight()/20);
-			this.getContentPane().add(numberOfPlayer);
-			
-			JTextField numberOfPlayerField = new JTextField();
-			numberOfPlayerField.setBounds(0,this.getHeight()/20*3,this.getWidth()/3,this.getHeight()/20);
-			this.getContentPane().add(numberOfPlayerField);
-			
-			JLabel numberOfPlayerCons = new JLabel("Entrez le nombre de joueurs console");
-			numberOfPlayer.setBounds(0,this.getHeight()/20*4,this.getWidth()/3,this.getHeight()/20);
-			this.getContentPane().add(numberOfPlayerCons);
-			
-			JTextField numberOfPlayerConsField = new JTextField();
-			numberOfPlayerField.setBounds(0,this.getHeight()/20*5,this.getWidth()/3,this.getHeight()/20);
-			this.getContentPane().add(numberOfPlayerConsField);
-			
-			JLabel numberOfPawns = new JLabel("Veuillez saisir le nombre de pions");
-			numberOfPawns.setBounds(0,this.getHeight()/20*6,this.getWidth()/3,this.getHeight()/20);
-			this.getContentPane().add(numberOfPawns);
-			
-			JTextField numberOfPawnsField = new JTextField();
-			numberOfPawnsField.setBounds(0, this.getHeight()/20*7, this.getWidth()/3, this.getHeight()/20);
-			this.getContentPane().add(numberOfPawnsField);
-			
-			JButton btnValider = new JButton("valider");
-			btnValider.setBounds(0,this.getHeight()/20*8,this.getWidth()/5,this.getHeight()/20);
-			this.getContentPane().add(btnValider);
-			this.getContentPane().repaint();
-			
-			this.setVisible(true);
-		}
-		
-		if(msg==DisplayMessage.SERVER_CONFIG) {
-			//size of the board
-			//number of players
-			//number of pawns
-			this.setVisible(false);
-			
-			JLabel size = new JLabel("Entrez la taille du plateau de jeu");
-			size.setBounds(0,0,this.getWidth()/3,this.getHeight()/20);
-			this.getContentPane().add(size);
-			
-			JTextField sizeField = new JTextField();
-			sizeField.setBounds(0,this.getHeight()/20,this.getWidth()/3,this.getHeight()/20);
-			this.getContentPane().add(sizeField);
-			
-			JLabel numberOfPlayer = new JLabel("Entrez le nombre de joueurs");
-			numberOfPlayer.setBounds(0,this.getHeight()/20*2,this.getWidth()/3,this.getHeight()/20);
-			this.getContentPane().add(numberOfPlayer);
-			
-			JTextField numberOfPlayerField = new JTextField();
-			numberOfPlayerField.setBounds(0,this.getHeight()/20*3,this.getWidth()/3,this.getHeight()/20);
-			this.getContentPane().add(numberOfPlayerField);
-			
-			JLabel numberOfPawns = new JLabel("Veuillez saisir le nombre de pions");
-			numberOfPawns.setBounds(0,this.getHeight()/20*4,this.getWidth()/3,this.getHeight()/20);
-			this.getContentPane().add(numberOfPawns);
-			
-			JTextField numberOfPawnsField = new JTextField();
-			numberOfPawnsField.setBounds(0, this.getHeight()/20*5, this.getWidth()/3, this.getHeight()/20);
-			this.getContentPane().add(numberOfPawnsField);
-			
-			JButton btnValider = new JButton("valider");
-			btnValider.setBounds(this.getWidth()/5*2,this.getHeight()/20*7,this.getWidth()/5,this.getHeight()/20);
-			btnValider.addActionListener(new ActionListener() {
-				public void actionPerformed(ActionEvent arg0) {
-					int nbPlayer = Integer.parseInt(numberOfPlayerField.getText());
-					int nbPawns = Integer.parseInt(numberOfPawnsField.getText());
-					int boardSize = Integer.parseInt(sizeField.getText());
-					
-					controller.serverConfigRequest(nbPlayer, nbPawns, boardSize);
-				}
-			});
-			this.getContentPane().add(btnValider);
-			this.getContentPane().repaint();
-			
-			this.setVisible(true);
-		}
-		
-	}
-
-	@Override
-	public void askChoiceMenu() {
-		
-		this.pause = true;
-		
-		JButton btnCreateGame = (JButton) this.getContentPane().getComponent(0);
-		btnCreateGame.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent arg0) {
-				controller.choiceMenuRequest(MenuChoices.HOST_GAME);
-				System.out.println("create game");
-				pause = false;
-			}
-		});
-		JButton btnJoinGame = (JButton) this.getContentPane().getComponent(1);
-		btnJoinGame.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent arg0) {
-				controller.choiceMenuRequest(MenuChoices.JOIN_GAME);
-				System.out.println("join game");
-				pause = false;
-			}
-		});
-		JButton btnLocalGame = (JButton) this.getContentPane().getComponent(2);
-		btnLocalGame.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent arg0) {
-				controller.choiceMenuRequest(MenuChoices.LOCAL_GAME);
-				System.out.println("localgame");
-				pause = false;
-			}
-		});
-		JButton btnCreateSpellPage = (JButton) this.getContentPane().getComponent(3);
-		btnCreateSpellPage.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent arg0) {
-				controller.choiceMenuRequest(MenuChoices.CREATE_SPELL_PAGE);
-				System.out.println("spell page");
-				pause = false;
-			}
-		});
-		
-		while(pause);
 	}
 	
+
+	@Override
+	public void askChoiceMenu()
+	{
+		this.menuChoice = MenuChoices.INVALID_CHOICE;
+		for(Component comp : this.mainContainer.getContentPane().getComponents())
+			if(comp instanceof JButton)
+				comp.setEnabled(true);
+				
+		while(this.menuChoice.equals(MenuChoices.INVALID_CHOICE))
+		{
+			try {
+				Thread.sleep(100);
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		for(Component comp : this.mainContainer.getContentPane().getComponents())
+			if(comp instanceof JButton)
+				comp.setEnabled(false);
+		controller.choiceMenuRequest(this.menuChoice);
+	}
+	//TODO this method
 	public void displayJoinGame() {
 		this.setVisible(false);
 		this.getContentPane().removeAll();
@@ -429,161 +456,18 @@ public class UserViewWindow extends JFrame implements UserView {
 		this.setVisible(true);
 	}
 	
-	/**
-	 * This method displays a menu that allows the player to create a spell
-	 * @param spellIndex the spell you want to create/modify
-	 */
-	public void displayCreateSpell(int spellIndex) {
-		//disable the visibility to avoid bugs
-		this.setVisible(false);
-		this.setLocation(0, 0);
-		this.getContentPane().removeAll();
-		//create a new button to allow the player to validate the creation of his spell and refresh the string that contains the spell informations
-		JButton btnValiderSpellCreation = new JButton("Valider");
-		btnValiderSpellCreation.setBounds(this.getWidth()/3, this.getHeight()/3*2, this.getWidth()/3, this.getHeight()/20);
-		btnValiderSpellCreation.setEnabled(false);
-		btnValiderSpellCreation.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent arg0) {
-				switch(spellIndex) {
-				case 1:
-					sp1ElCh = chElement.getSelectedItem();
-					sp1ShCh = chShape.getSelectedItem();
-					break;
-				case 2:
-					sp2ElCh = chElement.getSelectedItem();
-					sp2ShCh = chShape.getSelectedItem();
-					break;
-				case 3:
-					sp3ElCh = chElement.getSelectedItem();
-					sp3ShCh = chShape.getSelectedItem();
-				}
-				
-			}
-		});
-		this.getContentPane().add(btnValiderSpellCreation);
-		
-		this.displayElementChoice();
-		
-		//set the values that we have stored before to the choice when we want to edit them either the values within the choices are reinitialized
-		if(this.sp1ElCh != null && spellIndex == 1)
-			this.chElement.select(this.sp1ElCh);
-		
-		if(this.sp2ElCh != null && spellIndex == 2)
-			this.chElement.select(this.sp2ElCh);
-		
-		if(this.sp3ElCh != null && spellIndex == 3)
-			this.chElement.select(this.sp3ElCh);
-		
-		this.chElement.setBounds(this.getWidth()/3, 10, this.getWidth()/3, this.getHeight()/10);
-		
-		this.chElement.addItemListener(new ItemListener() {
-			public void itemStateChanged(ItemEvent arg0) {
-				if(chElement.getSelectedItem() == "Choose an element") {
-					chShape.setEnabled(false);
-					pause = true;
-				}
-				else {
-					chShape.setEnabled(true);
-					pause = false;
-				}
-					
-			}
-		});
-		
-		this.getContentPane().add(this.chElement);
-	
-		this.chShape.setEnabled(false);
-		this.displayShapeChoice();
-		
-		if(this.sp1ShCh != null && spellIndex == 1)
-			this.chShape.select(sp1ShCh);
-		if(this.sp2ShCh != null && spellIndex == 2)
-			this.chShape.select(sp2ShCh);
-		if(this.sp3ShCh != null && spellIndex == 3)
-			this.chShape.select(sp3ShCh);
-		
-		this.chShape.setBounds(this.getWidth()/3, this.getHeight()/10+10,this.getWidth()/3,this.getHeight()/10);
-		
-		this.chShape.addItemListener(new ItemListener() {
-			public void itemStateChanged(ItemEvent arg0) {
-				if(chShape.getSelectedItem()=="Choose a shape") {
-					btnValiderSpellCreation.setEnabled(false);
-					pause = true;
-				}
-				else if(chShape.getSelectedItem()=="Custom") {
-					JOptionPane.showMessageDialog(mainContainer, "This functionnality is under devel");	
-					pause = true;
-				}
-				else {
-					btnValiderSpellCreation.setEnabled(true);
-					pause = false;
-				}
-			}
-		});
-		this.getContentPane().add(this.chShape);
-		
-		if (this.chShape.getSelectedItem() != "Choose a shape")
-			btnValiderSpellCreation.setEnabled(true);
-		else
-			btnValiderSpellCreation.setEnabled(false);
-		
-		this.setVisible(true);
+	@Override
+	public void displaySpellCreation()
+	{
+		switchPanel(this.spellPageCreationMenu);
 	}
-
+		
 	public void displaySelectForThisPawn(Pawn thePawn) {
 		new JLabel("Veuillez selectionner une page pour le pion n° "+thePawn.getName());
 		
 	}
 	
-	public void displaySpellPage(ArrayList<SpellPage> listPages) {
-		this.setVisible(false);
-		
-		this.displaySelectForThisPawn(null);
-		this.chSpellPages.removeAll();
-		this.chSpellPages.add("Choose a spell page");
-		for(SpellPage sp : listPages) {
-			this.chSpellPages.add(sp.getPageName());
-		}
-		
-		JButton btnValider = new JButton("Valider");
-		btnValider.setBounds(this.getWidth()/5*2,this.getHeight()-this.getHeight()/20,this.getWidth()/5,this.getHeight()/20);
-		btnValider.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent arg0) {
-				//TODO method from gameController that calls askPageSelection
-			}
-		});	
-	}
-	
-	public void askPageSelection(int currentPlayerIndex) {
-		if(!(chSpellPages.getSelectedIndex()==0)) {
-			//TODO
-		}
-		
-	}
-
-
-	@Override
-	public void displayElementChoice() {
-		this.chElement.removeAll();
-		this.chElement.add("Choose an element");
-		for (Effect element : Effect.values()) {
-			this.chElement.add(element.getElementName());
-		}
-		
-	}
-
-	@Override
-	public void displayShapeChoice() {
-		this.chShape.removeAll();
-		this.chShape.add("Choose a shape");
-		for (Shape shape : this.controller.getGameShapes()) {
-			this.chShape.add(shape.getName());
-		}
-		this.chShape.add("Custom");
-		
-	}
-
+	//TODO this method
 	@Override
 	public void displayListServer() {
 		// TODO Auto-generated method stub
@@ -596,8 +480,23 @@ public class UserViewWindow extends JFrame implements UserView {
 	}
 
 	@Override
-	public void askPageCreation() {
-		JButton spell1 = (JButton) this.getContentPane().getComponent(0);
+	public void askPageCreation() 
+	{
+		this.pageToCreate = new Spell[3];
+		for(Component comp : this.mainContainer.getContentPane().getComponents())
+			if(comp instanceof JButton)
+				comp.setEnabled(true);
+		while(!pageOk)
+		{	
+			try {
+				Thread.sleep(10);
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}		
+		}
+		this.controller.createSpellPageRequest(pageName, pageToCreate[0], pageToCreate[1], pageToCreate[2]);
+	/*	JButton spell1 = (JButton) this.getContentPane().getComponent(0);
 		spell1.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				displayCreateSpell(1);
@@ -631,10 +530,10 @@ public class UserViewWindow extends JFrame implements UserView {
 			public void actionPerformed(ActionEvent arg0) {
 				controller.createSpellPageRequest(pageNameField.getText(),sp1,sp2,sp3);
 			}
-		});
+		});*/
 	}
 
-	@Override
+/*	@Override
 	public Spell askSpellCreation() {
 		//TODO might review
 		int effectIndex = -1;
@@ -657,7 +556,7 @@ public class UserViewWindow extends JFrame implements UserView {
 			shapeIndex = 0;
 		Shape pShape = this.controller.getGameShapes().get(shapeIndex);
 		return new Spell(pEffect,pShape);
-	}
+	}*/
 
 	@Override
 	public void askServerConnection() {
@@ -674,46 +573,91 @@ public class UserViewWindow extends JFrame implements UserView {
 
 	@Override
 	public void askServerConfig() {
-		JButton btnValider = (JButton) this.getContentPane().getComponent(6);
-		JTextField numberOfPlayerField = (JTextField) this.getContentPane().getComponent(3);
-		JTextField sizeField = (JTextField) this.getContentPane().getComponent(1);
-		JTextField numberOfPawnsField = (JTextField) this.getContentPane().getComponent(5);
-		btnValider.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent arg0) {
-				int nbPlayer = Integer.parseInt(numberOfPlayerField.getText());
-				int nbPawns = Integer.parseInt(numberOfPawnsField.getText());
-				int boardSize = Integer.parseInt(sizeField.getText());
-				
-				controller.serverConfigRequest(nbPlayer, nbPawns, boardSize);
+		boolean ok = false;
+		int nbPlayer = this.localConfig[0];
+		int nbPawn = this.localConfig[1];
+		int boardSize = this.localConfig[2];
+		for(Component comp : this.mainContainer.getContentPane().getComponents())
+			if(comp instanceof JButton)
+				comp.setEnabled(true);
+		while(!ok)
+		{
+			 nbPlayer = this.localConfig[0];
+			 nbPawn = this.localConfig[1];
+			 boardSize = this.localConfig[2];
+			if(nbPlayer >1 && nbPawn >0 && boardSize*boardSize>nbPlayer*nbPawn)
+			{
+				ok = true;
 			}
-		});
-		
+			try {
+				Thread.sleep(10);
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		for(Component comp : this.mainContainer.getContentPane().getComponents())
+			if(comp instanceof JButton)
+				comp.setEnabled(false);
+		this.controller.serverConfigRequest(nbPlayer, nbPawn, boardSize);
 	}
 
 	@Override
-	public void askLocalConfig() {
-		JButton btnValider = (JButton) this.getContentPane().getComponent(6);
-		JTextField numberOfPlayerField = (JTextField) this.getContentPane().getComponent(3);
-		JTextField sizeField = (JTextField) this.getContentPane().getComponent(1);
-		JTextField numberOfPlayerConsField = (JTextField) this.getContentPane().getComponent(5);
-		JTextField numberOfPawnsField = (JTextField) this.getContentPane().getComponent(7);
-		btnValider.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent arg0) {
-				int nbPlayer = Integer.parseInt(numberOfPlayerField.getText());
-				int nbPawns = Integer.parseInt(numberOfPawnsField.getText());
-				int boardSize = Integer.parseInt(sizeField.getText());
-				int nbPlayerCons = Integer.parseInt(numberOfPlayerConsField.getText());
-				
-				controller.localConfigRequest(nbPlayer, nbPawns, boardSize, nbPlayerCons);
-			}
-		});
-		
-	}
-
-	@Override
-	public void setController(UserController pController)
+	public void askLocalConfig()
 	{
-		this.controller = pController;
+		boolean ok = false;
+		int nbPlayer = this.localConfig[0];
+		int nbPawn = this.localConfig[1];
+		int boardSize = this.localConfig[2];
+		int consoles = this.localConfig[3];
+		for(Component comp : this.mainContainer.getContentPane().getComponents())
+			if(comp instanceof JButton)
+				comp.setEnabled(true);
+		while(!ok)
+		{
+			 nbPlayer = this.localConfig[0];
+			 nbPawn = this.localConfig[1];
+			 boardSize = this.localConfig[2];
+			 consoles = this.localConfig[3];
+			if(nbPlayer >1 && nbPawn >0 && boardSize*boardSize>nbPlayer*nbPawn)
+			{
+				ok = true;
+				
+			}
+			try {
+				Thread.sleep(10);
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		for(Component comp : this.mainContainer.getContentPane().getComponents())
+			if(comp instanceof JButton)
+				comp.setEnabled(false);
+		this.controller.localConfigRequest(nbPlayer, nbPawn, boardSize, consoles);
+	
+		
 	}
 
+	private void createSpell(int spellIndex)
+	{
+		createSpellCreationMenu(spellIndex);
+		switchPanel(this.spellCreationMenu);
+	}
+
+
+	
+	
+	@Override
+	public Spell askSpellCreation() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+
+	@Override
+	public void displayHowManyConnectedPeople(String msg) {
+		// TODO Auto-generated method stub
+		
+	}
 }
