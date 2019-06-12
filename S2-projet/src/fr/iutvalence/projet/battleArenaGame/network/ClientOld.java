@@ -15,7 +15,7 @@ import fr.iutvalence.projet.battleArenaGame.Game;
  *
  */
 
-public class Client implements Communication
+public class ClientOld implements Communication
 {
 
     //The port of the server
@@ -43,7 +43,7 @@ public class Client implements Communication
      * @param port: Port of communication with the server
      * @param address : address of the server
      */
-    public Client(int port, String address, Network pNetwork)
+    public ClientOld(int port, String address, Network pNetwork)
     {
         this.port = port;
         this.serverAddress = address;

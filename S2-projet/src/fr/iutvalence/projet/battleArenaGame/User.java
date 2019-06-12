@@ -7,6 +7,8 @@ import java.util.HashSet;
 
 import fr.iutvalence.projet.battleArenaGame.move.Coordinate;
 import fr.iutvalence.projet.battleArenaGame.network.ClientTCP;
+import fr.iutvalence.projet.battleArenaGame.network.GameClient;
+import fr.iutvalence.projet.battleArenaGame.network.GameClientHandler;
 import fr.iutvalence.projet.battleArenaGame.network.ServerTCP;
 import fr.iutvalence.projet.battleArenaGame.spell.Effect;
 import fr.iutvalence.projet.battleArenaGame.spell.Shape;
@@ -42,6 +44,7 @@ public class User implements UserController
 		this.myPages = new ArrayList<SpellPage>();
 		this.myPages.add(new SpellPage("DefaultPage",new Spell(Effect.Fire,this.gameShapes.get(0)),new Spell(Effect.Ice,this.gameShapes.get(1)),new Spell(Effect.Electricity,this.gameShapes.get(2))));
 	}
+	
 	public void launch()
 	{
 		while(true)
@@ -49,7 +52,6 @@ public class User implements UserController
 			userView.display(DisplayMessage.MENU);
 			userView.askChoiceMenu();	
 		}
-		
 	}
 
 	@Override
@@ -104,22 +106,6 @@ public class User implements UserController
 		
 		new Game(listPlayer,nbPlayers,nbPawns,boardSize).play();		
 	}
-	
-/*	@Override
-	public void serverConfigRequest(int nbPlayers, int nbPawns, int boardSize)
-	{
-		
-		
-		ClientConnectionInfo[] clients = new GameLauncherServerClientHandler(int 12000,int nbPlayers).getClients;
-		new Thread(() ->  {
-			GameView gch = new GameClientHandler(clients);
-			ArrayList<GameView> gchList = new ArrayList<GameView>();
-			gchList.add(gch);
-			this.userView.displayServerLaunched(gch.getServerIp(),gch.getPort()); 
-			new Game(gchList,nbPlayers,nbPawns,boardSize).play();
-		}).start();
-		
-	}*/
 	
 	
 	@Override
@@ -193,57 +179,22 @@ public class User implements UserController
 			BoardSize = (int)Math.sqrt(nbPlayer*nbPawn)+1;
 		}
 		
-		new ServerTCP(nbPlayer);
-
-//		try
-//		{
-//			ServerSocket s = new ServerSocket(PORT);
-//			GameLauncherServerClientHandler glsch = new GameLauncherServerClientHandler(nbPlayer);
-//			System.out.println("aaaaaa");
-//			int nbPlayersConnected = 1; //L'host est connecté
-//
-//			while(nbPlayersConnected < nbPlayer)
-//			{
-//				Socket clientSocket = s.accept();
-//				glsch.addClient(clientSocket);
-//				listPlayer.add(new GameClientHandler(clientSocket));
-//				System.out.println("co" + nbPlayersConnected);
-//				nbPlayersConnected++;
-//			}
-//		
-//			s.close(); //TODO hum
-//		} catch (IOException e)
-//		{
-//			e.printStackTrace();
-//		}
-//		
-		
+		for(Socket s : new ServerTCP(nbPlayer).getSockets())
+			listPlayer.add(new GameClientHandler(s));
+	
 		new Game(listPlayer,nbPlayer,nbPawn,BoardSize).play();
-		
-
 	}
 	@Override
 	public void clientConfigConnection(String ip)
 	{
+		//launch the view
+		new GameClient(new ClientTCP(ip).getSocket(), new PlayerConsole(this));
 		
-		new ClientTCP(ip);
-			
-//			GameView gv = new PlayerConsole(this);
-//			GameClient gc = new GameClient(gv);
-//			gv.setGameController(gc);
 	}
 	@Override
 	public void clientReceiveConfigInformation(String msg)
 	{
 		this.userView.displayHowManyConnectedPeople(msg);
 	}
-	@Override
-	public void serverEndConfiguration(ArrayList<Socket> socketList)
-	{
-		// TODO Auto-generated method stub
-		
-	}
-
-
 	
 }

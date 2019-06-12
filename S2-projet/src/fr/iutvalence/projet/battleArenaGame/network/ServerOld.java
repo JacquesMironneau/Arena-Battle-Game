@@ -18,7 +18,7 @@ import fr.iutvalence.projet.battleArenaGame.pawn.TeamId;
  * @author pashmi
  *
  */
-public class Server implements Communication
+public class ServerOld implements Communication
 {
     //The port of the server
     private int port;
@@ -52,7 +52,7 @@ public class Server implements Communication
      * When the server is started there is no player connected
      * @param port chosen in the Game class
      */
-    public Server(int port, Network pNetwork, int numberOfClients)
+    public ServerOld(int port, Network pNetwork, int numberOfClients)
     {
         this.port = port;
         this.playersConnected = 0;
