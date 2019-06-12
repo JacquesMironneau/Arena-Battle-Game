@@ -79,6 +79,7 @@ public class UserViewWindowGraphics extends JFrame implements UserView {
 	private UserController controller;
 	
 	private int spellIndex;
+	private int globalNbPawns;
 	
 	public UserViewWindowGraphics() {
 		/*
@@ -298,6 +299,7 @@ public class UserViewWindowGraphics extends JFrame implements UserView {
 				int nbPlayer = Integer.parseInt(numberOfPlayerField.getText());
 				int nbPawns = Integer.parseInt(numberOfPawnsField.getText());
 				int boardSize = Integer.parseInt(sizeField.getText());
+				globalNbPawns = nbPawns;
 				
 				controller.serverConfigRequest(nbPlayer, nbPawns, boardSize);
 			}
@@ -498,6 +500,8 @@ public class UserViewWindowGraphics extends JFrame implements UserView {
 
 	public void displaySelectForThisPawn(Pawn thePawn) {
 		new JLabel("Veuillez selectionner une page pour ce pion : "+thePawn.getName());
+		this.champSelect.add(new JLabel("Veuillez selectionner une page pour ce pion : "+thePawn.getName()));
+		this.champSelect.add(new Choice());
 		
 	}
 	
@@ -510,13 +514,13 @@ public class UserViewWindowGraphics extends JFrame implements UserView {
 		infos.setBounds(this.getWidth()/3,0,this.getWidth()/3,this.getHeight()/20);
 		this.champSelect.add(infos);
 		
-		this.displaySelectForThisPawn(null);
-		this.chSpellPages.removeAll();
-		this.chSpellPages.add("Choose a spell page");
-		for(SpellPage sp : listPages) {
-			this.chSpellPages.add(sp.getPageName());
+		ArrayList<Choice> choicesForSpellPages= new ArrayList<Choice>();
+		for (int i = 1; i < this.globalNbPawns; i++) {
+			choicesForSpellPages.add(new Choice());
+			choicesForSpellPages.get(i-1).setBounds(this.getWidth()/3, this.getHeight()/20*i, this.getWidth()/3, this.getHeight()/20/2);
+			this.champSelect.add(choicesForSpellPages.get(i-1));
 		}
-		this.champSelect.add(this.chSpellPages);
+		
 		
 		JButton btnValider = new JButton("Valider");
 		btnValider.setBounds(this.getWidth()/5*2,this.getHeight()-this.getHeight()/20,this.getWidth()/5,this.getHeight()/20);
@@ -534,8 +538,14 @@ public class UserViewWindowGraphics extends JFrame implements UserView {
 	}
 	
 	public void askPageSelection(int currentPlayerIndex) {
-		if(!(chSpellPages.getSelectedIndex()==0)) {
-			//TODO
+		ArrayList<Choice> choicesForSpellPages = new ArrayList<Choice>();
+		
+		for (int i = 0; i < this.globalNbPawns;i++) {
+			choicesForSpellPages.add((Choice) this.champSelect.getComponent(i+1));
+		}
+		
+		for (Choice chSpellPage : choicesForSpellPages) {
+			//help
 		}
 		
 	}
