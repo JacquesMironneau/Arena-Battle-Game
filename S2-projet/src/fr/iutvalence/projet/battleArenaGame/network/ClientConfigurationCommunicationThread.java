@@ -1,31 +1,29 @@
 package fr.iutvalence.projet.battleArenaGame.network;
 
-import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.IOException;
-import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
 import java.net.Socket;
 
-import fr.iutvalence.projet.battleArenaGame.UserController;
+import fr.iutvalence.projet.battleArenaGame.User;
 
 public class ClientConfigurationCommunicationThread extends Thread
 {
 	private Socket s;
-	private UserController userController;
 	
-	public ClientConfigurationCommunicationThread(Socket sock, UserController userController )
+	public ClientConfigurationCommunicationThread(Socket sock, User user)
 	{
 		super();
-		this.userController = userController;
 		this.s = sock;
 	}
 	
 	public void run()
 	{
-		BufferedReader bufr = null;
+		BufferedWriter bufw = null;
 		try {
-			bufr = new BufferedReader(new InputStreamReader(s.getInputStream()));
-			bufr.readLine();
-
+			bufw = new BufferedWriter(new OutputStreamWriter(s.getOutputStream()));
+			bufw.append(msg);
+			
 		}catch(IOException e)
 		{}
 		

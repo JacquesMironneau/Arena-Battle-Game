@@ -12,7 +12,7 @@ public class GameLauncherServerClientHandler
 {
 
 	
-	private ArrayList<ClientConnectionInfo> clientList;
+	private  ArrayList<ClientConnectionInfo> clientList;
 	
 	private int nbPlayers;
 	
@@ -22,11 +22,10 @@ public class GameLauncherServerClientHandler
 		this.nbPlayers = nbPlayer;
 		this.clientList = new ArrayList<ClientConnectionInfo>();
 	
-		while(this.clientList.size() < this.nbPlayers)
-		{
-			int connectedPlayers = this.clientList.size()+1; // +1 : pour compter l'host 
-			this.broadcast("Joueurs connectés : "+ connectedPlayers+"/"+nbPlayers);
-		}
+//		while(this.clientList.size() < this.nbPlayers)
+//		{
+
+//		}
 	}
 	
 	private void broadcast(String msg)
@@ -35,7 +34,9 @@ public class GameLauncherServerClientHandler
 		{
 			try
 			{
-				c.getWriter().append(msg + "\n");
+				c.getWriter().append(msg);
+				c.getWriter().append("\n");
+				System.out.println("envoyé");
 			} catch (IOException e)
 			{
 				e.printStackTrace();
@@ -48,6 +49,11 @@ public class GameLauncherServerClientHandler
 		try
 		{
 			this.clientList.add(new ClientConnectionInfo(new BufferedReader(new InputStreamReader(s.getInputStream())), new BufferedWriter(new OutputStreamWriter(s.getOutputStream())),s));
+			int connectedPlayers = this.clientList.size()+1; // +1 : pour compter l'host 
+			System.out.println(connectedPlayers + " "+ this.nbPlayers);
+
+			this.broadcast("Joueurs connectés : "+ connectedPlayers+"/"+nbPlayers);
+		
 		} catch (IOException e)
 		{
 			e.printStackTrace();

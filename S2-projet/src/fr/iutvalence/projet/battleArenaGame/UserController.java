@@ -67,7 +67,6 @@ public interface UserController {
 	
 	public void clientReceiveConfigInformation(String msg);
 	
-	public void serverEndConfiguration(ArrayList<Socket> socketList);
 	
 }
 
