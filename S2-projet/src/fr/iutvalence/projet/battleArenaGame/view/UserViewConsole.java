@@ -28,7 +28,7 @@ public class UserViewConsole implements UserView{
 	
 	
 	@Override
-	public void displayElementChoice()
+	public void displaySpellCreation()
 	{
 		int index = 0;
 		System.out.println("Elements :");
@@ -38,12 +38,7 @@ public class UserViewConsole implements UserView{
 			index++;
 		}
 		System.out.println('\n');
-	}
-		
-	@Override
-	public void displayShapeChoice()
-	{
-		int index = 0;
+		index = 0;
 		System.out.println("Shapes :");
 		for(Shape shp : this.controller.getGameShapes())
 			{
@@ -52,6 +47,7 @@ public class UserViewConsole implements UserView{
 			}
 		System.out.println('\n');
 	}
+
 
 	@Override
 	public void displayListServer()
@@ -149,6 +145,13 @@ public class UserViewConsole implements UserView{
 		nbPawn = scan.getInt();
 		size = scan.getInt();
 		this.controller.serverConfigRequest(nbPlayer,nbPawn,size);		
+	}
+
+	@Override
+	public void displayHowManyConnectedPeople(String msg)
+	{
+		// TODO Auto-generated method stub
+		
 	}
 
 	

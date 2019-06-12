@@ -18,12 +18,11 @@ public interface UserView {
 	/**
 	 * Displays every possible choices for element
 	 */
-	public void displayElementChoice();
+	public void displaySpellCreation();
 
 	/**
 	 * Display every possible choices for a spell shape
 	 */
-	public void displayShapeChoice();
 	
 	/**
 	 * Display the list of available servers
