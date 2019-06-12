@@ -134,6 +134,7 @@ public class GameClientHandler implements GameView
 			}
 			msg+=GameClient.SENTENCE_SEPARATOR;
 		}
+		System.out.println(msg);
 		this.send(msg);
 	}
 

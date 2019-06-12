@@ -169,16 +169,16 @@ public class GameClient implements GameController
 							HashSet<Coordinate> myCoordinate = new HashSet<Coordinate>();
 							for(int k=0;k<Integer.parseInt(parts2[6]);k++)
 							{
-								myCoordinate.add(new Coordinate(Integer.parseInt(parts2[7+k*2]),Integer.parseInt(parts[8+k*2])));
+								myCoordinate.add(new Coordinate(Integer.parseInt(parts2[7+k*2]),Integer.parseInt(parts2[8+k*2])));
 							}
 							Spell spell = new Spell();
 							spell.setShape(new Shape(parts2[0],Integer.parseInt(parts2[1]),Integer.parseInt(parts2[2]),Integer.parseInt(parts2[3]),Integer.parseInt(parts2[4]),myCoordinate));
 							spell.setCurrentCooldown(0);
-							s.setSpell(i-1,spell);
+							s.setSpell(m-1,spell);
 							for(Effect eff : Effect.values())
 							{
 								if(eff.getElementName()==parts2[5]);
-									s.getSpell(i-1).setSpellEffect(eff);
+									s.getSpell(m-1).setSpellEffect(eff);
 							}
 						}
 							parts2 = spellPart[4].split(GameClient.WORD_SEPARATOR);
@@ -187,9 +187,9 @@ public class GameClient implements GameController
 							for(int k=0;k<Integer.parseInt(parts2[0]);k++)
 							{
 								for(Effect eff : Effect.values())
-									if(eff.getElementName()==parts2[3+k*2])
+									if(eff.getEffectName()==parts2[2+k*2])
 										ef.add(new PawnEffect(eff));
-										ef.get(k).setCurrentDuration(Integer.parseInt(pawnPart[2+k*2]));
+										ef.get(k).setCurrentDuration(Integer.parseInt(parts2[1+k*2]));
 							}
 						p.getEffect().addAll(ef);
 						newTurnOrder.add(p);
@@ -211,7 +211,7 @@ public class GameClient implements GameController
 				case "nextTurn":
 					this.gameView.displayNextTurn(Integer.parseInt(parts[2]));
 					break;
-				case "spellPageDetails":
+				case "spellPageDetail":
 					String[] spellParts = receivedFrame.split(GameClient.GROUP_SEPARATOR);
 					SpellPage p = new SpellPage(parts[2],null,null,null);
 					for(int i=1;i<=3;i++)
@@ -220,7 +220,7 @@ public class GameClient implements GameController
 						HashSet<Coordinate> myCoordinate = new HashSet<Coordinate>();
 						for(int k=0;k<Integer.parseInt(parts2[6]);k++)
 						{
-							myCoordinate.add(new Coordinate(Integer.parseInt(parts2[7+k*2]),Integer.parseInt(parts[8+k*2])));
+							myCoordinate.add(new Coordinate(Integer.parseInt(parts2[7+k*2]),Integer.parseInt(parts2[8+k*2])));
 						}
 						Spell spell = new Spell();
 						spell.setShape(new Shape(parts2[0],Integer.parseInt(parts2[1]),Integer.parseInt(parts2[2]),Integer.parseInt(parts2[3]),Integer.parseInt(parts2[4]),myCoordinate));
