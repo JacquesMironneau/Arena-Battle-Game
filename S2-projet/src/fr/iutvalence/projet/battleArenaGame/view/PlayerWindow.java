@@ -1,22 +1,32 @@
 package fr.iutvalence.projet.battleArenaGame.view;
+import java.awt.BorderLayout;
+import java.awt.Choice;
 import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashSet;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
-import javax.swing.JLayeredPane;
 import javax.swing.JOptionPane;
+import javax.swing.JPanel;
 import javax.swing.JTextArea;
 
 import fr.iutvalence.projet.battleArenaGame.Board;
+import fr.iutvalence.projet.battleArenaGame.Game;
 import fr.iutvalence.projet.battleArenaGame.GameController;
 import fr.iutvalence.projet.battleArenaGame.UserController;
 import fr.iutvalence.projet.battleArenaGame.move.Coordinate;
 import fr.iutvalence.projet.battleArenaGame.pawn.Pawn;
+import fr.iutvalence.projet.battleArenaGame.pawn.PawnEffect;
+import fr.iutvalence.projet.battleArenaGame.spell.Effect;
+import fr.iutvalence.projet.battleArenaGame.spell.Shape;
+import fr.iutvalence.projet.battleArenaGame.spell.Spell;
 import fr.iutvalence.projet.battleArenaGame.spell.SpellPage;
 
 /**
@@ -38,12 +48,18 @@ public class PlayerWindow extends JFrame implements GameView{
 	/**
 	 * This pane contains all the container and the visible informations on the screen.
 	 */
-	private JLayeredPane mainContainer;
+	private JFrame mainContainer;
 	
 	private GameController gameController;
 	
 	private UserController myUser;
 	private JGameCanvas gameBoard;
+
+
+	private JPanel boardPane;
+
+
+	private JPanel champSelect;
 	
 	
 	/**
@@ -53,31 +69,26 @@ public class PlayerWindow extends JFrame implements GameView{
 	 * the default operation when closing the window,
 	 * 
 	 */
-	public PlayerWindow(UserController pUserController) {
-		/*
-		 * Super Constructor
-		 */
-		super();
-		this.myUser = pUserController;		
-		/*
-		 * Window properties
-		 * no relative location
-		 * Set default close operation
-		 * Size by default
-		 */
-		
-		Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-		this.setTitle("Projet S2");
-		this.setLocationRelativeTo(null);
-		this.setLocation(0, 0);
-		this.setDefaultCloseOperation(EXIT_ON_CLOSE);
-		this.setSize((int)screenSize.getWidth(),(int)screenSize.getHeight());
-		this.setResizable(false);
-		
-		
-		this.mainContainer = new JLayeredPane();
-		this.setContentPane(this.mainContainer);
-		
+	public PlayerWindow() {
+		        /*
+		         * Super Constructor
+		         */
+		        this.mainContainer = new JFrame();
+		        
+		        
+		        /*
+		         * Window properties
+		         * no relative location
+		         * Set default close operation
+		         * Size by default
+		         */
+		        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+		        this.mainContainer.setTitle("Projet S2");
+		        this.mainContainer.setLocationRelativeTo(null);
+		        this.mainContainer.setLocation(0, 0);
+		        this.mainContainer.setDefaultCloseOperation(EXIT_ON_CLOSE);
+		        this.mainContainer.setSize(screenSize);
+		        this.mainContainer.setResizable(false);
 	}
 
 	public void setGameController(GameController controller) {
@@ -138,6 +149,7 @@ public class PlayerWindow extends JFrame implements GameView{
 
 	@Override
 	public void displayEnd(String winTeam) {
+
 		JOptionPane.showMessageDialog(mainContainer, "Victoire de l'équipe "+winTeam.getBytes());
 		//displayMenu
 		
@@ -226,37 +238,45 @@ public class PlayerWindow extends JFrame implements GameView{
 
 	@Override
 	public void displayBoard(Board myBoard, int nbPlayer) {
-		this.setVisible(false);
-		this.getContentPane().removeAll();
-		this.gameBoard = new JGameCanvas(myBoard.getTurnOrder(),myBoard.getBoardSize(),this.getWidth()/3,this.getHeight()/3);
-		this.gameBoard.setBounds(0, 0, this.getWidth()/3*2, this.getHeight()/3*2);
-		this.getContentPane().add(this.gameBoard);
-		this.mainContainer.setLayer(this.gameBoard, this.mainContainer.lowestLayer());
-		
-		
-		JTextArea messages = new JTextArea();
-		messages.setBounds(this.getWidth()/3*2, 0, this.getWidth()/3, this.getHeight()/6);
-		this.getContentPane().add(messages);
-		
-		JTextArea infos = new JTextArea();
-		infos.setBounds(this.getWidth()/3*2, this.getHeight()/6, this.getWidth()/3, this.getHeight()-this.getHeight()/6);
-		infos.setEditable(false);
-		for (Pawn p : myBoard.getTurnOrder()) {
-			infos.setText(p.getName()+"\nHP: "+p.getHealthPoints()+" / "+Pawn.DEFAULT_HEALTH_POINTS+"\nPA: "+p.getActionPoints()+" / "+Pawn.DEFAULT_ACTION_POINTS+"\nPM:"+p.getMovePoints()+" / "+Pawn.DEFAULT_MOVE_POINTS+"\n\n"/*+"\n\n"+paramString()+p.getSpellPage().toString()+"\n\n\n"*/);
-		}
-		
-		
-		
-		this.getContentPane().add(infos);
-		this.askActionChoice(0);
-		this.setVisible(true);
-		
+	JGameCanvas JGC = new JGameCanvas(myBoard.getTurnOrder(),myBoard.getBoardSize(),this.mainContainer.getWidth(),this.mainContainer.getHeight());
+	JGC.setLayout(null);
+	String str = "";
+			//Pawns detail
+			str += myBoard.getTurnOrder().get(myBoard.getCurrentPawnIndex()).getName() + " : HP:" + myBoard.getTurnOrder().get(myBoard.getCurrentPawnIndex()).getHealthPoints() + "/100 AP:" + myBoard.getTurnOrder().get(myBoard.getCurrentPawnIndex()).getActionPoints() + "/6 MP:"
+					+ myBoard.getTurnOrder().get(myBoard.getCurrentPawnIndex()).getMovePoints() + "/6\n" 
+					+ "Spell 1 :" + myBoard.getTurnOrder().get(myBoard.getCurrentPawnIndex()).getSpellPage().getSpell(0).getCurrentCooldown() + "/" + myBoard.getTurnOrder().get(myBoard.getCurrentPawnIndex()).getSpellPage().getSpell(0).getDefaultCooldown()
+					+ "\nSpell 2 :" + myBoard.getTurnOrder().get(myBoard.getCurrentPawnIndex()).getSpellPage().getSpell(1).getCurrentCooldown() + "/" + myBoard.getTurnOrder().get(myBoard.getCurrentPawnIndex()).getSpellPage().getSpell(1).getDefaultCooldown()
+					+ "\nSpell 3 :" + myBoard.getTurnOrder().get(myBoard.getCurrentPawnIndex()).getSpellPage().getSpell(2).getCurrentCooldown() + "/" + myBoard.getTurnOrder().get(myBoard.getCurrentPawnIndex()).getSpellPage().getSpell(2).getDefaultCooldown();
+			str+= "\nCurrent effects :";
+					for(PawnEffect effect :myBoard.getTurnOrder().get(myBoard.getCurrentPawnIndex()).getEffect())
+						str+= effect.getEffectName();
+					str+="\n";
+			
+			
+				for(int teamIndex = 0; teamIndex < nbPlayer; teamIndex++)
+				{
+					str += "Team" + teamIndex +":\n";
+					for(Pawn p1 : myBoard.getTurnOrder())
+						if(p1.getTeamId()==teamIndex)
+							{
+								str += p1.getName()+": HP:"+p1.getHealthPoints()+"/"+Pawn.DEFAULT_HEALTH_POINTS+"   Effects : ";
+								for(PawnEffect effect :p1.getEffect())
+									str+= effect.getEffectName() +"  ";
+								str+="\n";
+							}
+							
+				}
+	System.out.println(str);
+	JLabel label = new JLabel(str);
+	label.setBounds(this.mainContainer.getWidth()/3,0,this.mainContainer.getWidth()/3,this.mainContainer.getHeight()/20);
+	JGC.add(label);
+	this.mainContainer.setContentPane(JGC);
 	}
 
 
 	@Override
 	public void askActionChoice(int currentPlayerIndex) {
-		JButton endTurn = (JButton) this.getContentPane().getComponentAt(this.getWidth()/6*3+1,this.getHeight()/3*2+1);
+		JButton endTurn = (JButton) this.getContentPane().getComponentAt(this.getWidth()/6*4,this.getHeight()/204);
 		endTurn.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				for(Component comp : mainContainer.getComponents()) {
@@ -310,31 +330,70 @@ public class PlayerWindow extends JFrame implements GameView{
 				gameController.spellRequest(currentPlayerIndex, 2, new Coordinate(gameBoard.getXIndex(),gameBoard.getYIndex()));
 			}
 		});
-		
-		
+			
 	}
-
-
-
 	
 	public static void main(String[] args) {
-//		Game game = new Game(2,3,9);
-		PlayerWindow p = new PlayerWindow();
-		try {
-			Thread.sleep(2000);
-		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		ArrayList<GameView> gv = new ArrayList<GameView>();
+		gv.add(new PlayerConsole());
+		PlayerConsole P1 = new PlayerConsole();
+		Game G = new Game(gv,2,3,15);
+		P1.setGameController(G);
+		gv.get(0).setGameController(G);
 
-//		PlayerWindow pw = new PlayerWindow();
-//		pw.setGameController(game);
-//		pw.displayBoard(game.getBoard(), 2);
-//		pw.askActionChoice(0);
-//		pw.displayCreateSpell(1);
-//		pw.displaySpellSelection();
-//		pw.displaySpellPage(null);
+
+		PlayerWindow pw = new PlayerWindow();
+		ArrayList<Shape> gameShapes = new ArrayList<Shape>();
+		//Ball
+		HashSet<Coordinate> ballShape = new HashSet<Coordinate>();
+		ballShape.addAll(Arrays.asList(new Coordinate(0,0)));
+		gameShapes.add(new Shape("Ball",10,2,5,3,ballShape));
+		//Fist
+		HashSet<Coordinate> fistShape = new HashSet<Coordinate>();
+		fistShape.addAll(Arrays.asList(new Coordinate(0,0)));
+		gameShapes.add(new Shape("Fist",15,1,1,2,fistShape));
+		//Cross
+		HashSet<Coordinate> crossShape = new HashSet<Coordinate>();
+		crossShape.addAll(Arrays.asList(new Coordinate(0,0),new Coordinate(-2,0),new Coordinate(-1,0),new Coordinate(1,0),new Coordinate(2,0),new Coordinate(0,-2),new Coordinate(0,-1),new Coordinate(0,1),new Coordinate(0,2)));
+		gameShapes.add(new Shape("Cross",10,3,5,4,crossShape));
+		//Square
+		HashSet<Coordinate> squareShape = new HashSet<Coordinate>();
+		squareShape.addAll(Arrays.asList(new Coordinate(0,0),new Coordinate(0,-1),new Coordinate(0,1),new Coordinate(-1,0),new Coordinate(-1,-1),new Coordinate(-1,1),new Coordinate(1,0),new Coordinate(1,-1),new Coordinate(1,1)));
+		gameShapes.add(new Shape("Square",10,3,4,4,squareShape));
+		//Sword
+		HashSet<Coordinate> swordShape = new HashSet<Coordinate>();
+		swordShape.addAll(Arrays.asList(new Coordinate(-1,-1),new Coordinate(-1,0),new Coordinate(-1,1),new Coordinate(0,-1),new Coordinate(0,1),new Coordinate(1,-1),new Coordinate(1,0),new Coordinate(1,1)));
+		gameShapes.add(new Shape("Sword",8,2,1,3,swordShape));
+		//Beam
+		HashSet<Coordinate> beamShape = new HashSet<Coordinate>();
+		beamShape.addAll(Arrays.asList(new Coordinate(0,1),new Coordinate(0,2),new Coordinate(0,3),new Coordinate(0,4),new Coordinate(0,5)));
+		gameShapes.add(new Shape("Beam",10,3,1,4,beamShape));
 		
+		Spell s1 =new Spell();
+		s1.setShape(gameShapes.get(0));
+		Spell s2 =new Spell();
+		Spell s3 =new Spell();
+		s2.setShape(gameShapes.get(1));
+		s3.setShape(gameShapes.get(2));
+		
+		SpellPage page1 = new SpellPage("Namepage1",s1,s2,s3);
+		Effect anEffect = Effect.Fire;
+		page1.getSpell(0).setSpellEffect(anEffect);
+		page1.getSpell(1).setSpellEffect(anEffect);
+		page1.getSpell(2).setSpellEffect(anEffect);
+		G.getBoard().getTurnOrder().get(0).setSpellPage(page1);
+		G.getBoard().getTurnOrder().get(1).setSpellPage(page1);
+		G.getBoard().getTurnOrder().get(2).setSpellPage(page1);
+		G.getBoard().getTurnOrder().get(3).setSpellPage(page1);
+		G.getBoard().getTurnOrder().get(4).setSpellPage(page1);
+		G.getBoard().getTurnOrder().get(5).setSpellPage(page1);
+		G.getBoard().getTurnOrder().get(0).addEffect(new PawnEffect(anEffect));
+		G.getBoard().getTurnOrder().get(1).addEffect(new PawnEffect(anEffect));
+		G.getBoard().getTurnOrder().get(4).addEffect(new PawnEffect(anEffect));
+		System.out.println(pw.mainContainer.getHeight());
+		pw.displayBoard(G.getBoard(),2);
+		pw.mainContainer.repaint();
+		pw.mainContainer.setVisible(true);
 	}
 
 	@Override
@@ -351,9 +410,31 @@ public class PlayerWindow extends JFrame implements GameView{
 
 	@Override
 	public void displaySelectForThisPawn(String pawnName) {
-		// TODO Auto-generated method stub
+		this.champSelect.setLayout(null);
+        
+        JLabel infos = new JLabel("Veuillez selectionner des pages pour vos pions");
+        infos.setBounds(this.getWidth()/3,0,this.getWidth()/3,this.getHeight()/20);
+        this.champSelect.add(infos);
+        
+        ArrayList<Choice> choicesForSpellPages= new ArrayList<Choice>();
+        for (int i = 1; i < 2; i++) {
+            choicesForSpellPages.add(new Choice());
+            choicesForSpellPages.get(i-1).setBounds(this.getWidth()/3, this.getHeight()/20*i, this.getWidth()/3, this.getHeight()/20/2);
+            this.champSelect.add(choicesForSpellPages.get(i-1));
+        }
+        
+        
+        JButton btnValider = new JButton("Valider");
+        btnValider.setBounds(this.getWidth()/5*2,this.getHeight()-this.getHeight()/20,this.getWidth()/5,this.getHeight()/20);
+        btnValider.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent arg0) {
+                //TODO method from gameController that calls askPageSelection
+            }
+        });    
+        this.champSelect.add(btnValider);
 		
 	}
 
-
 }
+	
