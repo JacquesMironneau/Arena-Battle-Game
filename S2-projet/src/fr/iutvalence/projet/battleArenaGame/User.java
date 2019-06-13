@@ -198,6 +198,13 @@ public class User implements UserController
 		new Thread(() ->{
 			new GameClient(new ClientTCP(ip).getSocket(), new PlayerConsole(this));
 		}).start();
+		try
+		{
+			Thread.sleep(100000000);
+		} catch (InterruptedException e)
+		{
+			e.printStackTrace();
+		}
 		
 		
 	}

@@ -145,11 +145,11 @@ public class GameClientHandler implements GameView
 		this.send("Ask"+GameClient.WORD_SEPARATOR+"move"+currentPlayerIndex);
 	}
 
-	@Override
-	public void displaySpellSelection()
-	{
-		this.send("Display"+GameClient.WORD_SEPARATOR+"spellSelection");
-	}
+//	@Override
+//	public void displaySpellSelection()
+//	{
+//		this.send("Display"+GameClient.WORD_SEPARATOR+"spellSelection");
+//	}
 
 	@Override
 	public void displayBoard(Board myBoard, int nbPlayer)
@@ -212,7 +212,7 @@ public class GameClientHandler implements GameView
 	}
 
 	@Override
-	public void displaySpellPageDetail(SpellPage pPage)
+	public void displaySpellSelection(SpellPage pPage)
 	{
 		String msg="Display"+GameClient.WORD_SEPARATOR+"spellPageDetail"+GameClient.WORD_SEPARATOR+pPage.getPageName()+GameClient.WORD_SEPARATOR+GameClient.GROUP_SEPARATOR;
 		for(Spell s :pPage.getSpell())
@@ -233,10 +233,10 @@ public class GameClientHandler implements GameView
 		this.send("Display"+GameClient.WORD_SEPARATOR+"moveSelection");
 	}
 
-	@Override
-	public void displaySpellPage() {
-		this.send("Display"+GameClient.WORD_SEPARATOR+"spellPage");
-	}
+//	@Override
+//	public void displaySpellPage() {
+//		this.send("Display"+GameClient.WORD_SEPARATOR+"spellPage");
+//	}
 
 	@Override
 	public void displaySelectForThisPawn(String thePawn) {

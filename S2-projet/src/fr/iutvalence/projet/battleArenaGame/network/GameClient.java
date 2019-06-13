@@ -242,16 +242,16 @@ public class GameClient implements GameController
 							if(eff.getElementName()==parts2[5]);
 								p.getSpell(i-1).setSpellEffect(eff);
 						}
-						this.gameView.displaySpellPageDetail(p);
+						this.gameView.displaySpellSelection(p);
 					}
-					this.gameView.displaySpellPageDetail(p);
+//					this.gameView.displaySpellPageDetail(p);
 					break;
 				case "selectForThisPawn":
 					this.gameView.displaySelectForThisPawn(parts[2]);
 					break;
-				case "spellPages":
-					this.gameView.displaySpellPage();
-					break;
+//				case "spellPages":
+//					this.gameView.displaySpellPage();
+//					break;
 				case "choiceAction":
 					this.gameView.displayChoiceAction();
 					break;
