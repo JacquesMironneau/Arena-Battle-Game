@@ -1,5 +1,8 @@
 package fr.iutvalence.projet.battleArenaGame;
 
+import java.io.BufferedWriter;
+import java.io.IOException;
+import java.io.OutputStreamWriter;
 import java.net.Socket;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -180,15 +183,22 @@ public class User implements UserController
 		}
 		
 		for(Socket s : new ServerTCP(nbPlayer).getSockets())
+		{
 			listPlayer.add(new GameClientHandler(s));
+			
+		}
 	
+		
 		new Game(listPlayer,nbPlayer,nbPawn,BoardSize).play();
 	}
 	@Override
 	public void clientConfigConnection(String ip)
 	{
 		//launch the view
-		new GameClient(new ClientTCP(ip).getSocket(), new PlayerConsole(this));
+		new Thread(() ->{
+			new GameClient(new ClientTCP(ip).getSocket(), new PlayerConsole(this));
+		}).start();
+		
 		
 	}
 	@Override
