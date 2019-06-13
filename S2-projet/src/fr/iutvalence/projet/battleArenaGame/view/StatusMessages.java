@@ -28,7 +28,8 @@ public enum StatusMessages
 	
 	//Other
 	SYSTEM_ERROR("Error system"),
-	WRONG_INDEX("You chose a wrong index");
+	WRONG_INDEX("You chose a wrong index"),
+	WAIT("");
 	
 	private String statusMessage;
 	

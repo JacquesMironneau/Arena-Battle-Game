@@ -88,26 +88,6 @@ public class PlayerConsole implements GameView{
 	
 
 	//DISPLAY
-	
-	public void displaySpellSelection()
-	{
-		System.out.println("Entrer l'index du sort à lancer,\n puis la ligne de la cible, puis la colonne de la cible");
-		
-	}
-	
-	/**
-	 * Display a list of spell pages with their name and an index
-	 */
-	@Override
-	public void displaySpellPage()
-	{
-		int index = 0;
-		for(SpellPage page :this.myUser.getSpellPages())
-			{
-			System.out.println(index+")"+page.getPageName());
-			index++;
-			}
-	}
 
 	@Override
 	public void displayEnd(String winTeam) 
@@ -134,7 +114,7 @@ public class PlayerConsole implements GameView{
 
 
 	@Override
-	public void displaySpellPageDetail(SpellPage pPage) {
+	public void displaySpellSelection(SpellPage pPage) {
 		for(int spellIndex =0;spellIndex<3;spellIndex++)
 		{
 			if(pPage.getSpell(spellIndex)!=null)
@@ -142,6 +122,7 @@ public class PlayerConsole implements GameView{
 			else
 				System.out.println(spellIndex+1 +")\n");
 		}
+		System.out.println("Entrer l'index du sort à lancer,\n puis la ligne de la cible, puis la colonne de la cible");
 		System.out.println("Choissisez l'index du sort a lancer");
 	}
 
@@ -249,8 +230,8 @@ public class PlayerConsole implements GameView{
 	}
 
 
-		@Override
-		public void displayStatus(StatusMessages msg)
+	@Override
+	public void displayStatus(StatusMessages msg)
 		{
 			System.out.println(msg.getStatusMessage());
 		}
@@ -263,6 +244,12 @@ public class PlayerConsole implements GameView{
 	
 	@Override
 	public void displaySelectForThisPawn(String thePawn) {
+		int index = 0;
+		for(SpellPage page :this.myUser.getSpellPages())
+			{
+			System.out.println(index+")"+page.getPageName());
+			index++;
+			}
 		System.out.println("choisissez une page pour le pion "+ thePawn);
 		
 	}
