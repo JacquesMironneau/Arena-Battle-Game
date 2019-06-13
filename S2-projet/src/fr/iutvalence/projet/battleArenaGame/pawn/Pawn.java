@@ -1,9 +1,9 @@
 package fr.iutvalence.projet.battleArenaGame.pawn;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 
 import fr.iutvalence.projet.battleArenaGame.move.Coordinate;
-import fr.iutvalence.projet.battleArenaGame.spell.Effect;
 import fr.iutvalence.projet.battleArenaGame.spell.SpellPage;
 
 
@@ -77,7 +77,7 @@ public class Pawn
 	/**
 	 * List of all the active effect on the Pawn
 	 */
-	private ArrayList<PawnEffect> activeEffects;
+	private HashSet<PawnEffect> activeEffects;
 	
 	/**
 	 * Constructor of Pawn, set his points to defaults values
@@ -93,7 +93,7 @@ public class Pawn
 		this.movePoints = Pawn.DEFAULT_MOVE_POINTS;
 		
 		this.currentCoordinate = pBaseCoordinate;
-		this.activeEffects= new ArrayList<PawnEffect>();
+		this.activeEffects= new HashSet<PawnEffect>();
 		this.teamId = pTeamId;
 		this.name = pName;
 	}
@@ -166,7 +166,7 @@ public class Pawn
 		return this.movePoints;
 	}
 	
-	public ArrayList<PawnEffect> getEffect()
+	public HashSet<PawnEffect> getEffect()
 	{
 		return this.activeEffects;
 	}

@@ -308,9 +308,8 @@ public class PlayerWindow extends JFrame implements GameView{
 
 	@Override
 	public void displayBoard(Board myBoard, int nbPlayer) {
-	JGameCanvas JGC = new JGameCanvas(myBoard.getTurnOrder(),myBoard.getBoardSize(),this.mainContainer.getWidth(),this.mainContainer.getHeight());
+	JGameCanvas JGC = new JGameCanvas(myBoard.getTurnOrder(),myBoard.getBoardSize(),this.mainContainer.getWidth()*2/3,this.mainContainer.getHeight()*2/3);
 	JGC.setLayout(null);
-	JGC.setBounds(0, 0, this.mainContainer.getWidth()*2/3,this.mainContainer.getHeight()*2/3);
 	String str = "";
 			//Pawns detail
 			str += myBoard.getTurnOrder().get(myBoard.getCurrentPawnIndex()).getName() + " : HP:" + myBoard.getTurnOrder().get(myBoard.getCurrentPawnIndex()).getHealthPoints() + "/100 AP:" + myBoard.getTurnOrder().get(myBoard.getCurrentPawnIndex()).getActionPoints() + "/6 MP:"
@@ -343,6 +342,8 @@ public class PlayerWindow extends JFrame implements GameView{
 	JGC.setBounds(0,0,this.mainContainer.getWidth()*2/3,this.mainContainer.getHeight()*2/3);
 	this.boardPane.add(JGC);
 	this.gameBoard = JGC;
+	this.gameBoard.validate();
+	this.gameBoard.repaint();
 	switchPanel(this.boardPane);
 	}
 

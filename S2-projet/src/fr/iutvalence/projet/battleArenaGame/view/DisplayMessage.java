@@ -6,7 +6,7 @@ package fr.iutvalence.projet.battleArenaGame.view;
 public enum DisplayMessage
 {
 	//Instructions
-	MENU("----------------Menu-----------------\n1) Creer page de sort\n2) Créer une partie\n3) Rejoindre une partie\n4) cr�� partie local"),
+	MENU("----------------Menu-----------------\n1) Creer page de sort\n2) Créer une partie\n3) Rejoindre une partie\n4) créer partie local"),
 	LOCAL_CONFIG("Entrer le nombre de joueur, puis le nombre de pion par joueur, puis la taille du plateau puis le nombre d'interface console voulue"),
 	SERVER_CONFIG("Entrer le nombre de joueur, puis le nombre de pion par joueur, puis la taille du plateau"),
 	PAGE_CREATION("Entrer 3 fois l'index de l'element voulu puis l'index de la forme voulue, terminer par le nom de la page"),
