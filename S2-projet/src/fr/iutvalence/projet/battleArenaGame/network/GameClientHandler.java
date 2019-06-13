@@ -6,12 +6,15 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.net.Socket;
+import java.util.HashSet;
 
 import fr.iutvalence.projet.battleArenaGame.Board;
 import fr.iutvalence.projet.battleArenaGame.GameController;
 import fr.iutvalence.projet.battleArenaGame.move.Coordinate;
 import fr.iutvalence.projet.battleArenaGame.pawn.Pawn;
 import fr.iutvalence.projet.battleArenaGame.pawn.PawnEffect;
+import fr.iutvalence.projet.battleArenaGame.spell.Effect;
+import fr.iutvalence.projet.battleArenaGame.spell.Shape;
 import fr.iutvalence.projet.battleArenaGame.spell.Spell;
 import fr.iutvalence.projet.battleArenaGame.spell.SpellPage;
 import fr.iutvalence.projet.battleArenaGame.view.GameView;
@@ -56,6 +59,7 @@ public class GameClientHandler implements GameView
 
 				try {
 					received = this.clients.getReader().readLine();
+					System.out.println(received);
 				}catch(IOException e)
 				{
 					e.printStackTrace();
@@ -77,8 +81,28 @@ public class GameClientHandler implements GameView
 							this.gameController.actionRequest(Integer.parseInt(parts[2]), Smsg);
 					break;
 				case "page":
-					//TODO
-					System.out.println("WARNING");
+					String[] spellParts = received.split(GameClient.GROUP_SEPARATOR);
+
+					SpellPage p = new SpellPage(parts[2],null,null,null);
+					for(int i=1;i<=3;i++)
+					{
+						String[] parts2 = spellParts[i-1].split(GameClient.WORD_SEPARATOR);
+						HashSet<Coordinate> myCoordinate = new HashSet<Coordinate>();
+						for(int k=0;k<Integer.parseInt(parts2[6]);k++)
+						{
+							myCoordinate.add(new Coordinate(Integer.parseInt(parts2[7+k*2]),Integer.parseInt(parts2[8+k*2])));
+						}
+						Spell spell = new Spell();
+						spell.setShape(new Shape(parts2[0],Integer.parseInt(parts2[1]),Integer.parseInt(parts2[2]),Integer.parseInt(parts2[3]),Integer.parseInt(parts2[4]),myCoordinate));
+						spell.setCurrentCooldown(0);
+						p.setSpell(i-1,spell);
+						for(Effect eff : Effect.values())
+						{
+							if(eff.getElementName()==parts2[5]);
+								p.getSpell(i-1).setSpellEffect(eff);
+						}
+					}
+					this.gameController.setPageRequest(Integer.parseInt(parts[2]), p);
 				}
 		}
 	}

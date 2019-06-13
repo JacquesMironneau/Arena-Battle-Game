@@ -26,7 +26,7 @@ public class GameClient implements GameController
 {
 
 	public static final String WORD_SEPARATOR ="�";
-	public static final String GROUP_SEPARATOR ="&";
+	public static final String GROUP_SEPARATOR ="abba";
 	public static final String SENTENCE_SEPARATOR ="#";
 	
 	private GameView gameView;
@@ -84,14 +84,14 @@ public class GameClient implements GameController
 	@Override
 	public void setPageRequest(int currentPlayerIndex, SpellPage pageToSet)
 	{
-		String request = "Request" +GameClient.WORD_SEPARATOR+"page"+GameClient.WORD_SEPARATOR+currentPlayerIndex+ GameClient.WORD_SEPARATOR+ pageToSet.getPageName()+ GameClient.WORD_SEPARATOR;
+		String request = "Request" +GameClient.WORD_SEPARATOR+"page"+GameClient.WORD_SEPARATOR+currentPlayerIndex+ GameClient.WORD_SEPARATOR+ pageToSet.getPageName()+ GameClient.WORD_SEPARATOR+GameClient.GROUP_SEPARATOR;
 		for(Spell s: pageToSet.getSpell())
 		{
 			request += s.getShape().getName()+ GameClient.WORD_SEPARATOR + s.getShape().getDamage()+ GameClient.WORD_SEPARATOR+s.getShape().getCooldown()+GameClient.WORD_SEPARATOR+s.getShape().getRange()+ GameClient.WORD_SEPARATOR + s.getShape().getSpellCost()+ GameClient.WORD_SEPARATOR+ s.getShape().getEffectedCoordinates().size()+ GameClient.WORD_SEPARATOR;
 			
 			for(Coordinate coord: s.getShape().getEffectedCoordinates())
 				request += coord.getCoordX()+ GameClient.WORD_SEPARATOR + coord.getCoordY()+ GameClient.WORD_SEPARATOR;
-			request += s.getSpellEffect().getEffectName() + GameClient.WORD_SEPARATOR;
+			request += s.getSpellEffect().getEffectName() + GameClient.WORD_SEPARATOR + GameClient.GROUP_SEPARATOR;
 		}
 		send(request);
 
