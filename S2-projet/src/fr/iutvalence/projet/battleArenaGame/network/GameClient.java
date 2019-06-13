@@ -57,8 +57,7 @@ public class GameClient implements GameController
 	private void send(String msg)
 	{
 		try {
-			writer.append(msg);
-			writer.flush();
+			writer.append(msg+"\n").flush();
 		}
 		catch(IOException e)
 		{

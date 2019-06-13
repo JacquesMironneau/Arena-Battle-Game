@@ -78,6 +78,7 @@ public class GameClientHandler implements GameView
 					break;
 				case "page":
 					//TODO
+					System.out.println("WARNING");
 				}
 		}
 	}
@@ -89,8 +90,7 @@ public class GameClientHandler implements GameView
 	{
 		try
 		{
-			this.clients.getWriter().append(msg);
-			this.clients.getWriter().flush();
+			this.clients.getWriter().append(msg+"\n").flush();
 		} catch (IOException e)
 		{
 			e.printStackTrace();
