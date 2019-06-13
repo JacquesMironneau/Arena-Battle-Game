@@ -82,7 +82,6 @@ public class Game implements GameController
 			for(GameView gv : players)
 					if(this.board.getTurnOrder().get(this.board.getCurrentPawnIndex()).getTeamId()==players.indexOf(gv))
 						currentPlayerIndex = players.indexOf(gv);
-			this.players.get(currentPlayerIndex).displaySpellPage();
 			this.players.get(currentPlayerIndex).displaySelectForThisPawn(this.board.getTurnOrder().get(this.board.getCurrentPawnIndex()).getName());
 			this.players.get(currentPlayerIndex).askPageSelection(currentPlayerIndex);
 			this.board.nextPawn();
@@ -193,8 +192,7 @@ public class Game implements GameController
 			
 		case LAUNCH_SPELL:
 			this.players.get(currentPlayerIndex).displayBoard(board,this.maxPlayer);
-			this.players.get(currentPlayerIndex).displaySpellPageDetail(this.board.getTurnOrder().get(this.board.getCurrentPawnIndex()).getSpellPage());
-			this.players.get(currentPlayerIndex).displaySpellSelection();
+			this.players.get(currentPlayerIndex).displaySpellSelection(this.board.getTurnOrder().get(this.board.getCurrentPawnIndex()).getSpellPage());
 			this.players.get(currentPlayerIndex).askSpell(currentPlayerIndex);
 			if(this.board.getTurnOrder().get(this.board.getCurrentPawnIndex()).getHealthPoints()<=0)
 				this.board.nextPawn();

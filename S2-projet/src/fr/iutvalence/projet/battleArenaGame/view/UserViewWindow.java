@@ -460,11 +460,6 @@ public class UserViewWindow extends JFrame implements UserView {
 	{
 		switchPanel(this.spellPageCreationMenu);
 	}
-		
-	public void displaySelectForThisPawn(Pawn thePawn) {
-		new JLabel("Veuillez selectionner une page pour le pion n° "+thePawn.getName());
-		
-	}
 	
 	//TODO this method
 	@Override

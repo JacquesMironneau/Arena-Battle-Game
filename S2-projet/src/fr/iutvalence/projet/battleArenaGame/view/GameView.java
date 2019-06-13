@@ -40,11 +40,7 @@ public interface GameView {
 	
 	//DISPLAY
 	
-	/**
-	 * Display to the player what he have to do in order to select a spell
-	 */
-	public void displaySpellSelection();
-		
+	
 	/**
 	 * Display the board to user
 	 * @param myBoard
@@ -57,10 +53,6 @@ public interface GameView {
 	 */
 	public void displayStatus(StatusMessages msg);
 	
-	/**
-	 * Display the owned spell pages
-	 */
-	public void displaySpellPage();
 	
 	/**
 	 * Display the actions that the player can move
@@ -85,10 +77,10 @@ public interface GameView {
 	public void displayMoveDone();
 
 	/**
-	 * Display every attributes of every spell in a page
+	 * Display to the player what the deatail of his page and what he have to do to cast a spell
 	 * @param pPage the described page
 	 */
-	public void displaySpellPageDetail(SpellPage pPage);
+	public void displaySpellSelection(SpellPage pPage);
 	
 	/**
 	 * say Size is to small for the amount of pawns

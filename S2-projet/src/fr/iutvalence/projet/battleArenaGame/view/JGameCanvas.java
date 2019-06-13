@@ -30,7 +30,8 @@ import fr.iutvalence.projet.battleArenaGame.pawn.Pawn;
  *class who display the board using jpanel with event listener for the ihm Player
  */
 public class JGameCanvas extends JPanel implements MouseListener{
-	private static final long serialVersionUID = 1L;
+
+	public final static Coordinate NULL_COORDINATE = new Coordinate(-12,-50);
 	/**
 	 * default size of the image
 	 */
@@ -62,6 +63,7 @@ public class JGameCanvas extends JPanel implements MouseListener{
 		this.height=pheight;
 		this.rec = new ArrayList<Rectangle>();
 		this.arrayImage = new LocatedImage[this.boardSize][this.boardSize];
+		this.isListenerOn = false;
 	}
 	
 	
@@ -176,6 +178,7 @@ public class JGameCanvas extends JPanel implements MouseListener{
 					
 					askCoordinate = new Coordinate(xIndex, yIndex);
 					System.out.println("clicked");
+					break;
 				}
 					
 			}		

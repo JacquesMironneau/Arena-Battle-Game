@@ -1,16 +1,14 @@
 package fr.iutvalence.projet.battleArenaGame.view;
-import java.awt.BorderLayout;
 import java.awt.Choice;
 import java.awt.Component;
 import java.awt.Dimension;
+import java.awt.GridLayout;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashSet;
 
 import javax.swing.JButton;
+import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -18,15 +16,11 @@ import javax.swing.JPanel;
 import javax.swing.JTextArea;
 
 import fr.iutvalence.projet.battleArenaGame.Board;
-import fr.iutvalence.projet.battleArenaGame.Game;
 import fr.iutvalence.projet.battleArenaGame.GameController;
 import fr.iutvalence.projet.battleArenaGame.UserController;
 import fr.iutvalence.projet.battleArenaGame.move.Coordinate;
 import fr.iutvalence.projet.battleArenaGame.pawn.Pawn;
 import fr.iutvalence.projet.battleArenaGame.pawn.PawnEffect;
-import fr.iutvalence.projet.battleArenaGame.spell.Effect;
-import fr.iutvalence.projet.battleArenaGame.spell.Shape;
-import fr.iutvalence.projet.battleArenaGame.spell.Spell;
 import fr.iutvalence.projet.battleArenaGame.spell.SpellPage;
 
 /**
@@ -38,11 +32,6 @@ import fr.iutvalence.projet.battleArenaGame.spell.SpellPage;
  */
 public class PlayerWindow extends JFrame implements GameView{
 	
-	
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = -8426609022478204799L;
 
 	
 	/**
@@ -55,9 +44,16 @@ public class PlayerWindow extends JFrame implements GameView{
 	private UserController myUser;
 	private JGameCanvas gameBoard;
 
+	private StatusMessages actionChoice;
+	private int spellChoice;
+	private int pageChoice;
 
 	private JPanel boardPane;
-
+	private JPanel selectionPane;
+	private JPanel actionButtons;
+	private JPanel spellButtons;
+	
+	
 
 	private JPanel champSelect;
 	
@@ -89,6 +85,147 @@ public class PlayerWindow extends JFrame implements GameView{
 		        this.mainContainer.setDefaultCloseOperation(EXIT_ON_CLOSE);
 		        this.mainContainer.setSize(screenSize);
 		        this.mainContainer.setResizable(false);
+		        
+		        createActionPanel();
+		        createSpellPanel();
+		        createBoardPanel();
+		        createPageSelectionPanel();
+		        this.mainContainer.setVisible(true);
+	}
+	
+	private void createBoardPanel()
+	{
+		this.boardPane = new JPanel();
+		this.boardPane.setLayout(null);
+		
+		this.boardPane.add(actionButtons);
+		
+		JTextArea infos = new JTextArea();
+		infos.setBounds(this.mainContainer.getWidth()*2/3,0,this.mainContainer.getWidth()*1/3,this.mainContainer.getHeight()*2/3);
+		infos.setEditable(false);
+		this.boardPane.add(infos);
+		
+		
+		JTextArea spellDetail = new JTextArea();
+		spellDetail.setBounds(this.mainContainer.getWidth()*2/3,this.mainContainer.getHeight()*2/3,this.mainContainer.getWidth()*1/3,this.mainContainer.getHeight()*1/3);
+		spellDetail.setEditable(false);
+		this.boardPane.add(spellDetail);
+		
+	}
+
+	private void createPageSelectionPanel()
+	{
+		this.selectionPane = new JPanel();
+		this.selectionPane.setLayout(null);
+		
+		JComboBox<String> listPage = new JComboBox<String>();
+		listPage.setBounds(this.mainContainer.getWidth()/4, this.mainContainer.getHeight()/8, this.mainContainer.getWidth()/4*2, this.mainContainer.getHeight()/8);
+		for(SpellPage page :this.myUser.getSpellPages())
+			listPage.addItem(page.getPageName());
+		this.selectionPane.add(listPage);
+	
+		JButton validationButton = new JButton("Valider");
+		validationButton.setBounds(this.mainContainer.getWidth()/4, this.mainContainer.getHeight()/4, this.mainContainer.getWidth()/4*2, this.mainContainer.getHeight()/8);
+		validationButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				pageChoice = listPage.getSelectedIndex();
+			}
+		});
+		
+		this.selectionPane.add(validationButton);
+	
+	}
+
+	private void createActionPanel()
+	{
+		this.actionButtons = new JPanel();
+		GridLayout buttonsLayout = new GridLayout(0,3);
+		this.actionButtons.setLayout(buttonsLayout);
+		this.actionButtons.setBounds(0,this.mainContainer.getHeight()*2/3,this.mainContainer.getWidth()*2/3,this.mainContainer.getHeight()*1/3);
+		
+		JButton moveButton = new JButton("Move");
+		moveButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				actionChoice = StatusMessages.MOVE;
+			}
+		});
+		this.actionButtons.add(moveButton);
+		
+		
+		JButton castButton = new JButton("Cast");
+		castButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				actionChoice = StatusMessages.MOVE;
+			}
+		});
+		this.actionButtons.add(castButton);
+		
+		
+		JButton endButton = new JButton("End Turn");
+		endButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				for(Component comp : mainContainer.getComponents()) {
+					comp.setEnabled(false);
+				}
+				actionChoice = StatusMessages.END_TURN;
+			}
+		});
+		this.actionButtons.add(endButton);
+	}
+	
+	
+	private void createSpellPanel()
+	{
+		this.spellButtons = new JPanel();
+		GridLayout buttonsLayout = new GridLayout(0,3);
+		this.spellButtons.setLayout(buttonsLayout);
+		this.spellButtons.setBounds(0,this.mainContainer.getHeight()*2/3,this.mainContainer.getWidth()*2/3,this.mainContainer.getHeight()*1/3);
+		
+		JButton moveButton = new JButton("1");
+		moveButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				spellChoice = 0;
+			}
+		});
+		this.spellButtons.add(moveButton);
+		
+		
+		JButton castButton = new JButton("2");
+		castButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				spellChoice = 1;
+			}
+		});
+		this.spellButtons.add(castButton);
+		
+		
+		JButton endButton = new JButton("3");
+		endButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				for(Component comp : mainContainer.getComponents()) {
+					comp.setEnabled(false);
+				}
+				spellChoice = 2;
+			}
+		});
+		this.spellButtons.add(endButton);
+		
+		
+	}
+	private void switchPanel(JPanel panel)
+	{
+		this.mainContainer.remove(this.mainContainer.getContentPane());
+		this.mainContainer.setContentPane(panel);
+		this.mainContainer.validate();
+		this.mainContainer.repaint();
+	}
+	
+	private void switchButtons(JPanel panel)
+	{
+		this.boardPane.getComponent(0);
+		this.boardPane.add(panel,0);
+		this.boardPane.validate();
+		this.boardPane.repaint();
 	}
 
 	public void setGameController(GameController controller) {
@@ -111,40 +248,9 @@ public class PlayerWindow extends JFrame implements GameView{
 	}
 
 
-
 	@Override
 	public void displayChoiceAction() {
-		this.setVisible(false);
-		for(Component comp : this.getContentPane().getComponents()) {
-			comp.setEnabled(true);
-		}
-		JButton move = new JButton("Se déplacer");
-		move.setBounds(this.getWidth()/6*2, this.getHeight()/3*2, this.getWidth()/6, this.getHeight()/3);
-		this.getContentPane().add(move);
-		
-		JButton spell = new JButton("Lancer un sort");
-		spell.setBounds(this.getWidth()/6,this.getHeight()/3*2,this.getWidth()/6,this.getHeight()/3);
-		this.getContentPane().add(spell);
-		
-		JButton endTurn = new JButton("Terminer le tour");
-		endTurn.setBounds(this.getWidth()/6*3,this.getHeight()/3*2,this.getWidth()/6,this.getHeight()/3);
-		this.getContentPane().add(endTurn);
-
-		this.setVisible(true);
-		
-		JButton s1 = new JButton("Sort 1");
-		s1.setBounds(0, this.getHeight()/3*2, this.getWidth()/6, this.getHeight()/3/3);
-		this.getContentPane().add(s1);
-		s1.setEnabled(false);
-		JButton s2 = new JButton("Sort 2");
-		s2.setBounds(0, this.getHeight()/3*2+this.getHeight()/3/3, this.getWidth()/6, this.getHeight()/3/3);
-		this.getContentPane().add(s2);
-		s2.setEnabled(false);
-		JButton s3 = new JButton("Sort 3");
-		s3.setBounds(0, this.getHeight()/3*2+(this.getHeight()/3/3)*2, this.getWidth()/6, this.getHeight()/3/3);
-		this.getContentPane().add(s3);
-		s3.setEnabled(false);
-		
+		switchButtons(actionButtons);
 	}
 
 	@Override
@@ -156,8 +262,6 @@ public class PlayerWindow extends JFrame implements GameView{
 	}
 
 
-
-
 	@Override
 	public void displayMoveDone() {
 		JTextArea moveDoneArea = new JTextArea(StatusMessages.MOVE_DONE.getStatusMessage());
@@ -166,35 +270,22 @@ public class PlayerWindow extends JFrame implements GameView{
 	}
 
 	@Override
-	public void displaySpellPageDetail(SpellPage pPage) {
-		this.setVisible(false);
-		this.setLocation(0, 0);
-		this.getContentPane().removeAll();
+	public void displaySpellSelection(SpellPage pPage) {
 		
-		JLabel lblTitle = new JLabel("Spell page details");
-		lblTitle.setBounds(0,0,this.getWidth(),this.getHeight()/20);
-		this.getContentPane().add(lblTitle);
+		switchButtons(spellButtons);
+		JTextArea spellDetail = (JTextArea) this.boardPane.getComponent(2);
 		
-		JLabel lblName = new JLabel(pPage.getPageName());
-		lblName.setBounds(0, this.getHeight()/20, this.getWidth(), this.getHeight()/20);
-		this.getContentPane().add(lblName);
+		String str = "";
+		for(int spellIndex =0;spellIndex<3;spellIndex++)
+		{
+			if(pPage.getSpell(spellIndex)!=null)
+				str+= spellIndex+1 +" )  "+ pPage.getSpell(spellIndex).toString();
+			else
+				str+=spellIndex+1 +")\n";
+		}
+		spellDetail.setText(str);
 		
-		JTextArea spell1Details = new JTextArea(pPage.getSpell(0).toString());
-		spell1Details.setEditable(false);
-		spell1Details.setBounds(0,this.getHeight()/2,this.getWidth()/3,this.getHeight()/2);
-		this.getContentPane().add(spell1Details);
-		
-		JTextArea spell2Details = new JTextArea(pPage.getSpell(1).toString());
-		spell2Details.setEditable(false);
-		spell2Details.setBounds(this.getWidth()/3, this.getHeight()/2, this.getWidth()/3, this.getWidth()/3);
-		this.getContentPane().add(spell2Details);
-		
-		JTextArea spell3Details = new JTextArea(pPage.getSpell(2).toString());
-		spell3Details.setEditable(false);
-		spell3Details.setBounds(this.getWidth()/3*2, this.getHeight()/2, this.getWidth()/3, this.getHeight()/2);
-		this.getContentPane().add(spell3Details);
-		
-		this.setVisible(true);
+	
 	}
 
 	@Override
@@ -205,41 +296,21 @@ public class PlayerWindow extends JFrame implements GameView{
 
 	@Override
 	public void displayNextTurn(int numPlayer) {
-		JTextArea messages = (JTextArea) this.getContentPane().getComponentAt(this.getWidth()/3*2+1,1);
-		messages.setText("Au tour du joueur n° "+numPlayer);
+		
 		
 		
 	}
 
 	@Override
 	public void displayMoveSelection() {
-		this.gameBoard.highlight(this.gameBoard.getYIndex(), this.gameBoard.getXIndex());
-		JTextArea messages = (JTextArea) this.getContentPane().getComponentAt(this.getWidth()/3*2+1, 1);
-		messages.setText("CASE SELECT : (" + this.gameBoard.getXIndex() + "," + this.gameBoard.getYIndex() + ")");
 		
-	}
-
-	@Override
-	public void displaySpellSelection() {
-		this.setVisible(false);
-		
-		JButton s1 = (JButton) this.getContentPane().getComponentAt(1, this.getHeight()/3*2+1);
-		s1.setEnabled(true);
-		
-		JButton s2 = (JButton) this.getContentPane().getComponentAt(1,this.getHeight()/3*2+this.getHeight()/3/3+1);
-		s2.setEnabled(true);
-		
-		JButton s3 = (JButton) this.getContentPane().getComponentAt(1,this.getHeight()/3*2+(this.getHeight()/3/3)*2+1);
-		s3.setEnabled(true);
-		
-		
-		this.setVisible(true);
 	}
 
 	@Override
 	public void displayBoard(Board myBoard, int nbPlayer) {
 	JGameCanvas JGC = new JGameCanvas(myBoard.getTurnOrder(),myBoard.getBoardSize(),this.mainContainer.getWidth(),this.mainContainer.getHeight());
 	JGC.setLayout(null);
+	JGC.setBounds(0, 0, this.mainContainer.getWidth()*2/3,this.mainContainer.getHeight()*2/3);
 	String str = "";
 			//Pawns detail
 			str += myBoard.getTurnOrder().get(myBoard.getCurrentPawnIndex()).getName() + " : HP:" + myBoard.getTurnOrder().get(myBoard.getCurrentPawnIndex()).getHealthPoints() + "/100 AP:" + myBoard.getTurnOrder().get(myBoard.getCurrentPawnIndex()).getActionPoints() + "/6 MP:"
@@ -266,93 +337,110 @@ public class PlayerWindow extends JFrame implements GameView{
 							}
 							
 				}
-	System.out.println(str);
-	JLabel label = new JLabel(str);
-	label.setBounds(this.mainContainer.getWidth()/3,0,this.mainContainer.getWidth()/3,this.mainContainer.getHeight()/20);
-	JGC.add(label);
-	this.mainContainer.setContentPane(JGC);
+	JTextArea txt = (JTextArea) this.boardPane.getComponent(1);
+	txt.setText(str);
+	//	label.setBounds(this.mainContainer.getWidth()/3,0,this.mainContainer.getWidth()/3,this.mainContainer.getHeight()/20);
+	JGC.setBounds(0,0,this.mainContainer.getWidth()*2/3,this.mainContainer.getHeight()*2/3);
+	this.boardPane.add(JGC);
+	this.gameBoard = JGC;
+	switchPanel(this.boardPane);
 	}
 
-
 	@Override
-	public void askActionChoice(int currentPlayerIndex) {
-		JButton endTurn = (JButton) this.getContentPane().getComponentAt(this.getWidth()/6*4,this.getHeight()/204);
-		endTurn.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent arg0) {
-				for(Component comp : mainContainer.getComponents()) {
-					comp.setEnabled(false);
-				}
-				gameController.actionRequest(currentPlayerIndex, StatusMessages.END_TURN);
+	public void askActionChoice(int currentPlayerIndex) 
+	{
+		this.actionChoice = StatusMessages.WAIT;
+		for(Component comp :this.actionButtons.getComponents())
+			comp.setEnabled(true);
+		while(actionChoice.equals(StatusMessages.WAIT))
+		{
+			try {
+				Thread.sleep(10);
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
 			}
-		});
-		
-		JButton move = (JButton) this.getContentPane().getComponentAt(this.getWidth()/6*2+1,this.getHeight()/3*2+1);
-		move.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent arg0) {
-				gameController.actionRequest(currentPlayerIndex, StatusMessages.MOVE);
-			}
-		});
-		
-		JButton spell = (JButton) this.getContentPane().getComponentAt(this.getWidth()/6+1, this.getHeight()/3*2+1);
-		spell.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent arg0) {
-				gameController.actionRequest(currentPlayerIndex, StatusMessages.LAUNCH_SPELL);
-			}
-		});
-		
+		}
+		gameController.actionRequest(currentPlayerIndex, actionChoice);
 	}
 	
 	@Override
 	public void askMove(int currentPlayerIndex) {
-		this.gameController.moveRequest(currentPlayerIndex,new Coordinate(this.gameBoard.getXIndex(),this.gameBoard.getYIndex()));
+		this.gameBoard.EnableListener();
+		this.gameBoard.setClickedCoordinate(JGameCanvas.NULL_COORDINATE);
+		while(this.gameBoard.getClickedCoordinate().equals(JGameCanvas.NULL_COORDINATE))
+		{
+			try {
+				Thread.sleep(10);
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		this.gameBoard.DisableListener();
+		
+		for(Component comp :this.actionButtons.getComponents())
+			comp.setEnabled(false);
+				
+		this.gameController.moveRequest(currentPlayerIndex,gameBoard.getClickedCoordinate());
 		
 	}
 
 	@Override
 	public void askSpell(int currentPlayerIndex) {
-		JButton s1 = (JButton) this.getContentPane().getComponentAt(1, this.getHeight()/3*2+1);
-		s1.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent arg0) {
-				gameController.spellRequest(currentPlayerIndex, 0, new Coordinate(gameBoard.getXIndex(),gameBoard.getYIndex()));
+		this.spellChoice = -1;
+		for(Component comp :this.mainContainer.getContentPane().getComponents())
+			if(comp instanceof JButton)
+				comp.setEnabled(true);
+		while(this.spellChoice == -1)
+		{
+			try {
+				Thread.sleep(10);
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
 			}
-		});
+		}
+		for(Component comp :this.mainContainer.getContentPane().getComponents())
+			if(comp instanceof JButton)
+				comp.setEnabled(false);
+		this.gameBoard.EnableListener();
+		this.gameBoard.setClickedCoordinate(JGameCanvas.NULL_COORDINATE);
+		while(this.gameBoard.getClickedCoordinate().equals(JGameCanvas.NULL_COORDINATE))
+		{
+			try {
+				Thread.sleep(10);
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		this.gameBoard.DisableListener();
+				gameController.spellRequest(currentPlayerIndex, spellChoice, this.gameBoard.getClickedCoordinate());
+			
 		
-		JButton s2 = (JButton) this.getContentPane().getComponentAt(1,this.getHeight()/3*2+this.getHeight()/3/3+1);
-		s2.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent arg0) {
-				gameController.spellRequest(currentPlayerIndex, 1, new Coordinate(gameBoard.getXIndex(),gameBoard.getYIndex()));
-			}
-		});
-		
-		JButton s3 = (JButton) this.getContentPane().getComponentAt(1,this.getHeight()/3*2+(this.getHeight()/3/3)*2+1);
-		s3.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent arg0) {
-				gameController.spellRequest(currentPlayerIndex, 2, new Coordinate(gameBoard.getXIndex(),gameBoard.getYIndex()));
-			}
-		});
 			
 	}
 	
 	@Override
     public void askPageSelection(int currentPlayerIndex) {
-        Choice spellPages = (Choice) this.mainContainer.getComponent(1);
-        int pageIndex = spellPages.getSelectedIndex();
-        this.gameController.setPageRequest(currentPlayerIndex,this.myUser.getSpellPages().get(pageIndex));
-    }
-
-    @Override
-    public void displaySpellPage() {
-        Choice spellPages = (Choice) this.mainContainer.getComponent(1);
-        for (SpellPage page : this.myUser.getSpellPages()) {
-            spellPages.add(page.getPageName());
-        }
-        
+		this.pageChoice = -1;
+		this.mainContainer.getContentPane().getComponent(1).setEnabled(true);
+		while(this.pageChoice == -1)
+		{
+			try {
+				Thread.sleep(10);
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		this.mainContainer.getContentPane().getComponent(1).setEnabled(false);
+        this.gameController.setPageRequest(currentPlayerIndex,this.myUser.getSpellPages().get(pageChoice));
     }
 
     @Override
     public void displaySelectForThisPawn(String pawnName) {
-        this.mainContainer.add(new JLabel("Selectionnez une page pour le pion "+pawnName));
-        this.mainContainer.add(new Choice());
-        
+        switchPanel(this.selectionPane);
     }
 }
