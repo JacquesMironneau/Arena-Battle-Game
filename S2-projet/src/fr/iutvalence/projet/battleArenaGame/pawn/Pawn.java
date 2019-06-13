@@ -130,7 +130,18 @@ public class Pawn
 	 */
 	public void addEffect(PawnEffect pEffect)
 	{
-		this.activeEffects.add(pEffect);
+		boolean found=false;
+		for(PawnEffect eff : this.getEffect())
+			{
+				if(eff.getEffectName().equals(pEffect.getEffectName()))
+				{
+					eff.setCurrentDuration(3);
+					found=true;
+					break;
+				}
+			}
+		if(found==false)
+			this.activeEffects.add(pEffect);
 	}
 	
 	/**
