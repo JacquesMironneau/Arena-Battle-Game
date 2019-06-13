@@ -5,6 +5,7 @@ import java.awt.Image;
 import java.awt.Rectangle;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -30,11 +31,12 @@ public class JGameCanvas extends JPanel implements MouseListener{
 	/**
 	 * default width of the image
 	 */
-	private int sizeWidth=32;
+	private int sizeWidth = 56;
 	/**
 	 * default height of the image
 	 */
-	private int sizeHeight=32;
+	private int sizeHeight = 56;
+	private int nbPlayer;
 	
 	private ArrayList<Pawn> List;
 	
@@ -44,20 +46,24 @@ public class JGameCanvas extends JPanel implements MouseListener{
 	
 	private int height;
 	
+	private Coordinate askCoordinate;
+	
 	private int xIndex;
 	private int yIndex;
+	
+	private boolean isListenerOn;
 	
 	private LocatedImage[][] arrayImage;
 	
 	private ArrayList<Rectangle> rec;
 	
-	public JGameCanvas(ArrayList<Pawn> pList,int pboardSize,int pwidth,int pheight){
+	public JGameCanvas(ArrayList<Pawn> pList,int pboardSize,int pwidth,int pheight,int pnbPlayer){
 		this.List = pList;
 		this.boardSize=pboardSize;
 		this.width=pwidth;
 		this.height=pheight;
 		this.rec = new ArrayList<Rectangle>();
-
+		this.nbPlayer=pnbPlayer;
 		this.arrayImage = new LocatedImage[this.boardSize][this.boardSize];
 	}
 	
@@ -86,7 +92,25 @@ public class JGameCanvas extends JPanel implements MouseListener{
 	 */
 	public void paintComponent(Graphics g) {
 		super.paintComponent(g);
+		final int rows =10;
+		final int cols = 16;
+		BufferedImage bigImg = null;
+		try
+		{
+			bigImg = ImageIO.read(new File(""));
+		} catch (IOException e1)
+		{
+			e1.printStackTrace();
+		}
+		BufferedImage[] sprites = new BufferedImage[rows*cols];
 
+		for(int index = 0; index < this.nbPlayer; index++)
+			for(int i = 0; i < rows; i++)
+				sprites[(index*cols)+i] = bigImg.getSubimage(i*width, index*height, width, height);
+		
+	//TODO: donner une image par pelo
+		
+		
 		File img = new File("ressources/newp1.png");
 		File img2 = new File("ressources/newp2.png");
 		File img3 = new File("ressources/newvide.png");
@@ -125,34 +149,26 @@ public class JGameCanvas extends JPanel implements MouseListener{
 			}
 		}
 
-	for(int i=0 ;i<boardSize;i++)
-	{	
-		for(int k=0;k<boardSize;k++)
-			{		
-				for(Pawn p : List)
-					{
-						if(p.getPos().getCoordX()==i && p.getPos().getCoordY()==k )
-						{
-							if(p.getTeamId()==1)
-							{
-								g.drawImage(p1, i*sizeWidth,  k*sizeHeight,this);
-								this.arrayImage[i][k].setImg(p1);
-								this.arrayImage[i][k].setCoordX(i*sizeWidth);
-								this.arrayImage[i][k].setCoordY(k*sizeHeight);
-							}
-							else
-							{
-								g.drawImage(p2, i*sizeWidth,  k*sizeHeight,this);
-								this.arrayImage[i][k].setImg(p2);
-								this.arrayImage[i][k].setCoordX(i*sizeWidth);
-								this.arrayImage[i][k].setCoordY(k*sizeHeight);
-							}
 
-								
-						}
-					}
+		for(Pawn p : List)
+		{
+			if(p.getTeamId()==1)
+			{
+				g.drawImage(p1, p.getPos().getCoordX()*sizeWidth,  p.getPos().getCoordY()*sizeHeight,this);
+				this.arrayImage[p.getPos().getCoordX()][p.getPos().getCoordY()].setImg(p1);
+				this.arrayImage[p.getPos().getCoordX()][p.getPos().getCoordY()].setCoordX(p.getPos().getCoordX()*sizeWidth);
+				this.arrayImage[p.getPos().getCoordX()][p.getPos().getCoordY()].setCoordY(p.getPos().getCoordY()*sizeHeight);
 			}
-	}
+			else
+			{
+				g.drawImage(p2, p.getPos().getCoordX()*sizeWidth,  p.getPos().getCoordY()*sizeHeight,this);
+				this.arrayImage[p.getPos().getCoordX()][p.getPos().getCoordY()].setImg(p2);
+				this.arrayImage[p.getPos().getCoordX()][p.getPos().getCoordY()].setCoordX(p.getPos().getCoordX()*sizeWidth);
+				this.arrayImage[p.getPos().getCoordX()][p.getPos().getCoordY()].setCoordY(p.getPos().getCoordY()*sizeHeight);
+			}
+		}
+			
+
 
 	
 	for(int indexRow = 0; indexRow < this.boardSize; indexRow++)
@@ -168,6 +184,7 @@ public class JGameCanvas extends JPanel implements MouseListener{
 		@Override
 		public void mouseClicked(MouseEvent e) {
 			
+			if(!isListenerOn) return;
 			for(Rectangle r: rec)
 			{
 				if(r.contains(e.getX(),e.getY()))
@@ -175,7 +192,9 @@ public class JGameCanvas extends JPanel implements MouseListener{
 					
 					xIndex = (int)r.getX()/sizeWidth;
 					yIndex= (int)r.getY()/sizeHeight;
-				
+					
+					askCoordinate = new Coordinate(xIndex, yIndex);
+					System.out.println("clicked");
 				}
 					
 			}		
@@ -205,10 +224,24 @@ public class JGameCanvas extends JPanel implements MouseListener{
 		}
 		
 	});
+	this.EnableListener();
+	}
 	
-
-}
-
+	public void EnableListener()
+	{
+		this.isListenerOn = true;
+	}
+	
+	
+	public void DisableListener()
+	{
+		this.isListenerOn = false;
+	}
+	
+	public Coordinate getClickedCoordinate()
+	{
+		return this.askCoordinate;
+	}
 
 
 	public static void main(String[] args) {
@@ -220,7 +253,7 @@ public class JGameCanvas extends JPanel implements MouseListener{
 		JFrame f = new JFrame();
 	
 		f.setExtendedState(JFrame.MAXIMIZED_BOTH);
-		JGameCanvas CC = new JGameCanvas(List,15,f.getWidth(),f.getHeight());
+		JGameCanvas CC = new JGameCanvas(List,15,f.getWidth(),f.getHeight(), 3);
 		f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	
 		f.setTitle("JULES");
