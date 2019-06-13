@@ -119,7 +119,7 @@ public class JGameCanvas extends JPanel implements MouseListener{
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		
+		voidImg=voidImg.getScaledInstance(this.size, this.size, Image.SCALE_DEFAULT);
 		
 		for(int i=0 ;i<boardSize;i++)
 			for(int k=0;k<boardSize;k++)
@@ -248,7 +248,7 @@ public class JGameCanvas extends JPanel implements MouseListener{
 		f.setSize(screenSize);
 		
 		f.setExtendedState(JFrame.MAXIMIZED_BOTH);
-		JGameCanvas CC = new JGameCanvas(List,40,f.getWidth(),f.getHeight());
+		JGameCanvas CC = new JGameCanvas(List,15,f.getWidth(),f.getHeight());
 		f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	
 		f.setTitle("JULES");
@@ -274,7 +274,7 @@ public class JGameCanvas extends JPanel implements MouseListener{
 	
 		t.add(new Pawn(15,new Coordinate(9,6),"lol"));
 	
-		t.add(new Pawn(143,new Coordinate(12,6),"lol"));
+		t.add(new Pawn(150,new Coordinate(12,6),"lol"));
 	
 		
 		
